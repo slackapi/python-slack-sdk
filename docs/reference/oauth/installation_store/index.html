@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>slack_sdk.oauth.installation_store API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.oauth.installation_store</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.amazon_s3" href="amazon_s3/index.html">slack_sdk.oauth.installation_store.amazon_s3</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.async_cacheable_installation_store" href="async_cacheable_installation_store.html">slack_sdk.oauth.installation_store.async_cacheable_installation_store</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.async_installation_store" href="async_installation_store.html">slack_sdk.oauth.installation_store.async_installation_store</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.cacheable_installation_store" href="cacheable_installation_store.html">slack_sdk.oauth.installation_store.cacheable_installation_store</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.file" href="file/index.html">slack_sdk.oauth.installation_store.file</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.installation_store" href="installation_store.html">slack_sdk.oauth.installation_store.installation_store</a></code></dt>
+<dd>
+<div class="desc"><p>Slack installation data store …</p></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.internals" href="internals.html">slack_sdk.oauth.installation_store.internals</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.models" href="models/index.html">slack_sdk.oauth.installation_store.models</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.sqlalchemy" href="sqlalchemy/index.html">slack_sdk.oauth.installation_store.sqlalchemy</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.oauth.installation_store.sqlite3" href="sqlite3/index.html">slack_sdk.oauth.installation_store.sqlite3</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.Bot"><code class="flex name class">
+<span>class <span class="ident">Bot</span></span>
+<span>(</span><span>*,<br>app_id: str | None = None,<br>enterprise_id: str | None = None,<br>enterprise_name: str | None = None,<br>team_id: str | None = None,<br>team_name: str | None = None,<br>bot_token: str,<br>bot_id: str,<br>bot_user_id: str,<br>bot_scopes: str | Sequence[str] = '',<br>bot_refresh_token: str | None = None,<br>bot_token_expires_in: int | None = None,<br>bot_token_expires_at: int | datetime.datetime | str | None = None,<br>is_enterprise_install: bool | None = False,<br>installed_at: float | datetime.datetime | str,<br>custom_values: Dict[str, Any] | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Bot:
+    app_id: Optional[str]
+    enterprise_id: Optional[str]
+    enterprise_name: Optional[str]
+    team_id: Optional[str]
+    team_name: Optional[str]
+    bot_token: str
+    bot_id: str
+    bot_user_id: str
+    bot_scopes: Sequence[str]
+    # only when token rotation is enabled
+    bot_refresh_token: Optional[str]
+    # only when token rotation is enabled
+    bot_token_expires_at: Optional[int]
+    is_enterprise_install: bool
+    installed_at: float
+
+    custom_values: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        # org / workspace
+        enterprise_id: Optional[str] = None,
+        enterprise_name: Optional[str] = None,
+        team_id: Optional[str] = None,
+        team_name: Optional[str] = None,
+        # bot
+        bot_token: str,
+        bot_id: str,
+        bot_user_id: str,
+        bot_scopes: Union[str, Sequence[str]] = &#34;&#34;,
+        # only when token rotation is enabled
+        bot_refresh_token: Optional[str] = None,
+        # only when token rotation is enabled
+        bot_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        bot_token_expires_at: Optional[Union[int, datetime, str]] = None,
+        is_enterprise_install: Optional[bool] = False,
+        # timestamps
+        # The expected value type is float but the internals handle other types too
+        # for str values, we support only ISO datetime format.
+        installed_at: Union[float, datetime, str],
+        # custom values
+        custom_values: Optional[Dict[str, Any]] = None,
+    ):
+        self.app_id = app_id
+        self.enterprise_id = enterprise_id
+        self.enterprise_name = enterprise_name
+        self.team_id = team_id
+        self.team_name = team_name
+
+        self.bot_token = bot_token
+        self.bot_id = bot_id
+        self.bot_user_id = bot_user_id
+        if isinstance(bot_scopes, str):
+            self.bot_scopes = bot_scopes.split(&#34;,&#34;) if len(bot_scopes) &gt; 0 else []
+        else:
+            self.bot_scopes = bot_scopes
+        self.bot_refresh_token = bot_refresh_token
+
+        if bot_token_expires_at is not None:
+            self.bot_token_expires_at = _timestamp_to_type(bot_token_expires_at, int)
+        elif bot_token_expires_in is not None:
+            self.bot_token_expires_at = int(time()) + bot_token_expires_in
+        else:
+            self.bot_token_expires_at = None
+
+        self.is_enterprise_install = is_enterprise_install or False
+
+        self.installed_at = _timestamp_to_type(installed_at, float)
+
+        self.custom_values = custom_values if custom_values is not None else {}
+
+    def set_custom_value(self, name: str, value: Any):
+        self.custom_values[name] = value
+
+    def get_custom_value(self, name: str) -&gt; Optional[Any]:
+        return self.custom_values.get(name)
+
+    def _to_standard_value_dict(self) -&gt; Dict[str, Any]:
+        return {
+            &#34;app_id&#34;: self.app_id,
+            &#34;enterprise_id&#34;: self.enterprise_id,
+            &#34;enterprise_name&#34;: self.enterprise_name,
+            &#34;team_id&#34;: self.team_id,
+            &#34;team_name&#34;: self.team_name,
+            &#34;bot_token&#34;: self.bot_token,
+            &#34;bot_id&#34;: self.bot_id,
+            &#34;bot_user_id&#34;: self.bot_user_id,
+            &#34;bot_scopes&#34;: &#34;,&#34;.join(self.bot_scopes) if self.bot_scopes else None,
+            &#34;bot_refresh_token&#34;: self.bot_refresh_token,
+            &#34;bot_token_expires_at&#34;: (
+                datetime.utcfromtimestamp(self.bot_token_expires_at) if self.bot_token_expires_at is not None else None
+            ),
+            &#34;is_enterprise_install&#34;: self.is_enterprise_install,
+            &#34;installed_at&#34;: datetime.utcfromtimestamp(self.installed_at),
+        }
+
+    def to_dict_for_copying(self) -&gt; Dict[str, Any]:
+        return {&#34;custom_values&#34;: self.custom_values, **self._to_standard_value_dict()}
+
+    def to_dict(self) -&gt; Dict[str, Any]:
+        # prioritize standard_values over custom_values
+        # when the same keys exist in both
+        return {**self.custom_values, **self._to_standard_value_dict()}</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.Bot.app_id"><code class="name">var <span class="ident">app_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.bot_id"><code class="name">var <span class="ident">bot_id</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.bot_refresh_token"><code class="name">var <span class="ident">bot_refresh_token</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.bot_scopes"><code class="name">var <span class="ident">bot_scopes</span> : Sequence[str]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.bot_token"><code class="name">var <span class="ident">bot_token</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.bot_token_expires_at"><code class="name">var <span class="ident">bot_token_expires_at</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.bot_user_id"><code class="name">var <span class="ident">bot_user_id</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.custom_values"><code class="name">var <span class="ident">custom_values</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.enterprise_id"><code class="name">var <span class="ident">enterprise_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.enterprise_name"><code class="name">var <span class="ident">enterprise_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.installed_at"><code class="name">var <span class="ident">installed_at</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.is_enterprise_install"><code class="name">var <span class="ident">is_enterprise_install</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.team_id"><code class="name">var <span class="ident">team_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.team_name"><code class="name">var <span class="ident">team_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.Bot.get_custom_value"><code class="name flex">
+<span>def <span class="ident">get_custom_value</span></span>(<span>self, name: str) ‑> Any | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_custom_value(self, name: str) -&gt; Optional[Any]:
+    return self.custom_values.get(name)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.set_custom_value"><code class="name flex">
+<span>def <span class="ident">set_custom_value</span></span>(<span>self, name: str, value: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_custom_value(self, name: str, value: Any):
+    self.custom_values[name] = value</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; Dict[str, Any]:
+    # prioritize standard_values over custom_values
+    # when the same keys exist in both
+    return {**self.custom_values, **self._to_standard_value_dict()}</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Bot.to_dict_for_copying"><code class="name flex">
+<span>def <span class="ident">to_dict_for_copying</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict_for_copying(self) -&gt; Dict[str, Any]:
+    return {&#34;custom_values&#34;: self.custom_values, **self._to_standard_value_dict()}</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.FileInstallationStore"><code class="flex name class">
+<span>class <span class="ident">FileInstallationStore</span></span>
+<span>(</span><span>*,<br>base_dir: str = '/Users/eden.zimbelman/.bolt-app-installation',<br>historical_data_enabled: bool = True,<br>client_id: str | None = None,<br>logger: logging.Logger = &lt;Logger slack_sdk.oauth.installation_store.file (WARNING)&gt;)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileInstallationStore(InstallationStore, AsyncInstallationStore):
+    def __init__(
+        self,
+        *,
+        base_dir: str = str(Path.home()) + &#34;/.bolt-app-installation&#34;,
+        historical_data_enabled: bool = True,
+        client_id: Optional[str] = None,
+        logger: Logger = logging.getLogger(__name__),
+    ):
+        self.base_dir = base_dir
+        self.historical_data_enabled = historical_data_enabled
+        self.client_id = client_id
+        if self.client_id is not None:
+            self.base_dir = f&#34;{self.base_dir}/{self.client_id}&#34;
+        self._logger = logger
+
+    @property
+    def logger(self) -&gt; Logger:
+        if self._logger is None:
+            self._logger = logging.getLogger(__name__)
+        return self._logger
+
+    async def async_save(self, installation: Installation):
+        return self.save(installation)
+
+    async def async_save_bot(self, bot: Bot):
+        return self.save_bot(bot)
+
+    def save(self, installation: Installation):
+        none = &#34;none&#34;
+        e_id = installation.enterprise_id or none
+        t_id = installation.team_id or none
+        team_installation_dir = f&#34;{self.base_dir}/{e_id}-{t_id}&#34;
+        self._mkdir(team_installation_dir)
+
+        self.save_bot(installation.to_bot())
+
+        if self.historical_data_enabled:
+            history_version: str = str(installation.installed_at)
+
+            # per workspace
+            entity: str = json.dumps(installation.__dict__)
+            with open(f&#34;{team_installation_dir}/installer-latest&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+            with open(f&#34;{team_installation_dir}/installer-{history_version}&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+
+            # per workspace per user
+            u_id = installation.user_id or none
+            entity = json.dumps(installation.__dict__)
+            with open(f&#34;{team_installation_dir}/installer-{u_id}-latest&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+            with open(f&#34;{team_installation_dir}/installer-{u_id}-{history_version}&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+
+        else:
+            u_id = installation.user_id or none
+            installer_filepath = f&#34;{team_installation_dir}/installer-{u_id}-latest&#34;
+            with open(installer_filepath, &#34;w&#34;) as f:
+                entity = json.dumps(installation.__dict__)
+                f.write(entity)
+
+    def save_bot(self, bot: Bot):
+        if bot.bot_token is None:
+            self.logger.debug(&#34;Skipped saving a new row because of the absense of bot token in it&#34;)
+            return
+
+        none = &#34;none&#34;
+        e_id = bot.enterprise_id or none
+        t_id = bot.team_id or none
+        team_installation_dir = f&#34;{self.base_dir}/{e_id}-{t_id}&#34;
+        self._mkdir(team_installation_dir)
+
+        if self.historical_data_enabled:
+            history_version: str = str(bot.installed_at)
+
+            entity: str = json.dumps(bot.__dict__)
+            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+            with open(f&#34;{team_installation_dir}/bot-{history_version}&#34;, &#34;w&#34;) as f:
+                f.write(entity)
+        else:
+            with open(f&#34;{team_installation_dir}/bot-latest&#34;, &#34;w&#34;) as f:
+                entity = json.dumps(bot.__dict__)
+                f.write(entity)
+
+    async def async_find_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Bot]:
+        return self.find_bot(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            is_enterprise_install=is_enterprise_install,
+        )
+
+    def find_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Bot]:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if is_enterprise_install:
+            t_id = none
+        bot_filepath = f&#34;{self.base_dir}/{e_id}-{t_id}/bot-latest&#34;
+        try:
+            with open(bot_filepath) as f:
+                data = json.loads(f.read())
+                return Bot(**data)
+        except FileNotFoundError as e:
+            message = f&#34;Installation data missing for enterprise: {e_id}, team: {t_id}: {e}&#34;
+            self.logger.debug(message)
+            return None
+
+    async def async_find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Installation]:
+        return self.find_installation(
+            enterprise_id=enterprise_id,
+            team_id=team_id,
+            user_id=user_id,
+            is_enterprise_install=is_enterprise_install,
+        )
+
+    def find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Installation]:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if is_enterprise_install:
+            t_id = none
+        installation_filepath = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-latest&#34;
+        if user_id is not None:
+            installation_filepath = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-latest&#34;
+
+        try:
+            installation: Optional[Installation] = None
+            with open(installation_filepath) as f:
+                data = json.loads(f.read())
+                installation = Installation(**data)
+
+            has_user_installation = user_id is not None and installation is not None
+            no_bot_token_installation = installation is not None and installation.bot_token is None
+            should_find_bot_installation = has_user_installation or no_bot_token_installation
+            if should_find_bot_installation:
+                # Retrieve the latest bot token, just in case
+                # See also: https://github.com/slackapi/bolt-python/issues/664
+                latest_bot_installation = self.find_bot(
+                    enterprise_id=enterprise_id,
+                    team_id=team_id,
+                    is_enterprise_install=is_enterprise_install,
+                )
+                if latest_bot_installation is not None and installation.bot_token != latest_bot_installation.bot_token:
+                    # NOTE: this logic is based on the assumption that every single installation has bot scopes
+                    # If you need to installation patterns without bot scopes in the same S3 bucket,
+                    # please fork this code and implement your own logic.
+                    installation.bot_id = latest_bot_installation.bot_id
+                    installation.bot_user_id = latest_bot_installation.bot_user_id
+                    installation.bot_token = latest_bot_installation.bot_token
+                    installation.bot_scopes = latest_bot_installation.bot_scopes
+                    installation.bot_refresh_token = latest_bot_installation.bot_refresh_token
+                    installation.bot_token_expires_at = latest_bot_installation.bot_token_expires_at
+
+            return installation
+
+        except FileNotFoundError as e:
+            message = f&#34;Installation data missing for enterprise: {e_id}, team: {t_id}: {e}&#34;
+            self.logger.debug(message)
+            return None
+
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
+        return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+
+    def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/bot-*&#34;
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        return self.delete_installation(enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        none = &#34;none&#34;
+        e_id = enterprise_id or none
+        t_id = team_id or none
+        if user_id is not None:
+            filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-{user_id}-*&#34;
+        else:
+            filepath_glob = f&#34;{self.base_dir}/{e_id}-{t_id}/installer-*&#34;
+        self._delete_by_glob(e_id, t_id, filepath_glob)
+
+    def _delete_by_glob(self, e_id: str, t_id: str, filepath_glob: str):
+        for filepath in glob.glob(filepath_glob):
+            try:
+                os.remove(filepath)
+            except FileNotFoundError as e:
+                message = f&#34;Failed to delete installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                self.logger.warning(message)
+
+    @staticmethod
+    def _mkdir(path: Union[str, Path]):
+        if isinstance(path, str):
+            path = Path(path)
+        path.mkdir(parents=True, exist_ok=True)</code></pre>
+</details>
+<div class="desc"><p>The installation store interface.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>delete_installation(enterprise_id, team_id, user_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>delete_bot(enterprise_id, team_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></li>
+<li><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.FileInstallationStore.logger"><code class="name">prop <span class="ident">logger</span> : logging.Logger</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def logger(self) -&gt; Logger:
+    if self._logger is None:
+        self._logger = logging.getLogger(__name__)
+    return self._logger</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation" href="installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save">async_save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_save_bot">async_save_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_bot">async_find_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_find_installation">async_find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot">async_delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation">async_delete_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all" href="async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all">async_delete_all</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation"><code class="flex name class">
+<span>class <span class="ident">Installation</span></span>
+<span>(</span><span>*,<br>app_id: str | None = None,<br>enterprise_id: str | None = None,<br>enterprise_name: str | None = None,<br>enterprise_url: str | None = None,<br>team_id: str | None = None,<br>team_name: str | None = None,<br>bot_token: str | None = None,<br>bot_id: str | None = None,<br>bot_user_id: str | None = None,<br>bot_scopes: str | Sequence[str] = '',<br>bot_refresh_token: str | None = None,<br>bot_token_expires_in: int | None = None,<br>bot_token_expires_at: int | datetime.datetime | str | None = None,<br>user_id: str,<br>user_token: str | None = None,<br>user_scopes: str | Sequence[str] = '',<br>user_refresh_token: str | None = None,<br>user_token_expires_in: int | None = None,<br>user_token_expires_at: int | datetime.datetime | str | None = None,<br>incoming_webhook_url: str | None = None,<br>incoming_webhook_channel: str | None = None,<br>incoming_webhook_channel_id: str | None = None,<br>incoming_webhook_configuration_url: str | None = None,<br>is_enterprise_install: bool | None = False,<br>token_type: str | None = None,<br>installed_at: float | datetime.datetime | str | None = None,<br>custom_values: Dict[str, Any] | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Installation:
+    app_id: Optional[str]
+    enterprise_id: Optional[str]
+    enterprise_name: Optional[str]
+    enterprise_url: Optional[str]
+    team_id: Optional[str]
+    team_name: Optional[str]
+    bot_token: Optional[str]
+    bot_id: Optional[str]
+    bot_user_id: Optional[str]
+    bot_scopes: Optional[Sequence[str]]
+    bot_refresh_token: Optional[str]  # only when token rotation is enabled
+    # only when token rotation is enabled
+    # Unix time (seconds): only when token rotation is enabled
+    bot_token_expires_at: Optional[int]
+    user_id: str
+    user_token: Optional[str]
+    user_scopes: Optional[Sequence[str]]
+    user_refresh_token: Optional[str]  # only when token rotation is enabled
+    # Unix time (seconds): only when token rotation is enabled
+    user_token_expires_at: Optional[int]
+    incoming_webhook_url: Optional[str]
+    incoming_webhook_channel: Optional[str]
+    incoming_webhook_channel_id: Optional[str]
+    incoming_webhook_configuration_url: Optional[str]
+    is_enterprise_install: bool
+    token_type: Optional[str]
+    installed_at: float
+
+    custom_values: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        # org / workspace
+        enterprise_id: Optional[str] = None,
+        enterprise_name: Optional[str] = None,
+        enterprise_url: Optional[str] = None,
+        team_id: Optional[str] = None,
+        team_name: Optional[str] = None,
+        # bot
+        bot_token: Optional[str] = None,
+        bot_id: Optional[str] = None,
+        bot_user_id: Optional[str] = None,
+        bot_scopes: Union[str, Sequence[str]] = &#34;&#34;,
+        bot_refresh_token: Optional[str] = None,  # only when token rotation is enabled
+        # only when token rotation is enabled
+        bot_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        bot_token_expires_at: Optional[Union[int, datetime, str]] = None,
+        # installer
+        user_id: str,
+        user_token: Optional[str] = None,
+        user_scopes: Union[str, Sequence[str]] = &#34;&#34;,
+        user_refresh_token: Optional[str] = None,  # only when token rotation is enabled
+        # only when token rotation is enabled
+        user_token_expires_in: Optional[int] = None,
+        # only for duplicating this object
+        # only when token rotation is enabled
+        user_token_expires_at: Optional[Union[int, datetime, str]] = None,
+        # incoming webhook
+        incoming_webhook_url: Optional[str] = None,
+        incoming_webhook_channel: Optional[str] = None,
+        incoming_webhook_channel_id: Optional[str] = None,
+        incoming_webhook_configuration_url: Optional[str] = None,
+        # org app
+        is_enterprise_install: Optional[bool] = False,
+        token_type: Optional[str] = None,
+        # timestamps
+        # The expected value type is float but the internals handle other types too
+        # for str values, we supports only ISO datetime format.
+        installed_at: Optional[Union[float, datetime, str]] = None,
+        # custom values
+        custom_values: Optional[Dict[str, Any]] = None,
+    ):
+        self.app_id = app_id
+        self.enterprise_id = enterprise_id
+        self.enterprise_name = enterprise_name
+        self.enterprise_url = enterprise_url
+        self.team_id = team_id
+        self.team_name = team_name
+        self.bot_token = bot_token
+        self.bot_id = bot_id
+        self.bot_user_id = bot_user_id
+        if isinstance(bot_scopes, str):
+            self.bot_scopes = bot_scopes.split(&#34;,&#34;) if len(bot_scopes) &gt; 0 else []
+        else:
+            self.bot_scopes = bot_scopes
+        self.bot_refresh_token = bot_refresh_token
+
+        if bot_token_expires_at is not None:
+            self.bot_token_expires_at = _timestamp_to_type(bot_token_expires_at, int)
+        elif bot_token_expires_in is not None:
+            self.bot_token_expires_at = int(time()) + bot_token_expires_in
+        else:
+            self.bot_token_expires_at = None
+
+        self.user_id = user_id
+        self.user_token = user_token
+        if isinstance(user_scopes, str):
+            self.user_scopes = user_scopes.split(&#34;,&#34;) if len(user_scopes) &gt; 0 else []
+        else:
+            self.user_scopes = user_scopes
+        self.user_refresh_token = user_refresh_token
+
+        if user_token_expires_at is not None:
+            self.user_token_expires_at = _timestamp_to_type(user_token_expires_at, int)
+        elif user_token_expires_in is not None:
+            self.user_token_expires_at = int(time()) + user_token_expires_in
+        else:
+            self.user_token_expires_at = None
+
+        self.incoming_webhook_url = incoming_webhook_url
+        self.incoming_webhook_channel = incoming_webhook_channel
+        self.incoming_webhook_channel_id = incoming_webhook_channel_id
+        self.incoming_webhook_configuration_url = incoming_webhook_configuration_url
+
+        self.is_enterprise_install = is_enterprise_install or False
+        self.token_type = token_type
+
+        if installed_at is None:
+            self.installed_at = datetime.now().timestamp()
+        else:
+            self.installed_at = _timestamp_to_type(installed_at, float)
+
+        self.custom_values = custom_values if custom_values is not None else {}
+
+    def to_bot(self) -&gt; Bot:
+        return Bot(
+            app_id=self.app_id,
+            enterprise_id=self.enterprise_id,
+            enterprise_name=self.enterprise_name,
+            team_id=self.team_id,
+            team_name=self.team_name,
+            bot_token=self.bot_token,  # type: ignore[arg-type]
+            bot_id=self.bot_id,  # type: ignore[arg-type]
+            bot_user_id=self.bot_user_id,  # type: ignore[arg-type]
+            bot_scopes=self.bot_scopes,  # type: ignore[arg-type]
+            bot_refresh_token=self.bot_refresh_token,
+            bot_token_expires_at=self.bot_token_expires_at,
+            is_enterprise_install=self.is_enterprise_install,
+            installed_at=self.installed_at,
+            custom_values=self.custom_values,
+        )
+
+    def set_custom_value(self, name: str, value: Any):
+        self.custom_values[name] = value
+
+    def get_custom_value(self, name: str) -&gt; Optional[Any]:
+        return self.custom_values.get(name)
+
+    def _to_standard_value_dict(self) -&gt; Dict[str, Any]:
+        return {
+            &#34;app_id&#34;: self.app_id,
+            &#34;enterprise_id&#34;: self.enterprise_id,
+            &#34;enterprise_name&#34;: self.enterprise_name,
+            &#34;enterprise_url&#34;: self.enterprise_url,
+            &#34;team_id&#34;: self.team_id,
+            &#34;team_name&#34;: self.team_name,
+            &#34;bot_token&#34;: self.bot_token,
+            &#34;bot_id&#34;: self.bot_id,
+            &#34;bot_user_id&#34;: self.bot_user_id,
+            &#34;bot_scopes&#34;: &#34;,&#34;.join(self.bot_scopes) if self.bot_scopes else None,
+            &#34;bot_refresh_token&#34;: self.bot_refresh_token,
+            &#34;bot_token_expires_at&#34;: (
+                datetime.utcfromtimestamp(self.bot_token_expires_at) if self.bot_token_expires_at is not None else None
+            ),
+            &#34;user_id&#34;: self.user_id,
+            &#34;user_token&#34;: self.user_token,
+            &#34;user_scopes&#34;: &#34;,&#34;.join(self.user_scopes) if self.user_scopes else None,
+            &#34;user_refresh_token&#34;: self.user_refresh_token,
+            &#34;user_token_expires_at&#34;: (
+                datetime.utcfromtimestamp(self.user_token_expires_at) if self.user_token_expires_at is not None else None
+            ),
+            &#34;incoming_webhook_url&#34;: self.incoming_webhook_url,
+            &#34;incoming_webhook_channel&#34;: self.incoming_webhook_channel,
+            &#34;incoming_webhook_channel_id&#34;: self.incoming_webhook_channel_id,
+            &#34;incoming_webhook_configuration_url&#34;: self.incoming_webhook_configuration_url,
+            &#34;is_enterprise_install&#34;: self.is_enterprise_install,
+            &#34;token_type&#34;: self.token_type,
+            &#34;installed_at&#34;: datetime.utcfromtimestamp(self.installed_at),
+        }
+
+    def to_dict_for_copying(self) -&gt; Dict[str, Any]:
+        return {&#34;custom_values&#34;: self.custom_values, **self._to_standard_value_dict()}
+
+    def to_dict(self) -&gt; Dict[str, Any]:
+        # prioritize standard_values over custom_values
+        # when the same keys exist in both
+        return {**self.custom_values, **self._to_standard_value_dict()}</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.Installation.app_id"><code class="name">var <span class="ident">app_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.bot_id"><code class="name">var <span class="ident">bot_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.bot_refresh_token"><code class="name">var <span class="ident">bot_refresh_token</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.bot_scopes"><code class="name">var <span class="ident">bot_scopes</span> : Sequence[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.bot_token"><code class="name">var <span class="ident">bot_token</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.bot_token_expires_at"><code class="name">var <span class="ident">bot_token_expires_at</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.bot_user_id"><code class="name">var <span class="ident">bot_user_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.custom_values"><code class="name">var <span class="ident">custom_values</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.enterprise_id"><code class="name">var <span class="ident">enterprise_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.enterprise_name"><code class="name">var <span class="ident">enterprise_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.enterprise_url"><code class="name">var <span class="ident">enterprise_url</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.incoming_webhook_channel"><code class="name">var <span class="ident">incoming_webhook_channel</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.incoming_webhook_channel_id"><code class="name">var <span class="ident">incoming_webhook_channel_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.incoming_webhook_configuration_url"><code class="name">var <span class="ident">incoming_webhook_configuration_url</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.incoming_webhook_url"><code class="name">var <span class="ident">incoming_webhook_url</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.installed_at"><code class="name">var <span class="ident">installed_at</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.is_enterprise_install"><code class="name">var <span class="ident">is_enterprise_install</span> : bool</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.team_id"><code class="name">var <span class="ident">team_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.team_name"><code class="name">var <span class="ident">team_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.token_type"><code class="name">var <span class="ident">token_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.user_id"><code class="name">var <span class="ident">user_id</span> : str</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.user_refresh_token"><code class="name">var <span class="ident">user_refresh_token</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.user_scopes"><code class="name">var <span class="ident">user_scopes</span> : Sequence[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.user_token"><code class="name">var <span class="ident">user_token</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.user_token_expires_at"><code class="name">var <span class="ident">user_token_expires_at</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.Installation.get_custom_value"><code class="name flex">
+<span>def <span class="ident">get_custom_value</span></span>(<span>self, name: str) ‑> Any | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_custom_value(self, name: str) -&gt; Optional[Any]:
+    return self.custom_values.get(name)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.set_custom_value"><code class="name flex">
+<span>def <span class="ident">set_custom_value</span></span>(<span>self, name: str, value: Any)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_custom_value(self, name: str, value: Any):
+    self.custom_values[name] = value</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.to_bot"><code class="name flex">
+<span>def <span class="ident">to_bot</span></span>(<span>self) ‑> <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_bot(self) -&gt; Bot:
+    return Bot(
+        app_id=self.app_id,
+        enterprise_id=self.enterprise_id,
+        enterprise_name=self.enterprise_name,
+        team_id=self.team_id,
+        team_name=self.team_name,
+        bot_token=self.bot_token,  # type: ignore[arg-type]
+        bot_id=self.bot_id,  # type: ignore[arg-type]
+        bot_user_id=self.bot_user_id,  # type: ignore[arg-type]
+        bot_scopes=self.bot_scopes,  # type: ignore[arg-type]
+        bot_refresh_token=self.bot_refresh_token,
+        bot_token_expires_at=self.bot_token_expires_at,
+        is_enterprise_install=self.is_enterprise_install,
+        installed_at=self.installed_at,
+        custom_values=self.custom_values,
+    )</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; Dict[str, Any]:
+    # prioritize standard_values over custom_values
+    # when the same keys exist in both
+    return {**self.custom_values, **self._to_standard_value_dict()}</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.Installation.to_dict_for_copying"><code class="name flex">
+<span>def <span class="ident">to_dict_for_copying</span></span>(<span>self) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict_for_copying(self) -&gt; Dict[str, Any]:
+    return {&#34;custom_values&#34;: self.custom_values, **self._to_standard_value_dict()}</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore"><code class="flex name class">
+<span>class <span class="ident">InstallationStore</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InstallationStore:
+    &#34;&#34;&#34;The installation store interface.
+
+    The minimum required methods are:
+
+    * save(installation)
+    * find_installation(enterprise_id, team_id, user_id, is_enterprise_install)
+
+    If you would like to properly handle app uninstallations and token revocations,
+    the following methods should be implemented.
+
+    * delete_installation(enterprise_id, team_id, user_id)
+    * delete_all(enterprise_id, team_id)
+
+    If your app needs only bot scope installations, the simpler way to implement would be:
+
+    * save(installation)
+    * find_bot(enterprise_id, team_id, is_enterprise_install)
+    * delete_bot(enterprise_id, team_id)
+    * delete_all(enterprise_id, team_id)
+    &#34;&#34;&#34;
+
+    @property
+    def logger(self) -&gt; Logger:
+        raise NotImplementedError()
+
+    def save(self, installation: Installation):
+        &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def save_bot(self, bot: Bot):
+        &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def find_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Bot]:
+        &#34;&#34;&#34;Finds a bot scope installation per workspace / org&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def find_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+        is_enterprise_install: Optional[bool] = False,
+    ) -&gt; Optional[Installation]:
+        &#34;&#34;&#34;Finds a relevant installation for the given IDs.
+        If the user_id is absent, this method may return the latest installation in the workspace / org.
+        &#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def delete_bot(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ) -&gt; None:
+        &#34;&#34;&#34;Deletes a bot scope installation per workspace / org&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        &#34;&#34;&#34;Deletes an installation that matches the given IDs&#34;&#34;&#34;
+        raise NotImplementedError()
+
+    def delete_all(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+    ):
+        &#34;&#34;&#34;Deletes all installation data for the given workspace / org&#34;&#34;&#34;
+        self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+        self.delete_installation(enterprise_id=enterprise_id, team_id=team_id)</code></pre>
+</details>
+<div class="desc"><p>The installation store interface.</p>
+<p>The minimum required methods are:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_installation(enterprise_id, team_id, user_id, is_enterprise_install)</li>
+</ul>
+<p>If you would like to properly handle app uninstallations and token revocations,
+the following methods should be implemented.</p>
+<ul>
+<li>delete_installation(enterprise_id, team_id, user_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul>
+<p>If your app needs only bot scope installations, the simpler way to implement would be:</p>
+<ul>
+<li>save(installation)</li>
+<li>find_bot(enterprise_id, team_id, is_enterprise_install)</li>
+<li>delete_bot(enterprise_id, team_id)</li>
+<li>delete_all(enterprise_id, team_id)</li>
+</ul></div>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore" href="amazon_s3/index.html#slack_sdk.oauth.installation_store.amazon_s3.AmazonS3InstallationStore">AmazonS3InstallationStore</a></li>
+<li><a title="slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore" href="cacheable_installation_store.html#slack_sdk.oauth.installation_store.cacheable_installation_store.CacheableInstallationStore">CacheableInstallationStore</a></li>
+<li><a title="slack_sdk.oauth.installation_store.file.FileInstallationStore" href="file/index.html#slack_sdk.oauth.installation_store.file.FileInstallationStore">FileInstallationStore</a></li>
+<li><a title="slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore" href="sqlalchemy/index.html#slack_sdk.oauth.installation_store.sqlalchemy.SQLAlchemyInstallationStore">SQLAlchemyInstallationStore</a></li>
+<li><a title="slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore" href="sqlite3/index.html#slack_sdk.oauth.installation_store.sqlite3.SQLite3InstallationStore">SQLite3InstallationStore</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.logger"><code class="name">prop <span class="ident">logger</span> : logging.Logger</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def logger(self) -&gt; Logger:
+    raise NotImplementedError()</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.delete_all"><code class="name flex">
+<span>def <span class="ident">delete_all</span></span>(<span>self, *, enterprise_id: str | None, team_id: str | None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_all(
+    self,
+    *,
+    enterprise_id: Optional[str],
+    team_id: Optional[str],
+):
+    &#34;&#34;&#34;Deletes all installation data for the given workspace / org&#34;&#34;&#34;
+    self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+    self.delete_installation(enterprise_id=enterprise_id, team_id=team_id)</code></pre>
+</details>
+<div class="desc"><p>Deletes all installation data for the given workspace / org</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.delete_bot"><code class="name flex">
+<span>def <span class="ident">delete_bot</span></span>(<span>self, *, enterprise_id: str | None, team_id: str | None) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_bot(
+    self,
+    *,
+    enterprise_id: Optional[str],
+    team_id: Optional[str],
+) -&gt; None:
+    &#34;&#34;&#34;Deletes a bot scope installation per workspace / org&#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+<div class="desc"><p>Deletes a bot scope installation per workspace / org</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.delete_installation"><code class="name flex">
+<span>def <span class="ident">delete_installation</span></span>(<span>self, *, enterprise_id: str | None, team_id: str | None, user_id: str | None = None) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delete_installation(
+    self,
+    *,
+    enterprise_id: Optional[str],
+    team_id: Optional[str],
+    user_id: Optional[str] = None,
+) -&gt; None:
+    &#34;&#34;&#34;Deletes an installation that matches the given IDs&#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+<div class="desc"><p>Deletes an installation that matches the given IDs</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.find_bot"><code class="name flex">
+<span>def <span class="ident">find_bot</span></span>(<span>self,<br>*,<br>enterprise_id: str | None,<br>team_id: str | None,<br>is_enterprise_install: bool | None = False) ‑> <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a> | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_bot(
+    self,
+    *,
+    enterprise_id: Optional[str],
+    team_id: Optional[str],
+    is_enterprise_install: Optional[bool] = False,
+) -&gt; Optional[Bot]:
+    &#34;&#34;&#34;Finds a bot scope installation per workspace / org&#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+<div class="desc"><p>Finds a bot scope installation per workspace / org</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.find_installation"><code class="name flex">
+<span>def <span class="ident">find_installation</span></span>(<span>self,<br>*,<br>enterprise_id: str | None,<br>team_id: str | None,<br>user_id: str | None = None,<br>is_enterprise_install: bool | None = False) ‑> <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a> | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_installation(
+    self,
+    *,
+    enterprise_id: Optional[str],
+    team_id: Optional[str],
+    user_id: Optional[str] = None,
+    is_enterprise_install: Optional[bool] = False,
+) -&gt; Optional[Installation]:
+    &#34;&#34;&#34;Finds a relevant installation for the given IDs.
+    If the user_id is absent, this method may return the latest installation in the workspace / org.
+    &#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+<div class="desc"><p>Finds a relevant installation for the given IDs.
+If the user_id is absent, this method may return the latest installation in the workspace / org.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.save"><code class="name flex">
+<span>def <span class="ident">save</span></span>(<span>self,<br>installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save(self, installation: Installation):
+    &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+<div class="desc"><p>Saves an installation data</p></div>
+</dd>
+<dt id="slack_sdk.oauth.installation_store.InstallationStore.save_bot"><code class="name flex">
+<span>def <span class="ident">save_bot</span></span>(<span>self,<br>bot: <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_bot(self, bot: Bot):
+    &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+<div class="desc"><p>Saves a bot installation data</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.oauth" href="../index.html">slack_sdk.oauth</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="slack_sdk.oauth.installation_store.amazon_s3" href="amazon_s3/index.html">slack_sdk.oauth.installation_store.amazon_s3</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_cacheable_installation_store" href="async_cacheable_installation_store.html">slack_sdk.oauth.installation_store.async_cacheable_installation_store</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store" href="async_installation_store.html">slack_sdk.oauth.installation_store.async_installation_store</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.cacheable_installation_store" href="cacheable_installation_store.html">slack_sdk.oauth.installation_store.cacheable_installation_store</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.file" href="file/index.html">slack_sdk.oauth.installation_store.file</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store" href="installation_store.html">slack_sdk.oauth.installation_store.installation_store</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.internals" href="internals.html">slack_sdk.oauth.installation_store.internals</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.models" href="models/index.html">slack_sdk.oauth.installation_store.models</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlalchemy" href="sqlalchemy/index.html">slack_sdk.oauth.installation_store.sqlalchemy</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.sqlite3" href="sqlite3/index.html">slack_sdk.oauth.installation_store.sqlite3</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.oauth.installation_store.Bot" href="#slack_sdk.oauth.installation_store.Bot">Bot</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.app_id" href="#slack_sdk.oauth.installation_store.Bot.app_id">app_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.bot_id" href="#slack_sdk.oauth.installation_store.Bot.bot_id">bot_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.bot_refresh_token" href="#slack_sdk.oauth.installation_store.Bot.bot_refresh_token">bot_refresh_token</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.bot_scopes" href="#slack_sdk.oauth.installation_store.Bot.bot_scopes">bot_scopes</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.bot_token" href="#slack_sdk.oauth.installation_store.Bot.bot_token">bot_token</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.bot_token_expires_at" href="#slack_sdk.oauth.installation_store.Bot.bot_token_expires_at">bot_token_expires_at</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.bot_user_id" href="#slack_sdk.oauth.installation_store.Bot.bot_user_id">bot_user_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.custom_values" href="#slack_sdk.oauth.installation_store.Bot.custom_values">custom_values</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.enterprise_id" href="#slack_sdk.oauth.installation_store.Bot.enterprise_id">enterprise_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.enterprise_name" href="#slack_sdk.oauth.installation_store.Bot.enterprise_name">enterprise_name</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.get_custom_value" href="#slack_sdk.oauth.installation_store.Bot.get_custom_value">get_custom_value</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.installed_at" href="#slack_sdk.oauth.installation_store.Bot.installed_at">installed_at</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.is_enterprise_install" href="#slack_sdk.oauth.installation_store.Bot.is_enterprise_install">is_enterprise_install</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.set_custom_value" href="#slack_sdk.oauth.installation_store.Bot.set_custom_value">set_custom_value</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.team_id" href="#slack_sdk.oauth.installation_store.Bot.team_id">team_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.team_name" href="#slack_sdk.oauth.installation_store.Bot.team_name">team_name</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.to_dict" href="#slack_sdk.oauth.installation_store.Bot.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Bot.to_dict_for_copying" href="#slack_sdk.oauth.installation_store.Bot.to_dict_for_copying">to_dict_for_copying</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.oauth.installation_store.FileInstallationStore" href="#slack_sdk.oauth.installation_store.FileInstallationStore">FileInstallationStore</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.oauth.installation_store.FileInstallationStore.logger" href="#slack_sdk.oauth.installation_store.FileInstallationStore.logger">logger</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.oauth.installation_store.Installation" href="#slack_sdk.oauth.installation_store.Installation">Installation</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.app_id" href="#slack_sdk.oauth.installation_store.Installation.app_id">app_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.bot_id" href="#slack_sdk.oauth.installation_store.Installation.bot_id">bot_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.bot_refresh_token" href="#slack_sdk.oauth.installation_store.Installation.bot_refresh_token">bot_refresh_token</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.bot_scopes" href="#slack_sdk.oauth.installation_store.Installation.bot_scopes">bot_scopes</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.bot_token" href="#slack_sdk.oauth.installation_store.Installation.bot_token">bot_token</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.bot_token_expires_at" href="#slack_sdk.oauth.installation_store.Installation.bot_token_expires_at">bot_token_expires_at</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.bot_user_id" href="#slack_sdk.oauth.installation_store.Installation.bot_user_id">bot_user_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.custom_values" href="#slack_sdk.oauth.installation_store.Installation.custom_values">custom_values</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.enterprise_id" href="#slack_sdk.oauth.installation_store.Installation.enterprise_id">enterprise_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.enterprise_name" href="#slack_sdk.oauth.installation_store.Installation.enterprise_name">enterprise_name</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.enterprise_url" href="#slack_sdk.oauth.installation_store.Installation.enterprise_url">enterprise_url</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.get_custom_value" href="#slack_sdk.oauth.installation_store.Installation.get_custom_value">get_custom_value</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.incoming_webhook_channel" href="#slack_sdk.oauth.installation_store.Installation.incoming_webhook_channel">incoming_webhook_channel</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.incoming_webhook_channel_id" href="#slack_sdk.oauth.installation_store.Installation.incoming_webhook_channel_id">incoming_webhook_channel_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.incoming_webhook_configuration_url" href="#slack_sdk.oauth.installation_store.Installation.incoming_webhook_configuration_url">incoming_webhook_configuration_url</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.incoming_webhook_url" href="#slack_sdk.oauth.installation_store.Installation.incoming_webhook_url">incoming_webhook_url</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.installed_at" href="#slack_sdk.oauth.installation_store.Installation.installed_at">installed_at</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.is_enterprise_install" href="#slack_sdk.oauth.installation_store.Installation.is_enterprise_install">is_enterprise_install</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.set_custom_value" href="#slack_sdk.oauth.installation_store.Installation.set_custom_value">set_custom_value</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.team_id" href="#slack_sdk.oauth.installation_store.Installation.team_id">team_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.team_name" href="#slack_sdk.oauth.installation_store.Installation.team_name">team_name</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.to_bot" href="#slack_sdk.oauth.installation_store.Installation.to_bot">to_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.to_dict" href="#slack_sdk.oauth.installation_store.Installation.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.to_dict_for_copying" href="#slack_sdk.oauth.installation_store.Installation.to_dict_for_copying">to_dict_for_copying</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.token_type" href="#slack_sdk.oauth.installation_store.Installation.token_type">token_type</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.user_id" href="#slack_sdk.oauth.installation_store.Installation.user_id">user_id</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.user_refresh_token" href="#slack_sdk.oauth.installation_store.Installation.user_refresh_token">user_refresh_token</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.user_scopes" href="#slack_sdk.oauth.installation_store.Installation.user_scopes">user_scopes</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.user_token" href="#slack_sdk.oauth.installation_store.Installation.user_token">user_token</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.Installation.user_token_expires_at" href="#slack_sdk.oauth.installation_store.Installation.user_token_expires_at">user_token_expires_at</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.oauth.installation_store.InstallationStore" href="#slack_sdk.oauth.installation_store.InstallationStore">InstallationStore</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.delete_all" href="#slack_sdk.oauth.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.delete_bot" href="#slack_sdk.oauth.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.delete_installation" href="#slack_sdk.oauth.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.find_bot" href="#slack_sdk.oauth.installation_store.InstallationStore.find_bot">find_bot</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.find_installation" href="#slack_sdk.oauth.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.logger" href="#slack_sdk.oauth.installation_store.InstallationStore.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.save" href="#slack_sdk.oauth.installation_store.InstallationStore.save">save</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.InstallationStore.save_bot" href="#slack_sdk.oauth.installation_store.InstallationStore.save_bot">save_bot</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

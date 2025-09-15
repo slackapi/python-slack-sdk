@@ -37,7 +37,7 @@ class TestAiohttp(unittest.TestCase):
             app_token="xapp-A111-222-xyz",
             web_client=self.web_client,
             auto_reconnect_enabled=False,
-            loop=asyncio.new_event_loop(),
+            loop=asyncio.get_event_loop(),
         )
         try:
             self.assertIsNotNone(client)

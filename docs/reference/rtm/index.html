@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>slack_sdk.rtm API documentation</title>
+<meta name="description" content="A Python module for interacting with Slack&#39;s RTM API.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.rtm</code></h1>
+</header>
+<section id="section-intro">
+<p>A Python module for interacting with Slack's RTM API.</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="slack_sdk.rtm.v2" href="v2/index.html">slack_sdk.rtm.v2</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.rtm.RTMClient"><code class="flex name class">
+<span>class <span class="ident">RTMClient</span></span>
+<span>(</span><span>*,<br>token: str,<br>run_async: bool | None = False,<br>auto_reconnect: bool | None = True,<br>ssl: ssl.SSLContext | None = None,<br>proxy: str | None = None,<br>timeout: int | None = 30,<br>base_url: str | None = 'https://slack.com/api/',<br>connect_method: str | None = None,<br>ping_interval: int | None = 30,<br>loop: asyncio.events.AbstractEventLoop | None = None,<br>headers: dict | None = {})</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RTMClient(object):
+    &#34;&#34;&#34;An RTMClient allows apps to communicate with the Slack Platform&#39;s RTM API.
+
+    The event-driven architecture of this client allows you to simply
+    link callbacks to their corresponding events. When an event occurs
+    this client executes your callback while passing along any
+    information it receives.
+
+    Attributes:
+        token (str): A string specifying an xoxp or xoxb token.
+        run_async (bool): A boolean specifying if the client should
+            be run in async mode. Default is False.
+        auto_reconnect (bool): When true the client will automatically
+            reconnect when (not manually) disconnected. Default is True.
+        ssl (SSLContext): To use SSL support, pass an SSLContext object here.
+            Default is None.
+        proxy (str): To use proxy support, pass the string of the proxy server.
+            e.g. &#34;http://proxy.com&#34;
+            Authentication credentials can be passed in proxy URL.
+            e.g. &#34;http://user:pass@some.proxy.com&#34;
+            Default is None.
+        timeout (int): The amount of seconds the session should wait before timing out.
+            Default is 30.
+        base_url (str): The base url for all HTTP requests.
+            Note: This is only used in the WebClient.
+            Default is &#34;https://slack.com/api/&#34;.
+        connect_method (str): An string specifying if the client
+            will connect with `rtm.connect` or `rtm.start`.
+            Default is `rtm.connect`.
+        ping_interval (int): automatically send &#34;ping&#34; command every
+            specified period of seconds. If set to 0, do not send automatically.
+            Default is 30.
+        loop (AbstractEventLoop): An event loop provided by asyncio.
+            If None is specified we attempt to use the current loop
+            with `get_event_loop`. Default is None.
+
+    Methods:
+        ping: Sends a ping message over the websocket to Slack.
+        typing: Sends a typing indicator to the specified channel.
+        on: Stores and links callbacks to websocket and Slack events.
+        run_on: Decorator that stores and links callbacks to websocket and Slack events.
+        start: Starts an RTM Session with Slack.
+        stop: Closes the websocket connection and ensures it won&#39;t reconnect.
+
+    Example:
+    ```python
+    import os
+    from slack import RTMClient
+
+    @RTMClient.run_on(event=&#34;message&#34;)
+    def say_hello(**payload):
+        data = payload[&#39;data&#39;]
+        web_client = payload[&#39;web_client&#39;]
+        if &#39;Hello&#39; in data[&#39;text&#39;]:
+            channel_id = data[&#39;channel&#39;]
+            thread_ts = data[&#39;ts&#39;]
+            user = data[&#39;user&#39;]
+
+            web_client.chat_postMessage(
+                channel=channel_id,
+                text=f&#34;Hi &lt;@{user}&gt;!&#34;,
+                thread_ts=thread_ts
+            )
+
+    slack_token = os.environ[&#34;SLACK_API_TOKEN&#34;]
+    rtm_client = RTMClient(token=slack_token)
+    rtm_client.start()
+    ```
+
+    Note:
+        The initial state returned when establishing an RTM connection will
+        be available as the data in payload for the &#39;open&#39; event. This data is not and
+        will not be stored on the RTM Client.
+
+        Any attributes or methods prefixed with _underscores are
+        intended to be &#34;private&#34; internal use only. They may be changed or
+        removed at anytime.
+    &#34;&#34;&#34;
+
+    _callbacks: DefaultDict = collections.defaultdict(list)
+
+    def __init__(
+        self,
+        *,
+        token: str,
+        run_async: Optional[bool] = False,
+        auto_reconnect: Optional[bool] = True,
+        ssl: Optional[SSLContext] = None,
+        proxy: Optional[str] = None,
+        timeout: Optional[int] = 30,
+        base_url: Optional[str] = WebClient.BASE_URL,
+        connect_method: Optional[str] = None,
+        ping_interval: Optional[int] = 30,
+        loop: Optional[asyncio.AbstractEventLoop] = None,
+        headers: Optional[dict] = {},
+    ):
+        self.token = token.strip()
+        self.run_async = run_async
+        self.auto_reconnect = auto_reconnect
+        self.ssl = ssl
+        self.proxy = proxy
+        self.timeout = timeout
+        self.base_url = base_url
+        self.connect_method = connect_method
+        self.ping_interval = ping_interval
+        self.headers = headers
+        self._event_loop = loop or asyncio.get_event_loop()
+        self._web_client = None
+        self._websocket = None
+        self._session = None
+        self._logger = logging.getLogger(__name__)
+        self._last_message_id = 0
+        self._connection_attempts = 0
+        self._stopped = False
+        self._web_client = WebClient(
+            token=self.token,
+            base_url=self.base_url,  # type: ignore[arg-type]
+            timeout=self.timeout,  # type: ignore[arg-type]
+            ssl=self.ssl,
+            proxy=self.proxy,
+            run_async=self.run_async,  # type: ignore[arg-type]
+            loop=self._event_loop,
+            session=self._session,
+            headers=self.headers,
+        )
+
+    @staticmethod
+    def run_on(*, event: str):
+        &#34;&#34;&#34;A decorator to store and link a callback to an event.&#34;&#34;&#34;
+
+        def decorator(callback):
+            RTMClient.on(event=event, callback=callback)
+            return callback
+
+        return decorator
+
+    @classmethod
+    def on(cls, *, event: str, callback: Callable):
+        &#34;&#34;&#34;Stores and links the callback(s) to the event.
+
+        Args:
+            event (str): A string that specifies a Slack or websocket event.
+                e.g. &#39;channel_joined&#39; or &#39;open&#39;
+            callback (Callable): Any object or a list of objects that can be called.
+                e.g. &lt;function say_hello at 0x101234567&gt; or
+                [&lt;function say_hello at 0x10123&gt;,&lt;function say_bye at 0x10456&gt;]
+
+        Raises:
+            SlackClientError: The specified callback is not callable.
+            SlackClientError: The callback must accept keyword arguments (**kwargs).
+        &#34;&#34;&#34;
+        if isinstance(callback, list):
+            for cb in callback:
+                cls._validate_callback(cb)
+            previous_callbacks = cls._callbacks[event]
+            cls._callbacks[event] = list(set(previous_callbacks + callback))
+        else:
+            cls._validate_callback(callback)
+            cls._callbacks[event].append(callback)
+
+    def start(self) -&gt; Union[asyncio.Future, Any]:
+        &#34;&#34;&#34;Starts an RTM Session with Slack.
+
+        Makes an authenticated call to Slack&#39;s RTM API to retrieve
+        a websocket URL and then connects to the message server.
+        As events stream-in we run any associated callbacks stored
+        on the client.
+
+        If &#39;auto_reconnect&#39; is specified we
+        retrieve a new url and reconnect any time the connection
+        is lost unintentionally or an exception is thrown.
+
+        Raises:
+            SlackApiError: Unable to retrieve RTM URL from Slack.
+        &#34;&#34;&#34;
+        # Not yet implemented: Add Windows support for graceful shutdowns.
+        if os.name != &#34;nt&#34; and current_thread() == main_thread():
+            signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
+            for s in signals:
+                self._event_loop.add_signal_handler(s, self.stop)
+
+        future: Future[Any] = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
+
+        if self.run_async:
+            return future
+        return self._event_loop.run_until_complete(future)
+
+    def stop(self):
+        &#34;&#34;&#34;Closes the websocket connection and ensures it won&#39;t reconnect.
+
+        If your application outputs the following errors,
+        call #async_stop() instead and await for the completion on your application side.
+
+        asyncio/base_events.py:641: RuntimeWarning:
+          coroutine &#39;ClientWebSocketResponse.close&#39; was never awaited self._ready.clear()
+        &#34;&#34;&#34;
+        self._logger.debug(&#34;The Slack RTMClient is shutting down.&#34;)
+        self._stopped = True
+        self._close_websocket()
+
+    async def async_stop(self):
+        &#34;&#34;&#34;Closes the websocket connection and ensures it won&#39;t reconnect.&#34;&#34;&#34;
+        self._logger.debug(&#34;The Slack RTMClient is shutting down.&#34;)
+        remaining_futures = self._close_websocket()
+        for future in remaining_futures:
+            await future
+        self._stopped = True
+
+    def send_over_websocket(self, *, payload: dict):
+        &#34;&#34;&#34;Sends a message to Slack over the WebSocket connection.
+
+        Note:
+            The RTM API only supports posting simple messages formatted using
+            our default message formatting mode. It does not support
+            attachments or other message formatting modes. For this reason
+            we recommend users send messages via the Web API methods.
+            e.g. web_client.chat_postMessage()
+
+            If the message &#34;id&#34; is not specified in the payload, it&#39;ll be added.
+
+        Args:
+            payload (dict): The message to send over the wesocket.
+            e.g.
+            {
+                &#34;id&#34;: 1,
+                &#34;type&#34;: &#34;typing&#34;,
+                &#34;channel&#34;: &#34;C024BE91L&#34;
+            }
+
+        Raises:
+            SlackClientNotConnectedError: Websocket connection is closed.
+        &#34;&#34;&#34;
+        return asyncio.ensure_future(self._send_json(payload), loop=self._event_loop)
+
+    async def _send_json(self, payload):
+        if self._websocket is None or self._event_loop is None:
+            raise client_err.SlackClientNotConnectedError(&#34;Websocket connection is closed.&#34;)
+        if &#34;id&#34; not in payload:
+            payload[&#34;id&#34;] = self._next_msg_id()
+
+        return await self._websocket.send_json(payload)
+
+    async def ping(self):
+        &#34;&#34;&#34;Sends a ping message over the websocket to Slack.
+
+        Not all web browsers support the WebSocket ping spec,
+        so the RTM protocol also supports ping/pong messages.
+
+        Raises:
+            SlackClientNotConnectedError: Websocket connection is closed.
+        &#34;&#34;&#34;
+        payload = {&#34;id&#34;: self._next_msg_id(), &#34;type&#34;: &#34;ping&#34;}
+        await self._send_json(payload=payload)
+
+    async def typing(self, *, channel: str):
+        &#34;&#34;&#34;Sends a typing indicator to the specified channel.
+
+        This indicates that this app is currently
+        writing a message to send to a channel.
+
+        Args:
+            channel (str): The channel id. e.g. &#39;C024BE91L&#39;
+
+        Raises:
+            SlackClientNotConnectedError: Websocket connection is closed.
+        &#34;&#34;&#34;
+        payload = {&#34;id&#34;: self._next_msg_id(), &#34;type&#34;: &#34;typing&#34;, &#34;channel&#34;: channel}
+        await self._send_json(payload=payload)
+
+    @staticmethod
+    def _validate_callback(callback):
+        &#34;&#34;&#34;Checks if the specified callback is callable and accepts a kwargs param.
+
+        Args:
+            callback (obj): Any object or a list of objects that can be called.
+                e.g. &lt;function say_hello at 0x101234567&gt;
+
+        Raises:
+            SlackClientError: The specified callback is not callable.
+            SlackClientError: The callback must accept keyword arguments (**kwargs).
+        &#34;&#34;&#34;
+
+        cb_name = callback.__name__ if hasattr(callback, &#34;__name__&#34;) else callback
+        if not callable(callback):
+            msg = &#34;The specified callback &#39;{}&#39; is not callable.&#34;.format(cb_name)
+            raise client_err.SlackClientError(msg)
+        callback_params = inspect.signature(callback).parameters.values()
+        if not any(param for param in callback_params if param.kind == param.VAR_KEYWORD):
+            msg = &#34;The callback &#39;{}&#39; must accept keyword arguments (**kwargs).&#34;.format(cb_name)
+            raise client_err.SlackClientError(msg)
+
+    def _next_msg_id(self):
+        &#34;&#34;&#34;Retrieves the next message id.
+
+        When sending messages to Slack every event should
+        have a unique (for that connection) positive integer ID.
+
+        Returns:
+            An integer representing the message id. e.g. 98
+        &#34;&#34;&#34;
+        self._last_message_id += 1
+        return self._last_message_id
+
+    async def _connect_and_read(self):
+        &#34;&#34;&#34;Retrieves the WS url and connects to Slack&#39;s RTM API.
+
+        Makes an authenticated call to Slack&#39;s Web API to retrieve
+        a websocket URL. Then connects to the message server and
+        reads event messages as they come in.
+
+        If &#39;auto_reconnect&#39; is specified we
+        retrieve a new url and reconnect any time the connection
+        is lost unintentionally or an exception is thrown.
+
+        Raises:
+            SlackApiError: Unable to retrieve RTM URL from Slack.
+            websockets.exceptions: Errors thrown by the &#39;websockets&#39; library.
+        &#34;&#34;&#34;
+        while not self._stopped:
+            try:
+                self._connection_attempts += 1
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=self.timeout)) as session:
+                    self._session = session
+                    url, data = await self._retrieve_websocket_info()
+                    async with session.ws_connect(
+                        url,
+                        heartbeat=self.ping_interval,
+                        ssl=self.ssl,
+                        proxy=self.proxy,
+                    ) as websocket:
+                        self._logger.debug(&#34;The Websocket connection has been opened.&#34;)
+                        self._websocket = websocket
+                        await self._dispatch_event(event=&#34;open&#34;, data=data)
+                        await self._read_messages()
+                        # The websocket has been disconnected, or self._stopped is True
+                        if not self._stopped and not self.auto_reconnect:
+                            self._logger.warning(&#34;Not reconnecting the Websocket because auto_reconnect is False&#34;)
+                            return
+                        # No need to wait exponentially here, since the connection was
+                        # established OK, but timed out, or was closed remotely
+            except (
+                client_err.SlackClientNotConnectedError,
+                client_err.SlackApiError,
+                # Not yet implemented: Catch websocket exceptions thrown by aiohttp.
+            ) as exception:
+                await self._dispatch_event(event=&#34;error&#34;, data=exception)
+                error_code = exception.response.get(&#34;error&#34;, None) if hasattr(exception, &#34;response&#34;) else None
+                if (
+                    self.auto_reconnect
+                    and not self._stopped
+                    and error_code != &#34;invalid_auth&#34;  # &#34;invalid_auth&#34; is unrecoverable
+                ):
+                    await self._wait_exponentially(exception)
+                    continue
+                self._logger.exception(&#34;The Websocket encountered an error. Closing the connection...&#34;)
+                self._close_websocket()
+                raise
+
+    async def _read_messages(self):
+        &#34;&#34;&#34;Process messages received on the WebSocket connection.&#34;&#34;&#34;
+        while not self._stopped and self._websocket is not None:
+            try:
+                # Wait for a message to be received, but timeout after a second so that
+                # we can check if the socket has been closed, or if self._stopped is
+                # True
+                message = await self._websocket.receive(timeout=1)
+            except asyncio.TimeoutError:
+                if not self._websocket.closed:
+                    # We didn&#39;t receive a message within the timeout interval, but
+                    # aiohttp hasn&#39;t closed the socket, so ping responses must still be
+                    # returning
+                    continue
+                self._logger.warning(
+                    &#34;Websocket was closed (%s).&#34;,
+                    self._websocket.close_code if self._websocket else &#34;&#34;,
+                )
+                await self._dispatch_event(
+                    event=&#34;error&#34;,
+                    data=self._websocket.exception() if self._websocket else &#34;&#34;,
+                )
+                self._websocket = None
+                await self._dispatch_event(event=&#34;close&#34;)
+                return
+
+            if message.type == aiohttp.WSMsgType.TEXT:
+                try:
+                    payload = message.json()
+                    event = payload.pop(&#34;type&#34;, &#34;Unknown&#34;)
+                    await self._dispatch_event(event, data=payload)
+                except Exception as err:
+                    data = message.data if message else message
+                    self._logger.info(f&#34;Caught a raised exception ({err}) while dispatching a TEXT message ({data})&#34;)
+                    # Raised exceptions here happen in users&#39; code and were just unhandled.
+                    # As they&#39;re not intended for closing current WebSocket connection,
+                    # this exception should not be propagated to higher level (#_connect_and_read()).
+                    continue
+            elif message.type == aiohttp.WSMsgType.ERROR:
+                self._logger.error(&#34;Received an error on the websocket: %r&#34;, message)
+                await self._dispatch_event(event=&#34;error&#34;, data=message)
+            elif message.type in (
+                aiohttp.WSMsgType.CLOSE,
+                aiohttp.WSMsgType.CLOSING,
+                aiohttp.WSMsgType.CLOSED,
+            ):
+                self._logger.warning(&#34;Websocket was closed.&#34;)
+                self._websocket = None
+                await self._dispatch_event(event=&#34;close&#34;)
+            else:
+                self._logger.debug(&#34;Received unhandled message type: %r&#34;, message)
+
+    async def _dispatch_event(self, event, data=None):
+        &#34;&#34;&#34;Dispatches the event and executes any associated callbacks.
+
+        Note: To prevent the app from crashing due to callback errors. We
+        catch all exceptions and send all data to the logger.
+
+        Args:
+            event (str): The type of event. e.g. &#39;bot_added&#39;
+            data (dict): The data Slack sent. e.g.
+            {
+                &#34;type&#34;: &#34;bot_added&#34;,
+                &#34;bot&#34;: {
+                    &#34;id&#34;: &#34;B024BE7LH&#34;,
+                    &#34;app_id&#34;: &#34;A4H1JB4AZ&#34;,
+                    &#34;name&#34;: &#34;hugbot&#34;
+                }
+            }
+        &#34;&#34;&#34;
+        if self._logger.level &lt;= logging.DEBUG:
+            self._logger.debug(&#34;Received an event: &#39;%s&#39; - %s&#34;, event, data)
+        for callback in self._callbacks[event]:
+            self._logger.debug(
+                &#34;Running %s callbacks for event: &#39;%s&#39;&#34;,
+                len(self._callbacks[event]),
+                event,
+            )
+            try:
+                if self._stopped and event not in [&#34;close&#34;, &#34;error&#34;]:
+                    # Don&#39;t run callbacks if client was stopped unless they&#39;re
+                    # close/error callbacks.
+                    break
+
+                if inspect.iscoroutinefunction(callback):
+                    await callback(rtm_client=self, web_client=self._web_client, data=data)
+                else:
+                    if self.run_async is True:
+                        raise client_err.SlackRequestError(
+                            f&#39;The callback &#34;{callback.__name__}&#34; is NOT a coroutine. &#39;
+                            &#34;Running such with run_async=True is unsupported. &#34;
+                            &#34;Consider adding async/await to the method &#34;
+                            &#34;or going with run_async=False if your app is not really non-blocking.&#34;
+                        )
+                    payload = {
+                        &#34;rtm_client&#34;: self,
+                        &#34;web_client&#34;: self._web_client,
+                        &#34;data&#34;: data,
+                    }
+                    callback(**payload)
+            except Exception as err:
+                name = callback.__name__
+                module = callback.__module__
+                msg = f&#34;When calling &#39;#{name}()&#39; in the &#39;{module}&#39; module the following error was raised: {err}&#34;
+                self._logger.error(msg)
+                raise
+
+    async def _retrieve_websocket_info(self):
+        &#34;&#34;&#34;Retrieves the WebSocket info from Slack.
+
+        Returns:
+            A tuple of websocket information.
+            e.g.
+            (
+                &#34;wss://...&#34;,
+                {
+                    &#34;self&#34;: {&#34;id&#34;: &#34;U01234ABC&#34;,&#34;name&#34;: &#34;robotoverlord&#34;},
+                    &#34;team&#34;: {
+                        &#34;domain&#34;: &#34;exampledomain&#34;,
+                        &#34;id&#34;: &#34;T123450FP&#34;,
+                        &#34;name&#34;: &#34;ExampleName&#34;
+                    }
+                }
+            )
+
+        Raises:
+            SlackApiError: Unable to retrieve RTM URL from Slack.
+        &#34;&#34;&#34;
+        if self._web_client is None:
+            self._web_client = WebClient(
+                token=self.token,
+                base_url=self.base_url,
+                timeout=self.timeout,
+                ssl=self.ssl,
+                proxy=self.proxy,
+                run_async=True,
+                loop=self._event_loop,
+                session=self._session,
+                headers=self.headers,
+            )
+        self._logger.debug(&#34;Retrieving websocket info.&#34;)
+        use_rtm_start = self.connect_method in [&#34;rtm.start&#34;, &#34;rtm_start&#34;]
+        if self.run_async:
+            if use_rtm_start:
+                resp = await self._web_client.rtm_start()
+            else:
+                resp = await self._web_client.rtm_connect()
+        else:
+            if use_rtm_start:
+                resp = self._web_client.rtm_start()
+            else:
+                resp = self._web_client.rtm_connect()
+
+        url = resp.get(&#34;url&#34;)
+        if url is None:
+            msg = &#34;Unable to retrieve RTM URL from Slack.&#34;
+            raise client_err.SlackApiError(message=msg, response=resp)
+        return url, resp.data
+
+    async def _wait_exponentially(self, exception, max_wait_time=300):
+        &#34;&#34;&#34;Wait exponentially longer for each connection attempt.
+
+        Calculate the number of seconds to wait and then add
+        a random number of milliseconds to avoid coincidental
+        synchronized client retries. Wait up to the maximum amount
+        of wait time specified via &#39;max_wait_time&#39;. However,
+        if Slack returned how long to wait use that.
+        &#34;&#34;&#34;
+        if hasattr(exception, &#34;response&#34;):
+            wait_time = exception.response.get(&#34;headers&#34;, {}).get(
+                &#34;Retry-After&#34;,
+                min((2**self._connection_attempts) + random.random(), max_wait_time),
+            )
+            self._logger.debug(&#34;Waiting %s seconds before reconnecting.&#34;, wait_time)
+            await asyncio.sleep(float(wait_time))
+
+    def _close_websocket(self) -&gt; Sequence[Future]:
+        &#34;&#34;&#34;Closes the websocket connection.&#34;&#34;&#34;
+        futures = []
+        close_method = getattr(self._websocket, &#34;close&#34;, None)
+        if callable(close_method):
+            future = asyncio.ensure_future(close_method(), loop=self._event_loop)
+            futures.append(future)
+        self._websocket = None
+        event_f = asyncio.ensure_future(self._dispatch_event(event=&#34;close&#34;), loop=self._event_loop)
+        futures.append(event_f)
+        return futures</code></pre>
+</details>
+<div class="desc"><p>An RTMClient allows apps to communicate with the Slack Platform's RTM API.</p>
+<p>The event-driven architecture of this client allows you to simply
+link callbacks to their corresponding events. When an event occurs
+this client executes your callback while passing along any
+information it receives.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>token</code></strong> :&ensp;<code>str</code></dt>
+<dd>A string specifying an xoxp or xoxb token.</dd>
+<dt><strong><code>run_async</code></strong> :&ensp;<code>bool</code></dt>
+<dd>A boolean specifying if the client should
+be run in async mode. Default is False.</dd>
+<dt><strong><code>auto_reconnect</code></strong> :&ensp;<code>bool</code></dt>
+<dd>When true the client will automatically
+reconnect when (not manually) disconnected. Default is True.</dd>
+<dt><strong><code>ssl</code></strong> :&ensp;<code>SSLContext</code></dt>
+<dd>To use SSL support, pass an SSLContext object here.
+Default is None.</dd>
+<dt><strong><code>proxy</code></strong> :&ensp;<code>str</code></dt>
+<dd>To use proxy support, pass the string of the proxy server.
+e.g. "http://proxy.com"
+Authentication credentials can be passed in proxy URL.
+e.g. "http://user:pass@some.proxy.com"
+Default is None.</dd>
+<dt><strong><code>timeout</code></strong> :&ensp;<code>int</code></dt>
+<dd>The amount of seconds the session should wait before timing out.
+Default is 30.</dd>
+<dt><strong><code>base_url</code></strong> :&ensp;<code>str</code></dt>
+<dd>The base url for all HTTP requests.
+Note: This is only used in the WebClient.
+Default is "https://slack.com/api/".</dd>
+<dt><strong><code>connect_method</code></strong> :&ensp;<code>str</code></dt>
+<dd>An string specifying if the client
+will connect with <code>rtm.connect</code> or <code>rtm.start</code>.
+Default is <code>rtm.connect</code>.</dd>
+<dt><strong><code>ping_interval</code></strong> :&ensp;<code>int</code></dt>
+<dd>automatically send "ping" command every
+specified period of seconds. If set to 0, do not send automatically.
+Default is 30.</dd>
+<dt><strong><code>loop</code></strong> :&ensp;<code>AbstractEventLoop</code></dt>
+<dd>An event loop provided by asyncio.
+If None is specified we attempt to use the current loop
+with <code>get_event_loop</code>. Default is None.</dd>
+</dl>
+<h2 id="methods">Methods</h2>
+<p>ping: Sends a ping message over the websocket to Slack.
+typing: Sends a typing indicator to the specified channel.
+on: Stores and links callbacks to websocket and Slack events.
+run_on: Decorator that stores and links callbacks to websocket and Slack events.
+start: Starts an RTM Session with Slack.
+stop: Closes the websocket connection and ensures it won't reconnect.</p>
+<p>Example:</p>
+<pre><code class="language-python">import os
+from slack import RTMClient
+
+@RTMClient.run_on(event=&quot;message&quot;)
+def say_hello(**payload):
+    data = payload['data']
+    web_client = payload['web_client']
+    if 'Hello' in data['text']:
+        channel_id = data['channel']
+        thread_ts = data['ts']
+        user = data['user']
+
+        web_client.chat_postMessage(
+            channel=channel_id,
+            text=f&quot;Hi &lt;@{user}&gt;!&quot;,
+            thread_ts=thread_ts
+        )
+
+slack_token = os.environ[&quot;SLACK_API_TOKEN&quot;]
+rtm_client = RTMClient(token=slack_token)
+rtm_client.start()
+</code></pre>
+<h2 id="note">Note</h2>
+<p>The initial state returned when establishing an RTM connection will
+be available as the data in payload for the 'open' event. This data is not and
+will not be stored on the RTM Client.</p>
+<p>Any attributes or methods prefixed with _underscores are
+intended to be "private" internal use only. They may be changed or
+removed at anytime.</p></div>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.rtm.RTMClient.on"><code class="name flex">
+<span>def <span class="ident">on</span></span>(<span>*, event: str, callback: Callable)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Stores and links the callback(s) to the event.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>event</code></strong> :&ensp;<code>str</code></dt>
+<dd>A string that specifies a Slack or websocket event.
+e.g. 'channel_joined' or 'open'</dd>
+<dt><strong><code>callback</code></strong> :&ensp;<code>Callable</code></dt>
+<dd>Any object or a list of objects that can be called.
+e.g. <function say_hello at 0x101234567> or
+[<function say_hello at 0x10123>,<function say_bye at 0x10456>]</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>SlackClientError</code></dt>
+<dd>The specified callback is not callable.</dd>
+<dt><code>SlackClientError</code></dt>
+<dd>The callback must accept keyword arguments (**kwargs).</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.rtm.RTMClient.run_on"><code class="name flex">
+<span>def <span class="ident">run_on</span></span>(<span>*, event: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def run_on(*, event: str):
+    &#34;&#34;&#34;A decorator to store and link a callback to an event.&#34;&#34;&#34;
+
+    def decorator(callback):
+        RTMClient.on(event=event, callback=callback)
+        return callback
+
+    return decorator</code></pre>
+</details>
+<div class="desc"><p>A decorator to store and link a callback to an event.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.rtm.RTMClient.async_stop"><code class="name flex">
+<span>async def <span class="ident">async_stop</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def async_stop(self):
+    &#34;&#34;&#34;Closes the websocket connection and ensures it won&#39;t reconnect.&#34;&#34;&#34;
+    self._logger.debug(&#34;The Slack RTMClient is shutting down.&#34;)
+    remaining_futures = self._close_websocket()
+    for future in remaining_futures:
+        await future
+    self._stopped = True</code></pre>
+</details>
+<div class="desc"><p>Closes the websocket connection and ensures it won't reconnect.</p></div>
+</dd>
+<dt id="slack_sdk.rtm.RTMClient.ping"><code class="name flex">
+<span>async def <span class="ident">ping</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def ping(self):
+    &#34;&#34;&#34;Sends a ping message over the websocket to Slack.
+
+    Not all web browsers support the WebSocket ping spec,
+    so the RTM protocol also supports ping/pong messages.
+
+    Raises:
+        SlackClientNotConnectedError: Websocket connection is closed.
+    &#34;&#34;&#34;
+    payload = {&#34;id&#34;: self._next_msg_id(), &#34;type&#34;: &#34;ping&#34;}
+    await self._send_json(payload=payload)</code></pre>
+</details>
+<div class="desc"><p>Sends a ping message over the websocket to Slack.</p>
+<p>Not all web browsers support the WebSocket ping spec,
+so the RTM protocol also supports ping/pong messages.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>SlackClientNotConnectedError</code></dt>
+<dd>Websocket connection is closed.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.rtm.RTMClient.send_over_websocket"><code class="name flex">
+<span>def <span class="ident">send_over_websocket</span></span>(<span>self, *, payload: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send_over_websocket(self, *, payload: dict):
+    &#34;&#34;&#34;Sends a message to Slack over the WebSocket connection.
+
+    Note:
+        The RTM API only supports posting simple messages formatted using
+        our default message formatting mode. It does not support
+        attachments or other message formatting modes. For this reason
+        we recommend users send messages via the Web API methods.
+        e.g. web_client.chat_postMessage()
+
+        If the message &#34;id&#34; is not specified in the payload, it&#39;ll be added.
+
+    Args:
+        payload (dict): The message to send over the wesocket.
+        e.g.
+        {
+            &#34;id&#34;: 1,
+            &#34;type&#34;: &#34;typing&#34;,
+            &#34;channel&#34;: &#34;C024BE91L&#34;
+        }
+
+    Raises:
+        SlackClientNotConnectedError: Websocket connection is closed.
+    &#34;&#34;&#34;
+    return asyncio.ensure_future(self._send_json(payload), loop=self._event_loop)</code></pre>
+</details>
+<div class="desc"><p>Sends a message to Slack over the WebSocket connection.</p>
+<h2 id="note">Note</h2>
+<p>The RTM API only supports posting simple messages formatted using
+our default message formatting mode. It does not support
+attachments or other message formatting modes. For this reason
+we recommend users send messages via the Web API methods.
+e.g. web_client.chat_postMessage()</p>
+<p>If the message "id" is not specified in the payload, it'll be added.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>payload</code></strong> :&ensp;<code>dict</code></dt>
+<dd>The message to send over the wesocket.</dd>
+</dl>
+<p>e.g.
+{
+"id": 1,
+"type": "typing",
+"channel": "C024BE91L"
+}</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>SlackClientNotConnectedError</code></dt>
+<dd>Websocket connection is closed.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.rtm.RTMClient.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>self) ‑> _asyncio.Future | Any</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start(self) -&gt; Union[asyncio.Future, Any]:
+    &#34;&#34;&#34;Starts an RTM Session with Slack.
+
+    Makes an authenticated call to Slack&#39;s RTM API to retrieve
+    a websocket URL and then connects to the message server.
+    As events stream-in we run any associated callbacks stored
+    on the client.
+
+    If &#39;auto_reconnect&#39; is specified we
+    retrieve a new url and reconnect any time the connection
+    is lost unintentionally or an exception is thrown.
+
+    Raises:
+        SlackApiError: Unable to retrieve RTM URL from Slack.
+    &#34;&#34;&#34;
+    # Not yet implemented: Add Windows support for graceful shutdowns.
+    if os.name != &#34;nt&#34; and current_thread() == main_thread():
+        signals = (signal.SIGHUP, signal.SIGTERM, signal.SIGINT)
+        for s in signals:
+            self._event_loop.add_signal_handler(s, self.stop)
+
+    future: Future[Any] = asyncio.ensure_future(self._connect_and_read(), loop=self._event_loop)
+
+    if self.run_async:
+        return future
+    return self._event_loop.run_until_complete(future)</code></pre>
+</details>
+<div class="desc"><p>Starts an RTM Session with Slack.</p>
+<p>Makes an authenticated call to Slack's RTM API to retrieve
+a websocket URL and then connects to the message server.
+As events stream-in we run any associated callbacks stored
+on the client.</p>
+<p>If 'auto_reconnect' is specified we
+retrieve a new url and reconnect any time the connection
+is lost unintentionally or an exception is thrown.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>SlackApiError</code></dt>
+<dd>Unable to retrieve RTM URL from Slack.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.rtm.RTMClient.stop"><code class="name flex">
+<span>def <span class="ident">stop</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop(self):
+    &#34;&#34;&#34;Closes the websocket connection and ensures it won&#39;t reconnect.
+
+    If your application outputs the following errors,
+    call #async_stop() instead and await for the completion on your application side.
+
+    asyncio/base_events.py:641: RuntimeWarning:
+      coroutine &#39;ClientWebSocketResponse.close&#39; was never awaited self._ready.clear()
+    &#34;&#34;&#34;
+    self._logger.debug(&#34;The Slack RTMClient is shutting down.&#34;)
+    self._stopped = True
+    self._close_websocket()</code></pre>
+</details>
+<div class="desc"><p>Closes the websocket connection and ensures it won't reconnect.</p>
+<p>If your application outputs the following errors,
+call #async_stop() instead and await for the completion on your application side.</p>
+<p>asyncio/base_events.py:641: RuntimeWarning:
+coroutine 'ClientWebSocketResponse.close' was never awaited self._ready.clear()</p></div>
+</dd>
+<dt id="slack_sdk.rtm.RTMClient.typing"><code class="name flex">
+<span>async def <span class="ident">typing</span></span>(<span>self, *, channel: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def typing(self, *, channel: str):
+    &#34;&#34;&#34;Sends a typing indicator to the specified channel.
+
+    This indicates that this app is currently
+    writing a message to send to a channel.
+
+    Args:
+        channel (str): The channel id. e.g. &#39;C024BE91L&#39;
+
+    Raises:
+        SlackClientNotConnectedError: Websocket connection is closed.
+    &#34;&#34;&#34;
+    payload = {&#34;id&#34;: self._next_msg_id(), &#34;type&#34;: &#34;typing&#34;, &#34;channel&#34;: channel}
+    await self._send_json(payload=payload)</code></pre>
+</details>
+<div class="desc"><p>Sends a typing indicator to the specified channel.</p>
+<p>This indicates that this app is currently
+writing a message to send to a channel.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>channel</code></strong> :&ensp;<code>str</code></dt>
+<dd>The channel id. e.g. 'C024BE91L'</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>SlackClientNotConnectedError</code></dt>
+<dd>Websocket connection is closed.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk" href="../index.html">slack_sdk</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="slack_sdk.rtm.v2" href="v2/index.html">slack_sdk.rtm.v2</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.rtm.RTMClient" href="#slack_sdk.rtm.RTMClient">RTMClient</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.rtm.RTMClient.async_stop" href="#slack_sdk.rtm.RTMClient.async_stop">async_stop</a></code></li>
+<li><code><a title="slack_sdk.rtm.RTMClient.on" href="#slack_sdk.rtm.RTMClient.on">on</a></code></li>
+<li><code><a title="slack_sdk.rtm.RTMClient.ping" href="#slack_sdk.rtm.RTMClient.ping">ping</a></code></li>
+<li><code><a title="slack_sdk.rtm.RTMClient.run_on" href="#slack_sdk.rtm.RTMClient.run_on">run_on</a></code></li>
+<li><code><a title="slack_sdk.rtm.RTMClient.send_over_websocket" href="#slack_sdk.rtm.RTMClient.send_over_websocket">send_over_websocket</a></code></li>
+<li><code><a title="slack_sdk.rtm.RTMClient.start" href="#slack_sdk.rtm.RTMClient.start">start</a></code></li>
+<li><code><a title="slack_sdk.rtm.RTMClient.stop" href="#slack_sdk.rtm.RTMClient.stop">stop</a></code></li>
+<li><code><a title="slack_sdk.rtm.RTMClient.typing" href="#slack_sdk.rtm.RTMClient.typing">typing</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>slack_sdk.models API documentation</title>
+<meta name="description" content="Classes for constructing Slack-specific data structure">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.models</code></h1>
+</header>
+<section id="section-intro">
+<p>Classes for constructing Slack-specific data structure</p>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="slack_sdk.models.attachments" href="attachments/index.html">slack_sdk.models.attachments</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.models.basic_objects" href="basic_objects.html">slack_sdk.models.basic_objects</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.models.blocks" href="blocks/index.html">slack_sdk.models.blocks</a></code></dt>
+<dd>
+<div class="desc"><p>Block Kit data model objects …</p></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.models.dialoags" href="dialoags.html">slack_sdk.models.dialoags</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.models.dialogs" href="dialogs/index.html">slack_sdk.models.dialogs</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.models.messages" href="messages/index.html">slack_sdk.models.messages</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.models.metadata" href="metadata/index.html">slack_sdk.models.metadata</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="slack_sdk.models.views" href="views/index.html">slack_sdk.models.views</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="slack_sdk.models.extract_json"><code class="name flex">
+<span>def <span class="ident">extract_json</span></span>(<span>item_or_items: <a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a> | Sequence[<a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a>],<br>*format_args) ‑> Dict[Any, Any] | List[Dict[Any, Any]] | Sequence[<a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a>]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extract_json(
+    item_or_items: Union[JsonObject, Sequence[JsonObject]], *format_args
+) -&gt; Union[Dict[Any, Any], List[Dict[Any, Any]], Sequence[JsonObject]]:
+    &#34;&#34;&#34;
+    Given a sequence (or single item), attempt to call the to_dict() method on each
+    item and return a plain list. If item is not the expected type, return it
+    unmodified, in case it&#39;s already a plain dict or some other user created class.
+
+    Args:
+      item_or_items: item(s) to go through
+      format_args: Any formatting specifiers to pass into the object&#39;s to_dict
+            method
+    &#34;&#34;&#34;
+    try:
+        return [
+            elem.to_dict(*format_args) if isinstance(elem, JsonObject) else elem
+            for elem in item_or_items  # type: ignore[union-attr]
+        ]
+    except TypeError:  # not iterable, so try returning it as a single item
+        return item_or_items.to_dict(*format_args) if isinstance(item_or_items, JsonObject) else item_or_items</code></pre>
+</details>
+<div class="desc"><p>Given a sequence (or single item), attempt to call the to_dict() method on each
+item and return a plain list. If item is not the expected type, return it
+unmodified, in case it's already a plain dict or some other user created class.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>item_or_items</code></strong></dt>
+<dd>item(s) to go through</dd>
+<dt><strong><code>format_args</code></strong></dt>
+<dd>Any formatting specifiers to pass into the object's to_dict
+method</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.models.show_unknown_key_warning"><code class="name flex">
+<span>def <span class="ident">show_unknown_key_warning</span></span>(<span>name: str | object, others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def show_unknown_key_warning(name: Union[str, object], others: dict):
+    if &#34;type&#34; in others:
+        others.pop(&#34;type&#34;)
+    if len(others) &gt; 0:
+        keys = &#34;, &#34;.join(others.keys())
+        logger = logging.getLogger(__name__)
+        if isinstance(name, object):
+            name = name.__class__.__name__
+        logger.debug(
+            f&#34;!!! {name}&#39;s constructor args ({keys}) were ignored.&#34;
+            f&#34;If they should be supported by this library, report this issue to the project :bow: &#34;
+            f&#34;https://github.com/slackapi/python-slack-sdk/issues&#34;
+        )</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.models.BaseObject"><code class="flex name class">
+<span>class <span class="ident">BaseObject</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BaseObject:
+    &#34;&#34;&#34;The base class for all model objects in this module&#34;&#34;&#34;
+
+    def __str__(self):
+        return f&#34;&lt;slack_sdk.{self.__class__.__name__}&gt;&#34;</code></pre>
+</details>
+<div class="desc"><p>The base class for all model objects in this module</p></div>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.messages.Link" href="messages/index.html#slack_sdk.models.messages.Link">Link</a></li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.EnumValidator"><code class="flex name class">
+<span>class <span class="ident">EnumValidator</span></span>
+<span>(</span><span>attribute: str, enum: Iterable[str])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EnumValidator(JsonValidator):
+    def __init__(self, attribute: str, enum: Iterable[str]):
+        super().__init__(f&#34;{attribute} attribute must be one of the following values: &#34; f&#34;{&#39;, &#39;.join(enum)}&#34;)</code></pre>
+</details>
+<div class="desc"><p>Decorate a method on a class to mark it as a JSON validator. Validation
+functions should return true if valid, false if not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>message</code></strong></dt>
+<dd>Message to be attached to the thrown SlackObjectFormationError</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonValidator" href="basic_objects.html#slack_sdk.models.basic_objects.JsonValidator">JsonValidator</a></li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.JsonObject"><code class="flex name class">
+<span>class <span class="ident">JsonObject</span></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class JsonObject(BaseObject, metaclass=ABCMeta):
+    &#34;&#34;&#34;The base class for JSON serializable class objects&#34;&#34;&#34;
+
+    @property
+    @abstractmethod
+    def attributes(self) -&gt; Set[str]:
+        &#34;&#34;&#34;Provide a set of attributes of this object that will make up its JSON structure&#34;&#34;&#34;
+        return set()
+
+    def validate_json(self) -&gt; None:
+        &#34;&#34;&#34;
+        Raises:
+          SlackObjectFormationError if the object was not valid
+        &#34;&#34;&#34;
+        for attribute in (func for func in dir(self) if not func.startswith(&#34;__&#34;)):
+            method = getattr(self, attribute, None)
+            if callable(method) and hasattr(method, &#34;validator&#34;):
+                method()
+
+    def get_non_null_attributes(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Construct a dictionary out of non-null keys (from attributes property)
+        present on this object
+        &#34;&#34;&#34;
+
+        def to_dict_compatible(value: Union[dict, list, object, tuple]) -&gt; Union[dict, list, Any]:
+            if isinstance(value, (list, tuple)):
+                return [to_dict_compatible(v) for v in value]
+            else:
+                to_dict = getattr(value, &#34;to_dict&#34;, None)
+                if to_dict and callable(to_dict):
+                    return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore[attr-defined]
+                else:
+                    return value
+
+        def is_not_empty(self, key: str) -&gt; bool:
+            value = getattr(self, key, None)
+            if value is None:
+                return False
+
+            # Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+            # The following code deals with these exceptions:
+            type_value = getattr(self, &#34;type&#34;, None)
+            for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
+                if type_value == empty_allowed[&#34;type&#34;] and key == empty_allowed[&#34;property&#34;]:
+                    return True
+
+            has_len = getattr(value, &#34;__len__&#34;, None) is not None
+            if has_len:
+                return len(value) &gt; 0
+            else:
+                return value is not None
+
+        return {
+            key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
+        }
+
+    def to_dict(self, *args) -&gt; dict:
+        &#34;&#34;&#34;
+        Extract this object as a JSON-compatible, Slack-API-valid dictionary
+
+        Args:
+          *args: Any specific formatting args (rare; generally not required)
+
+        Raises:
+          SlackObjectFormationError if the object was not valid
+        &#34;&#34;&#34;
+        self.validate_json()
+        return self.get_non_null_attributes()
+
+    def __repr__(self):
+        dict_value = self.get_non_null_attributes()
+        if dict_value:
+            return f&#34;&lt;slack_sdk.{self.__class__.__name__}: {dict_value}&gt;&#34;
+        else:
+            return self.__str__()
+
+    def __eq__(self, other: Any) -&gt; bool:
+        if not isinstance(other, JsonObject):
+            return False
+        return self.to_dict() == other.to_dict()</code></pre>
+</details>
+<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.attachments.Action" href="attachments/index.html#slack_sdk.models.attachments.Action">Action</a></li>
+<li><a title="slack_sdk.models.attachments.Attachment" href="attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a></li>
+<li><a title="slack_sdk.models.attachments.AttachmentField" href="attachments/index.html#slack_sdk.models.attachments.AttachmentField">AttachmentField</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.SlackFile" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.TextObject" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.Workflow" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Workflow">Workflow</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.WorkflowTrigger" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.WorkflowTrigger">WorkflowTrigger</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="blocks/block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.ConversationFilter" href="blocks/block_elements.html#slack_sdk.models.blocks.block_elements.ConversationFilter">ConversationFilter</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.dialogs.AbstractDialogSelector" href="dialogs/index.html#slack_sdk.models.dialogs.AbstractDialogSelector">AbstractDialogSelector</a></li>
+<li><a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></li>
+<li><a title="slack_sdk.models.dialogs.DialogTextComponent" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></li>
+<li><a title="slack_sdk.models.messages.message.Message" href="messages/message.html#slack_sdk.models.messages.message.Message">Message</a></li>
+<li><a title="slack_sdk.models.metadata.Metadata" href="metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a></li>
+<li><a title="slack_sdk.models.views.View" href="views/index.html#slack_sdk.models.views.View">View</a></li>
+<li><a title="slack_sdk.models.views.ViewState" href="views/index.html#slack_sdk.models.views.ViewState">ViewState</a></li>
+<li><a title="slack_sdk.models.views.ViewStateValue" href="views/index.html#slack_sdk.models.views.ViewStateValue">ViewStateValue</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.JsonObject.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+@abstractmethod
+def attributes(self) -&gt; Set[str]:
+    &#34;&#34;&#34;Provide a set of attributes of this object that will make up its JSON structure&#34;&#34;&#34;
+    return set()</code></pre>
+</details>
+<div class="desc"><p>Provide a set of attributes of this object that will make up its JSON structure</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.JsonObject.get_non_null_attributes"><code class="name flex">
+<span>def <span class="ident">get_non_null_attributes</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_non_null_attributes(self) -&gt; dict:
+    &#34;&#34;&#34;
+    Construct a dictionary out of non-null keys (from attributes property)
+    present on this object
+    &#34;&#34;&#34;
+
+    def to_dict_compatible(value: Union[dict, list, object, tuple]) -&gt; Union[dict, list, Any]:
+        if isinstance(value, (list, tuple)):
+            return [to_dict_compatible(v) for v in value]
+        else:
+            to_dict = getattr(value, &#34;to_dict&#34;, None)
+            if to_dict and callable(to_dict):
+                return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}  # type: ignore[attr-defined]
+            else:
+                return value
+
+    def is_not_empty(self, key: str) -&gt; bool:
+        value = getattr(self, key, None)
+        if value is None:
+            return False
+
+        # Usually, Block Kit components do not allow an empty array for a property value, but there are some exceptions.
+        # The following code deals with these exceptions:
+        type_value = getattr(self, &#34;type&#34;, None)
+        for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
+            if type_value == empty_allowed[&#34;type&#34;] and key == empty_allowed[&#34;property&#34;]:
+                return True
+
+        has_len = getattr(value, &#34;__len__&#34;, None) is not None
+        if has_len:
+            return len(value) &gt; 0
+        else:
+            return value is not None
+
+    return {
+        key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
+    }</code></pre>
+</details>
+<div class="desc"><p>Construct a dictionary out of non-null keys (from attributes property)
+present on this object</p></div>
+</dd>
+<dt id="slack_sdk.models.JsonObject.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self, *args) ‑> dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self, *args) -&gt; dict:
+    &#34;&#34;&#34;
+    Extract this object as a JSON-compatible, Slack-API-valid dictionary
+
+    Args:
+      *args: Any specific formatting args (rare; generally not required)
+
+    Raises:
+      SlackObjectFormationError if the object was not valid
+    &#34;&#34;&#34;
+    self.validate_json()
+    return self.get_non_null_attributes()</code></pre>
+</details>
+<div class="desc"><p>Extract this object as a JSON-compatible, Slack-API-valid dictionary</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>*args</code></strong></dt>
+<dd>Any specific formatting args (rare; generally not required)</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>SlackObjectFormationError if the object was not valid</p></div>
+</dd>
+<dt id="slack_sdk.models.JsonObject.validate_json"><code class="name flex">
+<span>def <span class="ident">validate_json</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validate_json(self) -&gt; None:
+    &#34;&#34;&#34;
+    Raises:
+      SlackObjectFormationError if the object was not valid
+    &#34;&#34;&#34;
+    for attribute in (func for func in dir(self) if not func.startswith(&#34;__&#34;)):
+        method = getattr(self, attribute, None)
+        if callable(method) and hasattr(method, &#34;validator&#34;):
+            method()</code></pre>
+</details>
+<div class="desc"><h2 id="raises">Raises</h2>
+<p>SlackObjectFormationError if the object was not valid</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.models.JsonValidator"><code class="flex name class">
+<span>class <span class="ident">JsonValidator</span></span>
+<span>(</span><span>message: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class JsonValidator:
+    def __init__(self, message: str):
+        &#34;&#34;&#34;
+        Decorate a method on a class to mark it as a JSON validator. Validation
+            functions should return true if valid, false if not.
+
+        Args:
+            message: Message to be attached to the thrown SlackObjectFormationError
+        &#34;&#34;&#34;
+        self.message = message
+
+    def __call__(self, func: Callable) -&gt; Callable[..., None]:
+        @wraps(func)
+        def wrapped_f(*args, **kwargs):
+            if not func(*args, **kwargs):
+                raise SlackObjectFormationError(self.message)
+
+        wrapped_f.validator = True  # type: ignore[attr-defined]
+        return wrapped_f</code></pre>
+</details>
+<div class="desc"><p>Decorate a method on a class to mark it as a JSON validator. Validation
+functions should return true if valid, false if not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>message</code></strong></dt>
+<dd>Message to be attached to the thrown SlackObjectFormationError</dd>
+</dl></div>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.EnumValidator" href="basic_objects.html#slack_sdk.models.basic_objects.EnumValidator">EnumValidator</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk" href="../index.html">slack_sdk</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="slack_sdk.models.attachments" href="attachments/index.html">slack_sdk.models.attachments</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects" href="basic_objects.html">slack_sdk.models.basic_objects</a></code></li>
+<li><code><a title="slack_sdk.models.blocks" href="blocks/index.html">slack_sdk.models.blocks</a></code></li>
+<li><code><a title="slack_sdk.models.dialoags" href="dialoags.html">slack_sdk.models.dialoags</a></code></li>
+<li><code><a title="slack_sdk.models.dialogs" href="dialogs/index.html">slack_sdk.models.dialogs</a></code></li>
+<li><code><a title="slack_sdk.models.messages" href="messages/index.html">slack_sdk.models.messages</a></code></li>
+<li><code><a title="slack_sdk.models.metadata" href="metadata/index.html">slack_sdk.models.metadata</a></code></li>
+<li><code><a title="slack_sdk.models.views" href="views/index.html">slack_sdk.models.views</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="slack_sdk.models.extract_json" href="#slack_sdk.models.extract_json">extract_json</a></code></li>
+<li><code><a title="slack_sdk.models.show_unknown_key_warning" href="#slack_sdk.models.show_unknown_key_warning">show_unknown_key_warning</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.models.BaseObject" href="#slack_sdk.models.BaseObject">BaseObject</a></code></h4>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.EnumValidator" href="#slack_sdk.models.EnumValidator">EnumValidator</a></code></h4>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.JsonObject" href="#slack_sdk.models.JsonObject">JsonObject</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.JsonObject.attributes" href="#slack_sdk.models.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.JsonObject.get_non_null_attributes" href="#slack_sdk.models.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.JsonObject.to_dict" href="#slack_sdk.models.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.JsonObject.validate_json" href="#slack_sdk.models.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.JsonValidator" href="#slack_sdk.models.JsonValidator">JsonValidator</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

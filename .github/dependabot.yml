@@ -12,15 +12,3 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-  - package-ecosystem: "npm"
-    directory: "/docs"
-    schedule:
-      interval: "monthly"
-    groups:
-      docusaurus:
-        patterns:
-          - "@docusaurus/*"
-      react:
-        patterns:
-          - "react"
-          - "react-dom"

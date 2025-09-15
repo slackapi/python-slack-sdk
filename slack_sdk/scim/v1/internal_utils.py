@@ -1,7 +1,6 @@
 import copy
 import logging
 import re
-import sys
 from typing import Dict, Callable
 from typing import Union, Optional, Any
 from urllib.parse import quote
@@ -43,10 +42,7 @@ def _to_dict_without_not_given(obj: Any) -> dict:
 
 
 def _create_copy(original: Any) -> Any:
-    if sys.version_info.major == 3 and sys.version_info.minor <= 6:
-        return copy.copy(original)
-    else:
-        return copy.deepcopy(original)
+    return copy.deepcopy(original)
 
 
 def _to_camel_case_key(key: str) -> str:

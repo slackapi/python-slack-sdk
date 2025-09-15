@@ -4,23 +4,24 @@ import json
 import os
 import warnings
 from io import IOBase
-from typing import Union, Sequence, Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
-from .base_client import BaseClient, SlackResponse
-from .internal_utils import (
-    _parse_web_class_objects,
-    _update_call_participants,
-    _warn_if_text_or_attachment_fallback_is_missing,
-    _remove_none_values,
-    _to_v2_file_upload_item,
-    _validate_for_legacy_client,
-    _print_files_upload_v2_suggestion,
-)
+
 from ..models.attachments import Attachment
 from ..models.blocks import Block
 from ..models.metadata import Metadata
+from .base_client import BaseClient, SlackResponse
+from .internal_utils import (
+    _parse_web_class_objects,
+    _print_files_upload_v2_suggestion,
+    _remove_none_values,
+    _to_v2_file_upload_item,
+    _update_call_participants,
+    _validate_for_legacy_client,
+    _warn_if_message_text_content_is_missing,
+)
 
 
 class WebClient(BaseClient):
@@ -426,6 +427,60 @@ class WebClient(BaseClient):
         kwargs.update({"policy_name": policy_name})
         kwargs.update({"entity_type": entity_type})
         return self.api_call("admin.auth.policy.removeEntities", http_verb="POST", params=kwargs)
+
+    def admin_conversations_createForObjects(
+        self,
+        *,
+        object_id: str,
+        salesforce_org_id: str,
+        invite_object_team: Optional[bool] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Create a Salesforce channel for the corresponding object provided.
+        https://api.slack.com/methods/admin.conversations.createForObjects
+        """
+        kwargs.update(
+            {"object_id": object_id, "salesforce_org_id": salesforce_org_id, "invite_object_team": invite_object_team}
+        )
+        return self.api_call("admin.conversations.createForObjects", params=kwargs)
+
+    def admin_conversations_linkObjects(
+        self,
+        *,
+        channel: str,
+        record_id: str,
+        salesforce_org_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Link a Salesforce record to a channel.
+        https://api.slack.com/methods/admin.conversations.linkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "record_id": record_id,
+                "salesforce_org_id": salesforce_org_id,
+            }
+        )
+        return self.api_call("admin.conversations.linkObjects", params=kwargs)
+
+    def admin_conversations_unlinkObjects(
+        self,
+        *,
+        channel: str,
+        new_name: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Unlink a Salesforce record from a channel.
+        https://api.slack.com/methods/admin.conversations.unlinkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "new_name": new_name,
+            }
+        )
+        return self.api_call("admin.conversations.unlinkObjects", params=kwargs)
 
     def admin_barriers_create(
         self,
@@ -1665,7 +1720,7 @@ class WebClient(BaseClient):
     def admin_users_list(
         self,
         *,
-        team_id: str,
+        team_id: Optional[str] = None,
         include_deactivated_user_workspaces: Optional[bool] = None,
         is_active: Optional[bool] = None,
         cursor: Optional[str] = None,
@@ -2630,6 +2685,7 @@ class WebClient(BaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Sends an ephemeral message to a user in a channel.
@@ -2649,11 +2705,12 @@ class WebClient(BaseClient):
                 "link_names": link_names,
                 "username": username,
                 "parse": parse,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.postEphemeral", kwargs)
+        _warn_if_message_text_content_is_missing("chat.postEphemeral", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postEphemeral", json=kwargs)
 
@@ -2677,6 +2734,7 @@ class WebClient(BaseClient):
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Sends a message to a channel.
@@ -2701,11 +2759,12 @@ class WebClient(BaseClient):
                 "username": username,
                 "parse": parse,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.postMessage", kwargs)
+        _warn_if_message_text_content_is_missing("chat.postMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.postMessage", json=kwargs)
 
@@ -2714,7 +2773,7 @@ class WebClient(BaseClient):
         *,
         channel: str,
         post_at: Union[str, int],
-        text: str,
+        text: Optional[str] = None,
         as_user: Optional[bool] = None,
         attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
@@ -2725,6 +2784,7 @@ class WebClient(BaseClient):
         unfurl_media: Optional[bool] = None,
         link_names: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Schedules a message.
@@ -2745,11 +2805,12 @@ class WebClient(BaseClient):
                 "unfurl_media": unfurl_media,
                 "link_names": link_names,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.scheduleMessage", kwargs)
+        _warn_if_message_text_content_is_missing("chat.scheduleMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
@@ -2802,6 +2863,7 @@ class WebClient(BaseClient):
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Updates a message in a channel.
@@ -2819,6 +2881,7 @@ class WebClient(BaseClient):
                 "parse": parse,
                 "reply_broadcast": reply_broadcast,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         if isinstance(file_ids, (list, tuple)):
@@ -2827,7 +2890,7 @@ class WebClient(BaseClient):
             kwargs.update({"file_ids": file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.update", kwargs)
+        _warn_if_message_text_content_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.update", json=kwargs)
 
@@ -5350,6 +5413,72 @@ class WebClient(BaseClient):
         kwargs = _remove_none_values(kwargs)
         # NOTE: Intentionally using json for the "view" parameter
         return self.api_call("views.publish", json=kwargs)
+
+    def workflows_featured_add(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Add featured workflows to a channel.
+        https://api.slack.com/methods/workflows.featured.add
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return self.api_call("workflows.featured.add", params=kwargs)
+
+    def workflows_featured_list(
+        self,
+        *,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """List the featured workflows for specified channels.
+        https://api.slack.com/methods/workflows.featured.list
+        """
+        if isinstance(channel_ids, (list, tuple)):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return self.api_call("workflows.featured.list", params=kwargs)
+
+    def workflows_featured_remove(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Remove featured workflows from a channel.
+        https://api.slack.com/methods/workflows.featured.remove
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return self.api_call("workflows.featured.remove", params=kwargs)
+
+    def workflows_featured_set(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Set featured workflows for a channel.
+        https://api.slack.com/methods/workflows.featured.set
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return self.api_call("workflows.featured.set", params=kwargs)
 
     def workflows_stepCompleted(
         self,

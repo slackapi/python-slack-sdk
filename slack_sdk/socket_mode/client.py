@@ -131,7 +131,7 @@ class BaseSocketModeClient:
 
             for listener in self.message_listeners:
                 try:
-                    listener(self, message, raw_message)  # type: ignore[call-arg, arg-type]
+                    listener(self, message, raw_message)  # type: ignore[call-arg, arg-type, misc]
                 except Exception as e:
                     self.logger.exception(f"Failed to run a message listener: {e}")
 

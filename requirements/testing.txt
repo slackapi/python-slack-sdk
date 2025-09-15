@@ -1,15 +1,14 @@
 # pip install -r requirements/testing.txt
 aiohttp<4  # used for a WebSocket server mock
 pytest>=7.0.1,<9
-pytest-asyncio<1  # for async
-pytest-cov>=2,<7
+pytest-asyncio<2  # for async
+pytest-cov>=2,<8
 # while flake8 5.x have issues with Python 3.12, flake8 6.x requires Python >= 3.8.1,
-# so 5.x should be kept in order to stay compatible with Python 3.6/3.7
+# so 5.x should be kept in order to stay compatible with Python 3.7/3.8
 flake8>=5.0.4,<8
 #  Don't change this version without running CI builds;
 #  The latest version may not be available for older Python runtime
-black>=22.8.0; python_version=="3.6"
-black==22.10.0; python_version>"3.6"
+black==22.10.0;
 click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
 psutil>=6.0.0,<8
 #  used only under slack_sdk/*_store
@@ -17,7 +16,7 @@ boto3<=2
 google-cloud-storage>=2.7.0,<3
 # For AWS tests
 moto>=4.0.13,<6
-mypy<=1.15.0
+mypy<=1.17.1
 # For AsyncSQLAlchemy tests
 greenlet<=4
 aiosqlite<=1
