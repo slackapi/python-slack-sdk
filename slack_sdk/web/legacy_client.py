@@ -2622,6 +2622,26 @@ class LegacyWebClient(LegacyBaseClient):
 
     # --------------------------
 
+    def chat_appendStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Appends text to an existing streaming conversation.
+        https://api.slack.com/methods/chat.appendStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+            }
+        )
+        return self.api_call("chat.appendStream", params=kwargs)
+
     def chat_delete(
         self,
         *,
@@ -2931,6 +2951,55 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         return self.api_call("chat.scheduledMessages.list", params=kwargs)
+
+    def chat_startStream(
+        self,
+        *,
+        channel: str,
+        thread_ts: Optional[str] = None,
+        markdown_text: Optional[str] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Starts a new streaming conversation.
+        https://api.slack.com/methods/chat.startStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "thread_ts": thread_ts,
+                "markdown_text": markdown_text,
+                "unfurl_links": unfurl_links,
+                "unfurl_media": unfurl_media,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.startStream", params=kwargs)
+
+    def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Finalizes and completes the streaming message.
+        https://api.slack.com/methods/chat.stopStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "blocks": blocks,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.stopStream", json=kwargs)
 
     def conversations_acceptSharedInvite(
         self,

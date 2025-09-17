@@ -2620,6 +2620,26 @@ class AsyncWebClient(AsyncBaseClient):
 
     # --------------------------
 
+    async def chat_appendStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Appends text to an existing streaming conversation.
+        https://api.slack.com/methods/chat.appendStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+            }
+        )
+        return await self.api_call("chat.appendStream", params=kwargs)
+
     async def chat_delete(
         self,
         *,
@@ -2929,6 +2949,55 @@ class AsyncWebClient(AsyncBaseClient):
             }
         )
         return await self.api_call("chat.scheduledMessages.list", params=kwargs)
+
+    async def chat_startStream(
+        self,
+        *,
+        channel: str,
+        thread_ts: Optional[str] = None,
+        markdown_text: Optional[str] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Starts a new streaming conversation.
+        https://api.slack.com/methods/chat.startStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "thread_ts": thread_ts,
+                "markdown_text": markdown_text,
+                "unfurl_links": unfurl_links,
+                "unfurl_media": unfurl_media,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.startStream", params=kwargs)
+
+    async def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Finalizes and completes the streaming message.
+        https://api.slack.com/methods/chat.stopStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "blocks": blocks,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.stopStream", json=kwargs)
 
     async def conversations_acceptSharedInvite(
         self,

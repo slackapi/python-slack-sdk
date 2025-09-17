@@ -2610,6 +2610,27 @@ class WebClient(BaseClient):
 
     # --------------------------
 
+    def chat_appendStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str],
+        **kwargs,
+    ) -> SlackResponse:
+        """Appends text to an existing streaming conversation.
+        https://api.slack.com/methods/chat.appendStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.appendStream", params=kwargs)
+
     def chat_delete(
         self,
         *,
@@ -2814,6 +2835,83 @@ class WebClient(BaseClient):
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
+    def chat_scheduledMessages_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        cursor: Optional[str] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists all scheduled messages.
+        https://api.slack.com/methods/chat.scheduledMessages.list
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "cursor": cursor,
+                "latest": latest,
+                "limit": limit,
+                "oldest": oldest,
+                "team_id": team_id,
+            }
+        )
+        return self.api_call("chat.scheduledMessages.list", params=kwargs)
+
+    def chat_startStream(
+        self,
+        *,
+        channel: str,
+        thread_ts: Optional[str] = None,
+        markdown_text: Optional[str] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Starts a new streaming conversation.
+        https://api.slack.com/methods/chat.startStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "thread_ts": thread_ts,
+                "markdown_text": markdown_text,
+                "unfurl_links": unfurl_links,
+                "unfurl_media": unfurl_media,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.startStream", params=kwargs)
+
+    def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Stops a streaming conversation.
+        https://api.slack.com/methods/chat.stopStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "blocks": blocks,
+                "metadata": metadata,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.stopStream", json=kwargs)
+
     def chat_unfurl(
         self,
         *,
@@ -2893,32 +2991,6 @@ class WebClient(BaseClient):
         _warn_if_message_text_content_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.update", json=kwargs)
-
-    def chat_scheduledMessages_list(
-        self,
-        *,
-        channel: Optional[str] = None,
-        cursor: Optional[str] = None,
-        latest: Optional[str] = None,
-        limit: Optional[int] = None,
-        oldest: Optional[str] = None,
-        team_id: Optional[str] = None,
-        **kwargs,
-    ) -> SlackResponse:
-        """Lists all scheduled messages.
-        https://api.slack.com/methods/chat.scheduledMessages.list
-        """
-        kwargs.update(
-            {
-                "channel": channel,
-                "cursor": cursor,
-                "latest": latest,
-                "limit": limit,
-                "oldest": oldest,
-                "team_id": team_id,
-            }
-        )
-        return self.api_call("chat.scheduledMessages.list", params=kwargs)
 
     def conversations_acceptSharedInvite(
         self,
