@@ -2628,7 +2628,6 @@ class WebClient(BaseClient):
                 "markdown_text": markdown_text,
             }
         )
-        kwargs = _remove_none_values(kwargs)
         return self.api_call("chat.appendStream", params=kwargs)
 
     def chat_delete(
@@ -2883,7 +2882,6 @@ class WebClient(BaseClient):
                 "unfurl_media": unfurl_media,
             }
         )
-        kwargs = _remove_none_values(kwargs)
         return self.api_call("chat.startStream", params=kwargs)
 
     def chat_stopStream(
@@ -2909,8 +2907,7 @@ class WebClient(BaseClient):
             }
         )
         _parse_web_class_objects(kwargs)
-        kwargs = _remove_none_values(kwargs)
-        return self.api_call("chat.stopStream", json=kwargs)
+        return self.api_call("chat.stopStream", params=kwargs)
 
     def chat_unfurl(
         self,
