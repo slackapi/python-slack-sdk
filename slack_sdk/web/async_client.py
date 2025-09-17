@@ -2625,7 +2625,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         channel: str,
         ts: str,
-        markdown_text: Optional[str],
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Appends text to an existing streaming conversation.
