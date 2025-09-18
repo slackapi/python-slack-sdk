@@ -2065,12 +2065,15 @@ class WebClient(BaseClient):
         channel_id: str,
         thread_ts: str,
         status: str,
+        loading_messages: Optional[List[str]] = None,
         **kwargs,
     ) -> SlackResponse:
-        """Revokes a token.
+        """Set the status for an AI assistant thread.
         https://api.slack.com/methods/assistant.threads.setStatus
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "status": status})
+        kwargs.update(
+            {"channel_id": channel_id, "thread_ts": thread_ts, "status": status, "loading_messages": loading_messages}
+        )
         return self.api_call("assistant.threads.setStatus", params=kwargs)
 
     def assistant_threads_setTitle(
@@ -2081,7 +2084,7 @@ class WebClient(BaseClient):
         title: str,
         **kwargs,
     ) -> SlackResponse:
-        """Revokes a token.
+        """Set the title for the given assistant thread.
         https://api.slack.com/methods/assistant.threads.setTitle
         """
         kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title})
@@ -2096,7 +2099,7 @@ class WebClient(BaseClient):
         prompts: List[Dict[str, str]],
         **kwargs,
     ) -> SlackResponse:
-        """Revokes a token.
+        """Set suggested prompts for the given assistant thread.
         https://api.slack.com/methods/assistant.threads.setSuggestedPrompts
         """
         kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "prompts": prompts})
