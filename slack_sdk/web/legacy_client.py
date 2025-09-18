@@ -2627,7 +2627,7 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         channel: str,
         ts: str,
-        markdown_text: Optional[str] = None,
+        markdown_text: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Appends text to an existing streaming conversation.

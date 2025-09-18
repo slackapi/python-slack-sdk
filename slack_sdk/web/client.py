@@ -2615,7 +2615,7 @@ class WebClient(BaseClient):
         *,
         channel: str,
         ts: str,
-        markdown_text: Optional[str] = None,
+        markdown_text: str,
         **kwargs,
     ) -> SlackResponse:
         """Appends text to an existing streaming conversation.

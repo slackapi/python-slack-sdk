@@ -541,8 +541,8 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(canvas_id="F123", criteria={})["method"])
                 await async_method(canvas_id="F123", criteria={})
             elif method_name == "chat_appendStream":
-                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
-                await async_method(channel="C123", ts="123.123")
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123", markdown_text="**bold**")["method"])
+                await async_method(channel="C123", ts="123.123", markdown_text="**bold**")
             elif method_name == "chat_delete":
                 self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
                 await async_method(channel="C123", ts="123.123")
