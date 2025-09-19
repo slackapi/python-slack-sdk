@@ -1130,7 +1130,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ConfirmObject(JsonObject):
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
 
     title_max_length = 100
     text_max_length = 300
@@ -1238,7 +1238,7 @@ offering a confirm and deny button.
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.ConfirmObject.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.blocks.ConfirmObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -3936,7 +3936,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     different required formats in different situations
     &#34;&#34;&#34;
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     logger = logging.getLogger(__name__)
 
     label_max_length = 75
@@ -4109,7 +4109,7 @@ dialogs.</dd>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.Option.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.blocks.Option.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -4218,7 +4218,7 @@ correct shape.</p></div>
     different required formats in different situations
     &#34;&#34;&#34;
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     label_max_length = 75
     options_max_length = 100
     logger = logging.getLogger(__name__)
@@ -4322,7 +4322,7 @@ UI) and a list of Option objects.</p>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.OptionGroup.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.blocks.OptionGroup.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>

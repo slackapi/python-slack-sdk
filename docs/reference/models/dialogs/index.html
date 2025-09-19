@@ -247,7 +247,7 @@ def placeholder_length(self) -&gt; bool:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DialogBuilder(JsonObject):
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementation
+    attributes: Set[str] = set()
 
     _callback_id: Optional[str]
     _elements: List[Union[DialogTextComponent, AbstractDialogSelector]]
@@ -687,7 +687,7 @@ dialog to Slack</p></div>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.dialogs.DialogBuilder.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.dialogs.DialogBuilder.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
