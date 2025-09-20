@@ -20,6 +20,7 @@ from slack_sdk.models.blocks import (
     PlainTextObject,
     MarkdownTextObject,
     HeaderBlock,
+    MarkdownBlock,
     VideoBlock,
     Option,
     RichTextBlock,
@@ -30,8 +31,8 @@ from slack_sdk.models.blocks import (
     RichTextElementParts,
 )
 from slack_sdk.models.blocks.basic_components import SlackFile
-from . import STRING_3001_CHARS
 
+from . import STRING_3001_CHARS
 
 # https://api.slack.com/reference/block-kit/blocks
 
@@ -802,6 +803,39 @@ class HeaderBlockTests(unittest.TestCase):
         }
         with self.assertRaises(SlackObjectFormationError):
             HeaderBlock(**input).validate_json()
+
+
+# ----------------------------------------------
+# MarkdownBlock
+# ----------------------------------------------
+
+
+class MarkdownBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "markdown",
+            "block_id": "introduction",
+            "text": "**Welcome!**",
+        }
+        self.assertDictEqual(input, MarkdownBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_text_length_12000(self):
+        input = {
+            "type": "markdown",
+            "block_id": "numbers",
+            "text": "1234567890" * 1200,
+        }
+        MarkdownBlock(**input).validate_json()
+
+    def test_text_length_12001(self):
+        input = {
+            "type": "markdown",
+            "block_id": "numbers",
+            "text": "1234567890" * 1200 + "1",
+        }
+        with self.assertRaises(SlackObjectFormationError):
+            MarkdownBlock(**input).validate_json()
 
 
 # ----------------------------------------------

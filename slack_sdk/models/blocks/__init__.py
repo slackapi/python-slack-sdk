@@ -58,6 +58,7 @@ from .blocks import FileBlock
 from .blocks import HeaderBlock
 from .blocks import ImageBlock
 from .blocks import InputBlock
+from .blocks import MarkdownBlock
 from .blocks import SectionBlock
 from .blocks import VideoBlock
 from .blocks import RichTextBlock
@@ -115,6 +116,7 @@ __all__ = [
     "HeaderBlock",
     "ImageBlock",
     "InputBlock",
+    "MarkdownBlock",
     "SectionBlock",
     "VideoBlock",
     "RichTextBlock",
