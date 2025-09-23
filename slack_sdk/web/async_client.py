@@ -2641,7 +2641,8 @@ class AsyncWebClient(AsyncBaseClient):
                 "markdown_text": markdown_text,
             }
         )
-        return await self.api_call("chat.appendStream", params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.appendStream", json=kwargs)
 
     async def chat_delete(
         self,
@@ -2895,7 +2896,8 @@ class AsyncWebClient(AsyncBaseClient):
                 "unfurl_media": unfurl_media,
             }
         )
-        return await self.api_call("chat.startStream", params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.startStream", json=kwargs)
 
     async def chat_stopStream(
         self,
@@ -2920,7 +2922,8 @@ class AsyncWebClient(AsyncBaseClient):
             }
         )
         _parse_web_class_objects(kwargs)
-        return await self.api_call("chat.stopStream", params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.stopStream", json=kwargs)
 
     async def chat_unfurl(
         self,

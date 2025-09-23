@@ -2643,7 +2643,8 @@ class LegacyWebClient(LegacyBaseClient):
                 "markdown_text": markdown_text,
             }
         )
-        return self.api_call("chat.appendStream", params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.appendStream", json=kwargs)
 
     def chat_delete(
         self,
@@ -2897,7 +2898,8 @@ class LegacyWebClient(LegacyBaseClient):
                 "unfurl_media": unfurl_media,
             }
         )
-        return self.api_call("chat.startStream", params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.startStream", json=kwargs)
 
     def chat_stopStream(
         self,
@@ -2922,7 +2924,8 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         _parse_web_class_objects(kwargs)
-        return self.api_call("chat.stopStream", params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.stopStream", json=kwargs)
 
     def chat_unfurl(
         self,
