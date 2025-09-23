@@ -558,7 +558,7 @@ class FeedbackButtonObject(JsonObject):
                 screen readers instead of the button `text` object.
             value (required): The button value. Maximum length for this field is 2000 characters.
         """
-        self._text: Optional[TextObject] = TextObject.parse(text, default_type=PlainTextObject.type)
+        self._text: Optional[TextObject] = PlainTextObject.parse(text, default_type=PlainTextObject.type)
         self._accessibility_label: Optional[str] = accessibility_label
         self._value: Optional[str] = value
         show_unknown_key_warning(self, others)
@@ -575,7 +575,7 @@ class FeedbackButtonObject(JsonObject):
         self.validate_json()
         json = {}
         if self._text:
-            json["text"] = self._text.text
+            json["text"] = self._text.to_dict()
         if self._accessibility_label:
             json["accessibility_label"] = self._accessibility_label
         if self._value:
