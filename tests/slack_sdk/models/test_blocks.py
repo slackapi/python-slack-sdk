@@ -31,7 +31,8 @@ from slack_sdk.models.blocks import (
     StaticSelectElement,
     VideoBlock,
 )
-from slack_sdk.models.blocks.basic_components import SlackFile
+from slack_sdk.models.blocks.basic_components import FeedbackButtonObject, SlackFile
+from slack_sdk.models.blocks.block_elements import FeedbackButtonsElement, IconButtonElement
 
 from . import STRING_3001_CHARS
 
@@ -557,17 +558,17 @@ class ContextActionsBlockTests(unittest.TestCase):
         self.assertDictEqual(input, Block.parse(input).to_dict())
 
     def test_with_feedback_buttons(self):
-        feedback_buttons = FeedbackButtons(
+        feedback_buttons = FeedbackButtonsElement(
             action_id="feedback-action",
-            positive_button={"text": {"type": "plain_text", "text": "Good"}, "value": "positive"},
-            negative_button={"text": {"type": "plain_text", "text": "Bad"}, "value": "negative"},
+            positive_button=FeedbackButtonObject(text="Good", value="positive"),
+            negative_button=FeedbackButtonObject(text="Bad", value="negative"),
         )
         block = ContextActionsBlock(elements=[feedback_buttons])
         self.assertEqual(len(block.elements), 1)
         self.assertEqual(block.elements[0].type, "feedback_buttons")
 
     def test_with_icon_button(self):
-        icon_button = IconButton(
+        icon_button = IconButtonElement(
             action_id="icon-action", icon="star", text=PlainTextObject(text="Favorite"), value="favorite"
         )
         block = ContextActionsBlock(elements=[icon_button])

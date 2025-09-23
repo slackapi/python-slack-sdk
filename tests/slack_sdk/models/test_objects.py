@@ -365,13 +365,13 @@ class ConfirmObjectTests(unittest.TestCase):
 class FeedbackButtonObjectTests(unittest.TestCase):
     def test_basic_json(self):
         feedback_button = FeedbackButtonObject(text="+1", value="positive")
-        expected = {"text": {"type": "plain_text", "text": "+1", "emoji": True}, "value": "positive"}
+        expected = {"text": PlainTextObject(text="+1"), "value": "positive"}
         self.assertDictEqual(expected, feedback_button.to_dict())
 
     def test_with_accessibility_label(self):
         feedback_button = FeedbackButtonObject(text="+1", value="positive", accessibility_label="Positive feedback button")
         expected = {
-            "text": {"type": "plain_text", "text": "+1", "emoji": True},
+            "text": PlainTextObject(text="+1"),
             "value": "positive",
             "accessibility_label": "Positive feedback button",
         }
@@ -380,7 +380,10 @@ class FeedbackButtonObjectTests(unittest.TestCase):
     def test_with_plain_text_object(self):
         text_obj = PlainTextObject(text="-1", emoji=False)
         feedback_button = FeedbackButtonObject(text=text_obj, value="negative")
-        expected = {"text": {"type": "plain_text", "text": "-1", "emoji": False}, "value": "negative"}
+        expected = {
+            "text": PlainTextObject(text="-1"),
+            "value": "negative",
+        }
         self.assertDictEqual(expected, feedback_button.to_dict())
 
     def test_text_length_validation(self):
@@ -396,7 +399,7 @@ class FeedbackButtonObjectTests(unittest.TestCase):
         parsed = FeedbackButtonObject.parse(data)
         self.assertIsInstance(parsed, FeedbackButtonObject)
         expected = {
-            "text": {"type": "plain_text", "text": "+1", "emoji": True},
+            "text": PlainTextObject(text="+1"),
             "value": "positive",
             "accessibility_label": "Positive feedback",
         }
