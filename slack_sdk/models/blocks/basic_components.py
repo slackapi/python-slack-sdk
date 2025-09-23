@@ -554,7 +554,8 @@ class FeedbackButtonObject(JsonObject):
 
         Args:
             text (required): An object containing some text. Maximum length for this field is 75 characters.
-            accessibility_label: A label for longer descriptive text about a button element. This label will be read out by screen readers instead of the button `text` object.
+            accessibility_label: A label for longer descriptive text about a button element. This label will be read out by
+                screen readers instead of the button `text` object.
             value (required): The button value. Maximum length for this field is 2000 characters.
         """
         self._text: Optional[TextObject] = TextObject.parse(text, default_type=PlainTextObject.type)
