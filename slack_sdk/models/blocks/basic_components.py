@@ -575,7 +575,7 @@ class FeedbackButtonObject(JsonObject):
         self.validate_json()
         json = {}
         if self._text:
-            json["text"] = self._text
+            json["text"] = self._text.text
         if self._accessibility_label:
             json["accessibility_label"] = self._accessibility_label
         if self._value:
