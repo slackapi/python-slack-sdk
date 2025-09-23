@@ -3024,7 +3024,8 @@ This method returns it's own object. e.g. 'self'</p>
                 &#34;markdown_text&#34;: markdown_text,
             }
         )
-        return self.api_call(&#34;chat.appendStream&#34;, params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.appendStream&#34;, json=kwargs)
 
     def chat_delete(
         self,
@@ -3278,7 +3279,8 @@ This method returns it's own object. e.g. 'self'</p>
                 &#34;unfurl_media&#34;: unfurl_media,
             }
         )
-        return self.api_call(&#34;chat.startStream&#34;, params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.startStream&#34;, json=kwargs)
 
     def chat_stopStream(
         self,
@@ -3303,7 +3305,8 @@ This method returns it's own object. e.g. 'self'</p>
             }
         )
         _parse_web_class_objects(kwargs)
-        return self.api_call(&#34;chat.stopStream&#34;, params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.stopStream&#34;, json=kwargs)
 
     def chat_unfurl(
         self,
@@ -10193,7 +10196,8 @@ Each authorization represents an app installation that the event is visible to.
             &#34;markdown_text&#34;: markdown_text,
         }
     )
-    return self.api_call(&#34;chat.appendStream&#34;, params=kwargs)</code></pre>
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.appendStream&#34;, json=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Appends text to an existing streaming conversation.
 <a href="https://api.slack.com/methods/chat.appendStream">https://api.slack.com/methods/chat.appendStream</a></p></div>
@@ -10546,7 +10550,8 @@ Each authorization represents an app installation that the event is visible to.
             &#34;unfurl_media&#34;: unfurl_media,
         }
     )
-    return self.api_call(&#34;chat.startStream&#34;, params=kwargs)</code></pre>
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.startStream&#34;, json=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Starts a new streaming conversation.
 <a href="https://api.slack.com/methods/chat.startStream">https://api.slack.com/methods/chat.startStream</a></p></div>
@@ -10582,7 +10587,8 @@ Each authorization represents an app installation that the event is visible to.
         }
     )
     _parse_web_class_objects(kwargs)
-    return self.api_call(&#34;chat.stopStream&#34;, params=kwargs)</code></pre>
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.stopStream&#34;, json=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Stops a streaming conversation.
 <a href="https://api.slack.com/methods/chat.stopStream">https://api.slack.com/methods/chat.stopStream</a></p></div>
