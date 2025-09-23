@@ -2901,6 +2901,8 @@ el.replaceWith(d);
         channel: str,
         thread_ts: Optional[str] = None,
         markdown_text: Optional[str] = None,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
         **kwargs,
@@ -2913,6 +2915,8 @@ el.replaceWith(d);
                 &#34;channel&#34;: channel,
                 &#34;thread_ts&#34;: thread_ts,
                 &#34;markdown_text&#34;: markdown_text,
+                &#34;recipient_team_id&#34;: recipient_team_id,
+                &#34;recipient_user_id&#34;: recipient_user_id,
                 &#34;unfurl_links&#34;: unfurl_links,
                 &#34;unfurl_media&#34;: unfurl_media,
             }
@@ -10159,7 +10163,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.scheduledMessages.list">https://api.slack.com/methods/chat.scheduledMessages.list</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.chat_startStream"><code class="name flex">
-<span>def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str | None = None,<br>markdown_text: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+<span>def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str | None = None,<br>markdown_text: str | None = None,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10172,6 +10176,8 @@ Each authorization represents an app installation that the event is visible to.
     channel: str,
     thread_ts: Optional[str] = None,
     markdown_text: Optional[str] = None,
+    recipient_team_id: Optional[str] = None,
+    recipient_user_id: Optional[str] = None,
     unfurl_links: Optional[bool] = None,
     unfurl_media: Optional[bool] = None,
     **kwargs,
@@ -10184,6 +10190,8 @@ Each authorization represents an app installation that the event is visible to.
             &#34;channel&#34;: channel,
             &#34;thread_ts&#34;: thread_ts,
             &#34;markdown_text&#34;: markdown_text,
+            &#34;recipient_team_id&#34;: recipient_team_id,
+            &#34;recipient_user_id&#34;: recipient_user_id,
             &#34;unfurl_links&#34;: unfurl_links,
             &#34;unfurl_media&#34;: unfurl_media,
         }
