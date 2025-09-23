@@ -573,7 +573,7 @@ class FeedbackButtonObject(JsonObject):
 
     def to_dict(self) -> Dict[str, Any]:
         self.validate_json()
-        json = {}
+        json: Dict[str, Union[str, dict]] = {}
         if self._text:
             json["text"] = self._text.to_dict()
         if self._accessibility_label:
