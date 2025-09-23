@@ -571,8 +571,8 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(channel="C123")["method"])
                 await async_method(channel="C123")
             elif method_name == "chat_stopStream":
-                self.api_methods_to_call.remove(method(channel="C123", ts="123.123")["method"])
-                await async_method(channel="C123", ts="123.123")
+                self.api_methods_to_call.remove(method(channel="C123", ts="123.123", blocks=[{"type":"markdown","text":"**twelve**"}])["method"])
+                await async_method(channel="C123", ts="123.123", blocks=[{"type":"markdown","text":"**twelve**"}])
             elif method_name == "chat_unfurl":
                 self.api_methods_to_call.remove(
                     method(
