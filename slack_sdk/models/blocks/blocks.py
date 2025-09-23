@@ -1,7 +1,7 @@
 import copy
 import logging
 import warnings
-from typing import Dict, Sequence, Optional, Set, Union, Any, List
+from typing import Any, Dict, List, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import (
@@ -87,6 +87,8 @@ class Block(JsonObject):
                     return CallBlock(**block)
                 elif type == HeaderBlock.type:
                     return HeaderBlock(**block)
+                elif type == MarkdownBlock.type:
+                    return MarkdownBlock(**block)
                 elif type == VideoBlock.type:
                     return VideoBlock(**block)
                 elif type == RichTextBlock.type:
@@ -521,6 +523,45 @@ class HeaderBlock(Block):
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def _validate_alt_text_length(self):
         return self.text is None or len(self.text.text) <= self.text_max_length
+
+
+class MarkdownBlock(Block):
+    type = "markdown"
+    text_max_length = 12000
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"text"})
+
+    def __init__(
+        self,
+        *,
+        text: str,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays formatted markdown.
+        https://docs.slack.dev/reference/block-kit/blocks/markdown-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (required): The standard markdown-formatted text. Limit 12,000 characters max.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = text
+
+    @JsonValidator("text attribute must be specified")
+    def _validate_text(self):
+        return self.text != ""
+
+    @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
+    def _validate_alt_text_length(self):
+        return len(self.text) <= self.text_max_length
 
 
 class VideoBlock(Block):
