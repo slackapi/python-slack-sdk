@@ -220,6 +220,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                     return ActionsBlock(**block)
                 elif type == ContextBlock.type:
                     return ContextBlock(**block)
+                elif type == ContextActionsBlock.type:
+                    return ContextActionsBlock(**block)
                 elif type == InputBlock.type:
                     return InputBlock(**block)
                 elif type == FileBlock.type:
@@ -257,6 +259,7 @@ to create visually rich and compellingly interactive messages.
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.ActionsBlock" href="#slack_sdk.models.blocks.blocks.ActionsBlock">ActionsBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.CallBlock" href="#slack_sdk.models.blocks.blocks.CallBlock">CallBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.ContextActionsBlock" href="#slack_sdk.models.blocks.blocks.ContextActionsBlock">ContextActionsBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.ContextBlock" href="#slack_sdk.models.blocks.blocks.ContextBlock">ContextBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.DividerBlock" href="#slack_sdk.models.blocks.blocks.DividerBlock">DividerBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.FileBlock" href="#slack_sdk.models.blocks.blocks.FileBlock">FileBlock</a></li>
@@ -388,6 +391,111 @@ to create visually rich and compellingly interactive messages.
 <pre><code class="python">@property
 def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;call_id&#34;, &#34;api_decoration_available&#34;, &#34;call&#34;})</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.block_id_max_length" href="#slack_sdk.models.blocks.blocks.Block.block_id_max_length">block_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ContextActionsBlock"><code class="flex name class">
+<span>class <span class="ident">ContextActionsBlock</span></span>
+<span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.FeedbackButtonsElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.FeedbackButtonsElement">FeedbackButtonsElement</a> | <a title="slack_sdk.models.blocks.block_elements.IconButtonElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.IconButtonElement">IconButtonElement</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ContextActionsBlock(Block):
+    type = &#34;context_actions&#34;
+    elements_max_length = 5
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, FeedbackButtonsElement, IconButtonElement]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays actions as contextual info, which can include both feedback buttons and icon buttons.
+
+        Args:
+            elements (required): An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator(&#34;elements attribute must be specified&#34;)
+    def _validate_elements(self):
+        return self.elements is None or len(self.elements) &gt; 0
+
+    @JsonValidator(f&#34;elements attribute cannot exceed {elements_max_length} elements&#34;)
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) &lt;= self.elements_max_length</code></pre>
+</details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays actions as contextual info, which can include both feedback buttons and icon buttons.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
+<dd>An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ContextActionsBlock.elements_max_length"><code class="name">var <span class="ident">elements_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.ContextActionsBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.ContextActionsBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return super().attributes.union({&#34;elements&#34;})</code></pre>
 </details>
 <div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
@@ -1711,6 +1819,14 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.blocks.CallBlock.attributes" href="#slack_sdk.models.blocks.blocks.CallBlock.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.CallBlock.type" href="#slack_sdk.models.blocks.blocks.CallBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.ContextActionsBlock" href="#slack_sdk.models.blocks.blocks.ContextActionsBlock">ContextActionsBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.ContextActionsBlock.attributes" href="#slack_sdk.models.blocks.blocks.ContextActionsBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ContextActionsBlock.elements_max_length" href="#slack_sdk.models.blocks.blocks.ContextActionsBlock.elements_max_length">elements_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.ContextActionsBlock.type" href="#slack_sdk.models.blocks.blocks.ContextActionsBlock.type">type</a></code></li>
 </ul>
 </li>
 <li>
