@@ -43,8 +43,7 @@ class TestGoogleStateStore(unittest.TestCase):
         """Test issue method"""
         state = self.state_store.issue()
         self.storage_client.bucket.assert_called_once_with(self.bucket_name)
-        self.bucket.blob.assert_called_once()
-        self.assertEqual(self.bucket.blob.call_args.args[0], state)
+        self.bucket.blob.assert_called_once_with(state)
         self.blob.upload_from_string.assert_called_once()
         self.assertRegex(self.blob.upload_from_string.call_args.args[0], r"\d{10,}.\d{5,}")
 
