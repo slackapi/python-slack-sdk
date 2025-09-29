@@ -568,10 +568,10 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method()["method"])
                 await async_method()
             elif method_name == "chat_startStream":
-                self.api_methods_to_call.remove(method(channel="C123")["method"])
-                method(channel="C123", recipient_team_id="T123", recipient_user_id="U123")
-                await async_method(channel="C123")
-                await async_method(channel="C123", recipient_team_id="T123", recipient_user_id="U123")
+                self.api_methods_to_call.remove(method(channel="C123", thread_ts="123.123")["method"])
+                await async_method(channel="C123", thread_ts="123.123")
+                method(channel="C123", thread_ts="123.123", recipient_team_id="T123", recipient_user_id="U123")
+                await async_method(channel="C123", thread_ts="123.123", recipient_team_id="T123", recipient_user_id="U123")
             elif method_name == "chat_stopStream":
                 self.api_methods_to_call.remove(
                     method(channel="C123", ts="123.123", blocks=[{"type": "markdown", "text": "**twelve**"}])["method"]

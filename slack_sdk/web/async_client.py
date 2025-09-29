@@ -2878,7 +2878,7 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         channel: str,
-        thread_ts: Optional[str] = None,
+        thread_ts: str,
         markdown_text: Optional[str] = None,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
