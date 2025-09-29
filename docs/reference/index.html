@@ -3004,7 +3004,7 @@ and message responses using response_url in payloads.</p></div>
         self,
         *,
         channel: str,
-        thread_ts: Optional[str] = None,
+        thread_ts: str,
         markdown_text: Optional[str] = None,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
@@ -10268,7 +10268,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.scheduledMessages.list">https://api.slack.com/methods/chat.scheduledMessages.list</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.chat_startStream"><code class="name flex">
-<span>def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str | None = None,<br>markdown_text: str | None = None,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str,<br>markdown_text: str | None = None,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10279,7 +10279,7 @@ Each authorization represents an app installation that the event is visible to.
     self,
     *,
     channel: str,
-    thread_ts: Optional[str] = None,
+    thread_ts: str,
     markdown_text: Optional[str] = None,
     recipient_team_id: Optional[str] = None,
     recipient_user_id: Optional[str] = None,
