@@ -2106,7 +2106,8 @@ el.replaceWith(d);
         kwargs.update(
             {&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status, &#34;loading_messages&#34;: loading_messages}
         )
-        return await self.api_call(&#34;assistant.threads.setStatus&#34;, params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;assistant.threads.setStatus&#34;, json=kwargs)
 
     async def assistant_threads_setTitle(
         self,
@@ -8887,7 +8888,8 @@ Each authorization represents an app installation that the event is visible to.
     kwargs.update(
         {&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status, &#34;loading_messages&#34;: loading_messages}
     )
-    return await self.api_call(&#34;assistant.threads.setStatus&#34;, params=kwargs)</code></pre>
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;assistant.threads.setStatus&#34;, json=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Set the status for an AI assistant thread.
 <a href="https://api.slack.com/methods/assistant.threads.setStatus">https://api.slack.com/methods/assistant.threads.setStatus</a></p></div>
