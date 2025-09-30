@@ -2086,7 +2086,8 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update(
             {"channel_id": channel_id, "thread_ts": thread_ts, "status": status, "loading_messages": loading_messages}
         )
-        return self.api_call("assistant.threads.setStatus", params=kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("assistant.threads.setStatus", json=kwargs)
 
     def assistant_threads_setTitle(
         self,

@@ -425,7 +425,19 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(
                     method(channel_id="D111", thread_ts="111.222", status="is typing...")["method"]
                 )
+                method(
+                    channel_id="D111",
+                    thread_ts="111.222",
+                    status="is typing...",
+                    loading_states=["Thinking...", "Writing..."],
+                )
                 await async_method(channel_id="D111", thread_ts="111.222", status="is typing...")
+                await async_method(
+                    channel_id="D111",
+                    thread_ts="111.222",
+                    status="is typing...",
+                    loading_states=["Thinking...", "Writing..."],
+                )
             elif method_name == "assistant_threads_setTitle":
                 self.api_methods_to_call.remove(method(channel_id="D111", thread_ts="111.222", title="New chat")["method"])
                 await async_method(channel_id="D111", thread_ts="111.222", title="New chat")
