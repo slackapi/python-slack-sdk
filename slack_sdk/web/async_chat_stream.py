@@ -58,6 +58,7 @@ class AsyncChatStream:
         self._buffer = ""
         self._state = "starting"
         self._stream_ts: Optional[str] = None
+        self._token: Optional[str] = kwargs.get("token")
         self._buffer_size = buffer_size
 
     async def append(
@@ -80,6 +81,8 @@ class AsyncChatStream:
         """
         if self._state == "completed":
             raise e.SlackRequestError(f"Cannot append to stream: stream state is {self._state}")
+        if kwargs.get("token"):
+            self._token = kwargs.pop("token")
         self._buffer += markdown_text
         if len(self._buffer) >= self._buffer_size:
             return await self._flush_buffer(**kwargs)
@@ -118,26 +121,25 @@ class AsyncChatStream:
         """
         if self._state == "completed":
             raise e.SlackRequestError(f"Cannot stop stream: stream state is {self._state}")
+        if kwargs.get("token"):
+            self._token = kwargs.pop("token")
         if markdown_text:
             self._buffer += markdown_text
         if not self._stream_ts:
             response = await self._client.chat_startStream(
                 **self._stream_args,
-                **kwargs,
+                token=self._token,
             )
             if not response.get("ts"):
                 raise e.SlackRequestError("Failed to stop stream: stream not started")
             self._stream_ts = str(response["ts"])
             self._state = "in_progress"
-
-        print(f"_stream_args: {self._stream_args}\n")  # todo
-        print(f"_buffer: {self._buffer}\n")
-
         response = await self._client.chat_stopStream(
+            token=self._token,
             channel=self._stream_args["channel"],
             ts=self._stream_ts,
             blocks=blocks,
-            markdown_text=self._buffer + (markdown_text if markdown_text is not None else ""),
+            markdown_text=self._buffer,
             metadata=metadata,
             **kwargs,
         )
@@ -149,17 +151,19 @@ class AsyncChatStream:
         if not self._stream_ts:
             response = await self._client.chat_startStream(
                 **self._stream_args,
-                markdown_text=self._buffer,
+                token=self._token,
                 **kwargs,
+                markdown_text=self._buffer,
             )
             self._stream_ts = response.get("ts")
             self._state = "in_progress"
         else:
             response = await self._client.chat_appendStream(
+                token=self._token,
                 channel=self._stream_args["channel"],
                 ts=self._stream_ts,
-                markdown_text=self._buffer,
                 **kwargs,
+                markdown_text=self._buffer,
             )
 
         self._buffer = ""

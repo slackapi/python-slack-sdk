@@ -18,6 +18,7 @@ class ChatStreamMockHandler(MockHandler):
 
             # Standard auth and validation from parent
             if self.is_valid_token() and self.is_valid_user_agent():
+                token = self.headers["authorization"].split(" ")[1]
                 parsed_path = urlparse(self.path)
                 len_header = self.headers.get("Content-Length") or 0
                 content_len = int(len_header)
@@ -40,13 +41,13 @@ class ChatStreamMockHandler(MockHandler):
                 if self.path in ["/chat.startStream", "/chat.appendStream", "/chat.stopStream"] and request_body:
                     if not hasattr(self.server, "chat_stream_requests"):
                         self.server.chat_stream_requests = {}
-                    self.server.chat_stream_requests[self.path] = request_body
-
-                # Get token pattern for response file
-                header = self.headers["authorization"]
-                pattern = str(header).split("xoxb-", 1)[1]
+                    self.server.chat_stream_requests[self.path] = {
+                        "token": token,
+                        **request_body,
+                    }
 
                 # Load response file
+                pattern = str(token).split("xoxb-", 1)[1]
                 with open(f"tests/slack_sdk_fixture/web_response_{pattern}.json") as file:
                     body = json.load(file)
 
@@ -93,6 +94,7 @@ class TestChatStream(unittest.TestCase):
         self.assertEqual(self.received_requests.get("/chat.startStream", 0), 1)
         self.assertEqual(self.received_requests.get("/chat.appendStream", 0), 0)
         self.assertEqual(self.received_requests.get("/chat.stopStream", 0), 1)
+
         if hasattr(self.thread.server, "chat_stream_requests"):
             start_request = self.thread.server.chat_stream_requests.get("/chat.startStream", {})
             self.assertEqual(start_request.get("channel"), "C0123456789")
@@ -117,7 +119,7 @@ class TestChatStream(unittest.TestCase):
         streamer.append(markdown_text="e is")
         streamer.append(markdown_text=" bold!")
         streamer.append(markdown_text="*")
-        streamer.stop(markdown_text="*")
+        streamer.stop(markdown_text="*", token="xoxb-chat_stream_test_token")
 
         self.assertEqual(self.received_requests.get("/chat.startStream", 0), 1)
         self.assertEqual(self.received_requests.get("/chat.appendStream", 0), 1)
@@ -139,4 +141,5 @@ class TestChatStream(unittest.TestCase):
             stop_request = self.thread.server.chat_stream_requests.get("/chat.stopStream", {})
             self.assertEqual(stop_request.get("channel"), "C0123456789")
             self.assertEqual(stop_request.get("markdown_text"), "**")
+            self.assertEqual(stop_request.get("token"), "xoxb-chat_stream_test_token")
             self.assertEqual(stop_request.get("ts"), "123.123")
