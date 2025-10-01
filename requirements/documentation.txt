@@ -1,2 +1,2 @@
-docutils==0.22
+docutils==0.22.2
 pdoc3==0.11.6
