@@ -55,6 +55,11 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
     async_source = re.sub(r"ChatStream:", "AsyncChatStream:", async_source)
     async_source = re.sub(r"ChatStream\(", "AsyncChatStream(", async_source)
     async_source = re.sub(
+        r" client.chat_stream\(",
+        " await client.chat_stream(",
+        async_source,
+    )
+    async_source = re.sub(
         r" streamer.append\(",
         " await streamer.append(",
         async_source,

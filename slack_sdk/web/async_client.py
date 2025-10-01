@@ -2939,7 +2939,7 @@ class AsyncWebClient(AsyncBaseClient):
 
         Example:
             ```python
-            streamer = client.chat_stream(
+            streamer = await client.chat_stream(
                 channel="C0123456789",
                 thread_ts="1700000001.123456",
                 recipient_team_id="T0123456789",
