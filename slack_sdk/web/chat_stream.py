@@ -8,7 +8,7 @@ from slack_sdk.models.metadata import Metadata
 from slack_sdk.web.slack_response import SlackResponse
 
 if TYPE_CHECKING:
-    from slack_sdk.web.client import WebClient
+    from slack_sdk import WebClient
 
 
 class ChatStream:

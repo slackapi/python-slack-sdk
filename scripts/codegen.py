@@ -35,7 +35,6 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
         "from .async_base_client import AsyncBaseClient, AsyncSlackResponse",
         async_source,
     )
-    # from slack_sdk import WebClient
     async_source = re.sub(
         r"class WebClient\(BaseClient\):",
         "class AsyncWebClient(AsyncBaseClient):",
@@ -122,3 +121,31 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
     legacy_source = re.sub(r"= WebClient\(", "= LegacyWebClient(", legacy_source)
     with open(f"{args.path}/slack_sdk/web/legacy_client.py", "w") as output:
         output.write(legacy_source)
+
+with open(f"{args.path}/slack_sdk/web/chat_stream.py", "r") as original:
+    source = original.read()
+    import re
+
+    async_source = header + source
+    async_source = re.sub(
+        "from slack_sdk.web.slack_response import SlackResponse",
+        "from slack_sdk.web.async_slack_response import AsyncSlackResponse",
+        async_source,
+    )
+    async_source = re.sub(
+        r"from slack_sdk import WebClient",
+        "from slack_sdk.web.async_client import AsyncWebClient",
+        async_source,
+    )
+    async_source = re.sub("class ChatStream", "class AsyncChatStream", async_source)
+    async_source = re.sub('"WebClient"', '"AsyncWebClient"', async_source)
+    async_source = re.sub(r"Optional\[SlackResponse\]", "Optional[AsyncSlackResponse]", async_source)
+    async_source = re.sub(r"SlackResponse ", "AsyncSlackResponse ", async_source)
+    async_source = re.sub(r"SlackResponse:", "AsyncSlackResponse:", async_source)
+    async_source = re.sub(r"def append\(", "async def append(", async_source)
+    async_source = re.sub(r"def stop\(", "async def stop(", async_source)
+    async_source = re.sub(r"def _flush_buffer\(", "async def _flush_buffer(", async_source)
+    async_source = re.sub("self._client.chat_", "await self._client.chat_", async_source)
+    async_source = re.sub("self._flush_buffer", "await self._flush_buffer", async_source)
+    with open(f"{args.path}/slack_sdk/web/async_chat_stream.py", "w") as output:
+        output.write(async_source)
