@@ -15,7 +15,7 @@ psutil>=6.0.0,<8
 boto3<=2
 # For AWS tests
 moto>=4.0.13,<6
-mypy<=1.17.1
+mypy<=1.18.2
 # For AsyncSQLAlchemy tests
 greenlet<=4
 aiosqlite<=1
