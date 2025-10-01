@@ -2913,29 +2913,28 @@ class AsyncWebClient(AsyncBaseClient):
         thread_ts: str,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
-        unfurl_links: Optional[bool] = None,
-        unfurl_media: Optional[bool] = None,
         **kwargs,
     ) -> AsyncChatStream:
         """Stream markdown text into a conversation.
 
-        This method provides an easy way to stream markdown text using the following endpoints:
-        - chat.startStream: Starts a new streaming conversation
-        - chat.appendStream: Appends text to an existing streaming conversation
-        - chat.stopStream: Stops a streaming conversation
+        This method starts a new chat stream in a coversation that can be appended to. After appending an entire message, the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.
+
+        The following methods are used:
+
+        - chat.startStream: Starts a new streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+        - chat.appendStream: Appends text to an existing streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+        - chat.stopStream: Stops a streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
 
         Args:
-            buffer_size: Size of the internal buffer before automatically flushing (default: 256)
-            channel: Channel to stream to
-            thread_ts: Thread timestamp to stream to (required)
-            recipient_team_id: Team ID of the recipient (for Slack Connect)
-            recipient_user_id: User ID of the recipient (for Slack Connect)
-            unfurl_links: Whether to unfurl links
-            unfurl_media: Whether to unfurl media
-            **kwargs: Additional arguments passed to the underlying API calls
+            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
-            ChatStreamer instance for managing the stream
+            ChatStream instance for managing the stream
 
         Example:
             ```python
@@ -2957,8 +2956,6 @@ class AsyncWebClient(AsyncBaseClient):
             thread_ts=thread_ts,
             recipient_team_id=recipient_team_id,
             recipient_user_id=recipient_user_id,
-            unfurl_links=unfurl_links,
-            unfurl_media=unfurl_media,
             buffer_size=buffer_size,
             **kwargs,
         )

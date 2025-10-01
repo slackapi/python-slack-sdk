@@ -14,8 +14,7 @@ if TYPE_CHECKING:
 class ChatStream:
     """A helper class for streaming markdown text into a conversation using the chat streaming APIs.
 
-    This class provides a convenient interface for the chat.startStream, chat.appendStream,
-    and chat.stopStream API methods, with automatic buffering and state management.
+    This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API methods, with automatic buffering and state management.
     """
 
     def __init__(
@@ -28,37 +27,35 @@ class ChatStream:
         buffer_size: int,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
-        unfurl_links: Optional[bool] = None,
-        unfurl_media: Optional[bool] = None,
         **kwargs,
     ):
         """Initialize a new ChatStream instance.
 
+        The __init__ method creates a unique ChatStream instance that keeps track of one chat stream.
+
         Args:
-            client: The WebClient instance to use for API calls
-            channel: Channel ID to stream to
-            thread_ts: Thread timestamp to stream to
-            recipient_team_id: Team ID of the recipient
-            recipient_user_id: User ID of the recipient
-            unfurl_links: Whether to unfurl links
-            unfurl_media: Whether to unfurl media
-            buffer_size: Size of the internal buffer before automatically flushing (default: 256)
+            client: The WebClient instance to use for API calls.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            logger: A logging channel for outputs.
+            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.
+            **kwargs: Additional arguments passed to the underlying API calls.
         """
         self._client = client
         self._logger = logger
+        self._token: Optional[str] = kwargs.pop("token", None)
         self._stream_args = {
             "channel": channel,
             "thread_ts": thread_ts,
             "recipient_team_id": recipient_team_id,
             "recipient_user_id": recipient_user_id,
-            "unfurl_links": unfurl_links,
-            "unfurl_media": unfurl_media,
             **kwargs,
         }
         self._buffer = ""
         self._state = "starting"
         self._stream_ts: Optional[str] = None
-        self._token: Optional[str] = kwargs.get("token")
         self._buffer_size = buffer_size
 
     def append(
@@ -67,17 +64,32 @@ class ChatStream:
         markdown_text: str,
         **kwargs,
     ) -> Optional[SlackResponse]:
-        """Append markdown text to the stream.
+        """Append to the stream.
+
+        The "append" method appends to the chat stream being used. This method can be called multiple times. After the stream is stopped this method cannot be called.
 
         Args:
-            markdown_text: The markdown text to append
-            **kwargs: Additional arguments passed to the underlying API calls
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
+            **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
-            SlackResponse if the buffer was flushed, None if buffering
+            SlackResponse if the buffer was flushed, None if buffering.
 
         Raises:
-            SlackRequestError: If the stream is already completed
+            SlackRequestError: If the stream is already completed.
+
+        Example:
+            ```python
+            streamer = client.chat_stream(
+                channel="C0123456789",
+                thread_ts="1700000001.123456",
+                recipient_team_id="T0123456789",
+                recipient_user_id="U0123456789",
+            )
+            streamer.append(markdown_text="**hello wo")
+            streamer.append(markdown_text="rld!**")
+            streamer.stop()
+            ```
         """
         if self._state == "completed":
             raise e.SlackRequestError(f"Cannot append to stream: stream state is {self._state}")
@@ -108,16 +120,29 @@ class ChatStream:
         """Stop the stream and finalize the message.
 
         Args:
-            markdown_text: Additional markdown text to append before stopping
-            blocks: Message blocks to add to the final message
-            metadata: Message metadata to add to the final message
-            **kwargs: Additional arguments passed to the underlying API calls
+            blocks: A list of blocks that will be rendered at the bottom of the finalized message.
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
+            metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you post to Slack is accessible to any app or user who is a member of that workspace.
+            **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
-            SlackResponse from the chat.stopStream API call
+            SlackResponse from the chat.stopStream API call.
 
         Raises:
-            SlackRequestError: If the stream is already completed
+            SlackRequestError: If the stream is already completed.
+
+        Example:
+            ```python
+            streamer = client.chat_stream(
+                channel="C0123456789",
+                thread_ts="1700000001.123456",
+                recipient_team_id="T0123456789",
+                recipient_user_id="U0123456789",
+            )
+            streamer.append(markdown_text="**hello wo")
+            streamer.append(markdown_text="rld!**")
+            streamer.stop()
+            ```
         """
         if self._state == "completed":
             raise e.SlackRequestError(f"Cannot stop stream: stream state is {self._state}")
@@ -165,6 +190,5 @@ class ChatStream:
                 **kwargs,
                 markdown_text=self._buffer,
             )
-
         self._buffer = ""
         return response

@@ -3038,29 +3038,28 @@ and message responses using response_url in payloads.</p></div>
         thread_ts: str,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
-        unfurl_links: Optional[bool] = None,
-        unfurl_media: Optional[bool] = None,
         **kwargs,
     ) -&gt; ChatStream:
         &#34;&#34;&#34;Stream markdown text into a conversation.
 
-        This method provides an easy way to stream markdown text using the following endpoints:
-        - chat.startStream: Starts a new streaming conversation
-        - chat.appendStream: Appends text to an existing streaming conversation
-        - chat.stopStream: Stops a streaming conversation
+        This method starts a new chat stream in a coversation that can be appended to. After appending an entire message, the stream can be stopped with concluding arguments such as &#34;blocks&#34; for gathering feedback.
+
+        The following methods are used:
+
+        - chat.startStream: Starts a new streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+        - chat.appendStream: Appends text to an existing streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+        - chat.stopStream: Stops a streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
 
         Args:
-            buffer_size: Size of the internal buffer before automatically flushing (default: 256)
-            channel: Channel to stream to
-            thread_ts: Thread timestamp to stream to (required)
-            recipient_team_id: Team ID of the recipient (for Slack Connect)
-            recipient_user_id: User ID of the recipient (for Slack Connect)
-            unfurl_links: Whether to unfurl links
-            unfurl_media: Whether to unfurl media
-            **kwargs: Additional arguments passed to the underlying API calls
+            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
-            ChatStreamer instance for managing the stream
+            ChatStream instance for managing the stream
 
         Example:
             ```python
@@ -3082,8 +3081,6 @@ and message responses using response_url in payloads.</p></div>
             thread_ts=thread_ts,
             recipient_team_id=recipient_team_id,
             recipient_user_id=recipient_user_id,
-            unfurl_links=unfurl_links,
-            unfurl_media=unfurl_media,
             buffer_size=buffer_size,
             **kwargs,
         )
@@ -10405,7 +10402,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.stopStream">https://api.slack.com/methods/chat.stopStream</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.chat_stream"><code class="name flex">
-<span>def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.chat_stream.ChatStream" href="web/chat_stream.html#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></span>
+<span>def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.chat_stream.ChatStream" href="web/chat_stream.html#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10420,29 +10417,28 @@ Each authorization represents an app installation that the event is visible to.
     thread_ts: str,
     recipient_team_id: Optional[str] = None,
     recipient_user_id: Optional[str] = None,
-    unfurl_links: Optional[bool] = None,
-    unfurl_media: Optional[bool] = None,
     **kwargs,
 ) -&gt; ChatStream:
     &#34;&#34;&#34;Stream markdown text into a conversation.
 
-    This method provides an easy way to stream markdown text using the following endpoints:
-    - chat.startStream: Starts a new streaming conversation
-    - chat.appendStream: Appends text to an existing streaming conversation
-    - chat.stopStream: Stops a streaming conversation
+    This method starts a new chat stream in a coversation that can be appended to. After appending an entire message, the stream can be stopped with concluding arguments such as &#34;blocks&#34; for gathering feedback.
+
+    The following methods are used:
+
+    - chat.startStream: Starts a new streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+    - chat.appendStream: Appends text to an existing streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+    - chat.stopStream: Stops a streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
 
     Args:
-        buffer_size: Size of the internal buffer before automatically flushing (default: 256)
-        channel: Channel to stream to
-        thread_ts: Thread timestamp to stream to (required)
-        recipient_team_id: Team ID of the recipient (for Slack Connect)
-        recipient_user_id: User ID of the recipient (for Slack Connect)
-        unfurl_links: Whether to unfurl links
-        unfurl_media: Whether to unfurl media
-        **kwargs: Additional arguments passed to the underlying API calls
+        buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.
+        channel: An encoded ID that represents a channel, private group, or DM.
+        thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user request.
+        recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.
+        recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+        **kwargs: Additional arguments passed to the underlying API calls.
 
     Returns:
-        ChatStreamer instance for managing the stream
+        ChatStream instance for managing the stream
 
     Example:
         ```python
@@ -10464,38 +10460,35 @@ Each authorization represents an app installation that the event is visible to.
         thread_ts=thread_ts,
         recipient_team_id=recipient_team_id,
         recipient_user_id=recipient_user_id,
-        unfurl_links=unfurl_links,
-        unfurl_media=unfurl_media,
         buffer_size=buffer_size,
         **kwargs,
     )</code></pre>
 </details>
 <div class="desc"><p>Stream markdown text into a conversation.</p>
-<p>This method provides an easy way to stream markdown text using the following endpoints:
-- chat.startStream: Starts a new streaming conversation
-- chat.appendStream: Appends text to an existing streaming conversation
-- chat.stopStream: Stops a streaming conversation</p>
+<p>This method starts a new chat stream in a coversation that can be appended to. After appending an entire message, the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.</p>
+<p>The following methods are used:</p>
+<ul>
+<li>chat.startStream: Starts a new streaming conversation. <a href="https://docs.slack.dev/reference/methods/chat.startStream">Reference</a>.</li>
+<li>chat.appendStream: Appends text to an existing streaming conversation. <a href="https://docs.slack.dev/reference/methods/chat.appendStream">Reference</a>.</li>
+<li>chat.stopStream: Stops a streaming conversation. <a href="https://docs.slack.dev/reference/methods/chat.stopStream">Reference</a>.</li>
+</ul>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>buffer_size</code></strong></dt>
-<dd>Size of the internal buffer before automatically flushing (default: 256)</dd>
+<dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.</dd>
 <dt><strong><code>channel</code></strong></dt>
-<dd>Channel to stream to</dd>
+<dd>An encoded ID that represents a channel, private group, or DM.</dd>
 <dt><strong><code>thread_ts</code></strong></dt>
-<dd>Thread timestamp to stream to (required)</dd>
+<dd>Provide another message's ts value to reply to. Streamed messages should always be replies to a user request.</dd>
 <dt><strong><code>recipient_team_id</code></strong></dt>
-<dd>Team ID of the recipient (for Slack Connect)</dd>
+<dd>The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.</dd>
 <dt><strong><code>recipient_user_id</code></strong></dt>
-<dd>User ID of the recipient (for Slack Connect)</dd>
-<dt><strong><code>unfurl_links</code></strong></dt>
-<dd>Whether to unfurl links</dd>
-<dt><strong><code>unfurl_media</code></strong></dt>
-<dd>Whether to unfurl media</dd>
+<dd>The encoded ID of the user to receive the streaming text. Required when streaming to channels.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
-<dd>Additional arguments passed to the underlying API calls</dd>
+<dd>Additional arguments passed to the underlying API calls.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>ChatStreamer instance for managing the stream</p>
+<p>ChatStream instance for managing the stream</p>
 <h2 id="example">Example</h2>
 <pre><code class="language-python">streamer = client.chat_stream(
     channel=&quot;C0123456789&quot;,
