@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
-from slack_sdk.web.chat_stream import ChatStream
+from slack_sdk.web.async_chat_stream import AsyncChatStream
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -2916,7 +2916,7 @@ class AsyncWebClient(AsyncBaseClient):
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
         **kwargs,
-    ) -> ChatStream:
+    ) -> AsyncChatStream:
         """Stream markdown text into a conversation.
 
         This method provides an easy way to stream markdown text using the following endpoints:
@@ -2945,12 +2945,12 @@ class AsyncWebClient(AsyncBaseClient):
                 recipient_team_id="T0123456789",
                 recipient_user_id="U0123456789",
             )
-            streamer.append(markdown_text="**hello wo")
-            streamer.append(markdown_text="rld!**")
-            streamer.stop()
+            await streamer.append(markdown_text="**hello wo")
+            await streamer.append(markdown_text="rld!**")
+            await streamer.stop()
             ```
         """
-        return ChatStream(
+        return AsyncChatStream(
             self,
             logger=self._logger,
             channel=channel,

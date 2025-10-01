@@ -1,5 +1,5 @@
-import sys
 import argparse
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--path", help="Path to the project source code.", type=str)
@@ -47,6 +47,23 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
         async_source,
     )
     async_source = re.sub(r"= WebClient\(", "= AsyncWebClient(", async_source)
+    async_source = re.sub(
+        "from slack_sdk.web.chat_stream import ChatStream",
+        "from slack_sdk.web.async_chat_stream import AsyncChatStream",
+        async_source,
+    )
+    async_source = re.sub(r"ChatStream:", "AsyncChatStream:", async_source)
+    async_source = re.sub(r"ChatStream\(", "AsyncChatStream(", async_source)
+    async_source = re.sub(
+        r" streamer.append\(",
+        " await streamer.append(",
+        async_source,
+    )
+    async_source = re.sub(
+        r" streamer.stop\(",
+        " await streamer.stop(",
+        async_source,
+    )
     async_source = re.sub(
         r" self.files_getUploadURLExternal\(",
         " await self.files_getUploadURLExternal(",
