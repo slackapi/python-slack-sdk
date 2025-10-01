@@ -21,7 +21,6 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
 
-
 from ..models.attachments import Attachment
 from ..models.blocks import Block
 from ..models.metadata import Metadata
