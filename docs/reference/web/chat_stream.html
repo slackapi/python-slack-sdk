@@ -58,7 +58,8 @@ el.replaceWith(d);
 <pre><code class="python">class ChatStream:
     &#34;&#34;&#34;A helper class for streaming markdown text into a conversation using the chat streaming APIs.
 
-    This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API methods, with automatic buffering and state management.
+    This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API
+    methods, with automatic buffering and state management.
     &#34;&#34;&#34;
 
     def __init__(
@@ -81,10 +82,14 @@ el.replaceWith(d);
             client: The WebClient instance to use for API calls.
             channel: An encoded ID that represents a channel, private group, or DM.
             logger: A logging channel for outputs.
-            thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user request.
-            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.
+            thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
-            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.
+            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
+              decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
+              Default: 256.
             **kwargs: Additional arguments passed to the underlying API calls.
         &#34;&#34;&#34;
         self._client = client
@@ -110,10 +115,12 @@ el.replaceWith(d);
     ) -&gt; Optional[SlackResponse]:
         &#34;&#34;&#34;Append to the stream.
 
-        The &#34;append&#34; method appends to the chat stream being used. This method can be called multiple times. After the stream is stopped this method cannot be called.
+        The &#34;append&#34; method appends to the chat stream being used. This method can be called multiple times. After the stream
+        is stopped this method cannot be called.
 
         Args:
-            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+              what will be appended to the message received so far.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -165,8 +172,10 @@ el.replaceWith(d);
 
         Args:
             blocks: A list of blocks that will be rendered at the bottom of the finalized message.
-            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
-            metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you post to Slack is accessible to any app or user who is a member of that workspace.
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+              what will be appended to the message received so far.
+            metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
+              post to Slack is accessible to any app or user who is a member of that workspace.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -238,7 +247,8 @@ el.replaceWith(d);
         return response</code></pre>
 </details>
 <div class="desc"><p>A helper class for streaming markdown text into a conversation using the chat streaming APIs.</p>
-<p>This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API methods, with automatic buffering and state management.</p>
+<p>This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API
+methods, with automatic buffering and state management.</p>
 <p>Initialize a new ChatStream instance.</p>
 <p>The <strong>init</strong> method creates a unique ChatStream instance that keeps track of one chat stream.</p>
 <h2 id="args">Args</h2>
@@ -250,13 +260,17 @@ el.replaceWith(d);
 <dt><strong><code>logger</code></strong></dt>
 <dd>A logging channel for outputs.</dd>
 <dt><strong><code>thread_ts</code></strong></dt>
-<dd>Provide another message's ts value to reply to. Streamed messages should always be replies to a user request.</dd>
+<dd>Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+request.</dd>
 <dt><strong><code>recipient_team_id</code></strong></dt>
-<dd>The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.</dd>
+<dd>The encoded ID of the team the user receiving the streaming text belongs to. Required when
+streaming to channels.</dd>
 <dt><strong><code>recipient_user_id</code></strong></dt>
 <dd>The encoded ID of the user to receive the streaming text. Required when streaming to channels.</dd>
 <dt><strong><code>buffer_size</code></strong></dt>
-<dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.</dd>
+<dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value
+decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
+Default: 256.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl></div>
@@ -278,10 +292,12 @@ el.replaceWith(d);
 ) -&gt; Optional[SlackResponse]:
     &#34;&#34;&#34;Append to the stream.
 
-    The &#34;append&#34; method appends to the chat stream being used. This method can be called multiple times. After the stream is stopped this method cannot be called.
+    The &#34;append&#34; method appends to the chat stream being used. This method can be called multiple times. After the stream
+    is stopped this method cannot be called.
 
     Args:
-        markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
+        markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+          what will be appended to the message received so far.
         **kwargs: Additional arguments passed to the underlying API calls.
 
     Returns:
@@ -322,11 +338,13 @@ el.replaceWith(d);
     return None</code></pre>
 </details>
 <div class="desc"><p>Append to the stream.</p>
-<p>The "append" method appends to the chat stream being used. This method can be called multiple times. After the stream is stopped this method cannot be called.</p>
+<p>The "append" method appends to the chat stream being used. This method can be called multiple times. After the stream
+is stopped this method cannot be called.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>markdown_text</code></strong></dt>
-<dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.</dd>
+<dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+what will be appended to the message received so far.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl>
@@ -369,8 +387,10 @@ streamer.stop()
 
     Args:
         blocks: A list of blocks that will be rendered at the bottom of the finalized message.
-        markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
-        metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you post to Slack is accessible to any app or user who is a member of that workspace.
+        markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+          what will be appended to the message received so far.
+        metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
+          post to Slack is accessible to any app or user who is a member of that workspace.
         **kwargs: Additional arguments passed to the underlying API calls.
 
     Returns:
@@ -425,9 +445,11 @@ streamer.stop()
 <dt><strong><code>blocks</code></strong></dt>
 <dd>A list of blocks that will be rendered at the bottom of the finalized message.</dd>
 <dt><strong><code>markdown_text</code></strong></dt>
-<dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.</dd>
+<dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+what will be appended to the message received so far.</dd>
 <dt><strong><code>metadata</code></strong></dt>
-<dd>JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you post to Slack is accessible to any app or user who is a member of that workspace.</dd>
+<dd>JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
+post to Slack is accessible to any app or user who is a member of that workspace.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl>

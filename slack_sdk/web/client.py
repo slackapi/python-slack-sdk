@@ -2933,19 +2933,27 @@ class WebClient(BaseClient):
     ) -> ChatStream:
         """Stream markdown text into a conversation.
 
-        This method starts a new chat stream in a coversation that can be appended to. After appending an entire message, the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.
+        This method starts a new chat stream in a coversation that can be appended to. After appending an entire message,
+        the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.
 
         The following methods are used:
 
-        - chat.startStream: Starts a new streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
-        - chat.appendStream: Appends text to an existing streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
-        - chat.stopStream: Stops a streaming conversation. [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
+        - chat.startStream: Starts a new streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+        - chat.appendStream: Appends text to an existing streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+        - chat.stopStream: Stops a streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
 
         Args:
-            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.
+            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
+              decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
+              Default: 256.
             channel: An encoded ID that represents a channel, private group, or DM.
-            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user request.
-            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.
+            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             **kwargs: Additional arguments passed to the underlying API calls.
 

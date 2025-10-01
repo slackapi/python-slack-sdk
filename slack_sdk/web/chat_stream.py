@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 class ChatStream:
     """A helper class for streaming markdown text into a conversation using the chat streaming APIs.
 
-    This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API methods, with automatic buffering and state management.
+    This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API
+    methods, with automatic buffering and state management.
     """
 
     def __init__(
@@ -37,10 +38,14 @@ class ChatStream:
             client: The WebClient instance to use for API calls.
             channel: An encoded ID that represents a channel, private group, or DM.
             logger: A logging channel for outputs.
-            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user request.
-            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when streaming to channels.
+            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
-            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits. Default: 256.
+            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
+              decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
+              Default: 256.
             **kwargs: Additional arguments passed to the underlying API calls.
         """
         self._client = client
@@ -66,10 +71,12 @@ class ChatStream:
     ) -> Optional[SlackResponse]:
         """Append to the stream.
 
-        The "append" method appends to the chat stream being used. This method can be called multiple times. After the stream is stopped this method cannot be called.
+        The "append" method appends to the chat stream being used. This method can be called multiple times. After the stream
+        is stopped this method cannot be called.
 
         Args:
-            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+              what will be appended to the message received so far.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -121,8 +128,10 @@ class ChatStream:
 
         Args:
             blocks: A list of blocks that will be rendered at the bottom of the finalized message.
-            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is what will be appended to the message received so far.
-            metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you post to Slack is accessible to any app or user who is a member of that workspace.
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+              what will be appended to the message received so far.
+            metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
+              post to Slack is accessible to any app or user who is a member of that workspace.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
