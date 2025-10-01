@@ -119,6 +119,8 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
         legacy_source,
     )
     legacy_source = re.sub(r"= WebClient\(", "= LegacyWebClient(", legacy_source)
+    legacy_source = re.sub(r"from slack_sdk.web.chat_stream import ChatStream", "", legacy_source)
+    legacy_source = re.sub(r"(?s)def chat_stream.*?(?=def\s+chat_stopStream\()", "", legacy_source)
     with open(f"{args.path}/slack_sdk/web/legacy_client.py", "w") as output:
         output.write(legacy_source)
 
