@@ -3033,7 +3033,7 @@ and message responses using response_url in payloads.</p></div>
     def chat_stream(
         self,
         *,
-        buffer_size: Optional[int] = 256,
+        buffer_size: int = 256,
         channel: str,
         thread_ts: str,
         recipient_team_id: Optional[str] = None,
@@ -10405,7 +10405,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.stopStream">https://api.slack.com/methods/chat.stopStream</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.chat_stream"><code class="name flex">
-<span>def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int | None = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.chat_stream.ChatStream" href="web/chat_stream.html#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></span>
+<span>def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.chat_stream.ChatStream" href="web/chat_stream.html#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10415,7 +10415,7 @@ Each authorization represents an app installation that the event is visible to.
 <pre><code class="python">def chat_stream(
     self,
     *,
-    buffer_size: Optional[int] = 256,
+    buffer_size: int = 256,
     channel: str,
     thread_ts: str,
     recipient_team_id: Optional[str] = None,

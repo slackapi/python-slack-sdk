@@ -2929,7 +2929,7 @@ el.replaceWith(d);
     async def chat_stream(
         self,
         *,
-        buffer_size: Optional[int] = 256,
+        buffer_size: int = 256,
         channel: str,
         thread_ts: str,
         recipient_team_id: Optional[str] = None,
@@ -2937,7 +2937,7 @@ el.replaceWith(d);
         unfurl_links: Optional[bool] = None,
         unfurl_media: Optional[bool] = None,
         **kwargs,
-    ) -&gt; ChatStream:
+    ) -&gt; AsyncChatStream:
         &#34;&#34;&#34;Stream markdown text into a conversation.
 
         This method provides an easy way to stream markdown text using the following endpoints:
@@ -2960,18 +2960,18 @@ el.replaceWith(d);
 
         Example:
             ```python
-            streamer = client.chat_stream(
+            streamer = await client.chat_stream(
                 channel=&#34;C0123456789&#34;,
                 thread_ts=&#34;1700000001.123456&#34;,
                 recipient_team_id=&#34;T0123456789&#34;,
                 recipient_user_id=&#34;U0123456789&#34;,
             )
-            streamer.append(markdown_text=&#34;**hello wo&#34;)
-            streamer.append(markdown_text=&#34;rld!**&#34;)
-            streamer.stop()
+            await streamer.append(markdown_text=&#34;**hello wo&#34;)
+            await streamer.append(markdown_text=&#34;rld!**&#34;)
+            await streamer.stop()
             ```
         &#34;&#34;&#34;
-        return ChatStream(
+        return AsyncChatStream(
             self,
             logger=self._logger,
             channel=channel,
@@ -10301,7 +10301,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.stopStream">https://api.slack.com/methods/chat.stopStream</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_stream"><code class="name flex">
-<span>async def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int | None = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.chat_stream.ChatStream" href="chat_stream.html#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></span>
+<span>async def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_chat_stream.AsyncChatStream" href="async_chat_stream.html#slack_sdk.web.async_chat_stream.AsyncChatStream">AsyncChatStream</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10311,7 +10311,7 @@ Each authorization represents an app installation that the event is visible to.
 <pre><code class="python">async def chat_stream(
     self,
     *,
-    buffer_size: Optional[int] = 256,
+    buffer_size: int = 256,
     channel: str,
     thread_ts: str,
     recipient_team_id: Optional[str] = None,
@@ -10319,7 +10319,7 @@ Each authorization represents an app installation that the event is visible to.
     unfurl_links: Optional[bool] = None,
     unfurl_media: Optional[bool] = None,
     **kwargs,
-) -&gt; ChatStream:
+) -&gt; AsyncChatStream:
     &#34;&#34;&#34;Stream markdown text into a conversation.
 
     This method provides an easy way to stream markdown text using the following endpoints:
@@ -10342,18 +10342,18 @@ Each authorization represents an app installation that the event is visible to.
 
     Example:
         ```python
-        streamer = client.chat_stream(
+        streamer = await client.chat_stream(
             channel=&#34;C0123456789&#34;,
             thread_ts=&#34;1700000001.123456&#34;,
             recipient_team_id=&#34;T0123456789&#34;,
             recipient_user_id=&#34;U0123456789&#34;,
         )
-        streamer.append(markdown_text=&#34;**hello wo&#34;)
-        streamer.append(markdown_text=&#34;rld!**&#34;)
-        streamer.stop()
+        await streamer.append(markdown_text=&#34;**hello wo&#34;)
+        await streamer.append(markdown_text=&#34;rld!**&#34;)
+        await streamer.stop()
         ```
     &#34;&#34;&#34;
-    return ChatStream(
+    return AsyncChatStream(
         self,
         logger=self._logger,
         channel=channel,
@@ -10393,15 +10393,15 @@ Each authorization represents an app installation that the event is visible to.
 <h2 id="returns">Returns</h2>
 <p>ChatStreamer instance for managing the stream</p>
 <h2 id="example">Example</h2>
-<pre><code class="language-python">streamer = client.chat_stream(
+<pre><code class="language-python">streamer = await client.chat_stream(
     channel=&quot;C0123456789&quot;,
     thread_ts=&quot;1700000001.123456&quot;,
     recipient_team_id=&quot;T0123456789&quot;,
     recipient_user_id=&quot;U0123456789&quot;,
 )
-streamer.append(markdown_text=&quot;**hello wo&quot;)
-streamer.append(markdown_text=&quot;rld!**&quot;)
-streamer.stop()
+await streamer.append(markdown_text=&quot;**hello wo&quot;)
+await streamer.append(markdown_text=&quot;rld!**&quot;)
+await streamer.stop()
 </code></pre></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_unfurl"><code class="name flex">
