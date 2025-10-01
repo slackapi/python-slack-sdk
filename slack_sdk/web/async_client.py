@@ -2905,6 +2905,32 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs = _remove_none_values(kwargs)
         return await self.api_call("chat.startStream", json=kwargs)
 
+    async def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Stops a streaming conversation.
+        https://api.slack.com/methods/chat.stopStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "blocks": blocks,
+                "metadata": metadata,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.stopStream", json=kwargs)
+
     async def chat_stream(
         self,
         *,
@@ -2959,32 +2985,6 @@ class AsyncWebClient(AsyncBaseClient):
             buffer_size=buffer_size,
             **kwargs,
         )
-
-    async def chat_stopStream(
-        self,
-        *,
-        channel: str,
-        ts: str,
-        markdown_text: Optional[str] = None,
-        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
-        metadata: Optional[Union[Dict, Metadata]] = None,
-        **kwargs,
-    ) -> AsyncSlackResponse:
-        """Stops a streaming conversation.
-        https://api.slack.com/methods/chat.stopStream
-        """
-        kwargs.update(
-            {
-                "channel": channel,
-                "ts": ts,
-                "markdown_text": markdown_text,
-                "blocks": blocks,
-                "metadata": metadata,
-            }
-        )
-        _parse_web_class_objects(kwargs)
-        kwargs = _remove_none_values(kwargs)
-        return await self.api_call("chat.stopStream", json=kwargs)
 
     async def chat_unfurl(
         self,

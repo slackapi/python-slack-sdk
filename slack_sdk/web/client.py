@@ -2895,6 +2895,32 @@ class WebClient(BaseClient):
         kwargs = _remove_none_values(kwargs)
         return self.api_call("chat.startStream", json=kwargs)
 
+    def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Stops a streaming conversation.
+        https://api.slack.com/methods/chat.stopStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "blocks": blocks,
+                "metadata": metadata,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.stopStream", json=kwargs)
+
     def chat_stream(
         self,
         *,
@@ -2949,32 +2975,6 @@ class WebClient(BaseClient):
             buffer_size=buffer_size,
             **kwargs,
         )
-
-    def chat_stopStream(
-        self,
-        *,
-        channel: str,
-        ts: str,
-        markdown_text: Optional[str] = None,
-        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
-        metadata: Optional[Union[Dict, Metadata]] = None,
-        **kwargs,
-    ) -> SlackResponse:
-        """Stops a streaming conversation.
-        https://api.slack.com/methods/chat.stopStream
-        """
-        kwargs.update(
-            {
-                "channel": channel,
-                "ts": ts,
-                "markdown_text": markdown_text,
-                "blocks": blocks,
-                "metadata": metadata,
-            }
-        )
-        _parse_web_class_objects(kwargs)
-        kwargs = _remove_none_values(kwargs)
-        return self.api_call("chat.stopStream", json=kwargs)
 
     def chat_unfurl(
         self,
