@@ -2926,6 +2926,64 @@ el.replaceWith(d);
         kwargs = _remove_none_values(kwargs)
         return self.api_call(&#34;chat.startStream&#34;, json=kwargs)
 
+    def chat_stream(
+        self,
+        *,
+        buffer_size: Optional[int] = 256,
+        channel: str,
+        thread_ts: str,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; ChatStream:
+        &#34;&#34;&#34;Stream markdown text into a conversation.
+
+        This method provides an easy way to stream markdown text using the following endpoints:
+        - chat.startStream: Starts a new streaming conversation
+        - chat.appendStream: Appends text to an existing streaming conversation
+        - chat.stopStream: Stops a streaming conversation
+
+        Args:
+            buffer_size: Size of the internal buffer before automatically flushing (default: 256)
+            channel: Channel to stream to
+            thread_ts: Thread timestamp to stream to (required)
+            recipient_team_id: Team ID of the recipient (for Slack Connect)
+            recipient_user_id: User ID of the recipient (for Slack Connect)
+            unfurl_links: Whether to unfurl links
+            unfurl_media: Whether to unfurl media
+            **kwargs: Additional arguments passed to the underlying API calls
+
+        Returns:
+            ChatStreamer instance for managing the stream
+
+        Example:
+            ```python
+            streamer = client.chat_stream(
+                channel=&#34;C0123456789&#34;,
+                thread_ts=&#34;1700000001.123456&#34;,
+                recipient_team_id=&#34;T0123456789&#34;,
+                recipient_user_id=&#34;U0123456789&#34;,
+            )
+            streamer.append(markdown_text=&#34;**hello wo&#34;)
+            streamer.append(markdown_text=&#34;rld!**&#34;)
+            streamer.stop()
+            ```
+        &#34;&#34;&#34;
+        return ChatStream(
+            self,
+            logger=self._logger,
+            channel=channel,
+            thread_ts=thread_ts,
+            recipient_team_id=recipient_team_id,
+            recipient_user_id=recipient_user_id,
+            unfurl_links=unfurl_links,
+            unfurl_media=unfurl_media,
+            buffer_size=buffer_size,
+            **kwargs,
+        )
+
     def chat_stopStream(
         self,
         *,
@@ -10242,6 +10300,110 @@ Each authorization represents an app installation that the event is visible to.
 <div class="desc"><p>Stops a streaming conversation.
 <a href="https://api.slack.com/methods/chat.stopStream">https://api.slack.com/methods/chat.stopStream</a></p></div>
 </dd>
+<dt id="slack_sdk.web.client.WebClient.chat_stream"><code class="name flex">
+<span>def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int | None = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.chat_stream.ChatStream" href="chat_stream.html#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_stream(
+    self,
+    *,
+    buffer_size: Optional[int] = 256,
+    channel: str,
+    thread_ts: str,
+    recipient_team_id: Optional[str] = None,
+    recipient_user_id: Optional[str] = None,
+    unfurl_links: Optional[bool] = None,
+    unfurl_media: Optional[bool] = None,
+    **kwargs,
+) -&gt; ChatStream:
+    &#34;&#34;&#34;Stream markdown text into a conversation.
+
+    This method provides an easy way to stream markdown text using the following endpoints:
+    - chat.startStream: Starts a new streaming conversation
+    - chat.appendStream: Appends text to an existing streaming conversation
+    - chat.stopStream: Stops a streaming conversation
+
+    Args:
+        buffer_size: Size of the internal buffer before automatically flushing (default: 256)
+        channel: Channel to stream to
+        thread_ts: Thread timestamp to stream to (required)
+        recipient_team_id: Team ID of the recipient (for Slack Connect)
+        recipient_user_id: User ID of the recipient (for Slack Connect)
+        unfurl_links: Whether to unfurl links
+        unfurl_media: Whether to unfurl media
+        **kwargs: Additional arguments passed to the underlying API calls
+
+    Returns:
+        ChatStreamer instance for managing the stream
+
+    Example:
+        ```python
+        streamer = client.chat_stream(
+            channel=&#34;C0123456789&#34;,
+            thread_ts=&#34;1700000001.123456&#34;,
+            recipient_team_id=&#34;T0123456789&#34;,
+            recipient_user_id=&#34;U0123456789&#34;,
+        )
+        streamer.append(markdown_text=&#34;**hello wo&#34;)
+        streamer.append(markdown_text=&#34;rld!**&#34;)
+        streamer.stop()
+        ```
+    &#34;&#34;&#34;
+    return ChatStream(
+        self,
+        logger=self._logger,
+        channel=channel,
+        thread_ts=thread_ts,
+        recipient_team_id=recipient_team_id,
+        recipient_user_id=recipient_user_id,
+        unfurl_links=unfurl_links,
+        unfurl_media=unfurl_media,
+        buffer_size=buffer_size,
+        **kwargs,
+    )</code></pre>
+</details>
+<div class="desc"><p>Stream markdown text into a conversation.</p>
+<p>This method provides an easy way to stream markdown text using the following endpoints:
+- chat.startStream: Starts a new streaming conversation
+- chat.appendStream: Appends text to an existing streaming conversation
+- chat.stopStream: Stops a streaming conversation</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>buffer_size</code></strong></dt>
+<dd>Size of the internal buffer before automatically flushing (default: 256)</dd>
+<dt><strong><code>channel</code></strong></dt>
+<dd>Channel to stream to</dd>
+<dt><strong><code>thread_ts</code></strong></dt>
+<dd>Thread timestamp to stream to (required)</dd>
+<dt><strong><code>recipient_team_id</code></strong></dt>
+<dd>Team ID of the recipient (for Slack Connect)</dd>
+<dt><strong><code>recipient_user_id</code></strong></dt>
+<dd>User ID of the recipient (for Slack Connect)</dd>
+<dt><strong><code>unfurl_links</code></strong></dt>
+<dd>Whether to unfurl links</dd>
+<dt><strong><code>unfurl_media</code></strong></dt>
+<dd>Whether to unfurl media</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Additional arguments passed to the underlying API calls</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>ChatStreamer instance for managing the stream</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python">streamer = client.chat_stream(
+    channel=&quot;C0123456789&quot;,
+    thread_ts=&quot;1700000001.123456&quot;,
+    recipient_team_id=&quot;T0123456789&quot;,
+    recipient_user_id=&quot;U0123456789&quot;,
+)
+streamer.append(markdown_text=&quot;**hello wo&quot;)
+streamer.append(markdown_text=&quot;rld!**&quot;)
+streamer.stop()
+</code></pre></div>
+</dd>
 <dt id="slack_sdk.web.client.WebClient.chat_unfurl"><code class="name flex">
 <span>def <span class="ident">chat_unfurl</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>ts: str | None = None,<br>source: str | None = None,<br>unfurl_id: str | None = None,<br>unfurls: Dict[str, Dict] | None = None,<br>user_auth_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>user_auth_message: str | None = None,<br>user_auth_required: bool | None = None,<br>user_auth_url: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -14758,6 +14920,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.chat_scheduledMessages_list" href="#slack_sdk.web.client.WebClient.chat_scheduledMessages_list">chat_scheduledMessages_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.chat_startStream" href="#slack_sdk.web.client.WebClient.chat_startStream">chat_startStream</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.chat_stopStream" href="#slack_sdk.web.client.WebClient.chat_stopStream">chat_stopStream</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.chat_stream" href="#slack_sdk.web.client.WebClient.chat_stream">chat_stream</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.chat_unfurl" href="#slack_sdk.web.client.WebClient.chat_unfurl">chat_unfurl</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.chat_update" href="#slack_sdk.web.client.WebClient.chat_update">chat_update</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.conversations_acceptSharedInvite" href="#slack_sdk.web.client.WebClient.conversations_acceptSharedInvite">conversations_acceptSharedInvite</a></code></li>

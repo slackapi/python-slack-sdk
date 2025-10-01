@@ -18,6 +18,7 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
+from slack_sdk.web.chat_stream import ChatStream
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -2903,6 +2904,64 @@ class AsyncWebClient(AsyncBaseClient):
         )
         kwargs = _remove_none_values(kwargs)
         return await self.api_call("chat.startStream", json=kwargs)
+
+    async def chat_stream(
+        self,
+        *,
+        buffer_size: Optional[int] = 256,
+        channel: str,
+        thread_ts: str,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        unfurl_links: Optional[bool] = None,
+        unfurl_media: Optional[bool] = None,
+        **kwargs,
+    ) -> ChatStream:
+        """Stream markdown text into a conversation.
+
+        This method provides an easy way to stream markdown text using the following endpoints:
+        - chat.startStream: Starts a new streaming conversation
+        - chat.appendStream: Appends text to an existing streaming conversation
+        - chat.stopStream: Stops a streaming conversation
+
+        Args:
+            buffer_size: Size of the internal buffer before automatically flushing (default: 256)
+            channel: Channel to stream to
+            thread_ts: Thread timestamp to stream to (required)
+            recipient_team_id: Team ID of the recipient (for Slack Connect)
+            recipient_user_id: User ID of the recipient (for Slack Connect)
+            unfurl_links: Whether to unfurl links
+            unfurl_media: Whether to unfurl media
+            **kwargs: Additional arguments passed to the underlying API calls
+
+        Returns:
+            ChatStreamer instance for managing the stream
+
+        Example:
+            ```python
+            streamer = client.chat_stream(
+                channel="C0123456789",
+                thread_ts="1700000001.123456",
+                recipient_team_id="T0123456789",
+                recipient_user_id="U0123456789",
+            )
+            streamer.append(markdown_text="**hello wo")
+            streamer.append(markdown_text="rld!**")
+            streamer.stop()
+            ```
+        """
+        return ChatStream(
+            self,
+            logger=self._logger,
+            channel=channel,
+            thread_ts=thread_ts,
+            recipient_team_id=recipient_team_id,
+            recipient_user_id=recipient_user_id,
+            unfurl_links=unfurl_links,
+            unfurl_media=unfurl_media,
+            buffer_size=buffer_size,
+            **kwargs,
+        )
 
     async def chat_stopStream(
         self,
