@@ -2908,7 +2908,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def chat_stream(
         self,
         *,
-        buffer_size: Optional[int] = 256,
+        buffer_size: int = 256,
         channel: str,
         thread_ts: str,
         recipient_team_id: Optional[str] = None,
