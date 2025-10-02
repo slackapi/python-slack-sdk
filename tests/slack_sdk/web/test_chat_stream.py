@@ -4,6 +4,9 @@ from urllib.parse import parse_qs, urlparse
 
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackRequestError
+from slack_sdk.models.blocks.basic_components import FeedbackButtonObject
+from slack_sdk.models.blocks.block_elements import FeedbackButtonsElement, IconButtonElement
+from slack_sdk.models.blocks.blocks import ContextActionsBlock
 from tests.mock_web_api_server import cleanup_mock_web_api_server, setup_mock_web_api_server
 from tests.slack_sdk.web.mock_web_api_handler import MockHandler
 
@@ -116,7 +119,24 @@ class TestChatStream(unittest.TestCase):
         streamer.append(markdown_text="e is", token="xoxb-chat_stream_test_token1")
         streamer.append(markdown_text=" bold!")
         streamer.append(markdown_text="*")
-        streamer.stop(markdown_text="*", token="xoxb-chat_stream_test_token2")
+        streamer.stop(
+            blocks=[
+                ContextActionsBlock(
+                    elements=[
+                        FeedbackButtonsElement(
+                            positive_button=FeedbackButtonObject(text="good", value="+1"),
+                            negative_button=FeedbackButtonObject(text="bad", value="-1"),
+                        ),
+                        IconButtonElement(
+                            icon="trash",
+                            text="delete",
+                        ),
+                    ],
+                )
+            ],
+            markdown_text="*",
+            token="xoxb-chat_stream_test_token2",
+        )
 
         self.assertEqual(self.received_requests.get("/chat.startStream", 0), 1)
         self.assertEqual(self.received_requests.get("/chat.appendStream", 0), 1)
@@ -137,6 +157,10 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(append_request.get("ts"), "123.123")
 
             stop_request = self.thread.server.chat_stream_requests.get("/chat.stopStream", {})
+            self.assertEqual(
+                json.dumps(stop_request.get("blocks")),
+                '[{"elements": [{"negative_button": {"text": {"emoji": true, "text": "bad", "type": "plain_text"}, "value": "-1"}, "positive_button": {"text": {"emoji": true, "text": "good", "type": "plain_text"}, "value": "+1"}, "type": "feedback_buttons"}, {"icon": "trash", "text": {"emoji": true, "text": "delete", "type": "plain_text"}, "type": "icon_button"}], "type": "context_actions"}]',
+            )
             self.assertEqual(stop_request.get("channel"), "C0123456789")
             self.assertEqual(stop_request.get("markdown_text"), "**")
             self.assertEqual(stop_request.get("token"), "xoxb-chat_stream_test_token2")
