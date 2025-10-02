@@ -45,7 +45,6 @@ class ChatStream:
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
-              Default: 256.
             **kwargs: Additional arguments passed to the underlying API calls.
         """
         self._client = client
