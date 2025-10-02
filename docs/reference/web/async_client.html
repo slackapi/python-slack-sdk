@@ -1752,7 +1752,7 @@ el.replaceWith(d);
     async def admin_users_list(
         self,
         *,
-        team_id: str,
+        team_id: Optional[str] = None,
         include_deactivated_user_workspaces: Optional[bool] = None,
         is_active: Optional[bool] = None,
         cursor: Optional[str] = None,
@@ -2717,6 +2717,7 @@ el.replaceWith(d);
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Sends an ephemeral message to a user in a channel.
@@ -2736,11 +2737,12 @@ el.replaceWith(d);
                 &#34;link_names&#34;: link_names,
                 &#34;username&#34;: username,
                 &#34;parse&#34;: parse,
+                &#34;markdown_text&#34;: markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
+        _warn_if_message_text_content_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return await self.api_call(&#34;chat.postEphemeral&#34;, json=kwargs)
 
@@ -2764,6 +2766,7 @@ el.replaceWith(d);
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Sends a message to a channel.
@@ -2788,11 +2791,12 @@ el.replaceWith(d);
                 &#34;username&#34;: username,
                 &#34;parse&#34;: parse,
                 &#34;metadata&#34;: metadata,
+                &#34;markdown_text&#34;: markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postMessage&#34;, kwargs)
+        _warn_if_message_text_content_is_missing(&#34;chat.postMessage&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return await self.api_call(&#34;chat.postMessage&#34;, json=kwargs)
 
@@ -2801,7 +2805,7 @@ el.replaceWith(d);
         *,
         channel: str,
         post_at: Union[str, int],
-        text: str,
+        text: Optional[str] = None,
         as_user: Optional[bool] = None,
         attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
@@ -2812,6 +2816,7 @@ el.replaceWith(d);
         unfurl_media: Optional[bool] = None,
         link_names: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Schedules a message.
@@ -2832,11 +2837,12 @@ el.replaceWith(d);
                 &#34;unfurl_media&#34;: unfurl_media,
                 &#34;link_names&#34;: link_names,
                 &#34;metadata&#34;: metadata,
+                &#34;markdown_text&#34;: markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
+        _warn_if_message_text_content_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return await self.api_call(&#34;chat.scheduleMessage&#34;, json=kwargs)
 
@@ -2889,6 +2895,7 @@ el.replaceWith(d);
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Updates a message in a channel.
@@ -2906,6 +2913,7 @@ el.replaceWith(d);
                 &#34;parse&#34;: parse,
                 &#34;reply_broadcast&#34;: reply_broadcast,
                 &#34;metadata&#34;: metadata,
+                &#34;markdown_text&#34;: markdown_text,
             }
         )
         if isinstance(file_ids, (list, tuple)):
@@ -2914,7 +2922,7 @@ el.replaceWith(d);
             kwargs.update({&#34;file_ids&#34;: file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.update&#34;, kwargs)
+        _warn_if_message_text_content_is_missing(&#34;chat.update&#34;, kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return await self.api_call(&#34;chat.update&#34;, json=kwargs)
 
@@ -5438,6 +5446,72 @@ el.replaceWith(d);
         # NOTE: Intentionally using json for the &#34;view&#34; parameter
         return await self.api_call(&#34;views.publish&#34;, json=kwargs)
 
+    async def workflows_featured_add(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Add featured workflows to a channel.
+        https://api.slack.com/methods/workflows.featured.add
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({&#34;trigger_ids&#34;: &#34;,&#34;.join(trigger_ids)})
+        else:
+            kwargs.update({&#34;trigger_ids&#34;: trigger_ids})
+        return await self.api_call(&#34;workflows.featured.add&#34;, params=kwargs)
+
+    async def workflows_featured_list(
+        self,
+        *,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;List the featured workflows for specified channels.
+        https://api.slack.com/methods/workflows.featured.list
+        &#34;&#34;&#34;
+        if isinstance(channel_ids, (list, tuple)):
+            kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
+        else:
+            kwargs.update({&#34;channel_ids&#34;: channel_ids})
+        return await self.api_call(&#34;workflows.featured.list&#34;, params=kwargs)
+
+    async def workflows_featured_remove(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Remove featured workflows from a channel.
+        https://api.slack.com/methods/workflows.featured.remove
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({&#34;trigger_ids&#34;: &#34;,&#34;.join(trigger_ids)})
+        else:
+            kwargs.update({&#34;trigger_ids&#34;: trigger_ids})
+        return await self.api_call(&#34;workflows.featured.remove&#34;, params=kwargs)
+
+    async def workflows_featured_set(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Set featured workflows for a channel.
+        https://api.slack.com/methods/workflows.featured.set
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({&#34;trigger_ids&#34;: &#34;,&#34;.join(trigger_ids)})
+        else:
+            kwargs.update({&#34;trigger_ids&#34;: trigger_ids})
+        return await self.api_call(&#34;workflows.featured.set&#34;, params=kwargs)
+
     async def workflows_stepCompleted(
         self,
         *,
@@ -7915,7 +7989,7 @@ Options to scope results by any combination of roles or entities
 <a href="https://api.slack.com/methods/admin.users.invite">https://api.slack.com/methods/admin.users.invite</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.admin_users_list"><code class="name flex">
-<span>async def <span class="ident">admin_users_list</span></span>(<span>self,<br>*,<br>team_id: str,<br>include_deactivated_user_workspaces: bool | None = None,<br>is_active: bool | None = None,<br>cursor: str | None = None,<br>limit: int | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">admin_users_list</span></span>(<span>self,<br>*,<br>team_id: str | None = None,<br>include_deactivated_user_workspaces: bool | None = None,<br>is_active: bool | None = None,<br>cursor: str | None = None,<br>limit: int | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -7925,7 +7999,7 @@ Options to scope results by any combination of roles or entities
 <pre><code class="python">async def admin_users_list(
     self,
     *,
-    team_id: str,
+    team_id: Optional[str] = None,
     include_deactivated_user_workspaces: Optional[bool] = None,
     is_active: Optional[bool] = None,
     cursor: Optional[str] = None,
@@ -9762,7 +9836,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.meMessage">https://api.slack.com/methods/chat.meMessage</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_postEphemeral"><code class="name flex">
-<span>async def <span class="ident">chat_postEphemeral</span></span>(<span>self,<br>*,<br>channel: str,<br>user: str,<br>text: str | None = None,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>link_names: bool | None = None,<br>username: str | None = None,<br>parse: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_postEphemeral</span></span>(<span>self,<br>*,<br>channel: str,<br>user: str,<br>text: str | None = None,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>link_names: bool | None = None,<br>username: str | None = None,<br>parse: str | None = None,<br>markdown_text: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -9784,6 +9858,7 @@ Each authorization represents an app installation that the event is visible to.
     link_names: Optional[bool] = None,
     username: Optional[str] = None,
     parse: Optional[str] = None,
+    markdown_text: Optional[str] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Sends an ephemeral message to a user in a channel.
@@ -9803,11 +9878,12 @@ Each authorization represents an app installation that the event is visible to.
             &#34;link_names&#34;: link_names,
             &#34;username&#34;: username,
             &#34;parse&#34;: parse,
+            &#34;markdown_text&#34;: markdown_text,
         }
     )
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
+    _warn_if_message_text_content_is_missing(&#34;chat.postEphemeral&#34;, kwargs)
     # NOTE: intentionally using json over params for the API methods using blocks/attachments
     return await self.api_call(&#34;chat.postEphemeral&#34;, json=kwargs)</code></pre>
 </details>
@@ -9815,7 +9891,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.postEphemeral">https://api.slack.com/methods/chat.postEphemeral</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_postMessage"><code class="name flex">
-<span>async def <span class="ident">chat_postMessage</span></span>(<span>self,<br>*,<br>channel: str,<br>text: str | None = None,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>reply_broadcast: bool | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>container_id: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>mrkdwn: bool | None = None,<br>link_names: bool | None = None,<br>username: str | None = None,<br>parse: str | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_postMessage</span></span>(<span>self,<br>*,<br>channel: str,<br>text: str | None = None,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>reply_broadcast: bool | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>container_id: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>mrkdwn: bool | None = None,<br>link_names: bool | None = None,<br>username: str | None = None,<br>parse: str | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>markdown_text: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -9842,6 +9918,7 @@ Each authorization represents an app installation that the event is visible to.
     username: Optional[str] = None,
     parse: Optional[str] = None,  # none, full
     metadata: Optional[Union[Dict, Metadata]] = None,
+    markdown_text: Optional[str] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Sends a message to a channel.
@@ -9866,11 +9943,12 @@ Each authorization represents an app installation that the event is visible to.
             &#34;username&#34;: username,
             &#34;parse&#34;: parse,
             &#34;metadata&#34;: metadata,
+            &#34;markdown_text&#34;: markdown_text,
         }
     )
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.postMessage&#34;, kwargs)
+    _warn_if_message_text_content_is_missing(&#34;chat.postMessage&#34;, kwargs)
     # NOTE: intentionally using json over params for the API methods using blocks/attachments
     return await self.api_call(&#34;chat.postMessage&#34;, json=kwargs)</code></pre>
 </details>
@@ -9878,7 +9956,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.postMessage">https://api.slack.com/methods/chat.postMessage</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_scheduleMessage"><code class="name flex">
-<span>async def <span class="ident">chat_scheduleMessage</span></span>(<span>self,<br>*,<br>channel: str,<br>post_at: str | int,<br>text: str,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>parse: str | None = None,<br>reply_broadcast: bool | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>link_names: bool | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_scheduleMessage</span></span>(<span>self,<br>*,<br>channel: str,<br>post_at: str | int,<br>text: str | None = None,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>parse: str | None = None,<br>reply_broadcast: bool | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>link_names: bool | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>markdown_text: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -9890,7 +9968,7 @@ Each authorization represents an app installation that the event is visible to.
     *,
     channel: str,
     post_at: Union[str, int],
-    text: str,
+    text: Optional[str] = None,
     as_user: Optional[bool] = None,
     attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
     blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
@@ -9901,6 +9979,7 @@ Each authorization represents an app installation that the event is visible to.
     unfurl_media: Optional[bool] = None,
     link_names: Optional[bool] = None,
     metadata: Optional[Union[Dict, Metadata]] = None,
+    markdown_text: Optional[str] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Schedules a message.
@@ -9921,11 +10000,12 @@ Each authorization represents an app installation that the event is visible to.
             &#34;unfurl_media&#34;: unfurl_media,
             &#34;link_names&#34;: link_names,
             &#34;metadata&#34;: metadata,
+            &#34;markdown_text&#34;: markdown_text,
         }
     )
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
+    _warn_if_message_text_content_is_missing(&#34;chat.scheduleMessage&#34;, kwargs)
     # NOTE: intentionally using json over params for the API methods using blocks/attachments
     return await self.api_call(&#34;chat.scheduleMessage&#34;, json=kwargs)</code></pre>
 </details>
@@ -10016,7 +10096,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.unfurl">https://api.slack.com/methods/chat.unfurl</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_update"><code class="name flex">
-<span>async def <span class="ident">chat_update</span></span>(<span>self,<br>*,<br>channel: str,<br>ts: str,<br>text: str | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>as_user: bool | None = None,<br>file_ids: str | Sequence[str] | None = None,<br>link_names: bool | None = None,<br>parse: str | None = None,<br>reply_broadcast: bool | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_update</span></span>(<span>self,<br>*,<br>channel: str,<br>ts: str,<br>text: str | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>as_user: bool | None = None,<br>file_ids: str | Sequence[str] | None = None,<br>link_names: bool | None = None,<br>parse: str | None = None,<br>reply_broadcast: bool | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>markdown_text: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10037,6 +10117,7 @@ Each authorization represents an app installation that the event is visible to.
     parse: Optional[str] = None,  # none, full
     reply_broadcast: Optional[bool] = None,
     metadata: Optional[Union[Dict, Metadata]] = None,
+    markdown_text: Optional[str] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Updates a message in a channel.
@@ -10054,6 +10135,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;parse&#34;: parse,
             &#34;reply_broadcast&#34;: reply_broadcast,
             &#34;metadata&#34;: metadata,
+            &#34;markdown_text&#34;: markdown_text,
         }
     )
     if isinstance(file_ids, (list, tuple)):
@@ -10062,7 +10144,7 @@ Each authorization represents an app installation that the event is visible to.
         kwargs.update({&#34;file_ids&#34;: file_ids})
     _parse_web_class_objects(kwargs)
     kwargs = _remove_none_values(kwargs)
-    _warn_if_text_or_attachment_fallback_is_missing(&#34;chat.update&#34;, kwargs)
+    _warn_if_message_text_content_is_missing(&#34;chat.update&#34;, kwargs)
     # NOTE: intentionally using json over params for API methods using blocks/attachments
     return await self.api_call(&#34;chat.update&#34;, json=kwargs)</code></pre>
 </details>
@@ -14090,6 +14172,116 @@ See the modals documentation (<a href="https://api.slack.com/surfaces/modals#upd
 to learn more about updating views and avoiding race conditions with the hash argument.
 <a href="https://api.slack.com/methods/views.update">https://api.slack.com/methods/views.update</a></p></div>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_add"><code class="name flex">
+<span>async def <span class="ident">workflows_featured_add</span></span>(<span>self, *, channel_id: str, trigger_ids: str | Sequence[str], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def workflows_featured_add(
+    self,
+    *,
+    channel_id: str,
+    trigger_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Add featured workflows to a channel.
+    https://api.slack.com/methods/workflows.featured.add
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    if isinstance(trigger_ids, (list, tuple)):
+        kwargs.update({&#34;trigger_ids&#34;: &#34;,&#34;.join(trigger_ids)})
+    else:
+        kwargs.update({&#34;trigger_ids&#34;: trigger_ids})
+    return await self.api_call(&#34;workflows.featured.add&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Add featured workflows to a channel.
+<a href="https://api.slack.com/methods/workflows.featured.add">https://api.slack.com/methods/workflows.featured.add</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_list"><code class="name flex">
+<span>async def <span class="ident">workflows_featured_list</span></span>(<span>self, *, channel_ids: str | Sequence[str], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def workflows_featured_list(
+    self,
+    *,
+    channel_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;List the featured workflows for specified channels.
+    https://api.slack.com/methods/workflows.featured.list
+    &#34;&#34;&#34;
+    if isinstance(channel_ids, (list, tuple)):
+        kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids)})
+    else:
+        kwargs.update({&#34;channel_ids&#34;: channel_ids})
+    return await self.api_call(&#34;workflows.featured.list&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>List the featured workflows for specified channels.
+<a href="https://api.slack.com/methods/workflows.featured.list">https://api.slack.com/methods/workflows.featured.list</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_remove"><code class="name flex">
+<span>async def <span class="ident">workflows_featured_remove</span></span>(<span>self, *, channel_id: str, trigger_ids: str | Sequence[str], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def workflows_featured_remove(
+    self,
+    *,
+    channel_id: str,
+    trigger_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Remove featured workflows from a channel.
+    https://api.slack.com/methods/workflows.featured.remove
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    if isinstance(trigger_ids, (list, tuple)):
+        kwargs.update({&#34;trigger_ids&#34;: &#34;,&#34;.join(trigger_ids)})
+    else:
+        kwargs.update({&#34;trigger_ids&#34;: trigger_ids})
+    return await self.api_call(&#34;workflows.featured.remove&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Remove featured workflows from a channel.
+<a href="https://api.slack.com/methods/workflows.featured.remove">https://api.slack.com/methods/workflows.featured.remove</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_set"><code class="name flex">
+<span>async def <span class="ident">workflows_featured_set</span></span>(<span>self, *, channel_id: str, trigger_ids: str | Sequence[str], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def workflows_featured_set(
+    self,
+    *,
+    channel_id: str,
+    trigger_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Set featured workflows for a channel.
+    https://api.slack.com/methods/workflows.featured.set
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    if isinstance(trigger_ids, (list, tuple)):
+        kwargs.update({&#34;trigger_ids&#34;: &#34;,&#34;.join(trigger_ids)})
+    else:
+        kwargs.update({&#34;trigger_ids&#34;: trigger_ids})
+    return await self.api_call(&#34;workflows.featured.set&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Set featured workflows for a channel.
+<a href="https://api.slack.com/methods/workflows.featured.set">https://api.slack.com/methods/workflows.featured.set</a></p></div>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.workflows_stepCompleted"><code class="name flex">
 <span>async def <span class="ident">workflows_stepCompleted</span></span>(<span>self, *, workflow_step_execute_id: str, outputs: dict | None = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -14513,6 +14705,10 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.views_publish" href="#slack_sdk.web.async_client.AsyncWebClient.views_publish">views_publish</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.views_push" href="#slack_sdk.web.async_client.AsyncWebClient.views_push">views_push</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.views_update" href="#slack_sdk.web.async_client.AsyncWebClient.views_update">views_update</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_add" href="#slack_sdk.web.async_client.AsyncWebClient.workflows_featured_add">workflows_featured_add</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_list" href="#slack_sdk.web.async_client.AsyncWebClient.workflows_featured_list">workflows_featured_list</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_remove" href="#slack_sdk.web.async_client.AsyncWebClient.workflows_featured_remove">workflows_featured_remove</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.workflows_featured_set" href="#slack_sdk.web.async_client.AsyncWebClient.workflows_featured_set">workflows_featured_set</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.workflows_stepCompleted" href="#slack_sdk.web.async_client.AsyncWebClient.workflows_stepCompleted">workflows_stepCompleted</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.workflows_stepFailed" href="#slack_sdk.web.async_client.AsyncWebClient.workflows_stepFailed">workflows_stepFailed</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.workflows_updateStep" href="#slack_sdk.web.async_client.AsyncWebClient.workflows_updateStep">workflows_updateStep</a></code></li>
