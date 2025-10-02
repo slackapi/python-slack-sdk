@@ -2885,8 +2885,6 @@ class LegacyWebClient(LegacyBaseClient):
         markdown_text: Optional[str] = None,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
-        unfurl_links: Optional[bool] = None,
-        unfurl_media: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a new streaming conversation.
@@ -2899,8 +2897,6 @@ class LegacyWebClient(LegacyBaseClient):
                 "markdown_text": markdown_text,
                 "recipient_team_id": recipient_team_id,
                 "recipient_user_id": recipient_user_id,
-                "unfurl_links": unfurl_links,
-                "unfurl_media": unfurl_media,
             }
         )
         kwargs = _remove_none_values(kwargs)

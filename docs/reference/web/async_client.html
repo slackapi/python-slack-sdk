@@ -2905,8 +2905,6 @@ el.replaceWith(d);
         markdown_text: Optional[str] = None,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
-        unfurl_links: Optional[bool] = None,
-        unfurl_media: Optional[bool] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Starts a new streaming conversation.
@@ -2919,8 +2917,6 @@ el.replaceWith(d);
                 &#34;markdown_text&#34;: markdown_text,
                 &#34;recipient_team_id&#34;: recipient_team_id,
                 &#34;recipient_user_id&#34;: recipient_user_id,
-                &#34;unfurl_links&#34;: unfurl_links,
-                &#34;unfurl_media&#34;: unfurl_media,
             }
         )
         kwargs = _remove_none_values(kwargs)
@@ -10229,7 +10225,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://api.slack.com/methods/chat.scheduledMessages.list">https://api.slack.com/methods/chat.scheduledMessages.list</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_startStream"><code class="name flex">
-<span>async def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str,<br>markdown_text: str | None = None,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str,<br>markdown_text: str | None = None,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10244,8 +10240,6 @@ Each authorization represents an app installation that the event is visible to.
     markdown_text: Optional[str] = None,
     recipient_team_id: Optional[str] = None,
     recipient_user_id: Optional[str] = None,
-    unfurl_links: Optional[bool] = None,
-    unfurl_media: Optional[bool] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
     &#34;&#34;&#34;Starts a new streaming conversation.
@@ -10258,8 +10252,6 @@ Each authorization represents an app installation that the event is visible to.
             &#34;markdown_text&#34;: markdown_text,
             &#34;recipient_team_id&#34;: recipient_team_id,
             &#34;recipient_user_id&#34;: recipient_user_id,
-            &#34;unfurl_links&#34;: unfurl_links,
-            &#34;unfurl_media&#34;: unfurl_media,
         }
     )
     kwargs = _remove_none_values(kwargs)
