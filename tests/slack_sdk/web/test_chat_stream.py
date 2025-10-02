@@ -1,5 +1,4 @@
 import json
-import re
 import unittest
 from urllib.parse import parse_qs, urlparse
 
@@ -78,9 +77,6 @@ class TestChatStream(unittest.TestCase):
 
     def tearDown(self):
         cleanup_mock_web_api_server(self)
-
-    pattern_for_language = re.compile("python/(\\S+)", re.IGNORECASE)
-    pattern_for_package_identifier = re.compile("slackclient/(\\S+)")
 
     def test_streams_a_short_message(self):
         streamer = self.client.chat_stream(
