@@ -18,6 +18,7 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.views import View
+from slack_sdk.web.async_chat_stream import AsyncChatStream
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block
@@ -2929,6 +2930,69 @@ class AsyncWebClient(AsyncBaseClient):
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         return await self.api_call("chat.stopStream", json=kwargs)
+
+    async def chat_stream(
+        self,
+        *,
+        buffer_size: int = 256,
+        channel: str,
+        thread_ts: str,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncChatStream:
+        """Stream markdown text into a conversation.
+
+        This method starts a new chat stream in a coversation that can be appended to. After appending an entire message,
+        the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.
+
+        The following methods are used:
+
+        - chat.startStream: Starts a new streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+        - chat.appendStream: Appends text to an existing streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+        - chat.stopStream: Stops a streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
+
+        Args:
+            buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+              value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+              limits. Default: 256.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            **kwargs: Additional arguments passed to the underlying API calls.
+
+        Returns:
+            ChatStream instance for managing the stream
+
+        Example:
+            ```python
+            streamer = await client.chat_stream(
+                channel="C0123456789",
+                thread_ts="1700000001.123456",
+                recipient_team_id="T0123456789",
+                recipient_user_id="U0123456789",
+            )
+            await streamer.append(markdown_text="**hello wo")
+            await streamer.append(markdown_text="rld!**")
+            await streamer.stop()
+            ```
+        """
+        return AsyncChatStream(
+            self,
+            logger=self._logger,
+            channel=channel,
+            thread_ts=thread_ts,
+            recipient_team_id=recipient_team_id,
+            recipient_user_id=recipient_user_id,
+            buffer_size=buffer_size,
+            **kwargs,
+        )
 
     async def chat_unfurl(
         self,

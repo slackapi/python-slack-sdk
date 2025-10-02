@@ -2952,6 +2952,69 @@ el.replaceWith(d);
         kwargs = _remove_none_values(kwargs)
         return await self.api_call(&#34;chat.stopStream&#34;, json=kwargs)
 
+    async def chat_stream(
+        self,
+        *,
+        buffer_size: int = 256,
+        channel: str,
+        thread_ts: str,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; AsyncChatStream:
+        &#34;&#34;&#34;Stream markdown text into a conversation.
+
+        This method starts a new chat stream in a coversation that can be appended to. After appending an entire message,
+        the stream can be stopped with concluding arguments such as &#34;blocks&#34; for gathering feedback.
+
+        The following methods are used:
+
+        - chat.startStream: Starts a new streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+        - chat.appendStream: Appends text to an existing streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+        - chat.stopStream: Stops a streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
+
+        Args:
+            buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+              value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+              limits. Default: 256.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            **kwargs: Additional arguments passed to the underlying API calls.
+
+        Returns:
+            ChatStream instance for managing the stream
+
+        Example:
+            ```python
+            streamer = await client.chat_stream(
+                channel=&#34;C0123456789&#34;,
+                thread_ts=&#34;1700000001.123456&#34;,
+                recipient_team_id=&#34;T0123456789&#34;,
+                recipient_user_id=&#34;U0123456789&#34;,
+            )
+            await streamer.append(markdown_text=&#34;**hello wo&#34;)
+            await streamer.append(markdown_text=&#34;rld!**&#34;)
+            await streamer.stop()
+            ```
+        &#34;&#34;&#34;
+        return AsyncChatStream(
+            self,
+            logger=self._logger,
+            channel=channel,
+            thread_ts=thread_ts,
+            recipient_team_id=recipient_team_id,
+            recipient_user_id=recipient_user_id,
+            buffer_size=buffer_size,
+            **kwargs,
+        )
+
     async def chat_unfurl(
         self,
         *,
@@ -10242,6 +10305,122 @@ Each authorization represents an app installation that the event is visible to.
 <div class="desc"><p>Stops a streaming conversation.
 <a href="https://api.slack.com/methods/chat.stopStream">https://api.slack.com/methods/chat.stopStream</a></p></div>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.chat_stream"><code class="name flex">
+<span>async def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_chat_stream.AsyncChatStream" href="async_chat_stream.html#slack_sdk.web.async_chat_stream.AsyncChatStream">AsyncChatStream</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def chat_stream(
+    self,
+    *,
+    buffer_size: int = 256,
+    channel: str,
+    thread_ts: str,
+    recipient_team_id: Optional[str] = None,
+    recipient_user_id: Optional[str] = None,
+    **kwargs,
+) -&gt; AsyncChatStream:
+    &#34;&#34;&#34;Stream markdown text into a conversation.
+
+    This method starts a new chat stream in a coversation that can be appended to. After appending an entire message,
+    the stream can be stopped with concluding arguments such as &#34;blocks&#34; for gathering feedback.
+
+    The following methods are used:
+
+    - chat.startStream: Starts a new streaming conversation.
+      [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+    - chat.appendStream: Appends text to an existing streaming conversation.
+      [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+    - chat.stopStream: Stops a streaming conversation.
+      [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
+
+    Args:
+        buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+          value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+          limits. Default: 256.
+        channel: An encoded ID that represents a channel, private group, or DM.
+        thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
+          request.
+        recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+          streaming to channels.
+        recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+        **kwargs: Additional arguments passed to the underlying API calls.
+
+    Returns:
+        ChatStream instance for managing the stream
+
+    Example:
+        ```python
+        streamer = await client.chat_stream(
+            channel=&#34;C0123456789&#34;,
+            thread_ts=&#34;1700000001.123456&#34;,
+            recipient_team_id=&#34;T0123456789&#34;,
+            recipient_user_id=&#34;U0123456789&#34;,
+        )
+        await streamer.append(markdown_text=&#34;**hello wo&#34;)
+        await streamer.append(markdown_text=&#34;rld!**&#34;)
+        await streamer.stop()
+        ```
+    &#34;&#34;&#34;
+    return AsyncChatStream(
+        self,
+        logger=self._logger,
+        channel=channel,
+        thread_ts=thread_ts,
+        recipient_team_id=recipient_team_id,
+        recipient_user_id=recipient_user_id,
+        buffer_size=buffer_size,
+        **kwargs,
+    )</code></pre>
+</details>
+<div class="desc"><p>Stream markdown text into a conversation.</p>
+<p>This method starts a new chat stream in a coversation that can be appended to. After appending an entire message,
+the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.</p>
+<p>The following methods are used:</p>
+<ul>
+<li>chat.startStream: Starts a new streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.startStream">Reference</a>.</li>
+<li>chat.appendStream: Appends text to an existing streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.appendStream">Reference</a>.</li>
+<li>chat.stopStream: Stops a streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.stopStream">Reference</a>.</li>
+</ul>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>buffer_size</code></strong></dt>
+<dd>The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+limits. Default: 256.</dd>
+<dt><strong><code>channel</code></strong></dt>
+<dd>An encoded ID that represents a channel, private group, or DM.</dd>
+<dt><strong><code>thread_ts</code></strong></dt>
+<dd>Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+request.</dd>
+<dt><strong><code>recipient_team_id</code></strong></dt>
+<dd>The encoded ID of the team the user receiving the streaming text belongs to. Required when
+streaming to channels.</dd>
+<dt><strong><code>recipient_user_id</code></strong></dt>
+<dd>The encoded ID of the user to receive the streaming text. Required when streaming to channels.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Additional arguments passed to the underlying API calls.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>ChatStream instance for managing the stream</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python">streamer = await client.chat_stream(
+    channel=&quot;C0123456789&quot;,
+    thread_ts=&quot;1700000001.123456&quot;,
+    recipient_team_id=&quot;T0123456789&quot;,
+    recipient_user_id=&quot;U0123456789&quot;,
+)
+await streamer.append(markdown_text=&quot;**hello wo&quot;)
+await streamer.append(markdown_text=&quot;rld!**&quot;)
+await streamer.stop()
+</code></pre></div>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_unfurl"><code class="name flex">
 <span>async def <span class="ident">chat_unfurl</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>ts: str | None = None,<br>source: str | None = None,<br>unfurl_id: str | None = None,<br>unfurls: Dict[str, Dict] | None = None,<br>user_auth_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>user_auth_message: str | None = None,<br>user_auth_required: bool | None = None,<br>user_auth_url: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -14759,6 +14938,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_scheduledMessages_list" href="#slack_sdk.web.async_client.AsyncWebClient.chat_scheduledMessages_list">chat_scheduledMessages_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_startStream" href="#slack_sdk.web.async_client.AsyncWebClient.chat_startStream">chat_startStream</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_stopStream" href="#slack_sdk.web.async_client.AsyncWebClient.chat_stopStream">chat_stopStream</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_stream" href="#slack_sdk.web.async_client.AsyncWebClient.chat_stream">chat_stream</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_unfurl" href="#slack_sdk.web.async_client.AsyncWebClient.chat_unfurl">chat_unfurl</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.chat_update" href="#slack_sdk.web.async_client.AsyncWebClient.chat_update">chat_update</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.conversations_acceptSharedInvite" href="#slack_sdk.web.async_client.AsyncWebClient.conversations_acceptSharedInvite">conversations_acceptSharedInvite</a></code></li>
