@@ -2977,9 +2977,9 @@ el.replaceWith(d);
           [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
 
         Args:
-            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
-              decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
-              Default: 256.
+            buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+              value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+              limits. Default: 256.
             channel: An encoded ID that represents a channel, private group, or DM.
             thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
               request.
@@ -10338,9 +10338,9 @@ Each authorization represents an app installation that the event is visible to.
       [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
 
     Args:
-        buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
-          decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
-          Default: 256.
+        buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+          value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+          limits. Default: 256.
         channel: An encoded ID that represents a channel, private group, or DM.
         thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
           request.
@@ -10391,9 +10391,9 @@ the stream can be stopped with concluding arguments such as "blocks" for gatheri
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>buffer_size</code></strong></dt>
-<dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value
-decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
-Default: 256.</dd>
+<dd>The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+limits. Default: 256.</dd>
 <dt><strong><code>channel</code></strong></dt>
 <dd>An encoded ID that represents a channel, private group, or DM.</dd>
 <dt><strong><code>thread_ts</code></strong></dt>

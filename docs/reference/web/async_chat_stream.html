@@ -89,7 +89,6 @@ el.replaceWith(d);
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
-              Default: 256.
             **kwargs: Additional arguments passed to the underlying API calls.
         &#34;&#34;&#34;
         self._client = client
@@ -269,8 +268,7 @@ streaming to channels.</dd>
 <dd>The encoded ID of the user to receive the streaming text. Required when streaming to channels.</dd>
 <dt><strong><code>buffer_size</code></strong></dt>
 <dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value
-decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
-Default: 256.</dd>
+decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl></div>
