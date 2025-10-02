@@ -9,7 +9,7 @@ pip install -U -r requirements/optional.txt
 
 rm -rf docs/reference
 
-pdoc slack_sdk --html -o docs/reference
+HOME="\$HOME" pdoc slack_sdk --html -o docs/reference
 cp -R docs/reference/slack_sdk/* docs/reference/
 rm -rf docs/reference/slack_sdk
 
