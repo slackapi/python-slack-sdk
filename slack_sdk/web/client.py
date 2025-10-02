@@ -2946,7 +2946,7 @@ class WebClient(BaseClient):
           [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
 
         Args:
-            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
+            buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
               Default: 256.
             channel: An encoded ID that represents a channel, private group, or DM.
