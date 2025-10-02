@@ -228,6 +228,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                     return CallBlock(**block)
                 elif type == HeaderBlock.type:
                     return HeaderBlock(**block)
+                elif type == MarkdownBlock.type:
+                    return MarkdownBlock(**block)
                 elif type == VideoBlock.type:
                     return VideoBlock(**block)
                 elif type == RichTextBlock.type:
@@ -261,6 +263,7 @@ to create visually rich and compellingly interactive messages.
 <li><a title="slack_sdk.models.blocks.blocks.HeaderBlock" href="#slack_sdk.models.blocks.blocks.HeaderBlock">HeaderBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.ImageBlock" href="#slack_sdk.models.blocks.blocks.ImageBlock">ImageBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.InputBlock" href="#slack_sdk.models.blocks.blocks.InputBlock">InputBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.MarkdownBlock" href="#slack_sdk.models.blocks.blocks.MarkdownBlock">MarkdownBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.RichTextBlock" href="#slack_sdk.models.blocks.blocks.RichTextBlock">RichTextBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.SectionBlock" href="#slack_sdk.models.blocks.blocks.SectionBlock">SectionBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.VideoBlock" href="#slack_sdk.models.blocks.blocks.VideoBlock">VideoBlock</a></li>
@@ -1098,6 +1101,113 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.blocks.MarkdownBlock"><code class="flex name class">
+<span>class <span class="ident">MarkdownBlock</span></span>
+<span>(</span><span>*, text: str, block_id: str | None = None, **others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MarkdownBlock(Block):
+    type = &#34;markdown&#34;
+    text_max_length = 12000
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;text&#34;})
+
+    def __init__(
+        self,
+        *,
+        text: str,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays formatted markdown.
+        https://docs.slack.dev/reference/block-kit/blocks/markdown-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (required): The standard markdown-formatted text. Limit 12,000 characters max.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = text
+
+    @JsonValidator(&#34;text attribute must be specified&#34;)
+    def _validate_text(self):
+        return self.text != &#34;&#34;
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def _validate_alt_text_length(self):
+        return len(self.text) &lt;= self.text_max_length</code></pre>
+</details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<p>Displays formatted markdown.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/markdown-block/">https://docs.slack.dev/reference/block-kit/blocks/markdown-block/</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>The standard markdown-formatted text. Limit 12,000 characters max.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.MarkdownBlock.text_max_length"><code class="name">var <span class="ident">text_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.MarkdownBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.MarkdownBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return super().attributes.union({&#34;text&#34;})</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.block_id_max_length" href="#slack_sdk.models.blocks.blocks.Block.block_id_max_length">block_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.blocks.RichTextBlock"><code class="flex name class">
 <span>class <span class="ident">RichTextBlock</span></span>
 <span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.RichTextElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.RichTextElement">RichTextElement</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
@@ -1649,6 +1759,14 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <li><code><a title="slack_sdk.models.blocks.blocks.InputBlock.hint_max_length" href="#slack_sdk.models.blocks.blocks.InputBlock.hint_max_length">hint_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.InputBlock.label_max_length" href="#slack_sdk.models.blocks.blocks.InputBlock.label_max_length">label_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.InputBlock.type" href="#slack_sdk.models.blocks.blocks.InputBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.MarkdownBlock" href="#slack_sdk.models.blocks.blocks.MarkdownBlock">MarkdownBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.MarkdownBlock.attributes" href="#slack_sdk.models.blocks.blocks.MarkdownBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.MarkdownBlock.text_max_length" href="#slack_sdk.models.blocks.blocks.MarkdownBlock.text_max_length">text_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.MarkdownBlock.type" href="#slack_sdk.models.blocks.blocks.MarkdownBlock.type">type</a></code></li>
 </ul>
 </li>
 <li>
