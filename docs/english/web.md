@@ -63,7 +63,7 @@ You can have your app's messages stream in to replicate conventional AI chatbot 
 
 :::tip [The Python Slack SDK provides a [`chat_stream()`](https://docss.slack.dev/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods.]
 
-See the [_Streaming messages_](/tools/bolt-python/concepts/message-sendin#streaming-messages) section of the Bolt for Python docs for implementation instructions. 
+See the [_Streaming messages_](/tools/bolt-python/concepts/message-sending#streaming-messages) section of the Bolt for Python docs for implementation instructions. 
 
 :::
 
