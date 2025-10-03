@@ -1,6 +1,6 @@
 """Audit Logs API is a set of APIs for monitoring what’s happening in your Enterprise Grid organization.
 
-Refer to https://slack.dev/python-slack-sdk/audit-logs/ for details.
+Refer to https://docs.slack.dev/tools/python-slack-sdk/audit-logs for details.
 """
 
 import json
@@ -59,7 +59,7 @@ class AsyncAuditLogsClient:
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         """API client for Audit Logs API
-        See https://api.slack.com/admins/audit-logs for more details
+        See https://docs.slack.dev/admins/audit-logs-api/ for more details
 
         Args:
             token: An admin user's token, which starts with `xoxp-`

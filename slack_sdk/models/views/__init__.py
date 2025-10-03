@@ -9,7 +9,7 @@ from slack_sdk.models.blocks import Block, TextObject, PlainTextObject, Option
 class View(JsonObject):
     """View object for modals and Home tabs.
 
-    https://api.slack.com/reference/surfaces/views
+    https://docs.slack.dev/reference/views/
     """
 
     types = ["modal", "home", "workflow_step"]

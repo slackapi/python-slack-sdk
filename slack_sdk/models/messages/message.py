@@ -35,7 +35,7 @@ class Message(JsonObject):
         """
         Create a message.
 
-        https://api.slack.com/messaging/composing#message-structure
+        https://docs.slack.dev/messaging/#message-structure
 
         Args:
             text: Plain or Slack Markdown-like text to display in the message.

@@ -60,7 +60,7 @@ class ButtonElementTests(unittest.TestCase):
         input = {
             "type": "button",
             "text": {"type": "plain_text", "text": "Link Button"},
-            "url": "https://api.slack.com/block-kit",
+            "url": "https://docs.slack.dev/block-kit/",
         }
         self.assertDictEqual(input, ButtonElement(**input).to_dict())
         self.assertDictEqual(input, LinkButtonElement(**input).to_dict())
@@ -635,7 +635,7 @@ class OverflowMenuElementTests(unittest.TestCase):
                 },
                 {
                     "text": {"type": "plain_text", "text": "*this is plain_text text*"},
-                    # https://api.slack.com/reference/block-kit/composition-objects#option
+                    # https://docs.slack.dev/reference/block-kit/composition-objects/option-object
                     "url": "https://www.example.com",
                 },
             ],

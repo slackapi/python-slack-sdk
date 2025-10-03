@@ -18,7 +18,7 @@ class SignatureVerifier:
         Slack signs its requests using a secret that's unique to your app.
         With the help of signing secrets, your app can more confidently verify
         whether requests from us are authentic.
-        https://api.slack.com/authentication/verifying-requests-from-slack
+        https://docs.slack.dev/authentication/verifying-requests-from-slack/
         """
         self.signing_secret = signing_secret
         self.clock = clock
