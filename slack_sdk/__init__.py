@@ -1,5 +1,5 @@
 """
-* The SDK website: https://slack.dev/python-slack-sdk/
+* The SDK website: https://docs.slack.dev/tools/python-slack-sdk
 * PyPI package: https://pypi.org/project/slack-sdk/
 
 Here is the list of key modules in this SDK:

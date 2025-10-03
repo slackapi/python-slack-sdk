@@ -26,7 +26,7 @@ from .block_elements import (
 class Block(JsonObject):
     """Blocks are a series of components that can be combined
     to create visually rich and compellingly interactive messages.
-    https://api.slack.com/reference/block-kit/blocks
+    https://docs.slack.dev/reference/block-kit/blocks
     """
 
     attributes = {"block_id", "type"}
@@ -132,7 +132,7 @@ class SectionBlock(Block):
         **others: dict,
     ):
         """A section is one of the most flexible blocks available.
-        https://api.slack.com/reference/block-kit/blocks#section
+        https://docs.slack.dev/reference/block-kit/blocks/section-block
 
         Args:
             block_id (required): A string acting as a unique identifier for a block.
@@ -200,7 +200,7 @@ class DividerBlock(Block):
         **others: dict,
     ):
         """A content divider, like an <hr>, to split up different blocks inside of a message.
-        https://api.slack.com/reference/block-kit/blocks#divider
+        https://docs.slack.dev/reference/block-kit/blocks/divider-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -235,7 +235,7 @@ class ImageBlock(Block):
         **others: dict,
     ):
         """A simple image block, designed to make those cat photos really pop.
-        https://api.slack.com/reference/block-kit/blocks#image
+        https://docs.slack.dev/reference/block-kit/blocks/image-block
 
         Args:
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
@@ -302,7 +302,7 @@ class ActionsBlock(Block):
         **others: dict,
     ):
         """A block that is used to hold interactive elements.
-        https://api.slack.com/reference/block-kit/blocks#actions
+        https://docs.slack.dev/reference/block-kit/blocks/actions-block
 
         Args:
             elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
@@ -340,7 +340,7 @@ class ContextBlock(Block):
         **others: dict,
     ):
         """Displays message context, which can include both images and text.
-        https://api.slack.com/reference/block-kit/blocks#context
+        https://docs.slack.dev/reference/block-kit/blocks/context-block
 
         Args:
             elements (required): An array of image elements and text objects. Maximum number of items is 10.
@@ -419,7 +419,7 @@ class InputBlock(Block):
     ):
         """A block that collects information from users - it can hold a plain-text input element,
         a select menu element, a multi-select menu element, or a datepicker.
-        https://api.slack.com/reference/block-kit/blocks#input
+        https://docs.slack.dev/reference/block-kit/blocks/input-block
 
         Args:
             label (required): A label that appears above an input element in the form of a text object
@@ -481,7 +481,7 @@ class FileBlock(Block):
         **others: dict,
     ):
         """Displays a remote file.
-        https://api.slack.com/reference/block-kit/blocks#file
+        https://docs.slack.dev/reference/block-kit/blocks/file-block
 
         Args:
             external_id (required): The external unique ID for this file.
@@ -515,7 +515,7 @@ class CallBlock(Block):
         **others: dict,
     ):
         """Displays a call information
-        https://api.slack.com/reference/block-kit/blocks#call
+        https://docs.slack.dev/reference/block-kit/blocks#call
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -541,7 +541,7 @@ class HeaderBlock(Block):
         **others: dict,
     ):
         """A header is a plain-text block that displays in a larger, bold font.
-        https://api.slack.com/reference/block-kit/blocks#header
+        https://docs.slack.dev/reference/block-kit/blocks/header-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -644,7 +644,7 @@ class VideoBlock(Block):
         (e.g. link unfurls, messages, modals, App Home) —
         anywhere you can put blocks! To use the video block within your app,
         you must have the links.embed:write scope.
-        https://api.slack.com/reference/block-kit/blocks#video
+        https://docs.slack.dev/reference/block-kit/blocks/video-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -716,7 +716,7 @@ class RichTextBlock(Block):
         **others: dict,
     ):
         """A block that is used to hold interactive elements.
-        https://api.slack.com/reference/block-kit/blocks#rich_text
+        https://docs.slack.dev/reference/block-kit/blocks/rich-text-block
 
         Args:
             elements (required): An array of rich text objects -

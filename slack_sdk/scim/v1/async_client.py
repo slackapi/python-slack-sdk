@@ -73,7 +73,7 @@ class AsyncSCIMClient:
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         """API client for SCIM API
-        See https://api.slack.com/scim for more details
+        See https://docs.slack.dev/admins/scim-api/ for more details
 
         Args:
             token: An admin user's token, which starts with `xoxp-`

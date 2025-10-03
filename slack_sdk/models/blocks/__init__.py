@@ -2,8 +2,8 @@
 
 To learn more about Block Kit, please check the following resources and tools:
 
-* https://api.slack.com/block-kit
-* https://api.slack.com/reference/block-kit/blocks
+* https://docs.slack.dev/block-kit/
+* https://docs.slack.dev/reference/block-kit/blocks
 * https://app.slack.com/block-kit-builder
 """
 

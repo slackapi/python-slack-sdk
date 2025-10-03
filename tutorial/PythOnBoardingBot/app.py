@@ -38,7 +38,7 @@ def start_onboarding(user_id: str, channel: str, client: WebClient):
 
 # Note: Bolt provides a WebClient instance as an argument to the listener function
 # we've defined here, which we then use to access Slack Web API methods like conversations_open.
-# For more info, checkout: https://slack.dev/bolt-python/concepts#message-listening
+# For more info, checkout: https://docs.slack.dev/tools/bolt-python/concepts/message-listening
 @app.event("team_join")
 def onboarding_message(event, client):
     """Create and send an onboarding welcome message to new users. Save the

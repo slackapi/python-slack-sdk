@@ -272,19 +272,19 @@ def _warn_if_message_text_content_is_missing(endpoint: str, kwargs: Dict[str, An
         "system push notifications, assistive technology such as screen readers, etc."
     )
 
-    # https://api.slack.com/reference/messaging/attachments
+    # https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments
     # Check if the fallback field exists for all the attachments
     # Not all attachments have a fallback property; warn about this too!
     missing_fallback_message = (
         f"Additionally, the attachment-level `fallback` argument is missing in the request payload for a {endpoint} call"
         " - To avoid this warning, it is recommended to always provide a top-level `text` argument when posting a"
         " message. Alternatively you can provide an attachment-level `fallback` argument, though this is now considered"
-        " a legacy field (see https://api.slack.com/reference/messaging/attachments#legacy_fields for more details)."
+        " a legacy field (see https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#legacy_fields for more details)."  # noqa: E501
     )
 
     # Additionally, specifically for attachments, there is a legacy field available at the attachment level called `fallback`
     # Even with a missing text, one can provide a `fallback` per attachment.
-    # More details here: https://api.slack.com/reference/messaging/attachments#legacy_fields
+    # More details here: https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#legacy_fields
     attachments = kwargs.get("attachments")
     # Note that this method does not verify attachments
     # if the value is already serialized as a single str value.

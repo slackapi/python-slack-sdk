@@ -1,6 +1,6 @@
 """Slack installation data store
 
-Refer to https://slack.dev/python-slack-sdk/oauth/ for details.
+Refer to https://docs.slack.dev/tools/python-slack-sdk/oauth for details.
 """
 from logging import Logger
 from typing import Optional

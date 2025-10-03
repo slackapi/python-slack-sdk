@@ -82,7 +82,7 @@ class PlainTextObject(TextObject):
     def __init__(self, *, text: str, emoji: Optional[bool] = None):
         """A plain text object, meaning markdown characters will not be parsed as
         formatting information.
-        https://api.slack.com/reference/block-kit/composition-objects#text
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
             text (required): The text for the block. This field accepts any of the standard text formatting markup
@@ -115,7 +115,7 @@ class MarkdownTextObject(TextObject):
     def __init__(self, *, text: str, verbatim: Optional[bool] = None):
         """A Markdown text object, meaning markdown characters will be parsed as
         formatting information.
-        https://api.slack.com/reference/block-kit/composition-objects#text
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
             text (required): The text for the block. This field accepts any of the standard text formatting markup
@@ -185,13 +185,13 @@ class Option(JsonObject):
         (StaticDialogSelectElement)
 
         Blocks:
-        https://api.slack.com/reference/block-kit/composition-objects#option
+        https://docs.slack.dev/reference/block-kit/composition-objects/option-object
 
         Dialogs:
-        https://api.slack.com/dialogs#select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
 
         Legacy interactive attachments:
-        https://api.slack.com/legacy/interactive-message-field-guide#option_fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields
 
         Args:
             label: A short, user-facing string to label this option to users.
@@ -327,13 +327,13 @@ class OptionGroup(JsonObject):
         UI) and a list of Option objects.
 
         Blocks:
-        https://api.slack.com/reference/block-kit/composition-objects#option-group
+        https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object
 
         Dialogs:
-        https://api.slack.com/dialogs#select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
 
         Legacy interactive attachments:
-        https://api.slack.com/legacy/interactive-message-field-guide#option_groups_to_place_within_message_menu_actions
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups
 
         Args:
             label: Text to display at the top of this group of options.
@@ -424,7 +424,7 @@ class ConfirmObject(JsonObject):
         An object that defines a dialog that provides a confirmation step to any
         interactive element. This dialog will ask the user to confirm their action by
         offering a confirm and deny button.
-        https://api.slack.com/reference/block-kit/composition-objects#confirm
+        https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/
         """
         self._title = TextObject.parse(title, default_type=PlainTextObject.type)
         self._text = TextObject.parse(text, default_type=MarkdownTextObject.type)
@@ -511,7 +511,7 @@ class DispatchActionConfig(JsonObject):
     ):
         """
         Determines when a plain-text input element will return a block_actions interaction payload.
-        https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config
+        https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object
         """
         self._trigger_actions_on = trigger_actions_on or []
 
@@ -628,7 +628,7 @@ class SlackFile(JsonObject):
         url: Optional[str] = None,
     ):
         """An object containing Slack file information to be used in an image block or image element.
-        https://api.slack.com/reference/block-kit/composition-objects#slack_file
+        https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object
 
         Args:
             id: Slack ID of the file.

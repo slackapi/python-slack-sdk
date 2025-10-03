@@ -71,7 +71,7 @@ el.replaceWith(d);
         **others: dict,
     ):
         &#34;&#34;&#34;A block that is used to hold interactive elements.
-        https://api.slack.com/reference/block-kit/blocks#actions
+        https://docs.slack.dev/reference/block-kit/blocks/actions-block
 
         Args:
             elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
@@ -94,9 +94,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A block that is used to hold interactive elements.
-<a href="https://api.slack.com/reference/block-kit/blocks#actions">https://api.slack.com/reference/block-kit/blocks#actions</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/actions-block">https://docs.slack.dev/reference/block-kit/blocks/actions-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
@@ -167,7 +167,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <pre><code class="python">class Block(JsonObject):
     &#34;&#34;&#34;Blocks are a series of components that can be combined
     to create visually rich and compellingly interactive messages.
-    https://api.slack.com/reference/block-kit/blocks
+    https://docs.slack.dev/reference/block-kit/blocks
     &#34;&#34;&#34;
 
     attributes = {&#34;block_id&#34;, &#34;type&#34;}
@@ -249,7 +249,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p></div>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -353,7 +353,7 @@ def subtype(self) -&gt; Optional[str]:
         **others: dict,
     ):
         &#34;&#34;&#34;Displays a call information
-        https://api.slack.com/reference/block-kit/blocks#call
+        https://docs.slack.dev/reference/block-kit/blocks#call
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -364,9 +364,9 @@ def subtype(self) -&gt; Optional[str]:
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a call information
-<a href="https://api.slack.com/reference/block-kit/blocks#call">https://api.slack.com/reference/block-kit/blocks#call</a></p></div>
+<a href="https://docs.slack.dev/reference/block-kit/blocks#call">https://docs.slack.dev/reference/block-kit/blocks#call</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
@@ -456,7 +456,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays actions as contextual info, which can include both feedback buttons and icon buttons.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -538,7 +538,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;Displays message context, which can include both images and text.
-        https://api.slack.com/reference/block-kit/blocks#context
+        https://docs.slack.dev/reference/block-kit/blocks/context-block
 
         Args:
             elements (required): An array of image elements and text objects. Maximum number of items is 10.
@@ -558,9 +558,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays message context, which can include both images and text.
-<a href="https://api.slack.com/reference/block-kit/blocks#context">https://api.slack.com/reference/block-kit/blocks#context</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/context-block">https://docs.slack.dev/reference/block-kit/blocks/context-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
@@ -635,7 +635,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;A content divider, like an &lt;hr&gt;, to split up different blocks inside of a message.
-        https://api.slack.com/reference/block-kit/blocks#divider
+        https://docs.slack.dev/reference/block-kit/blocks/divider-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -649,9 +649,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A content divider, like an <hr>, to split up different blocks inside of a message.
-<a href="https://api.slack.com/reference/block-kit/blocks#divider">https://api.slack.com/reference/block-kit/blocks#divider</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/divider-block">https://docs.slack.dev/reference/block-kit/blocks/divider-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>block_id</code></strong></dt>
@@ -713,7 +713,7 @@ If a message is updated, use a new block_id.</dd>
         **others: dict,
     ):
         &#34;&#34;&#34;Displays a remote file.
-        https://api.slack.com/reference/block-kit/blocks#file
+        https://docs.slack.dev/reference/block-kit/blocks/file-block
 
         Args:
             external_id (required): The external unique ID for this file.
@@ -731,9 +731,9 @@ If a message is updated, use a new block_id.</dd>
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a remote file.
-<a href="https://api.slack.com/reference/block-kit/blocks#file">https://api.slack.com/reference/block-kit/blocks#file</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/file-block">https://docs.slack.dev/reference/block-kit/blocks/file-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>external_id</code></strong> :&ensp;<code>required</code></dt>
@@ -812,7 +812,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;A header is a plain-text block that displays in a larger, bold font.
-        https://api.slack.com/reference/block-kit/blocks#header
+        https://docs.slack.dev/reference/block-kit/blocks/header-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -837,9 +837,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A header is a plain-text block that displays in a larger, bold font.
-<a href="https://api.slack.com/reference/block-kit/blocks#header">https://api.slack.com/reference/block-kit/blocks#header</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/header-block">https://docs.slack.dev/reference/block-kit/blocks/header-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>block_id</code></strong></dt>
@@ -927,7 +927,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;A simple image block, designed to make those cat photos really pop.
-        https://api.slack.com/reference/block-kit/blocks#image
+        https://docs.slack.dev/reference/block-kit/blocks/image-block
 
         Args:
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
@@ -979,9 +979,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A simple image block, designed to make those cat photos really pop.
-<a href="https://api.slack.com/reference/block-kit/blocks#image">https://api.slack.com/reference/block-kit/blocks#image</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/image-block">https://docs.slack.dev/reference/block-kit/blocks/image-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
@@ -1085,7 +1085,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     ):
         &#34;&#34;&#34;A block that collects information from users - it can hold a plain-text input element,
         a select menu element, a multi-select menu element, or a datepicker.
-        https://api.slack.com/reference/block-kit/blocks#input
+        https://docs.slack.dev/reference/block-kit/blocks/input-block
 
         Args:
             label (required): A label that appears above an input element in the form of a text object
@@ -1132,10 +1132,10 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A block that collects information from users - it can hold a plain-text input element,
 a select menu element, a multi-select menu element, or a datepicker.
-<a href="https://api.slack.com/reference/block-kit/blocks#input">https://api.slack.com/reference/block-kit/blocks#input</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/input-block">https://docs.slack.dev/reference/block-kit/blocks/input-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>label</code></strong> :&ensp;<code>required</code></dt>
@@ -1258,7 +1258,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays formatted markdown.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/markdown-block/">https://docs.slack.dev/reference/block-kit/blocks/markdown-block/</a></p>
 <h2 id="args">Args</h2>
@@ -1340,7 +1340,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;A block that is used to hold interactive elements.
-        https://api.slack.com/reference/block-kit/blocks#rich_text
+        https://docs.slack.dev/reference/block-kit/blocks/rich-text-block
 
         Args:
             elements (required): An array of rich text objects -
@@ -1357,9 +1357,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A block that is used to hold interactive elements.
-<a href="https://api.slack.com/reference/block-kit/blocks#rich_text">https://api.slack.com/reference/block-kit/blocks#rich_text</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/rich-text-block">https://docs.slack.dev/reference/block-kit/blocks/rich-text-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
@@ -1441,7 +1441,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;A section is one of the most flexible blocks available.
-        https://api.slack.com/reference/block-kit/blocks#section
+        https://docs.slack.dev/reference/block-kit/blocks/section-block
 
         Args:
             block_id (required): A string acting as a unique identifier for a block.
@@ -1500,9 +1500,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A section is one of the most flexible blocks available.
-<a href="https://api.slack.com/reference/block-kit/blocks#section">https://api.slack.com/reference/block-kit/blocks#section</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/section-block">https://docs.slack.dev/reference/block-kit/blocks/section-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>block_id</code></strong> :&ensp;<code>required</code></dt>
@@ -1627,7 +1627,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         (e.g. link unfurls, messages, modals, App Home) —
         anywhere you can put blocks! To use the video block within your app,
         you must have the links.embed:write scope.
-        https://api.slack.com/reference/block-kit/blocks#video
+        https://docs.slack.dev/reference/block-kit/blocks/video-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -1685,12 +1685,12 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
-<a href="https://api.slack.com/reference/block-kit/blocks">https://api.slack.com/reference/block-kit/blocks</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A video block is designed to embed videos in all app surfaces
 (e.g. link unfurls, messages, modals, App Home) —
 anywhere you can put blocks! To use the video block within your app,
 you must have the links.embed:write scope.
-<a href="https://api.slack.com/reference/block-kit/blocks#video">https://api.slack.com/reference/block-kit/blocks#video</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/video-block">https://docs.slack.dev/reference/block-kit/blocks/video-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>block_id</code></strong></dt>
