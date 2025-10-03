@@ -2201,13 +2201,17 @@ and message responses using response_url in payloads.</p></div>
         channel_id: str,
         thread_ts: str,
         status: str,
+        loading_messages: Optional[List[str]] = None,
         **kwargs,
     ) -&gt; SlackResponse:
-        &#34;&#34;&#34;Revokes a token.
+        &#34;&#34;&#34;Set the status for an AI assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         &#34;&#34;&#34;
-        kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status})
-        return self.api_call(&#34;assistant.threads.setStatus&#34;, params=kwargs)
+        kwargs.update(
+            {&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status, &#34;loading_messages&#34;: loading_messages}
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;assistant.threads.setStatus&#34;, json=kwargs)
 
     def assistant_threads_setTitle(
         self,
@@ -2217,7 +2221,7 @@ and message responses using response_url in payloads.</p></div>
         title: str,
         **kwargs,
     ) -&gt; SlackResponse:
-        &#34;&#34;&#34;Revokes a token.
+        &#34;&#34;&#34;Set the title for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setTitle
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;title&#34;: title})
@@ -2232,7 +2236,7 @@ and message responses using response_url in payloads.</p></div>
         prompts: List[Dict[str, str]],
         **kwargs,
     ) -&gt; SlackResponse:
-        &#34;&#34;&#34;Revokes a token.
+        &#34;&#34;&#34;Set suggested prompts for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;prompts&#34;: prompts})
@@ -2746,6 +2750,27 @@ and message responses using response_url in payloads.</p></div>
 
     # --------------------------
 
+    def chat_appendStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Appends text to an existing streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.appendStream
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;ts&#34;: ts,
+                &#34;markdown_text&#34;: markdown_text,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.appendStream&#34;, json=kwargs)
+
     def chat_delete(
         self,
         *,
@@ -2950,6 +2975,146 @@ and message responses using response_url in payloads.</p></div>
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.scheduleMessage&#34;, json=kwargs)
 
+    def chat_scheduledMessages_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        cursor: Optional[str] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Lists all scheduled messages.
+        https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;cursor&#34;: cursor,
+                &#34;latest&#34;: latest,
+                &#34;limit&#34;: limit,
+                &#34;oldest&#34;: oldest,
+                &#34;team_id&#34;: team_id,
+            }
+        )
+        return self.api_call(&#34;chat.scheduledMessages.list&#34;, params=kwargs)
+
+    def chat_startStream(
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        markdown_text: Optional[str] = None,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Starts a new streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.startStream
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;thread_ts&#34;: thread_ts,
+                &#34;markdown_text&#34;: markdown_text,
+                &#34;recipient_team_id&#34;: recipient_team_id,
+                &#34;recipient_user_id&#34;: recipient_user_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.startStream&#34;, json=kwargs)
+
+    def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Stops a streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.stopStream
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;ts&#34;: ts,
+                &#34;markdown_text&#34;: markdown_text,
+                &#34;blocks&#34;: blocks,
+                &#34;metadata&#34;: metadata,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.stopStream&#34;, json=kwargs)
+
+    def chat_stream(
+        self,
+        *,
+        buffer_size: int = 256,
+        channel: str,
+        thread_ts: str,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; ChatStream:
+        &#34;&#34;&#34;Stream markdown text into a conversation.
+
+        This method starts a new chat stream in a conversation that can be appended to. After appending an entire message,
+        the stream can be stopped with concluding arguments such as &#34;blocks&#34; for gathering feedback.
+
+        The following methods are used:
+
+        - chat.startStream: Starts a new streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+        - chat.appendStream: Appends text to an existing streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+        - chat.stopStream: Stops a streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
+
+        Args:
+            buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+              value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+              limits. Default: 256.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            **kwargs: Additional arguments passed to the underlying API calls.
+
+        Returns:
+            ChatStream instance for managing the stream
+
+        Example:
+            ```python
+            streamer = client.chat_stream(
+                channel=&#34;C0123456789&#34;,
+                thread_ts=&#34;1700000001.123456&#34;,
+                recipient_team_id=&#34;T0123456789&#34;,
+                recipient_user_id=&#34;U0123456789&#34;,
+            )
+            streamer.append(markdown_text=&#34;**hello wo&#34;)
+            streamer.append(markdown_text=&#34;rld!**&#34;)
+            streamer.stop()
+            ```
+        &#34;&#34;&#34;
+        return ChatStream(
+            self,
+            logger=self._logger,
+            channel=channel,
+            thread_ts=thread_ts,
+            recipient_team_id=recipient_team_id,
+            recipient_user_id=recipient_user_id,
+            buffer_size=buffer_size,
+            **kwargs,
+        )
+
     def chat_unfurl(
         self,
         *,
@@ -3029,32 +3194,6 @@ and message responses using response_url in payloads.</p></div>
         _warn_if_message_text_content_is_missing(&#34;chat.update&#34;, kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call(&#34;chat.update&#34;, json=kwargs)
-
-    def chat_scheduledMessages_list(
-        self,
-        *,
-        channel: Optional[str] = None,
-        cursor: Optional[str] = None,
-        latest: Optional[str] = None,
-        limit: Optional[int] = None,
-        oldest: Optional[str] = None,
-        team_id: Optional[str] = None,
-        **kwargs,
-    ) -&gt; SlackResponse:
-        &#34;&#34;&#34;Lists all scheduled messages.
-        https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
-        &#34;&#34;&#34;
-        kwargs.update(
-            {
-                &#34;channel&#34;: channel,
-                &#34;cursor&#34;: cursor,
-                &#34;latest&#34;: latest,
-                &#34;limit&#34;: limit,
-                &#34;oldest&#34;: oldest,
-                &#34;team_id&#34;: team_id,
-            }
-        )
-        return self.api_call(&#34;chat.scheduledMessages.list&#34;, params=kwargs)
 
     def conversations_acceptSharedInvite(
         self,
@@ -8890,7 +9029,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://docs.slack.dev/reference/methods/apps.uninstall">https://docs.slack.dev/reference/methods/apps.uninstall</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.assistant_threads_setStatus"><code class="name flex">
-<span>def <span class="ident">assistant_threads_setStatus</span></span>(<span>self, *, channel_id: str, thread_ts: str, status: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">assistant_threads_setStatus</span></span>(<span>self,<br>*,<br>channel_id: str,<br>thread_ts: str,<br>status: str,<br>loading_messages: List[str] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -8903,15 +9042,19 @@ Each authorization represents an app installation that the event is visible to.
     channel_id: str,
     thread_ts: str,
     status: str,
+    loading_messages: Optional[List[str]] = None,
     **kwargs,
 ) -&gt; SlackResponse:
-    &#34;&#34;&#34;Revokes a token.
+    &#34;&#34;&#34;Set the status for an AI assistant thread.
     https://docs.slack.dev/reference/methods/assistant.threads.setStatus
     &#34;&#34;&#34;
-    kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status})
-    return self.api_call(&#34;assistant.threads.setStatus&#34;, params=kwargs)</code></pre>
+    kwargs.update(
+        {&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status, &#34;loading_messages&#34;: loading_messages}
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;assistant.threads.setStatus&#34;, json=kwargs)</code></pre>
 </details>
-<div class="desc"><p>Revokes a token.
+<div class="desc"><p>Set the status for an AI assistant thread.
 <a href="https://docs.slack.dev/reference/methods/assistant.threads.setStatus">https://docs.slack.dev/reference/methods/assistant.threads.setStatus</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.assistant_threads_setSuggestedPrompts"><code class="name flex">
@@ -8931,7 +9074,7 @@ Each authorization represents an app installation that the event is visible to.
     prompts: List[Dict[str, str]],
     **kwargs,
 ) -&gt; SlackResponse:
-    &#34;&#34;&#34;Revokes a token.
+    &#34;&#34;&#34;Set suggested prompts for the given assistant thread.
     https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;prompts&#34;: prompts})
@@ -8939,7 +9082,7 @@ Each authorization represents an app installation that the event is visible to.
         kwargs.update({&#34;title&#34;: title})
     return self.api_call(&#34;assistant.threads.setSuggestedPrompts&#34;, json=kwargs)</code></pre>
 </details>
-<div class="desc"><p>Revokes a token.
+<div class="desc"><p>Set suggested prompts for the given assistant thread.
 <a href="https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts">https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.assistant_threads_setTitle"><code class="name flex">
@@ -8958,13 +9101,13 @@ Each authorization represents an app installation that the event is visible to.
     title: str,
     **kwargs,
 ) -&gt; SlackResponse:
-    &#34;&#34;&#34;Revokes a token.
+    &#34;&#34;&#34;Set the title for the given assistant thread.
     https://docs.slack.dev/reference/methods/assistant.threads.setTitle
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;title&#34;: title})
     return self.api_call(&#34;assistant.threads.setTitle&#34;, params=kwargs)</code></pre>
 </details>
-<div class="desc"><p>Revokes a token.
+<div class="desc"><p>Set the title for the given assistant thread.
 <a href="https://docs.slack.dev/reference/methods/assistant.threads.setTitle">https://docs.slack.dev/reference/methods/assistant.threads.setTitle</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.auth_revoke"><code class="name flex">
@@ -9835,6 +9978,38 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 <div class="desc"><p>Unarchives a channel.</p></div>
 </dd>
+<dt id="slack_sdk.WebClient.chat_appendStream"><code class="name flex">
+<span>def <span class="ident">chat_appendStream</span></span>(<span>self, *, channel: str, ts: str, markdown_text: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_appendStream(
+    self,
+    *,
+    channel: str,
+    ts: str,
+    markdown_text: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Appends text to an existing streaming conversation.
+    https://docs.slack.dev/reference/methods/chat.appendStream
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;ts&#34;: ts,
+            &#34;markdown_text&#34;: markdown_text,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.appendStream&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Appends text to an existing streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.appendStream">https://docs.slack.dev/reference/methods/chat.appendStream</a></p></div>
+</dd>
 <dt id="slack_sdk.WebClient.chat_delete"><code class="name flex">
 <span>def <span class="ident">chat_delete</span></span>(<span>self, *, channel: str, ts: str, as_user: bool | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -10152,6 +10327,195 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 <div class="desc"><p>Lists all scheduled messages.
 <a href="https://docs.slack.dev/reference/methods/chat.scheduledMessages.list">https://docs.slack.dev/reference/methods/chat.scheduledMessages.list</a></p></div>
+</dd>
+<dt id="slack_sdk.WebClient.chat_startStream"><code class="name flex">
+<span>def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str,<br>markdown_text: str | None = None,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_startStream(
+    self,
+    *,
+    channel: str,
+    thread_ts: str,
+    markdown_text: Optional[str] = None,
+    recipient_team_id: Optional[str] = None,
+    recipient_user_id: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Starts a new streaming conversation.
+    https://docs.slack.dev/reference/methods/chat.startStream
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;thread_ts&#34;: thread_ts,
+            &#34;markdown_text&#34;: markdown_text,
+            &#34;recipient_team_id&#34;: recipient_team_id,
+            &#34;recipient_user_id&#34;: recipient_user_id,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.startStream&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Starts a new streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.startStream">https://docs.slack.dev/reference/methods/chat.startStream</a></p></div>
+</dd>
+<dt id="slack_sdk.WebClient.chat_stopStream"><code class="name flex">
+<span>def <span class="ident">chat_stopStream</span></span>(<span>self,<br>*,<br>channel: str,<br>ts: str,<br>markdown_text: str | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_stopStream(
+    self,
+    *,
+    channel: str,
+    ts: str,
+    markdown_text: Optional[str] = None,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+    metadata: Optional[Union[Dict, Metadata]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Stops a streaming conversation.
+    https://docs.slack.dev/reference/methods/chat.stopStream
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;ts&#34;: ts,
+            &#34;markdown_text&#34;: markdown_text,
+            &#34;blocks&#34;: blocks,
+            &#34;metadata&#34;: metadata,
+        }
+    )
+    _parse_web_class_objects(kwargs)
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.stopStream&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Stops a streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.stopStream">https://docs.slack.dev/reference/methods/chat.stopStream</a></p></div>
+</dd>
+<dt id="slack_sdk.WebClient.chat_stream"><code class="name flex">
+<span>def <span class="ident">chat_stream</span></span>(<span>self,<br>*,<br>buffer_size: int = 256,<br>channel: str,<br>thread_ts: str,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.chat_stream.ChatStream" href="web/chat_stream.html#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_stream(
+    self,
+    *,
+    buffer_size: int = 256,
+    channel: str,
+    thread_ts: str,
+    recipient_team_id: Optional[str] = None,
+    recipient_user_id: Optional[str] = None,
+    **kwargs,
+) -&gt; ChatStream:
+    &#34;&#34;&#34;Stream markdown text into a conversation.
+
+    This method starts a new chat stream in a conversation that can be appended to. After appending an entire message,
+    the stream can be stopped with concluding arguments such as &#34;blocks&#34; for gathering feedback.
+
+    The following methods are used:
+
+    - chat.startStream: Starts a new streaming conversation.
+      [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+    - chat.appendStream: Appends text to an existing streaming conversation.
+      [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+    - chat.stopStream: Stops a streaming conversation.
+      [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
+
+    Args:
+        buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+          value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+          limits. Default: 256.
+        channel: An encoded ID that represents a channel, private group, or DM.
+        thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
+          request.
+        recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+          streaming to channels.
+        recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+        **kwargs: Additional arguments passed to the underlying API calls.
+
+    Returns:
+        ChatStream instance for managing the stream
+
+    Example:
+        ```python
+        streamer = client.chat_stream(
+            channel=&#34;C0123456789&#34;,
+            thread_ts=&#34;1700000001.123456&#34;,
+            recipient_team_id=&#34;T0123456789&#34;,
+            recipient_user_id=&#34;U0123456789&#34;,
+        )
+        streamer.append(markdown_text=&#34;**hello wo&#34;)
+        streamer.append(markdown_text=&#34;rld!**&#34;)
+        streamer.stop()
+        ```
+    &#34;&#34;&#34;
+    return ChatStream(
+        self,
+        logger=self._logger,
+        channel=channel,
+        thread_ts=thread_ts,
+        recipient_team_id=recipient_team_id,
+        recipient_user_id=recipient_user_id,
+        buffer_size=buffer_size,
+        **kwargs,
+    )</code></pre>
+</details>
+<div class="desc"><p>Stream markdown text into a conversation.</p>
+<p>This method starts a new chat stream in a conversation that can be appended to. After appending an entire message,
+the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.</p>
+<p>The following methods are used:</p>
+<ul>
+<li>chat.startStream: Starts a new streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.startStream">Reference</a>.</li>
+<li>chat.appendStream: Appends text to an existing streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.appendStream">Reference</a>.</li>
+<li>chat.stopStream: Stops a streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.stopStream">Reference</a>.</li>
+</ul>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>buffer_size</code></strong></dt>
+<dd>The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+limits. Default: 256.</dd>
+<dt><strong><code>channel</code></strong></dt>
+<dd>An encoded ID that represents a channel, private group, or DM.</dd>
+<dt><strong><code>thread_ts</code></strong></dt>
+<dd>Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+request.</dd>
+<dt><strong><code>recipient_team_id</code></strong></dt>
+<dd>The encoded ID of the team the user receiving the streaming text belongs to. Required when
+streaming to channels.</dd>
+<dt><strong><code>recipient_user_id</code></strong></dt>
+<dd>The encoded ID of the user to receive the streaming text. Required when streaming to channels.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Additional arguments passed to the underlying API calls.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>ChatStream instance for managing the stream</p>
+<h2 id="example">Example</h2>
+<pre><code class="language-python">streamer = client.chat_stream(
+    channel=&quot;C0123456789&quot;,
+    thread_ts=&quot;1700000001.123456&quot;,
+    recipient_team_id=&quot;T0123456789&quot;,
+    recipient_user_id=&quot;U0123456789&quot;,
+)
+streamer.append(markdown_text=&quot;**hello wo&quot;)
+streamer.append(markdown_text=&quot;rld!**&quot;)
+streamer.stop()
+</code></pre></div>
 </dd>
 <dt id="slack_sdk.WebClient.chat_unfurl"><code class="name flex">
 <span>def <span class="ident">chat_unfurl</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>ts: str | None = None,<br>source: str | None = None,<br>unfurl_id: str | None = None,<br>unfurls: Dict[str, Dict] | None = None,<br>user_auth_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>user_auth_message: str | None = None,<br>user_auth_required: bool | None = None,<br>user_auth_url: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
@@ -15119,6 +15483,7 @@ if you give this argument, body_params and files will be skipped</dd>
 <li><code><a title="slack_sdk.WebClient.channels_setPurpose" href="#slack_sdk.WebClient.channels_setPurpose">channels_setPurpose</a></code></li>
 <li><code><a title="slack_sdk.WebClient.channels_setTopic" href="#slack_sdk.WebClient.channels_setTopic">channels_setTopic</a></code></li>
 <li><code><a title="slack_sdk.WebClient.channels_unarchive" href="#slack_sdk.WebClient.channels_unarchive">channels_unarchive</a></code></li>
+<li><code><a title="slack_sdk.WebClient.chat_appendStream" href="#slack_sdk.WebClient.chat_appendStream">chat_appendStream</a></code></li>
 <li><code><a title="slack_sdk.WebClient.chat_delete" href="#slack_sdk.WebClient.chat_delete">chat_delete</a></code></li>
 <li><code><a title="slack_sdk.WebClient.chat_deleteScheduledMessage" href="#slack_sdk.WebClient.chat_deleteScheduledMessage">chat_deleteScheduledMessage</a></code></li>
 <li><code><a title="slack_sdk.WebClient.chat_getPermalink" href="#slack_sdk.WebClient.chat_getPermalink">chat_getPermalink</a></code></li>
@@ -15127,6 +15492,9 @@ if you give this argument, body_params and files will be skipped</dd>
 <li><code><a title="slack_sdk.WebClient.chat_postMessage" href="#slack_sdk.WebClient.chat_postMessage">chat_postMessage</a></code></li>
 <li><code><a title="slack_sdk.WebClient.chat_scheduleMessage" href="#slack_sdk.WebClient.chat_scheduleMessage">chat_scheduleMessage</a></code></li>
 <li><code><a title="slack_sdk.WebClient.chat_scheduledMessages_list" href="#slack_sdk.WebClient.chat_scheduledMessages_list">chat_scheduledMessages_list</a></code></li>
+<li><code><a title="slack_sdk.WebClient.chat_startStream" href="#slack_sdk.WebClient.chat_startStream">chat_startStream</a></code></li>
+<li><code><a title="slack_sdk.WebClient.chat_stopStream" href="#slack_sdk.WebClient.chat_stopStream">chat_stopStream</a></code></li>
+<li><code><a title="slack_sdk.WebClient.chat_stream" href="#slack_sdk.WebClient.chat_stream">chat_stream</a></code></li>
 <li><code><a title="slack_sdk.WebClient.chat_unfurl" href="#slack_sdk.WebClient.chat_unfurl">chat_unfurl</a></code></li>
 <li><code><a title="slack_sdk.WebClient.chat_update" href="#slack_sdk.WebClient.chat_update">chat_update</a></code></li>
 <li><code><a title="slack_sdk.WebClient.conversations_acceptSharedInvite" href="#slack_sdk.WebClient.conversations_acceptSharedInvite">conversations_acceptSharedInvite</a></code></li>

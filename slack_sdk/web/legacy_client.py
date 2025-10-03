@@ -2077,13 +2077,17 @@ class LegacyWebClient(LegacyBaseClient):
         channel_id: str,
         thread_ts: str,
         status: str,
+        loading_messages: Optional[List[str]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Revokes a token.
+        """Set the status for an AI assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "status": status})
-        return self.api_call("assistant.threads.setStatus", params=kwargs)
+        kwargs.update(
+            {"channel_id": channel_id, "thread_ts": thread_ts, "status": status, "loading_messages": loading_messages}
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("assistant.threads.setStatus", json=kwargs)
 
     def assistant_threads_setTitle(
         self,
@@ -2093,7 +2097,7 @@ class LegacyWebClient(LegacyBaseClient):
         title: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Revokes a token.
+        """Set the title for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setTitle
         """
         kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title})
@@ -2108,7 +2112,7 @@ class LegacyWebClient(LegacyBaseClient):
         prompts: List[Dict[str, str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Revokes a token.
+        """Set suggested prompts for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
         """
         kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "prompts": prompts})
@@ -2622,6 +2626,27 @@ class LegacyWebClient(LegacyBaseClient):
 
     # --------------------------
 
+    def chat_appendStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Appends text to an existing streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.appendStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.appendStream", json=kwargs)
+
     def chat_delete(
         self,
         *,
@@ -2826,6 +2851,83 @@ class LegacyWebClient(LegacyBaseClient):
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call("chat.scheduleMessage", json=kwargs)
 
+    def chat_scheduledMessages_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        cursor: Optional[str] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists all scheduled messages.
+        https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "cursor": cursor,
+                "latest": latest,
+                "limit": limit,
+                "oldest": oldest,
+                "team_id": team_id,
+            }
+        )
+        return self.api_call("chat.scheduledMessages.list", params=kwargs)
+
+    def chat_startStream(
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        markdown_text: Optional[str] = None,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Starts a new streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.startStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "thread_ts": thread_ts,
+                "markdown_text": markdown_text,
+                "recipient_team_id": recipient_team_id,
+                "recipient_user_id": recipient_user_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.startStream", json=kwargs)
+
+    def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Stops a streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.stopStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "blocks": blocks,
+                "metadata": metadata,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("chat.stopStream", json=kwargs)
+
     def chat_unfurl(
         self,
         *,
@@ -2905,32 +3007,6 @@ class LegacyWebClient(LegacyBaseClient):
         _warn_if_message_text_content_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call("chat.update", json=kwargs)
-
-    def chat_scheduledMessages_list(
-        self,
-        *,
-        channel: Optional[str] = None,
-        cursor: Optional[str] = None,
-        latest: Optional[str] = None,
-        limit: Optional[int] = None,
-        oldest: Optional[str] = None,
-        team_id: Optional[str] = None,
-        **kwargs,
-    ) -> Union[Future, SlackResponse]:
-        """Lists all scheduled messages.
-        https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
-        """
-        kwargs.update(
-            {
-                "channel": channel,
-                "cursor": cursor,
-                "latest": latest,
-                "limit": limit,
-                "oldest": oldest,
-                "team_id": team_id,
-            }
-        )
-        return self.api_call("chat.scheduledMessages.list", params=kwargs)
 
     def conversations_acceptSharedInvite(
         self,

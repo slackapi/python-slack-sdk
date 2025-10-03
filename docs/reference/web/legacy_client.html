@@ -2096,13 +2096,17 @@ el.replaceWith(d);
         channel_id: str,
         thread_ts: str,
         status: str,
+        loading_messages: Optional[List[str]] = None,
         **kwargs,
     ) -&gt; Union[Future, SlackResponse]:
-        &#34;&#34;&#34;Revokes a token.
+        &#34;&#34;&#34;Set the status for an AI assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         &#34;&#34;&#34;
-        kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status})
-        return self.api_call(&#34;assistant.threads.setStatus&#34;, params=kwargs)
+        kwargs.update(
+            {&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status, &#34;loading_messages&#34;: loading_messages}
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;assistant.threads.setStatus&#34;, json=kwargs)
 
     def assistant_threads_setTitle(
         self,
@@ -2112,7 +2116,7 @@ el.replaceWith(d);
         title: str,
         **kwargs,
     ) -&gt; Union[Future, SlackResponse]:
-        &#34;&#34;&#34;Revokes a token.
+        &#34;&#34;&#34;Set the title for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setTitle
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;title&#34;: title})
@@ -2127,7 +2131,7 @@ el.replaceWith(d);
         prompts: List[Dict[str, str]],
         **kwargs,
     ) -&gt; Union[Future, SlackResponse]:
-        &#34;&#34;&#34;Revokes a token.
+        &#34;&#34;&#34;Set suggested prompts for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
         &#34;&#34;&#34;
         kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;prompts&#34;: prompts})
@@ -2641,6 +2645,27 @@ el.replaceWith(d);
 
     # --------------------------
 
+    def chat_appendStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: str,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Appends text to an existing streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.appendStream
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;ts&#34;: ts,
+                &#34;markdown_text&#34;: markdown_text,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.appendStream&#34;, json=kwargs)
+
     def chat_delete(
         self,
         *,
@@ -2845,6 +2870,83 @@ el.replaceWith(d);
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return self.api_call(&#34;chat.scheduleMessage&#34;, json=kwargs)
 
+    def chat_scheduledMessages_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        cursor: Optional[str] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Lists all scheduled messages.
+        https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;cursor&#34;: cursor,
+                &#34;latest&#34;: latest,
+                &#34;limit&#34;: limit,
+                &#34;oldest&#34;: oldest,
+                &#34;team_id&#34;: team_id,
+            }
+        )
+        return self.api_call(&#34;chat.scheduledMessages.list&#34;, params=kwargs)
+
+    def chat_startStream(
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        markdown_text: Optional[str] = None,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Starts a new streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.startStream
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;thread_ts&#34;: thread_ts,
+                &#34;markdown_text&#34;: markdown_text,
+                &#34;recipient_team_id&#34;: recipient_team_id,
+                &#34;recipient_user_id&#34;: recipient_user_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.startStream&#34;, json=kwargs)
+
+    def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        **kwargs,
+    ) -&gt; Union[Future, SlackResponse]:
+        &#34;&#34;&#34;Stops a streaming conversation.
+        https://docs.slack.dev/reference/methods/chat.stopStream
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;ts&#34;: ts,
+                &#34;markdown_text&#34;: markdown_text,
+                &#34;blocks&#34;: blocks,
+                &#34;metadata&#34;: metadata,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;chat.stopStream&#34;, json=kwargs)
+
     def chat_unfurl(
         self,
         *,
@@ -2924,32 +3026,6 @@ el.replaceWith(d);
         _warn_if_message_text_content_is_missing(&#34;chat.update&#34;, kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return self.api_call(&#34;chat.update&#34;, json=kwargs)
-
-    def chat_scheduledMessages_list(
-        self,
-        *,
-        channel: Optional[str] = None,
-        cursor: Optional[str] = None,
-        latest: Optional[str] = None,
-        limit: Optional[int] = None,
-        oldest: Optional[str] = None,
-        team_id: Optional[str] = None,
-        **kwargs,
-    ) -&gt; Union[Future, SlackResponse]:
-        &#34;&#34;&#34;Lists all scheduled messages.
-        https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
-        &#34;&#34;&#34;
-        kwargs.update(
-            {
-                &#34;channel&#34;: channel,
-                &#34;cursor&#34;: cursor,
-                &#34;latest&#34;: latest,
-                &#34;limit&#34;: limit,
-                &#34;oldest&#34;: oldest,
-                &#34;team_id&#34;: team_id,
-            }
-        )
-        return self.api_call(&#34;chat.scheduledMessages.list&#34;, params=kwargs)
 
     def conversations_acceptSharedInvite(
         self,
@@ -8785,7 +8861,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://docs.slack.dev/reference/methods/apps.uninstall">https://docs.slack.dev/reference/methods/apps.uninstall</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.assistant_threads_setStatus"><code class="name flex">
-<span>def <span class="ident">assistant_threads_setStatus</span></span>(<span>self, *, channel_id: str, thread_ts: str, status: str, **kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+<span>def <span class="ident">assistant_threads_setStatus</span></span>(<span>self,<br>*,<br>channel_id: str,<br>thread_ts: str,<br>status: str,<br>loading_messages: List[str] | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -8798,15 +8874,19 @@ Each authorization represents an app installation that the event is visible to.
     channel_id: str,
     thread_ts: str,
     status: str,
+    loading_messages: Optional[List[str]] = None,
     **kwargs,
 ) -&gt; Union[Future, SlackResponse]:
-    &#34;&#34;&#34;Revokes a token.
+    &#34;&#34;&#34;Set the status for an AI assistant thread.
     https://docs.slack.dev/reference/methods/assistant.threads.setStatus
     &#34;&#34;&#34;
-    kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status})
-    return self.api_call(&#34;assistant.threads.setStatus&#34;, params=kwargs)</code></pre>
+    kwargs.update(
+        {&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;status&#34;: status, &#34;loading_messages&#34;: loading_messages}
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;assistant.threads.setStatus&#34;, json=kwargs)</code></pre>
 </details>
-<div class="desc"><p>Revokes a token.
+<div class="desc"><p>Set the status for an AI assistant thread.
 <a href="https://docs.slack.dev/reference/methods/assistant.threads.setStatus">https://docs.slack.dev/reference/methods/assistant.threads.setStatus</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.assistant_threads_setSuggestedPrompts"><code class="name flex">
@@ -8826,7 +8906,7 @@ Each authorization represents an app installation that the event is visible to.
     prompts: List[Dict[str, str]],
     **kwargs,
 ) -&gt; Union[Future, SlackResponse]:
-    &#34;&#34;&#34;Revokes a token.
+    &#34;&#34;&#34;Set suggested prompts for the given assistant thread.
     https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;prompts&#34;: prompts})
@@ -8834,7 +8914,7 @@ Each authorization represents an app installation that the event is visible to.
         kwargs.update({&#34;title&#34;: title})
     return self.api_call(&#34;assistant.threads.setSuggestedPrompts&#34;, json=kwargs)</code></pre>
 </details>
-<div class="desc"><p>Revokes a token.
+<div class="desc"><p>Set suggested prompts for the given assistant thread.
 <a href="https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts">https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.assistant_threads_setTitle"><code class="name flex">
@@ -8853,13 +8933,13 @@ Each authorization represents an app installation that the event is visible to.
     title: str,
     **kwargs,
 ) -&gt; Union[Future, SlackResponse]:
-    &#34;&#34;&#34;Revokes a token.
+    &#34;&#34;&#34;Set the title for the given assistant thread.
     https://docs.slack.dev/reference/methods/assistant.threads.setTitle
     &#34;&#34;&#34;
     kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;title&#34;: title})
     return self.api_call(&#34;assistant.threads.setTitle&#34;, params=kwargs)</code></pre>
 </details>
-<div class="desc"><p>Revokes a token.
+<div class="desc"><p>Set the title for the given assistant thread.
 <a href="https://docs.slack.dev/reference/methods/assistant.threads.setTitle">https://docs.slack.dev/reference/methods/assistant.threads.setTitle</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.auth_revoke"><code class="name flex">
@@ -9730,6 +9810,38 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 <div class="desc"><p>Unarchives a channel.</p></div>
 </dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.chat_appendStream"><code class="name flex">
+<span>def <span class="ident">chat_appendStream</span></span>(<span>self, *, channel: str, ts: str, markdown_text: str, **kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_appendStream(
+    self,
+    *,
+    channel: str,
+    ts: str,
+    markdown_text: str,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Appends text to an existing streaming conversation.
+    https://docs.slack.dev/reference/methods/chat.appendStream
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;ts&#34;: ts,
+            &#34;markdown_text&#34;: markdown_text,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.appendStream&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Appends text to an existing streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.appendStream">https://docs.slack.dev/reference/methods/chat.appendStream</a></p></div>
+</dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.chat_delete"><code class="name flex">
 <span>def <span class="ident">chat_delete</span></span>(<span>self, *, channel: str, ts: str, as_user: bool | None = None, **kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
 </code></dt>
@@ -10047,6 +10159,79 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 <div class="desc"><p>Lists all scheduled messages.
 <a href="https://docs.slack.dev/reference/methods/chat.scheduledMessages.list">https://docs.slack.dev/reference/methods/chat.scheduledMessages.list</a></p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.chat_startStream"><code class="name flex">
+<span>def <span class="ident">chat_startStream</span></span>(<span>self,<br>*,<br>channel: str,<br>thread_ts: str,<br>markdown_text: str | None = None,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_startStream(
+    self,
+    *,
+    channel: str,
+    thread_ts: str,
+    markdown_text: Optional[str] = None,
+    recipient_team_id: Optional[str] = None,
+    recipient_user_id: Optional[str] = None,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Starts a new streaming conversation.
+    https://docs.slack.dev/reference/methods/chat.startStream
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;thread_ts&#34;: thread_ts,
+            &#34;markdown_text&#34;: markdown_text,
+            &#34;recipient_team_id&#34;: recipient_team_id,
+            &#34;recipient_user_id&#34;: recipient_user_id,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.startStream&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Starts a new streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.startStream">https://docs.slack.dev/reference/methods/chat.startStream</a></p></div>
+</dd>
+<dt id="slack_sdk.web.legacy_client.LegacyWebClient.chat_stopStream"><code class="name flex">
+<span>def <span class="ident">chat_stopStream</span></span>(<span>self,<br>*,<br>channel: str,<br>ts: str,<br>markdown_text: str | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def chat_stopStream(
+    self,
+    *,
+    channel: str,
+    ts: str,
+    markdown_text: Optional[str] = None,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+    metadata: Optional[Union[Dict, Metadata]] = None,
+    **kwargs,
+) -&gt; Union[Future, SlackResponse]:
+    &#34;&#34;&#34;Stops a streaming conversation.
+    https://docs.slack.dev/reference/methods/chat.stopStream
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;ts&#34;: ts,
+            &#34;markdown_text&#34;: markdown_text,
+            &#34;blocks&#34;: blocks,
+            &#34;metadata&#34;: metadata,
+        }
+    )
+    _parse_web_class_objects(kwargs)
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;chat.stopStream&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Stops a streaming conversation.
+<a href="https://docs.slack.dev/reference/methods/chat.stopStream">https://docs.slack.dev/reference/methods/chat.stopStream</a></p></div>
 </dd>
 <dt id="slack_sdk.web.legacy_client.LegacyWebClient.chat_unfurl"><code class="name flex">
 <span>def <span class="ident">chat_unfurl</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>ts: str | None = None,<br>source: str | None = None,<br>unfurl_id: str | None = None,<br>unfurls: Dict[str, Dict] | None = None,<br>user_auth_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>user_auth_message: str | None = None,<br>user_auth_required: bool | None = None,<br>user_auth_url: str | None = None,<br>**kwargs) ‑> _asyncio.Future | <a title="slack_sdk.web.legacy_slack_response.LegacySlackResponse" href="legacy_slack_response.html#slack_sdk.web.legacy_slack_response.LegacySlackResponse">LegacySlackResponse</a></span>
@@ -14552,6 +14737,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.channels_setPurpose" href="#slack_sdk.web.legacy_client.LegacyWebClient.channels_setPurpose">channels_setPurpose</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.channels_setTopic" href="#slack_sdk.web.legacy_client.LegacyWebClient.channels_setTopic">channels_setTopic</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.channels_unarchive" href="#slack_sdk.web.legacy_client.LegacyWebClient.channels_unarchive">channels_unarchive</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_appendStream" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_appendStream">chat_appendStream</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_delete" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_delete">chat_delete</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_deleteScheduledMessage" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_deleteScheduledMessage">chat_deleteScheduledMessage</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_getPermalink" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_getPermalink">chat_getPermalink</a></code></li>
@@ -14560,6 +14746,8 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_postMessage" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_postMessage">chat_postMessage</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_scheduleMessage" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_scheduleMessage">chat_scheduleMessage</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_scheduledMessages_list" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_scheduledMessages_list">chat_scheduledMessages_list</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_startStream" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_startStream">chat_startStream</a></code></li>
+<li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_stopStream" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_stopStream">chat_stopStream</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_unfurl" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_unfurl">chat_unfurl</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.chat_update" href="#slack_sdk.web.legacy_client.LegacyWebClient.chat_update">chat_update</a></code></li>
 <li><code><a title="slack_sdk.web.legacy_client.LegacyWebClient.conversations_acceptSharedInvite" href="#slack_sdk.web.legacy_client.LegacyWebClient.conversations_acceptSharedInvite">conversations_acceptSharedInvite</a></code></li>

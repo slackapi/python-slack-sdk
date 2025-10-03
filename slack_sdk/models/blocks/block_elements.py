@@ -3,23 +3,24 @@ import logging
 import re
 import warnings
 from abc import ABCMeta
-from typing import Iterator, List, Optional, Set, Type, Union, Sequence, Dict, Any
+from typing import Any, Dict, Iterator, List, Optional, Sequence, Set, Type, Union
 
 from slack_sdk.models import show_unknown_key_warning
-from slack_sdk.models.basic_objects import (
-    JsonObject,
-    JsonValidator,
-    EnumValidator,
-)
-from .basic_components import ButtonStyles, Workflow, SlackFile
-from .basic_components import ConfirmObject
-from .basic_components import DispatchActionConfig
-from .basic_components import MarkdownTextObject
-from .basic_components import Option
-from .basic_components import OptionGroup
-from .basic_components import PlainTextObject
-from .basic_components import TextObject
+from slack_sdk.models.basic_objects import EnumValidator, JsonObject, JsonValidator
 
+from .basic_components import (
+    ButtonStyles,
+    ConfirmObject,
+    DispatchActionConfig,
+    FeedbackButtonObject,
+    MarkdownTextObject,
+    Option,
+    OptionGroup,
+    PlainTextObject,
+    SlackFile,
+    TextObject,
+    Workflow,
+)
 
 # -------------------------------------------------
 # Block Elements
@@ -540,6 +541,43 @@ class DateTimePickerElement(InputInteractiveElement):
 
 
 # -------------------------------------------------
+# Feedback Buttons Element
+# -------------------------------------------------
+
+
+class FeedbackButtonsElement(InteractiveElement):
+    type = "feedback_buttons"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"positive_button", "negative_button"})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        positive_button: Union[dict, FeedbackButtonObject],
+        negative_button: Union[dict, FeedbackButtonObject],
+        **others: dict,
+    ):
+        """Buttons to indicate positive or negative feedback.
+
+        Args:
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            positive_button (required): A button to indicate positive feedback.
+            negative_button (required): A button to indicate negative feedback.
+        """
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.positive_button = FeedbackButtonObject.parse(positive_button)
+        self.negative_button = FeedbackButtonObject.parse(negative_button)
+
+
+# -------------------------------------------------
 # Image
 # -------------------------------------------------
 
@@ -585,6 +623,59 @@ class ImageElement(BlockElement):
     @JsonValidator(f"alt_text attribute cannot exceed {alt_text_max_length} characters")
     def _validate_alt_text_length(self) -> bool:
         return len(self.alt_text) <= self.alt_text_max_length  # type: ignore[arg-type]
+
+
+# -------------------------------------------------
+# Icon Button Element
+# -------------------------------------------------
+
+
+class IconButtonElement(InteractiveElement):
+    type = "icon_button"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"icon", "text", "accessibility_label", "value", "visible_to_user_ids", "confirm"})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        icon: str,
+        text: Union[str, dict, TextObject],
+        accessibility_label: Optional[str] = None,
+        value: Optional[str] = None,
+        visible_to_user_ids: Optional[List[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        """An icon button to perform actions.
+
+        Args:
+            action_id: An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            icon (required): The icon to show (e.g., 'trash').
+            text (required): Defines an object containing some text.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
+            value: The button value.
+                Maximum length for this field is 2000 characters.
+            visible_to_user_ids: User IDs for which the icon appears.
+                Maximum length for this field is 10 user IDs.
+            confirm: A confirm object that defines an optional confirmation dialog after the button is clicked.
+        """
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.icon = icon
+        self.text = TextObject.parse(text, PlainTextObject.type)
+        self.accessibility_label = accessibility_label
+        self.value = value
+        self.visible_to_user_ids = visible_to_user_ids
+        self.confirm = ConfirmObject.parse(confirm) if confirm else None
 
 
 # -------------------------------------------------

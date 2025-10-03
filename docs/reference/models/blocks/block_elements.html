@@ -1843,6 +1843,89 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.block_elements.FeedbackButtonsElement"><code class="flex name class">
+<span>class <span class="ident">FeedbackButtonsElement</span></span>
+<span>(</span><span>*,<br>action_id: str | None = None,<br>positive_button: dict | <a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.FeedbackButtonObject">FeedbackButtonObject</a>,<br>negative_button: dict | <a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.FeedbackButtonObject">FeedbackButtonObject</a>,<br>**others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FeedbackButtonsElement(InteractiveElement):
+    type = &#34;feedback_buttons&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;positive_button&#34;, &#34;negative_button&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        positive_button: Union[dict, FeedbackButtonObject],
+        negative_button: Union[dict, FeedbackButtonObject],
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Buttons to indicate positive or negative feedback.
+
+        Args:
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            positive_button (required): A button to indicate positive feedback.
+            negative_button (required): A button to indicate negative feedback.
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.positive_button = FeedbackButtonObject.parse(positive_button)
+        self.negative_button = FeedbackButtonObject.parse(negative_button)</code></pre>
+</details>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
+<p>Buttons to indicate positive or negative feedback.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
+<dd>An identifier for this action.
+You can use this when you receive an interaction payload to identify the source of the action.
+Should be unique among all other action_ids in the containing block.
+Maximum length for this field is 255 characters.</dd>
+<dt><strong><code>positive_button</code></strong> :&ensp;<code>required</code></dt>
+<dd>A button to indicate positive feedback.</dd>
+<dt><strong><code>negative_button</code></strong> :&ensp;<code>required</code></dt>
+<dd>A button to indicate negative feedback.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.FeedbackButtonsElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.block_elements.FileInputElement"><code class="flex name class">
 <span>class <span class="ident">FileInputElement</span></span>
 <span>(</span><span>*,<br>action_id: str | None = None,<br>filetypes: List[str] | None = None,<br>max_files: int | None = None,<br>**others: dict)</span>
@@ -1958,6 +2041,117 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement.placeholder_max_length">placeholder_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.block_elements.IconButtonElement"><code class="flex name class">
+<span>class <span class="ident">IconButtonElement</span></span>
+<span>(</span><span>*,<br>action_id: str | None = None,<br>icon: str,<br>text: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>,<br>accessibility_label: str | None = None,<br>value: str | None = None,<br>visible_to_user_ids: List[str] | None = None,<br>confirm: dict | <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a> | None = None,<br>**others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IconButtonElement(InteractiveElement):
+    type = &#34;icon_button&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;icon&#34;, &#34;text&#34;, &#34;accessibility_label&#34;, &#34;value&#34;, &#34;visible_to_user_ids&#34;, &#34;confirm&#34;})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        icon: str,
+        text: Union[str, dict, TextObject],
+        accessibility_label: Optional[str] = None,
+        value: Optional[str] = None,
+        visible_to_user_ids: Optional[List[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;An icon button to perform actions.
+
+        Args:
+            action_id: An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            icon (required): The icon to show (e.g., &#39;trash&#39;).
+            text (required): Defines an object containing some text.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
+            value: The button value.
+                Maximum length for this field is 2000 characters.
+            visible_to_user_ids: User IDs for which the icon appears.
+                Maximum length for this field is 10 user IDs.
+            confirm: A confirm object that defines an optional confirmation dialog after the button is clicked.
+        &#34;&#34;&#34;
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.icon = icon
+        self.text = TextObject.parse(text, PlainTextObject.type)
+        self.accessibility_label = accessibility_label
+        self.value = value
+        self.visible_to_user_ids = visible_to_user_ids
+        self.confirm = ConfirmObject.parse(confirm) if confirm else None</code></pre>
+</details>
+<div class="desc"><p>Block Elements are things that exists inside of your Blocks.
+<a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
+<p>An icon button to perform actions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>action_id</code></strong></dt>
+<dd>An identifier for this action.
+You can use this when you receive an interaction payload to identify the source of the action.
+Should be unique among all other action_ids in the containing block.
+Maximum length for this field is 255 characters.</dd>
+<dt><strong><code>icon</code></strong> :&ensp;<code>required</code></dt>
+<dd>The icon to show (e.g., 'trash').</dd>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>Defines an object containing some text.</dd>
+<dt><strong><code>accessibility_label</code></strong></dt>
+<dd>A label for longer descriptive text about a button element.
+This label will be read out by screen readers instead of the button text object.
+Maximum length for this field is 75 characters.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>The button value.
+Maximum length for this field is 2000 characters.</dd>
+<dt><strong><code>visible_to_user_ids</code></strong></dt>
+<dd>User IDs for which the icon appears.
+Maximum length for this field is 10 user IDs.</dd>
+<dt><strong><code>confirm</code></strong></dt>
+<dd>A confirm object that defines an optional confirmation dialog after the button is clicked.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.BlockElement" href="#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.block_elements.IconButtonElement.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.block_elements.InteractiveElement" href="#slack_sdk.models.blocks.block_elements.InteractiveElement">InteractiveElement</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.action_id_max_length">action_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.attributes" href="#slack_sdk.models.blocks.block_elements.InteractiveElement.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.logger" href="#slack_sdk.models.blocks.block_elements.BlockElement.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.block_elements.InteractiveElement.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
 </li>
 </ul>
@@ -2259,6 +2453,8 @@ def subtype(self) -&gt; Optional[str]:
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.block_elements.ButtonElement" href="#slack_sdk.models.blocks.block_elements.ButtonElement">ButtonElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.FeedbackButtonsElement" href="#slack_sdk.models.blocks.block_elements.FeedbackButtonsElement">FeedbackButtonsElement</a></li>
+<li><a title="slack_sdk.models.blocks.block_elements.IconButtonElement" href="#slack_sdk.models.blocks.block_elements.IconButtonElement">IconButtonElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.InputInteractiveElement" href="#slack_sdk.models.blocks.block_elements.InputInteractiveElement">InputInteractiveElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.OverflowMenuElement" href="#slack_sdk.models.blocks.block_elements.OverflowMenuElement">OverflowMenuElement</a></li>
 <li><a title="slack_sdk.models.blocks.block_elements.WorkflowButtonElement" href="#slack_sdk.models.blocks.block_elements.WorkflowButtonElement">WorkflowButtonElement</a></li>
@@ -4946,10 +5142,22 @@ Maximum length for this field is 75 characters.</dd>
 </ul>
 </li>
 <li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.FeedbackButtonsElement" href="#slack_sdk.models.blocks.block_elements.FeedbackButtonsElement">FeedbackButtonsElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.FeedbackButtonsElement.type" href="#slack_sdk.models.blocks.block_elements.FeedbackButtonsElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement" href="#slack_sdk.models.blocks.block_elements.FileInputElement">FileInputElement</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement.attributes" href="#slack_sdk.models.blocks.block_elements.FileInputElement.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.block_elements.FileInputElement.type" href="#slack_sdk.models.blocks.block_elements.FileInputElement.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.block_elements.IconButtonElement" href="#slack_sdk.models.blocks.block_elements.IconButtonElement">IconButtonElement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.block_elements.IconButtonElement.type" href="#slack_sdk.models.blocks.block_elements.IconButtonElement.type">type</a></code></li>
 </ul>
 </li>
 <li>

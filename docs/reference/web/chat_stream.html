@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>slack_sdk.web.chat_stream API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.web.chat_stream</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.web.chat_stream.ChatStream"><code class="flex name class">
+<span>class <span class="ident">ChatStream</span></span>
+<span>(</span><span>client: WebClient,<br>*,<br>channel: str,<br>logger: logging.Logger,<br>thread_ts: str,<br>buffer_size: int,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ChatStream:
+    &#34;&#34;&#34;A helper class for streaming markdown text into a conversation using the chat streaming APIs.
+
+    This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API
+    methods, with automatic buffering and state management.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        client: &#34;WebClient&#34;,
+        *,
+        channel: str,
+        logger: logging.Logger,
+        thread_ts: str,
+        buffer_size: int,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        **kwargs,
+    ):
+        &#34;&#34;&#34;Initialize a new ChatStream instance.
+
+        The __init__ method creates a unique ChatStream instance that keeps track of one chat stream.
+
+        Args:
+            client: The WebClient instance to use for API calls.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            logger: A logging channel for outputs.
+            thread_ts: Provide another message&#39;s ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
+              decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
+            **kwargs: Additional arguments passed to the underlying API calls.
+        &#34;&#34;&#34;
+        self._client = client
+        self._logger = logger
+        self._token: Optional[str] = kwargs.pop(&#34;token&#34;, None)
+        self._stream_args = {
+            &#34;channel&#34;: channel,
+            &#34;thread_ts&#34;: thread_ts,
+            &#34;recipient_team_id&#34;: recipient_team_id,
+            &#34;recipient_user_id&#34;: recipient_user_id,
+            **kwargs,
+        }
+        self._buffer = &#34;&#34;
+        self._state = &#34;starting&#34;
+        self._stream_ts: Optional[str] = None
+        self._buffer_size = buffer_size
+
+    def append(
+        self,
+        *,
+        markdown_text: str,
+        **kwargs,
+    ) -&gt; Optional[SlackResponse]:
+        &#34;&#34;&#34;Append to the stream.
+
+        The &#34;append&#34; method appends to the chat stream being used. This method can be called multiple times. After the stream
+        is stopped this method cannot be called.
+
+        Args:
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+              what will be appended to the message received so far.
+            **kwargs: Additional arguments passed to the underlying API calls.
+
+        Returns:
+            SlackResponse if the buffer was flushed, None if buffering.
+
+        Raises:
+            SlackRequestError: If the stream is already completed.
+
+        Example:
+            ```python
+            streamer = client.chat_stream(
+                channel=&#34;C0123456789&#34;,
+                thread_ts=&#34;1700000001.123456&#34;,
+                recipient_team_id=&#34;T0123456789&#34;,
+                recipient_user_id=&#34;U0123456789&#34;,
+            )
+            streamer.append(markdown_text=&#34;**hello wo&#34;)
+            streamer.append(markdown_text=&#34;rld!**&#34;)
+            streamer.stop()
+            ```
+        &#34;&#34;&#34;
+        if self._state == &#34;completed&#34;:
+            raise e.SlackRequestError(f&#34;Cannot append to stream: stream state is {self._state}&#34;)
+        if kwargs.get(&#34;token&#34;):
+            self._token = kwargs.pop(&#34;token&#34;)
+        self._buffer += markdown_text
+        if len(self._buffer) &gt;= self._buffer_size:
+            return self._flush_buffer(**kwargs)
+        details = {
+            &#34;buffer_length&#34;: len(self._buffer),
+            &#34;buffer_size&#34;: self._buffer_size,
+            &#34;channel&#34;: self._stream_args.get(&#34;channel&#34;),
+            &#34;recipient_team_id&#34;: self._stream_args.get(&#34;recipient_team_id&#34;),
+            &#34;recipient_user_id&#34;: self._stream_args.get(&#34;recipient_user_id&#34;),
+            &#34;thread_ts&#34;: self._stream_args.get(&#34;thread_ts&#34;),
+        }
+        self._logger.debug(f&#34;ChatStream appended to buffer: {json.dumps(details)}&#34;)
+        return None
+
+    def stop(
+        self,
+        *,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Stop the stream and finalize the message.
+
+        Args:
+            blocks: A list of blocks that will be rendered at the bottom of the finalized message.
+            markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+              what will be appended to the message received so far.
+            metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
+              post to Slack is accessible to any app or user who is a member of that workspace.
+            **kwargs: Additional arguments passed to the underlying API calls.
+
+        Returns:
+            SlackResponse from the chat.stopStream API call.
+
+        Raises:
+            SlackRequestError: If the stream is already completed.
+
+        Example:
+            ```python
+            streamer = client.chat_stream(
+                channel=&#34;C0123456789&#34;,
+                thread_ts=&#34;1700000001.123456&#34;,
+                recipient_team_id=&#34;T0123456789&#34;,
+                recipient_user_id=&#34;U0123456789&#34;,
+            )
+            streamer.append(markdown_text=&#34;**hello wo&#34;)
+            streamer.append(markdown_text=&#34;rld!**&#34;)
+            streamer.stop()
+            ```
+        &#34;&#34;&#34;
+        if self._state == &#34;completed&#34;:
+            raise e.SlackRequestError(f&#34;Cannot stop stream: stream state is {self._state}&#34;)
+        if kwargs.get(&#34;token&#34;):
+            self._token = kwargs.pop(&#34;token&#34;)
+        if markdown_text:
+            self._buffer += markdown_text
+        if not self._stream_ts:
+            response = self._client.chat_startStream(
+                **self._stream_args,
+                token=self._token,
+            )
+            if not response.get(&#34;ts&#34;):
+                raise e.SlackRequestError(&#34;Failed to stop stream: stream not started&#34;)
+            self._stream_ts = str(response[&#34;ts&#34;])
+            self._state = &#34;in_progress&#34;
+        response = self._client.chat_stopStream(
+            token=self._token,
+            channel=self._stream_args[&#34;channel&#34;],
+            ts=self._stream_ts,
+            blocks=blocks,
+            markdown_text=self._buffer,
+            metadata=metadata,
+            **kwargs,
+        )
+        self._state = &#34;completed&#34;
+        return response
+
+    def _flush_buffer(self, **kwargs) -&gt; SlackResponse:
+        &#34;&#34;&#34;Flush the internal buffer by making appropriate API calls.&#34;&#34;&#34;
+        if not self._stream_ts:
+            response = self._client.chat_startStream(
+                **self._stream_args,
+                token=self._token,
+                **kwargs,
+                markdown_text=self._buffer,
+            )
+            self._stream_ts = response.get(&#34;ts&#34;)
+            self._state = &#34;in_progress&#34;
+        else:
+            response = self._client.chat_appendStream(
+                token=self._token,
+                channel=self._stream_args[&#34;channel&#34;],
+                ts=self._stream_ts,
+                **kwargs,
+                markdown_text=self._buffer,
+            )
+        self._buffer = &#34;&#34;
+        return response</code></pre>
+</details>
+<div class="desc"><p>A helper class for streaming markdown text into a conversation using the chat streaming APIs.</p>
+<p>This class provides a convenient interface for the chat.startStream, chat.appendStream, and chat.stopStream API
+methods, with automatic buffering and state management.</p>
+<p>Initialize a new ChatStream instance.</p>
+<p>The <strong>init</strong> method creates a unique ChatStream instance that keeps track of one chat stream.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>client</code></strong></dt>
+<dd>The WebClient instance to use for API calls.</dd>
+<dt><strong><code>channel</code></strong></dt>
+<dd>An encoded ID that represents a channel, private group, or DM.</dd>
+<dt><strong><code>logger</code></strong></dt>
+<dd>A logging channel for outputs.</dd>
+<dt><strong><code>thread_ts</code></strong></dt>
+<dd>Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+request.</dd>
+<dt><strong><code>recipient_team_id</code></strong></dt>
+<dd>The encoded ID of the team the user receiving the streaming text belongs to. Required when
+streaming to channels.</dd>
+<dt><strong><code>recipient_user_id</code></strong></dt>
+<dd>The encoded ID of the user to receive the streaming text. Required when streaming to channels.</dd>
+<dt><strong><code>buffer_size</code></strong></dt>
+<dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value
+decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Additional arguments passed to the underlying API calls.</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.web.chat_stream.ChatStream.append"><code class="name flex">
+<span>def <span class="ident">append</span></span>(<span>self, *, markdown_text: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a> | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append(
+    self,
+    *,
+    markdown_text: str,
+    **kwargs,
+) -&gt; Optional[SlackResponse]:
+    &#34;&#34;&#34;Append to the stream.
+
+    The &#34;append&#34; method appends to the chat stream being used. This method can be called multiple times. After the stream
+    is stopped this method cannot be called.
+
+    Args:
+        markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+          what will be appended to the message received so far.
+        **kwargs: Additional arguments passed to the underlying API calls.
+
+    Returns:
+        SlackResponse if the buffer was flushed, None if buffering.
+
+    Raises:
+        SlackRequestError: If the stream is already completed.
+
+    Example:
+        ```python
+        streamer = client.chat_stream(
+            channel=&#34;C0123456789&#34;,
+            thread_ts=&#34;1700000001.123456&#34;,
+            recipient_team_id=&#34;T0123456789&#34;,
+            recipient_user_id=&#34;U0123456789&#34;,
+        )
+        streamer.append(markdown_text=&#34;**hello wo&#34;)
+        streamer.append(markdown_text=&#34;rld!**&#34;)
+        streamer.stop()
+        ```
+    &#34;&#34;&#34;
+    if self._state == &#34;completed&#34;:
+        raise e.SlackRequestError(f&#34;Cannot append to stream: stream state is {self._state}&#34;)
+    if kwargs.get(&#34;token&#34;):
+        self._token = kwargs.pop(&#34;token&#34;)
+    self._buffer += markdown_text
+    if len(self._buffer) &gt;= self._buffer_size:
+        return self._flush_buffer(**kwargs)
+    details = {
+        &#34;buffer_length&#34;: len(self._buffer),
+        &#34;buffer_size&#34;: self._buffer_size,
+        &#34;channel&#34;: self._stream_args.get(&#34;channel&#34;),
+        &#34;recipient_team_id&#34;: self._stream_args.get(&#34;recipient_team_id&#34;),
+        &#34;recipient_user_id&#34;: self._stream_args.get(&#34;recipient_user_id&#34;),
+        &#34;thread_ts&#34;: self._stream_args.get(&#34;thread_ts&#34;),
+    }
+    self._logger.debug(f&#34;ChatStream appended to buffer: {json.dumps(details)}&#34;)
+    return None</code></pre>
+</details>
+<div class="desc"><p>Append to the stream.</p>
+<p>The "append" method appends to the chat stream being used. This method can be called multiple times. After the stream
+is stopped this method cannot be called.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>markdown_text</code></strong></dt>
+<dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+what will be appended to the message received so far.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Additional arguments passed to the underlying API calls.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>SlackResponse if the buffer was flushed, None if buffering.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>SlackRequestError</code></dt>
+<dd>If the stream is already completed.</dd>
+</dl>
+<h2 id="example">Example</h2>
+<pre><code class="language-python">streamer = client.chat_stream(
+    channel=&quot;C0123456789&quot;,
+    thread_ts=&quot;1700000001.123456&quot;,
+    recipient_team_id=&quot;T0123456789&quot;,
+    recipient_user_id=&quot;U0123456789&quot;,
+)
+streamer.append(markdown_text=&quot;**hello wo&quot;)
+streamer.append(markdown_text=&quot;rld!**&quot;)
+streamer.stop()
+</code></pre></div>
+</dd>
+<dt id="slack_sdk.web.chat_stream.ChatStream.stop"><code class="name flex">
+<span>def <span class="ident">stop</span></span>(<span>self,<br>*,<br>markdown_text: str | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop(
+    self,
+    *,
+    markdown_text: Optional[str] = None,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+    metadata: Optional[Union[Dict, Metadata]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Stop the stream and finalize the message.
+
+    Args:
+        blocks: A list of blocks that will be rendered at the bottom of the finalized message.
+        markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+          what will be appended to the message received so far.
+        metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
+          post to Slack is accessible to any app or user who is a member of that workspace.
+        **kwargs: Additional arguments passed to the underlying API calls.
+
+    Returns:
+        SlackResponse from the chat.stopStream API call.
+
+    Raises:
+        SlackRequestError: If the stream is already completed.
+
+    Example:
+        ```python
+        streamer = client.chat_stream(
+            channel=&#34;C0123456789&#34;,
+            thread_ts=&#34;1700000001.123456&#34;,
+            recipient_team_id=&#34;T0123456789&#34;,
+            recipient_user_id=&#34;U0123456789&#34;,
+        )
+        streamer.append(markdown_text=&#34;**hello wo&#34;)
+        streamer.append(markdown_text=&#34;rld!**&#34;)
+        streamer.stop()
+        ```
+    &#34;&#34;&#34;
+    if self._state == &#34;completed&#34;:
+        raise e.SlackRequestError(f&#34;Cannot stop stream: stream state is {self._state}&#34;)
+    if kwargs.get(&#34;token&#34;):
+        self._token = kwargs.pop(&#34;token&#34;)
+    if markdown_text:
+        self._buffer += markdown_text
+    if not self._stream_ts:
+        response = self._client.chat_startStream(
+            **self._stream_args,
+            token=self._token,
+        )
+        if not response.get(&#34;ts&#34;):
+            raise e.SlackRequestError(&#34;Failed to stop stream: stream not started&#34;)
+        self._stream_ts = str(response[&#34;ts&#34;])
+        self._state = &#34;in_progress&#34;
+    response = self._client.chat_stopStream(
+        token=self._token,
+        channel=self._stream_args[&#34;channel&#34;],
+        ts=self._stream_ts,
+        blocks=blocks,
+        markdown_text=self._buffer,
+        metadata=metadata,
+        **kwargs,
+    )
+    self._state = &#34;completed&#34;
+    return response</code></pre>
+</details>
+<div class="desc"><p>Stop the stream and finalize the message.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>blocks</code></strong></dt>
+<dd>A list of blocks that will be rendered at the bottom of the finalized message.</dd>
+<dt><strong><code>markdown_text</code></strong></dt>
+<dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
+what will be appended to the message received so far.</dd>
+<dt><strong><code>metadata</code></strong></dt>
+<dd>JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
+post to Slack is accessible to any app or user who is a member of that workspace.</dd>
+<dt><strong><code>**kwargs</code></strong></dt>
+<dd>Additional arguments passed to the underlying API calls.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>SlackResponse from the chat.stopStream API call.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>SlackRequestError</code></dt>
+<dd>If the stream is already completed.</dd>
+</dl>
+<h2 id="example">Example</h2>
+<pre><code class="language-python">streamer = client.chat_stream(
+    channel=&quot;C0123456789&quot;,
+    thread_ts=&quot;1700000001.123456&quot;,
+    recipient_team_id=&quot;T0123456789&quot;,
+    recipient_user_id=&quot;U0123456789&quot;,
+)
+streamer.append(markdown_text=&quot;**hello wo&quot;)
+streamer.append(markdown_text=&quot;rld!**&quot;)
+streamer.stop()
+</code></pre></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.web" href="index.html">slack_sdk.web</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.web.chat_stream.ChatStream" href="#slack_sdk.web.chat_stream.ChatStream">ChatStream</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.web.chat_stream.ChatStream.append" href="#slack_sdk.web.chat_stream.ChatStream.append">append</a></code></li>
+<li><code><a title="slack_sdk.web.chat_stream.ChatStream.stop" href="#slack_sdk.web.chat_stream.ChatStream.stop">stop</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

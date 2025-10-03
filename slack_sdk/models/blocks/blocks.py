@@ -4,19 +4,19 @@ import warnings
 from typing import Any, Dict, List, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
-from slack_sdk.models.basic_objects import (
-    JsonObject,
-    JsonValidator,
-)
-from .basic_components import MarkdownTextObject, SlackFile
-from .basic_components import PlainTextObject
-from .basic_components import TextObject
-from .block_elements import BlockElement, RichTextElement
-from .block_elements import ImageElement
-from .block_elements import InputInteractiveElement
-from .block_elements import InteractiveElement
-from ...errors import SlackObjectFormationError
+from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 
+from ...errors import SlackObjectFormationError
+from .basic_components import MarkdownTextObject, PlainTextObject, SlackFile, TextObject
+from .block_elements import (
+    BlockElement,
+    FeedbackButtonsElement,
+    IconButtonElement,
+    ImageElement,
+    InputInteractiveElement,
+    InteractiveElement,
+    RichTextElement,
+)
 
 # -------------------------------------------------
 # Base Classes
@@ -79,6 +79,8 @@ class Block(JsonObject):
                     return ActionsBlock(**block)
                 elif type == ContextBlock.type:
                     return ContextBlock(**block)
+                elif type == ContextActionsBlock.type:
+                    return ContextActionsBlock(**block)
                 elif type == InputBlock.type:
                     return InputBlock(**block)
                 elif type == FileBlock.type:
@@ -351,6 +353,44 @@ class ContextBlock(Block):
         show_unknown_key_warning(self, others)
 
         self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator(f"elements attribute cannot exceed {elements_max_length} elements")
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) <= self.elements_max_length
+
+
+class ContextActionsBlock(Block):
+    type = "context_actions"
+    elements_max_length = 5
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"elements"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, FeedbackButtonsElement, IconButtonElement]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays actions as contextual info, which can include both feedback buttons and icon buttons.
+
+        Args:
+            elements (required): An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator("elements attribute must be specified")
+    def _validate_elements(self):
+        return self.elements is None or len(self.elements) > 0
 
     @JsonValidator(f"elements attribute cannot exceed {elements_max_length} elements")
     def _validate_elements_length(self):
