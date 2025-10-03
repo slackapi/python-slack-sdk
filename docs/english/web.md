@@ -61,7 +61,7 @@ You can have your app's messages stream in to replicate conventional AI chatbot 
 * [`chat_appendStream`](/reference/methods/chat.appendstream)
 * [`chat_stopStream`](/reference/methods/chat.stopstream)
 
-:::tip [The Python Slack SDK provides a [`chat_stream()`](https://docss.slack.dev/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods.]
+:::tip [The Python Slack SDK provides a [`chat_stream()`](/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods.]
 
 See the [_Streaming messages_](/tools/bolt-python/concepts/message-sending#streaming-messages) section of the Bolt for Python docs for implementation instructions. 
 
@@ -75,12 +75,16 @@ First you need to begin the message stream:
 # Example: Stream a response to any message
 @app.message()
 def handle_message(message, client):
-    channel_id = payload["channel"]
-    thread_ts = payload["thread_ts"]
+    channel_id = event.get("channel")
+    team_id = event.get("team")
+    thread_ts = event.get("thread_ts") or event.get("ts")
+    user_id = event.get("user")
     
     # Start a new message stream
     stream_response = client.chat_startStream(
         channel=channel_id,
+        recipient_team_id=team_id,
+        recipient_user_id=user_id,
         thread_ts=thread_ts,
     )
     stream_ts = stream_response["ts"]
@@ -117,7 +121,7 @@ Your app can then end the stream with the `chat_stopStream` method:
     )
 ```
 
-The method also provides you an opportunity to request user feedback on your app's responses using the [feedback buttons](/reference/block-kit/block-elements/feedback-buttons-element) block element within the [context actions](/reference/block-kit/blocks/context-actions-block) block. The user will be presented with thumbs up and thumbs down buttons.
+The method also provides you an opportunity to request user feedback on your app's responses using the [feedback buttons](/reference/block-kit/block-elements/feedback-buttons-element) block element within the [context actions](/reference/block-kit/blocks/context-actions-block) block. The user will be presented with thumbs up and thumbs down buttons which send an action to your app when pressed.
 
 ```python
 def create_feedback_block() -> List[Block]:
