@@ -67,7 +67,7 @@ See the [_Streaming messages_](/tools/bolt-python/concepts/message-sending#strea
 
 :::
 
-#### Starting the message stream
+#### Starting the message stream {#starting-stream}
 
 First you need to begin the message stream:
 
@@ -86,7 +86,7 @@ def handle_message(message, client):
     stream_ts = stream_response["ts"]
 ```
 
-#### Appending content to the message stream
+#### Appending content to the message stream {#appending-stream}
 
 With the stream started, you can then append text to it in chunks to convey a streaming effect.
 
@@ -105,7 +105,7 @@ The structure of the text coming in will depend on your source. The following co
             continue
 ```
 
-#### Finishing the message stream
+#### Stopping the message stream {#stopping-stream}
 
 Your app can then end the stream with the `chat_stopStream` method:
 
