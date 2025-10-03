@@ -2939,7 +2939,7 @@ class AsyncWebClient(AsyncBaseClient):
     ) -> AsyncChatStream:
         """Stream markdown text into a conversation.
 
-        This method starts a new chat stream in a coversation that can be appended to. After appending an entire message,
+        This method starts a new chat stream in a conversation that can be appended to. After appending an entire message,
         the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.
 
         The following methods are used:
