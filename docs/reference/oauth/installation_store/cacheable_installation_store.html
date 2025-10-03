@@ -74,7 +74,7 @@ el.replaceWith(d);
     def logger(self) -&gt; Logger:
         return self.underlying.logger
 
-    def save(self, installation: Installation):  # type: ignore[explicit-override]
+    def save(self, installation: Installation):
         # Invalidate cache data for update operations
         key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
@@ -85,14 +85,14 @@ el.replaceWith(d);
 
         return self.underlying.save(installation)
 
-    def save_bot(self, bot: Bot):  # type: ignore[explicit-override]
+    def save_bot(self, bot: Bot):
         # Invalidate cache data for update operations
         key = f&#34;{bot.enterprise_id or &#39;&#39;}-{bot.team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
             self.cached_bots.pop(key)
         return self.underlying.save_bot(bot)
 
-    def find_bot(  # type: ignore[explicit-override]
+    def find_bot(
         self,
         *,
         enterprise_id: Optional[str],
@@ -113,7 +113,7 @@ el.replaceWith(d);
             self.cached_bots[key] = bot
         return bot
 
-    def find_installation(  # type: ignore[explicit-override]
+    def find_installation(
         self,
         *,
         enterprise_id: Optional[str],

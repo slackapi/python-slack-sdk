@@ -1,6 +1,6 @@
 """Modules for implementing the Slack OAuth flow
 
-https://slack.dev/python-slack-sdk/oauth/
+https://docs.slack.dev/tools/python-slack-sdk/oauth
 """
 from .authorize_url_generator import AuthorizeUrlGenerator
 from .authorize_url_generator import OpenIDConnectAuthorizeUrlGenerator

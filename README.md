@@ -27,13 +27,13 @@ Whether you're building a custom app for your team, or integrating a third party
 The **Python Slack SDK** allows interaction with:
 
 - `slack_sdk.web`: for calling the [Web API methods][api-methods]
-- `slack_sdk.webhook`: for utilizing the [Incoming Webhooks](https://api.slack.com/messaging/webhooks) and [`response_url`s in payloads](https://api.slack.com/interactivity/handling#message_responses)
-- `slack_sdk.signature`: for [verifying incoming requests from the Slack API server](https://api.slack.com/authentication/verifying-requests-from-slack)
-- `slack_sdk.socket_mode`: for receiving and sending messages over [Socket Mode](https://api.slack.com/socket-mode) connections
-- `slack_sdk.audit_logs`: for utilizing [Audit Logs APIs](https://api.slack.com/admins/audit-logs)
-- `slack_sdk.scim`: for utilizing [SCIM APIs](https://api.slack.com/admins/scim)
-- `slack_sdk.oauth`: for implementing the [Slack OAuth flow](https://api.slack.com/authentication/oauth-v2)
-- `slack_sdk.models`: for constructing [Block Kit](https://api.slack.com/block-kit) UI components using easy-to-use builders
+- `slack_sdk.webhook`: for utilizing the [Incoming Webhooks](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/) and [`response_url`s in payloads](https://docs.slack.dev/interactivity/handling-user-interaction/#message_responses)
+- `slack_sdk.signature`: for [verifying incoming requests from the Slack API server](https://docs.slack.dev/authentication/verifying-requests-from-slack/)
+- `slack_sdk.socket_mode`: for receiving and sending messages over [Socket Mode](https://docs.slack.dev/apis/events-api/using-socket-mode/) connections
+- `slack_sdk.audit_logs`: for utilizing [Audit Logs APIs](https://docs.slack.dev/admins/audit-logs-api/)
+- `slack_sdk.scim`: for utilizing [SCIM APIs](https://docs.slack.dev/admins/scim-api/)
+- `slack_sdk.oauth`: for implementing the [Slack OAuth flow](https://docs.slack.dev/authentication/installing-with-oauth/)
+- `slack_sdk.models`: for constructing [Block Kit](https://docs.slack.dev/block-kit/) UI components using easy-to-use builders
 - `slack_sdk.rtm`: for utilizing the [RTM API][rtm-docs]
 
 If you want to use our [Events API][events-docs] and Interactivity features, please check the [Bolt for Python][bolt-python] library. Details on the Tokens and Authentication can be found in our [Auth Guide](https://docs.slack.dev/tools/python-slack-sdk/installation/).
@@ -293,9 +293,9 @@ helpful and collaborative way.
 <!-- Markdown links -->
 
 [slackclientv1]: https://github.com/slackapi/python-slackclient/tree/v1
-[api-methods]: https://api.slack.com/methods
-[rtm-docs]: https://api.slack.com/rtm
-[events-docs]: https://api.slack.com/events-api
+[api-methods]: https://docs.slack.dev/reference/methods
+[rtm-docs]: https://docs.slack.dev/legacy/legacy-rtm-api/
+[events-docs]: https://docs.slack.dev/apis/events-api/
 [bolt-python]: https://github.com/slackapi/bolt-python
 [pypi]: https://pypi.org/
 [gh-issues]: https://github.com/slackapi/python-slack-sdk/issues

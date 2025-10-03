@@ -100,7 +100,7 @@ and message responses using response_url in payloads.</p>
     ):
         &#34;&#34;&#34;API client for Incoming Webhooks and `response_url`
 
-        https://api.slack.com/messaging/webhooks
+        https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/
 
         Args:
             url: Complete URL to send data (e.g., `https://hooks.slack.com/XXX`)
@@ -319,19 +319,19 @@ and message responses using response_url in payloads.</p>
             http_resp = opener.open(req, timeout=self.timeout)
         else:
             http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)
-        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;  # type: ignore[union-attr]
-        response_body: str = http_resp.read().decode(charset)  # type: ignore[union-attr]
+        charset: str = http_resp.headers.get_content_charset() or &#34;utf-8&#34;
+        response_body: str = http_resp.read().decode(charset)
         resp = WebhookResponse(
             url=url,
-            status_code=http_resp.status,  # type: ignore[union-attr]
+            status_code=http_resp.status,
             body=response_body,
-            headers=http_resp.headers,  # type: ignore[arg-type, union-attr]
+            headers=http_resp.headers,  # type: ignore[arg-type]
         )
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
 </details>
 <div class="desc"><p>API client for Incoming Webhooks and <code>response_url</code></p>
-<p><a href="https://api.slack.com/messaging/webhooks">https://api.slack.com/messaging/webhooks</a></p>
+<p><a href="https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/">https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>url</code></strong></dt>
