@@ -82,8 +82,8 @@ el.replaceWith(d);
         return json</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p></div>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.attachments.Action" href="#slack_sdk.models.attachments.Action">Action</a></li>
@@ -161,8 +161,8 @@ def data_source_valid(self):
 </summary>
 <pre><code class="python">class Action(JsonObject):
     &#34;&#34;&#34;Action in attachments
-    https://api.slack.com/messaging/composing/layouts#attachments
-    https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields
+    https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts
+    https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields
     &#34;&#34;&#34;
 
     attributes = {&#34;name&#34;, &#34;text&#34;, &#34;url&#34;}
@@ -190,8 +190,8 @@ def data_source_valid(self):
         return json</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p></div>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -265,7 +265,7 @@ def name_or_url_present(self):
     ):
         &#34;&#34;&#34;Simple button for use inside attachments
 
-        https://api.slack.com/legacy/message-buttons
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-message-buttons/
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -303,10 +303,10 @@ def name_or_url_present(self):
         return json</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Simple button for use inside attachments</p>
-<p><a href="https://api.slack.com/legacy/message-buttons">https://api.slack.com/legacy/message-buttons</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-message-buttons/">https://docs.slack.dev/legacy/legacy-messaging/legacy-message-buttons/</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -416,7 +416,7 @@ def value_length(self):
         Automatically populate the selector with a list of public channels in the
         workspace.
 
-        https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_channels
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -430,11 +430,11 @@ def value_length(self):
         super().__init__(name=name, text=text, selected_option=selected_channel)</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Automatically populate the selector with a list of public channels in the
 workspace.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels">https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_channels">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_channels</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -492,7 +492,7 @@ value.</dd>
         Automatically populate the selector with a list of conversations they have in
         the workspace.
 
-        https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_conversations
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -506,11 +506,11 @@ value.</dd>
         super().__init__(name=name, text=text, selected_option=selected_conversation)</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Automatically populate the selector with a list of conversations they have in
 the workspace.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations">https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_conversations">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_conversations</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -578,7 +578,7 @@ value.</dd>
         &#34;&#34;&#34;
         Populate a message select menu from your own application dynamically.
 
-        https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_dynamic
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -595,10 +595,10 @@ value.</dd>
         self.min_query_length = min_query_length</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Populate a message select menu from your own application dynamically.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically">https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_dynamic">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_dynamic</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -669,7 +669,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     def __init__(self, *, text: str, url: str):
         &#34;&#34;&#34;A simple interactive button that just opens a URL
 
-        https://api.slack.com/messaging/composing/layouts#attachments
+        https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts
 
         Args:
           text: text to display on the button, eg &#39;Click Me!&#34;
@@ -678,10 +678,10 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         super().__init__(text=text, url=url, subtype=&#34;button&#34;)</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>A simple interactive button that just opens a URL</p>
-<p><a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a></p>
+<p><a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>text</code></strong></dt>
@@ -722,7 +722,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     def __init__(self, name: str, text: str, selected_user: Optional[Option] = None):
         &#34;&#34;&#34;Automatically populate the selector with a list of users in the workspace.
 
-        https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_team_members
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -736,10 +736,10 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         super().__init__(name=name, text=text, selected_option=selected_user)</code></pre>
 </details>
 <div class="desc"><p>Action in attachments
-<a href="https://api.slack.com/messaging/composing/layouts#attachments">https://api.slack.com/messaging/composing/layouts#attachments</a>
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields">https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields</a></p>
+<a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Automatically populate the selector with a list of users in the workspace.</p>
-<p><a href="https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members">https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_team_members">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_team_members</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -840,7 +840,7 @@ value.</dd>
         A supplemental object that will display after the rest of the message.
         Considered legacy - recommended replacement is to use message blocks instead.
 
-        https://api.slack.com/reference/messaging/attachments#fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
 
         Args:
             text: The main body text of the attachment. It can be formatted as
@@ -956,7 +956,7 @@ value.</dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>A supplemental object that will display after the rest of the message.
 Considered legacy - recommended replacement is to use message blocks instead.</p>
-<p><a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>text</code></strong></dt>
@@ -1247,7 +1247,7 @@ def ts_without_footer(self) -&gt; bool:
         A bridge between legacy attachments and Block Kit formatting - pass a list of
         Block objects directly to this attachment.
 
-        https://api.slack.com/reference/messaging/attachments#fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
 
         Args:
             blocks: a sequence of Block objects
@@ -1272,7 +1272,7 @@ def ts_without_footer(self) -&gt; bool:
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>A bridge between legacy attachments and Block Kit formatting - pass a list of
 Block objects directly to this attachment.</p>
-<p><a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>blocks</code></strong></dt>
@@ -1386,8 +1386,8 @@ def fields_attribute_absent(self) -&gt; bool:
         An Attachment, but designed to contain interactive Actions
         Considered legacy - recommended replacement is to use message blocks instead.
 
-        https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields
-        https://api.slack.com/reference/messaging/attachments#fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#attachment_fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
 
         Args:
             actions: A collection of Action objects to include in the attachment.
@@ -1481,8 +1481,8 @@ def fields_attribute_absent(self) -&gt; bool:
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>An Attachment, but designed to contain interactive Actions
 Considered legacy - recommended replacement is to use message blocks instead.</p>
-<p><a href="https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields">https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields</a>
-<a href="https://api.slack.com/reference/messaging/attachments#fields">https://api.slack.com/reference/messaging/attachments#fields</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#attachment_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#attachment_fields</a>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>actions</code></strong></dt>
