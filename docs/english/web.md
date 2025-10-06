@@ -33,6 +33,8 @@ except SlackApiError as e:
     assert e.response["error"]    # str like 'invalid_auth', 'channel_not_found'
 ```
 
+### Sending ephemeral messages
+
 Sending an ephemeral message, which is only visible to an assigned user in a specified channel, is nearly the same as sending a regular message but with an additional `user` parameter.
 
 ``` python
@@ -50,6 +52,114 @@ response = client.chat_postEphemeral(
 ```
 
 See the [`chat.postEphemeral`](/reference/methods/chat.postEphemeral) API method for more details.
+
+### Sending streaming messages {#sending-streaming-messages}
+
+You can have your app's messages stream in to replicate conventional AI chatbot behavior. This is done through three Web API methods:
+
+* [`chat_startStream`](/reference/methods/chat.startstream)
+* [`chat_appendStream`](/reference/methods/chat.appendstream)
+* [`chat_stopStream`](/reference/methods/chat.stopstream)
+
+:::tip[The Python Slack SDK provides a [`chat_stream()`](https://docs.slack.dev/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods.]
+
+See the [_Streaming messages_](/tools/bolt-python/concepts/message-sending#streaming-messages) section of the Bolt for Python docs for implementation instructions. 
+
+:::
+
+#### Starting the message stream {#starting-stream}
+
+First you need to begin the message stream:
+
+```python
+# Example: Stream a response to any message
+@app.message()
+def handle_message(message, client):
+    channel_id = event.get("channel")
+    team_id = event.get("team")
+    thread_ts = event.get("thread_ts") or event.get("ts")
+    user_id = event.get("user")
+    
+    # Start a new message stream
+    stream_response = client.chat_startStream(
+        channel=channel_id,
+        recipient_team_id=team_id,
+        recipient_user_id=user_id,
+        thread_ts=thread_ts,
+    )
+    stream_ts = stream_response["ts"]
+```
+
+#### Appending content to the message stream {#appending-stream}
+
+With the stream started, you can then append text to it in chunks to convey a streaming effect.
+
+The structure of the text coming in will depend on your source. The following code snippet uses OpenAI's response structure as an example:
+
+```python
+# continued from above
+    for event in returned_message:
+        if event.type == "response.output_text.delta":
+            client.chat_appendStream(
+                channel=channel_id, 
+                ts=stream_ts, 
+                markdown_text=f"{event.delta}"
+            )
+        else:
+            continue
+```
+
+#### Stopping the message stream {#stopping-stream}
+
+Your app can then end the stream with the `chat_stopStream` method:
+
+```python
+# continued from above
+    client.chat_stopStream(
+        channel=channel_id, 
+        ts=stream_ts
+    )
+```
+
+The method also provides you an opportunity to request user feedback on your app's responses using the [feedback buttons](/reference/block-kit/block-elements/feedback-buttons-element) block element within the [context actions](/reference/block-kit/blocks/context-actions-block) block. The user will be presented with thumbs up and thumbs down buttons which send an action to your app when pressed.
+
+```python
+def create_feedback_block() -> List[Block]:
+    blocks: List[Block] = [
+        ContextActionsBlock(
+            elements=[
+                FeedbackButtonsElement(
+                    action_id="feedback",
+                    positive_button=FeedbackButtonObject(
+                        text="Good Response",
+                        accessibility_label="Submit positive feedback on this response",
+                        value="good-feedback",
+                    ),
+                    negative_button=FeedbackButtonObject(
+                        text="Bad Response",
+                        accessibility_label="Submit negative feedback on this response",
+                        value="bad-feedback",
+                    ),
+                )
+            ]
+        )
+    ]
+    return blocks
+
+@app.message()
+def handle_message(message, client):
+    # ... previous streaming code ...
+    
+    # Stop the stream and add interactive elements
+    feedback_block = create_feedback_block()
+    client.chat_stopStream(
+        channel=channel_id, 
+        ts=stream_ts, 
+        blocks=feedback_block
+    )
+```
+
+See [Formatting messages with Block Kit](#block-kit) below for more details on using Block Kit with messages.
 
 ## Formatting messages with Block Kit {#block-kit}
 
