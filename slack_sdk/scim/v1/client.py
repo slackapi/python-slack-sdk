@@ -2,7 +2,7 @@
 SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools,
 including Slack.
 
-Refer to https://slack.dev/python-slack-sdk/scim/ for details.
+Refer to https://docs.slack.dev/tools/python-slack-sdk/scim/ for details.
 """
 
 import json
@@ -76,7 +76,7 @@ class SCIMClient:
         retry_handlers: Optional[List[RetryHandler]] = None,
     ):
         """API client for SCIM API
-        See https://api.slack.com/scim for more details
+        See https://docs.slack.dev/admins/scim-api/ for more details
 
         Args:
             token: An admin user's token, which starts with `xoxp-`

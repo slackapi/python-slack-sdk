@@ -1,26 +1,14 @@
 import copy
 import unittest
-from typing import Optional, List, Union
+from typing import List, Optional, Union
 
 from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models import JsonObject, JsonValidator
-from slack_sdk.models.blocks import (
-    ConfirmObject,
-    MarkdownTextObject,
-    Option,
-    OptionGroup,
-    PlainTextObject,
-)
-from slack_sdk.models.blocks.basic_components import Workflow, WorkflowTrigger
-from slack_sdk.models.messages import (
-    ChannelLink,
-    DateLink,
-    EveryoneLink,
-    HereLink,
-    Link,
-    ObjectLink,
-)
-from . import STRING_301_CHARS, STRING_51_CHARS
+from slack_sdk.models.blocks import ConfirmObject, MarkdownTextObject, Option, OptionGroup, PlainTextObject
+from slack_sdk.models.blocks.basic_components import FeedbackButtonObject, Workflow, WorkflowTrigger
+from slack_sdk.models.messages import ChannelLink, DateLink, EveryoneLink, HereLink, Link, ObjectLink
+
+from . import STRING_51_CHARS, STRING_301_CHARS
 
 
 class SimpleJsonObject(JsonObject):
@@ -372,6 +360,58 @@ class ConfirmObjectTests(unittest.TestCase):
     def test_deny_length(self):
         with self.assertRaises(SlackObjectFormationError):
             ConfirmObject(title="title", text="Are you sure?", deny=STRING_51_CHARS).to_dict()
+
+
+class FeedbackButtonObjectTests(unittest.TestCase):
+    def test_basic_json(self):
+        feedback_button = FeedbackButtonObject(text="+1", value="positive")
+        expected = {"text": {"emoji": True, "text": "+1", "type": "plain_text"}, "value": "positive"}
+        self.assertDictEqual(expected, feedback_button.to_dict())
+
+    def test_with_accessibility_label(self):
+        feedback_button = FeedbackButtonObject(text="+1", value="positive", accessibility_label="Positive feedback button")
+        expected = {
+            "text": {"emoji": True, "text": "+1", "type": "plain_text"},
+            "value": "positive",
+            "accessibility_label": "Positive feedback button",
+        }
+        self.assertDictEqual(expected, feedback_button.to_dict())
+
+    def test_with_plain_text_object(self):
+        text_obj = PlainTextObject(text="-1", emoji=False)
+        feedback_button = FeedbackButtonObject(text=text_obj, value="negative")
+        expected = {
+            "text": {"emoji": False, "text": "-1", "type": "plain_text"},
+            "value": "negative",
+        }
+        self.assertDictEqual(expected, feedback_button.to_dict())
+
+    def test_text_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            FeedbackButtonObject(text="a" * 76, value="test").to_dict()
+
+    def test_value_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            FeedbackButtonObject(text="+1", value="a" * 2001).to_dict()
+
+    def test_parse_from_dict(self):
+        data = {"text": "+1", "value": "positive", "accessibility_label": "Positive feedback"}
+        parsed = FeedbackButtonObject.parse(data)
+        self.assertIsInstance(parsed, FeedbackButtonObject)
+        expected = {
+            "text": {"emoji": True, "text": "+1", "type": "plain_text"},
+            "value": "positive",
+            "accessibility_label": "Positive feedback",
+        }
+        self.assertDictEqual(expected, parsed.to_dict())
+
+    def test_parse_from_existing_object(self):
+        original = FeedbackButtonObject(text="-1", value="negative")
+        parsed = FeedbackButtonObject.parse(original)
+        self.assertIs(original, parsed)
+
+    def test_parse_none(self):
+        self.assertIsNone(FeedbackButtonObject.parse(None))
 
 
 class OptionTests(unittest.TestCase):

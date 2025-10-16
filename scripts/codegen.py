@@ -1,5 +1,5 @@
-import sys
 import argparse
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--path", help="Path to the project source code.", type=str)
@@ -35,7 +35,6 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
         "from .async_base_client import AsyncBaseClient, AsyncSlackResponse",
         async_source,
     )
-    # from slack_sdk import WebClient
     async_source = re.sub(
         r"class WebClient\(BaseClient\):",
         "class AsyncWebClient(AsyncBaseClient):",
@@ -47,6 +46,28 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
         async_source,
     )
     async_source = re.sub(r"= WebClient\(", "= AsyncWebClient(", async_source)
+    async_source = re.sub(
+        "from slack_sdk.web.chat_stream import ChatStream",
+        "from slack_sdk.web.async_chat_stream import AsyncChatStream",
+        async_source,
+    )
+    async_source = re.sub(r"ChatStream:", "AsyncChatStream:", async_source)
+    async_source = re.sub(r"ChatStream\(", "AsyncChatStream(", async_source)
+    async_source = re.sub(
+        r" client.chat_stream\(",
+        " await client.chat_stream(",
+        async_source,
+    )
+    async_source = re.sub(
+        r" streamer.append\(",
+        " await streamer.append(",
+        async_source,
+    )
+    async_source = re.sub(
+        r" streamer.stop\(",
+        " await streamer.stop(",
+        async_source,
+    )
     async_source = re.sub(
         r" self.files_getUploadURLExternal\(",
         " await self.files_getUploadURLExternal(",
@@ -98,5 +119,35 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
         legacy_source,
     )
     legacy_source = re.sub(r"= WebClient\(", "= LegacyWebClient(", legacy_source)
+    legacy_source = re.sub(r"^from slack_sdk.web.chat_stream import ChatStream\n", "", legacy_source, flags=re.MULTILINE)
+    legacy_source = re.sub(r"(?s)def chat_stream.*?(?=def)", "", legacy_source)
     with open(f"{args.path}/slack_sdk/web/legacy_client.py", "w") as output:
         output.write(legacy_source)
+
+with open(f"{args.path}/slack_sdk/web/chat_stream.py", "r") as original:
+    source = original.read()
+    import re
+
+    async_source = header + source
+    async_source = re.sub(
+        "from slack_sdk.web.slack_response import SlackResponse",
+        "from slack_sdk.web.async_slack_response import AsyncSlackResponse",
+        async_source,
+    )
+    async_source = re.sub(
+        r"from slack_sdk import WebClient",
+        "from slack_sdk.web.async_client import AsyncWebClient",
+        async_source,
+    )
+    async_source = re.sub("class ChatStream", "class AsyncChatStream", async_source)
+    async_source = re.sub('"WebClient"', '"AsyncWebClient"', async_source)
+    async_source = re.sub(r"Optional\[SlackResponse\]", "Optional[AsyncSlackResponse]", async_source)
+    async_source = re.sub(r"SlackResponse ", "AsyncSlackResponse ", async_source)
+    async_source = re.sub(r"SlackResponse:", "AsyncSlackResponse:", async_source)
+    async_source = re.sub(r"def append\(", "async def append(", async_source)
+    async_source = re.sub(r"def stop\(", "async def stop(", async_source)
+    async_source = re.sub(r"def _flush_buffer\(", "async def _flush_buffer(", async_source)
+    async_source = re.sub("self._client.chat_", "await self._client.chat_", async_source)
+    async_source = re.sub("self._flush_buffer", "await self._flush_buffer", async_source)
+    with open(f"{args.path}/slack_sdk/web/async_chat_stream.py", "w") as output:
+        output.write(async_source)

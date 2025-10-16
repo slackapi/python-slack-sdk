@@ -5,7 +5,7 @@ from slack_sdk.models.basic_objects import JsonObject
 class Metadata(JsonObject):
     """Message metadata
 
-    https://api.slack.com/metadata
+    https://docs.slack.dev/messaging/message-metadata/
     """
 
     attributes = {

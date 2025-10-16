@@ -56,7 +56,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ConfirmObject(JsonObject):
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
 
     title_max_length = 100
     text_max_length = 300
@@ -88,7 +88,7 @@ el.replaceWith(d);
         An object that defines a dialog that provides a confirmation step to any
         interactive element. This dialog will ask the user to confirm their action by
         offering a confirm and deny button.
-        https://api.slack.com/reference/block-kit/composition-objects#confirm
+        https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/
         &#34;&#34;&#34;
         self._title = TextObject.parse(title, default_type=PlainTextObject.type)
         self._text = TextObject.parse(text, default_type=MarkdownTextObject.type)
@@ -156,7 +156,7 @@ el.replaceWith(d);
 <p>An object that defines a dialog that provides a confirmation step to any
 interactive element. This dialog will ask the user to confirm their action by
 offering a confirm and deny button.
-<a href="https://api.slack.com/reference/block-kit/composition-objects#confirm">https://api.slack.com/reference/block-kit/composition-objects#confirm</a></p></div>
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/">https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -164,7 +164,7 @@ offering a confirm and deny button.
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -295,7 +295,7 @@ def title_length(self) -&gt; bool:
     ):
         &#34;&#34;&#34;
         Determines when a plain-text input element will return a block_actions interaction payload.
-        https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config
+        https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object
         &#34;&#34;&#34;
         self._trigger_actions_on = trigger_actions_on or []
 
@@ -308,7 +308,7 @@ def title_length(self) -&gt; bool:
 </details>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>Determines when a plain-text input element will return a block_actions interaction payload.
-<a href="https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config">https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config</a></p></div>
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object">https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -327,6 +327,157 @@ def title_length(self) -&gt; bool:
 <span>def <span class="ident">parse</span></span>(<span>config: ForwardRef('<a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>') | Dict[str, Any])</span>
 </code></dt>
 <dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject"><code class="flex name class">
+<span>class <span class="ident">FeedbackButtonObject</span></span>
+<span>(</span><span>*,<br>text: str | Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a>,<br>accessibility_label: str | None = None,<br>value: str,<br>**others: Dict[str, Any])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FeedbackButtonObject(JsonObject):
+    attributes: Set[str] = set()
+
+    text_max_length = 75
+    value_max_length = 2000
+
+    @classmethod
+    def parse(cls, feedback_button: Union[&#34;FeedbackButtonObject&#34;, Dict[str, Any]]):
+        if feedback_button:
+            if isinstance(feedback_button, FeedbackButtonObject):
+                return feedback_button
+            elif isinstance(feedback_button, dict):
+                return FeedbackButtonObject(**feedback_button)
+            else:
+                # Not yet implemented: show some warning here
+                return None
+        return None
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, Dict[str, Any], PlainTextObject],
+        accessibility_label: Optional[str] = None,
+        value: str,
+        **others: Dict[str, Any],
+    ):
+        &#34;&#34;&#34;
+        A feedback button element object for either positive or negative feedback.
+
+        Args:
+            text (required): An object containing some text. Maximum length for this field is 75 characters.
+            accessibility_label: A label for longer descriptive text about a button element. This label will be read out by
+                screen readers instead of the button `text` object.
+            value (required): The button value. Maximum length for this field is 2000 characters.
+        &#34;&#34;&#34;
+        self._text: Optional[TextObject] = PlainTextObject.parse(text, default_type=PlainTextObject.type)
+        self._accessibility_label: Optional[str] = accessibility_label
+        self._value: Optional[str] = value
+        show_unknown_key_warning(self, others)
+
+    @JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+    def text_length(self) -&gt; bool:
+        return self._text is None or len(self._text.text) &lt;= self.text_max_length
+
+    @JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
+    def value_length(self) -&gt; bool:
+        return self._value is None or len(self._value) &lt;= self.value_max_length
+
+    def to_dict(self) -&gt; Dict[str, Any]:
+        self.validate_json()
+        json: Dict[str, Union[str, dict]] = {}
+        if self._text:
+            json[&#34;text&#34;] = self._text.to_dict()
+        if self._accessibility_label:
+            json[&#34;accessibility_label&#34;] = self._accessibility_label
+        if self._value:
+            json[&#34;value&#34;] = self._value
+        return json</code></pre>
+</details>
+<div class="desc"><p>The base class for JSON serializable class objects</p>
+<p>A feedback button element object for either positive or negative feedback.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>An object containing some text. Maximum length for this field is 75 characters.</dd>
+<dt><strong><code>accessibility_label</code></strong></dt>
+<dd>A label for longer descriptive text about a button element. This label will be read out by
+screen readers instead of the button <code>text</code> object.</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>required</code></dt>
+<dd>The button value. Maximum length for this field is 2000 characters.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.text_max_length"><code class="name">var <span class="ident">text_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.value_max_length"><code class="name">var <span class="ident">value_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>feedback_button: ForwardRef('<a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject">FeedbackButtonObject</a>') | Dict[str, Any])</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.text_length"><code class="name flex">
+<span>def <span class="ident">text_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;text attribute cannot exceed {text_max_length} characters&#34;)
+def text_length(self) -&gt; bool:
+    return self._text is None or len(self._text.text) &lt;= self.text_max_length</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.value_length"><code class="name flex">
+<span>def <span class="ident">value_length</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@JsonValidator(f&#34;value attribute cannot exceed {value_max_length} characters&#34;)
+def value_length(self) -&gt; bool:
+    return self._value is None or len(self._value) &lt;= self.value_max_length</code></pre>
+</details>
 <div class="desc"></div>
 </dd>
 </dl>
@@ -362,7 +513,7 @@ def title_length(self) -&gt; bool:
     def __init__(self, *, text: str, verbatim: Optional[bool] = None):
         &#34;&#34;&#34;A Markdown text object, meaning markdown characters will be parsed as
         formatting information.
-        https://api.slack.com/reference/block-kit/composition-objects#text
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
             text (required): The text for the block. This field accepts any of the standard text formatting markup
@@ -406,7 +557,7 @@ def title_length(self) -&gt; bool:
 <div class="desc"><p>mrkdwn typed text object</p>
 <p>A Markdown text object, meaning markdown characters will be parsed as
 formatting information.
-<a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
@@ -546,7 +697,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     different required formats in different situations
     &#34;&#34;&#34;
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     logger = logging.getLogger(__name__)
 
     label_max_length = 75
@@ -568,13 +719,13 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         (StaticDialogSelectElement)
 
         Blocks:
-        https://api.slack.com/reference/block-kit/composition-objects#option
+        https://docs.slack.dev/reference/block-kit/composition-objects/option-object
 
         Dialogs:
-        https://api.slack.com/dialogs#select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
 
         Legacy interactive attachments:
-        https://api.slack.com/legacy/interactive-message-field-guide#option_fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields
 
         Args:
             label: A short, user-facing string to label this option to users.
@@ -693,11 +844,11 @@ different required formats in different situations</p>
 SelectElement, OverflowMenuElement) or dialog element
 (StaticDialogSelectElement)</p>
 <p>Blocks:
-<a href="https://api.slack.com/reference/block-kit/composition-objects#option">https://api.slack.com/reference/block-kit/composition-objects#option</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/option-object">https://docs.slack.dev/reference/block-kit/composition-objects/option-object</a></p>
 <p>Dialogs:
-<a href="https://api.slack.com/dialogs#select_elements">https://api.slack.com/dialogs#select_elements</a></p>
+<a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
 <p>Legacy interactive attachments:
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#option_fields">https://api.slack.com/legacy/interactive-message-field-guide#option_fields</a></p>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>label</code></strong></dt>
@@ -719,7 +870,7 @@ dialogs.</dd>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.basic_components.Option.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.blocks.basic_components.Option.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -828,7 +979,7 @@ correct shape.</p></div>
     different required formats in different situations
     &#34;&#34;&#34;
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     label_max_length = 75
     options_max_length = 100
     logger = logging.getLogger(__name__)
@@ -845,13 +996,13 @@ correct shape.</p></div>
         UI) and a list of Option objects.
 
         Blocks:
-        https://api.slack.com/reference/block-kit/composition-objects#option-group
+        https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object
 
         Dialogs:
-        https://api.slack.com/dialogs#select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
 
         Legacy interactive attachments:
-        https://api.slack.com/legacy/interactive-message-field-guide#option_groups_to_place_within_message_menu_actions
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups
 
         Args:
             label: Text to display at the top of this group of options.
@@ -913,11 +1064,11 @@ different required formats in different situations</p>
 <p>Create a group of Option objects - pass in a label (that will be part of the
 UI) and a list of Option objects.</p>
 <p>Blocks:
-<a href="https://api.slack.com/reference/block-kit/composition-objects#option-group">https://api.slack.com/reference/block-kit/composition-objects#option-group</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object">https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object</a></p>
 <p>Dialogs:
-<a href="https://api.slack.com/dialogs#select_elements">https://api.slack.com/dialogs#select_elements</a></p>
+<a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
 <p>Legacy interactive attachments:
-<a href="https://api.slack.com/legacy/interactive-message-field-guide#option_groups_to_place_within_message_menu_actions">https://api.slack.com/legacy/interactive-message-field-guide#option_groups_to_place_within_message_menu_actions</a></p>
+<a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>label</code></strong></dt>
@@ -932,7 +1083,7 @@ UI) and a list of Option objects.</p>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.blocks.basic_components.OptionGroup.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.blocks.basic_components.OptionGroup.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -990,7 +1141,7 @@ UI) and a list of Option objects.</p>
     def __init__(self, *, text: str, emoji: Optional[bool] = None):
         &#34;&#34;&#34;A plain text object, meaning markdown characters will not be parsed as
         formatting information.
-        https://api.slack.com/reference/block-kit/composition-objects#text
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
             text (required): The text for the block. This field accepts any of the standard text formatting markup
@@ -1013,7 +1164,7 @@ UI) and a list of Option objects.</p>
 <div class="desc"><p>plain_text typed text object</p>
 <p>A plain text object, meaning markdown characters will not be parsed as
 formatting information.
-<a href="https://api.slack.com/reference/block-kit/composition-objects#text">https://api.slack.com/reference/block-kit/composition-objects#text</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
@@ -1114,7 +1265,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         url: Optional[str] = None,
     ):
         &#34;&#34;&#34;An object containing Slack file information to be used in an image block or image element.
-        https://api.slack.com/reference/block-kit/composition-objects#slack_file
+        https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object
 
         Args:
             id: Slack ID of the file.
@@ -1134,7 +1285,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>An object containing Slack file information to be used in an image block or image element.
-<a href="https://api.slack.com/reference/block-kit/composition-objects#slack_file">https://api.slack.com/reference/block-kit/composition-objects#slack_file</a></p>
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object">https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>id</code></strong></dt>
@@ -1424,6 +1575,17 @@ def subtype(self) -&gt; Optional[str]:
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig.attributes" href="#slack_sdk.models.blocks.basic_components.DispatchActionConfig.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig.parse" href="#slack_sdk.models.blocks.basic_components.DispatchActionConfig.parse">parse</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject">FeedbackButtonObject</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.attributes" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.parse" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject.parse">parse</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.text_length" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject.text_length">text_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.text_max_length" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject.text_max_length">text_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.value_length" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject.value_length">value_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.value_max_length" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject.value_max_length">value_max_length</a></code></li>
 </ul>
 </li>
 <li>

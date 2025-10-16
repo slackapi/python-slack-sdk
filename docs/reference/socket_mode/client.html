@@ -167,7 +167,7 @@ el.replaceWith(d);
 
             for listener in self.message_listeners:
                 try:
-                    listener(self, message, raw_message)  # type: ignore[call-arg, arg-type]
+                    listener(self, message, raw_message)  # type: ignore[call-arg, arg-type, misc]
                 except Exception as e:
                     self.logger.exception(f&#34;Failed to run a message listener: {e}&#34;)
 
@@ -431,7 +431,7 @@ el.replaceWith(d);
 
         for listener in self.message_listeners:
             try:
-                listener(self, message, raw_message)  # type: ignore[call-arg, arg-type]
+                listener(self, message, raw_message)  # type: ignore[call-arg, arg-type, misc]
             except Exception as e:
                 self.logger.exception(f&#34;Failed to run a message listener: {e}&#34;)
 
