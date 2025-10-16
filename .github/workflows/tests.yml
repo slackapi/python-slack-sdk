@@ -98,7 +98,7 @@ jobs:
     needs:
       - typecheck
       - unittest
-    if: ${{ !success() && github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch' }}
+    if: ${{ !success() && github.event_name != 'workflow_dispatch' }}
     steps:
       - name: Send notifications of failing tests
         uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
