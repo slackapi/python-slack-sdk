@@ -19,7 +19,7 @@ You can hook `pyenv` into your shell automatically by running `pyenv init` and f
 
 Install necessary Python runtimes for development/testing. It is not necessary
 to install all the various Python versions we test in [continuous integration on
-GitHub Actions](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/ci-build.yml),
+GitHub Actions](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/tests.yml),
 but make sure you are running at least one version that we execute our tests in
 locally so that you can run the tests yourself.
 
@@ -56,7 +56,7 @@ run `source env_3.9.6/bin/activate` again.
 The last step is to install this project's dependencies and run all unit tests; to do so, you can run
 
 ```bash
-$ ./scripts/run_validation.sh 
+$ ./scripts/run_validation.sh
 ```
 
 Also check out [how
@@ -74,7 +74,7 @@ When you make changes to this SDK, please write unit tests verifying if the chan
 Run all the unit tests, code formatter, and code analyzer:
 
 ```bash
-$ ./scripts/run_validation.sh 
+$ ./scripts/run_validation.sh
 ```
 
 Run all the unit tests (no formatter nor code analyzer):
