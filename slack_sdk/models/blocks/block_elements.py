@@ -2032,11 +2032,13 @@ class RichTextElementParts:
             italic: Optional[bool] = None,
             strike: Optional[bool] = None,
             code: Optional[bool] = None,
+            underline: Optional[bool] = None,
         ):
             self.bold = bold
             self.italic = italic
             self.strike = strike
             self.code = code
+            self.underline = underline
 
         def to_dict(self, *args) -> dict:
             result = {
@@ -2044,6 +2046,7 @@ class RichTextElementParts:
                 "italic": self.italic,
                 "strike": self.strike,
                 "code": self.code,
+                "underline": self.underline,
             }
             return {k: v for k, v in result.items() if v is not None}
 
