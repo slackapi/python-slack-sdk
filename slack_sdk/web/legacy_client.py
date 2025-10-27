@@ -4837,6 +4837,249 @@ class LegacyWebClient(LegacyBaseClient):
         )
         return self.api_call("search.messages", http_verb="GET", params=kwargs)
 
+    def slackLists_access_delete(
+        self,
+        *,
+        list_id: str,
+        channel_ids: Optional[List[str]] = None,
+        user_ids: Optional[List[str]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Revoke access to a List for specified entities.
+        https://docs.slack.dev/reference/methods/slacklists.access.delete
+        """
+        kwargs.update({"list_id": list_id, "channel_ids": channel_ids, "user_ids": user_ids})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.access.delete", json=kwargs)
+
+    def slackLists_access_set(
+        self,
+        *,
+        list_id: str,
+        access_level: str,
+        channel_ids: Optional[List[str]] = None,
+        user_ids: Optional[List[str]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set the access level to a List for specified entities.
+        https://docs.slack.dev/reference/methods/slacklists.access.set
+        """
+        kwargs.update({"list_id": list_id, "access_level": access_level, "channel_ids": channel_ids, "user_ids": user_ids})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.access.set", json=kwargs)
+
+    def slackLists_create(
+        self,
+        *,
+        name: str,
+        description_blocks: Optional[List[Dict[str, Any]]] = None,
+        schema: Optional[List[Dict[str, Any]]] = None,
+        copy_from_list_id: Optional[str] = None,
+        include_copied_list_records: Optional[bool] = None,
+        todo_mode: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Creates a List.
+        https://docs.slack.dev/reference/methods/slacklists.create
+        """
+        kwargs.update(
+            {
+                "name": name,
+                "description_blocks": description_blocks,
+                "schema": schema,
+                "copy_from_list_id": copy_from_list_id,
+                "include_copied_list_records": include_copied_list_records,
+                "todo_mode": todo_mode,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.create", json=kwargs)
+
+    def slackLists_download_get(
+        self,
+        *,
+        list_id: str,
+        job_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Retrieve List download URL from an export job to download List contents.
+        https://docs.slack.dev/reference/methods/slacklists.download.get
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "job_id": job_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.download.get", json=kwargs)
+
+    def slackLists_download_start(
+        self,
+        *,
+        list_id: str,
+        include_archived: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Initiate a job to export List contents.
+        https://docs.slack.dev/reference/methods/slacklists.download.start
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "include_archived": include_archived,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.download.start", json=kwargs)
+
+    def slackLists_items_create(
+        self,
+        *,
+        list_id: str,
+        duplicated_item_id: Optional[str] = None,
+        parent_item_id: Optional[str] = None,
+        initial_fields: Optional[List[Dict[str, Any]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Add a new item to an existing List.
+        https://docs.slack.dev/reference/methods/slacklists.items.create
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "duplicated_item_id": duplicated_item_id,
+                "parent_item_id": parent_item_id,
+                "initial_fields": initial_fields,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.items.create", json=kwargs)
+
+    def slackLists_items_delete(
+        self,
+        *,
+        list_id: str,
+        id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Deletes an item from an existing List.
+        https://docs.slack.dev/reference/methods/slacklists.items.delete
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "id": id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.items.delete", json=kwargs)
+
+    def slackLists_items_deleteMultiple(
+        self,
+        *,
+        list_id: str,
+        ids: List[str],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Deletes multiple items from an existing List.
+        https://docs.slack.dev/reference/methods/slacklists.items.deletemultiple
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "ids": ids,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.items.deleteMultiple", json=kwargs)
+
+    def slackLists_items_info(
+        self,
+        *,
+        list_id: str,
+        id: str,
+        include_is_subscribed: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Get a row from a List.
+        https://docs.slack.dev/reference/methods/slacklists.items.info
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "id": id,
+                "include_is_subscribed": include_is_subscribed,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.items.info", json=kwargs)
+
+    def slackLists_items_list(
+        self,
+        *,
+        list_id: str,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        archived: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Get records from a List.
+        https://docs.slack.dev/reference/methods/slacklists.items.list
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "limit": limit,
+                "cursor": cursor,
+                "archived": archived,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.items.list", json=kwargs)
+
+    def slackLists_items_update(
+        self,
+        *,
+        list_id: str,
+        cells: List[Dict[str, Any]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Updates cells in a List.
+        https://docs.slack.dev/reference/methods/slacklists.items.update
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "cells": cells,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.items.update", json=kwargs)
+
+    def slackLists_update(
+        self,
+        *,
+        id: str,
+        name: Optional[str] = None,
+        description_blocks: Optional[List[Dict[str, Any]]] = None,
+        todo_mode: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Update a List.
+        https://docs.slack.dev/reference/methods/slacklists.update
+        """
+        kwargs.update(
+            {
+                "id": id,
+                "name": name,
+                "description_blocks": description_blocks,
+                "todo_mode": todo_mode,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("slackLists.update", json=kwargs)
+
     def stars_add(
         self,
         *,
