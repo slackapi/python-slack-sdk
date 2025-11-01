@@ -8,7 +8,7 @@ pytest-cov>=2,<8
 flake8>=5.0.4,<8
 #  Don't change this version without running CI builds;
 #  The latest version may not be available for older Python runtime
-black==22.10.0;
+black==25.9.0;
 click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
 psutil>=6.0.0,<8
 #  used only under slack_sdk/*_store
