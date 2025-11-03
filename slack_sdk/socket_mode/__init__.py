@@ -4,6 +4,7 @@ and performing interactions with Slack.
 
 https://docs.slack.dev/apis/events-api/using-socket-mode/
 """
+
 from .builtin import SocketModeClient
 
 __all__ = [

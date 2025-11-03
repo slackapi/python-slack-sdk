@@ -2,6 +2,7 @@
 
 Refer to https://docs.slack.dev/tools/python-slack-sdk/audit-logs for details.
 """
+
 from .v1.client import AuditLogsClient
 from .v1.response import AuditLogsResponse
 
