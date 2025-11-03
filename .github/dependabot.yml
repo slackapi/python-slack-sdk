@@ -10,9 +10,6 @@ updates:
     open-pull-requests-limit: 5
     ignore:
       - dependency-name: "black"
-        update-types: 
-          - version-update:semver-patch
-          - version-update:semver-minor
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
