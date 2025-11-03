@@ -18,7 +18,7 @@ The Slack platform offers several APIs to build apps. Each Slack API delivers pa
 | Request Signature Verification | Verify incoming requests from the Slack API servers. | `slack_sdk.signature` |
 | UI Builders | Construct UI components using easy-to-use builders.   | `slack_sdk.models` |
 
-You can also view the [Python module documents](https://docs.slack.dev/python-slack-sdk/reference)!
+You can also view the [Python module documents](https://docs.slack.dev/tools/python-slack-sdk/reference)!
 
 ## Getting help {#getting-help}
 
