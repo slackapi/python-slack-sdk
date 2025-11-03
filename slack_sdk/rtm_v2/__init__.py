@@ -1,4 +1,5 @@
 """A Python module for interacting with Slack's RTM API."""
+
 import inspect
 import json
 import logging
