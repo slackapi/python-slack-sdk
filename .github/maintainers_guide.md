@@ -233,7 +233,7 @@ the last tag is in a releasable state! At a minimum, [run the tests](#unit-tests
 
 ### Versioning and Tags
 
-This project uses semantic versioning, expressed through the numbering scheme of
+This project uses [Semantic Versioning](http://semver.org/), expressed through the numbering scheme of
 [PEP-0440](https://www.python.org/dev/peps/pep-0440/).
 
 ### Branches
