@@ -162,107 +162,70 @@ Alternatively, you can deploy from your local machine with:
 
 #### Development Deployment
 
-Deploying a new version of this library to Pypi is triggered by publishing a Github Release.
+Deploying a new version of this library to PyPI is triggered by publishing a GitHub Release.
 Before creating a new release, ensure that everything on a stable branch has
 landed, then [run the tests](#unit-tests).
 
-1. Create a branch in which the development release will live:
-   - Bump the version number in adherence to
-     [Semantic Versioning](http://semver.org/) and
-     [Developmental Release](https://peps.python.org/pep-0440/#developmental-releases)
-     in `slack_sdk/version.py`
-     - Example the current version is `1.2.3` a proper development bump would be
-       `1.2.3.dev0`
-     - `.dev` will indicate to pip that this is a
-       [Development Release](https://peps.python.org/pep-0440/#developmental-releases)
-     - Note that the `dev` version can be bumped in development releases:
-       `1.2.3.dev0` -> `1.2.3.dev1`
-   - Build the docs with `./scripts/generate_api_docs.sh`.
-   - Commit with a message including the new version number. For example
-     `1.2.3.dev0` & Push the commit to a branch where the development release
-     will live (create it if it does not exist)
-     - `git checkout -b future-release`
-     - `git commit -m 'version 1.2.3.dev0'`
-     - `git push -u origin future-release`
-2. Create a new GitHub Release from the
-   [Releases page](https://github.com/slackapi/python-slack-sdk/releases) by
-   clicking the "Draft a new release" button.
-3. Input the version manually into the "Choose a tag" input. You must use the
-   same version found in `slack_sdk/version.py`
-
-   - After you input the new version, click the "Create a new tag: x.x.x on
-     publish" button. This won't create your tag immediately.
-   - Auto-generate the release notes by clicking the "Auto-generate release
-     notes" button. This will pull in changes that will be included in your
-     release.
-   - Edit the resulting notes to ensure they have decent messaging that are
-     understandable by non-contributors, but each commit should still have it's
-     own line.
-   - Ensure that this version adheres to
-     [semantic versioning](http://semver.org/) and
-     [Developmental Release](https://peps.python.org/pep-0440/#developmental-releases).
-     See [Versioning](#versioning-and-tags) for correct version format.
-
-4. Set the "Target" input to the feature branch with the development changes.
-5. Name the release title after the version tag. It should match the updated
-   value from `slack_sdk/version.py`!
-6. Make any adjustments to generated release notes to make sure they are
-   accessible and approachable and that an end-user with little context about
-   this project could still understand.
-7. Select "Set as a pre-release"
-8. Publish the release by clicking the "Publish release" button!
-9. After a few minutes, the corresponding version will be available on
-   <https://pypi.org/project/slack-sdk/>.
-10. (Slack Internal) Communicate the release internally
+1. Create the commit for the release
+   1. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and [Developmental Release](https://peps.python.org/pep-0440/#developmental-releases).
+      - Example: if the current version is `1.2.3`, a proper development bump would be `1.2.4.dev0`
+      - `.dev` will indicate to pip that this is a [Development Release](https://peps.python.org/pep-0440/#developmental-releases)
+      - Note that the `dev` version can be bumped in development releases: `1.2.4.dev0` -> `1.2.4.dev1`
+   2. Build the docs with `./scripts/generate_api_docs.sh`.
+   3. Commit with a message including the new version number. For example `1.2.4.dev0` & push the commit to a branch where the development release will live (create it if it does not exist)
+      1. `git checkout -b future-release`
+      2. `git commit -m 'chore(release): version 1.2.4.dev0'`
+      3. `git push -u origin future-release`
+2. Create a new GitHub Release
+   1. Navigate to the [Releases page](https://github.com/slackapi/python-slack-sdk/releases).
+   2. Click the "Draft a new release" button.
+   3. Set the "Target" to the feature branch with the development changes.
+   4. Click "Tag: Select tag"
+   5. Input a new tag name manually. The tag name must match the version in `slack_sdk/version.py` prefixed with "v" (e.g., if version is `1.2.4.dev0`, enter `v1.2.4.dev0`)
+   6. Click the "Create a new tag" button. This won't create your tag immediately.
+   7. Click the "Generate release notes" button.
+   8. The release name should match the tag name!
+   9. Edit the resulting notes to ensure they have decent messaging that is understandable by non-contributors, but each commit should still have its own line.
+   10. Set this release as a pre-release.
+   11. Publish the release by clicking the "Publish release" button!
+3. Navigate to the [release workflow run](https://github.com/slackapi/python-slack-sdk/actions/workflows/pypi-release.yml). You will need to approve the deployment!
+4. After a few minutes, the corresponding version will be available on <https://pypi.org/project/slack-sdk>.
+5. (Slack Internal) Communicate the release internally
 
 #### Production Deployment
 
-Deploying a new version of this library to Pypi is triggered by publishing a Github Release.
+Deploying a new version of this library to PyPI is triggered by publishing a GitHub Release.
 Before creating a new release, ensure that everything on the `main` branch since
-the last tag is in a releasable state! At a minimum,
-[run the tests](#unit-tests).
+the last tag is in a releasable state! At a minimum, [run the tests](#unit-tests).
 
 1. Create the commit for the release
-   - Bump the version number in adherence to
-     [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
-   - Build the docs with `./scripts/generate_api_docs.sh`.
-   - Commit with a message including the new version number. For example `1.2.3`
-     & Push the commit to a branch and create a PR to sanity check.
-     - `git checkout -b 1.2.3-release`
-     - `git commit -m 'chore(release): tag version 1.2.3'`
-     - `git push {your-fork} 1.2.3-release`
-   - Add relevant labels to the PR and add the PR to a GitHub Milestone.
-   - Merge in release PR after getting an approval from at least one maintainer.
-2. Create a new GitHub Release from the
-   [Releases page](https://github.com/slackapi/python-slack-sdk/releases) by
-   clicking the "Draft a new release" button.
-3. Input the version manually into the "Choose a tag" input. You must use the
-   same version found in `slack_sdk/version.py`
-
-   - After you input the version, click the "Create a new tag: x.x.x on publish"
-     button. This won't create your tag immediately.
-   - Click the "Auto-generate release notes" button. This will pull in changes
-     that will be included in your release.
-   - Edit the resulting notes to ensure they have decent messaging that are
-     understandable by non-contributors, but each commit should still have it's
-     own line.
-   - Ensure that this version adheres to
-     [semantic versioning](http://semver.org/). See
-     [Versioning](#versioning-and-tags) for correct version format.
-
-4. Set the "Target" input to the "main" branch.
-5. Name the release title after the version tag. It should match the updated
-   value from `slack_sdk/version.py`!
-6. Make any adjustments to generated release notes to make sure they are
-   accessible and approachable and that an end-user with little context about
-   this project could still understand.
-7. Publish the release by clicking the "Publish release" button!
-8. After a few minutes, the corresponding version will be available on
-   <https://pypi.org/project/slack-sdk/>.
-9. Close the current GitHub Milestone and create one for the next minor version.
-10. (Slack Internal) Communicate the release internally
+   1. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and the [Versioning](#versioning-and-tags) section.
+   2. Build the docs with `./scripts/generate_api_docs.sh`.
+   3. Commit with a message including the new version number. For example `1.2.3` & push the commit to a branch and create a PR to sanity check.
+      1. `git checkout -b 1.2.3-release`
+      2. `git commit -m 'chore(release): version 1.2.3'`
+      3. `git push -u origin 1.2.3-release`
+   4. Add relevant labels to the PR and add the PR to a GitHub Milestone.
+   5. Merge in release PR after getting an approval from at least one maintainer.
+2. Create a new GitHub Release
+   1. Navigate to the [Releases page](https://github.com/slackapi/python-slack-sdk/releases).
+   2. Click the "Draft a new release" button.
+   3. Set the "Target" to the `main` branch.
+   4. Click "Tag: Select tag"
+   5. Input a new tag name manually. The tag name must match the version in `slack_sdk/version.py` prefixed with "v" (e.g., if version is `1.2.3`, enter `v1.2.3`)
+   6. Click the "Create a new tag" button. This won't create your tag immediately.
+   7. Click the "Generate release notes" button.
+   8. The release name should match the tag name!
+   9. Edit the resulting notes to ensure they have decent messaging that is understandable by non-contributors, but each commit should still have its own line.
+   10. Include a link to the current GitHub Milestone.
+   11. Ensure the "latest release" checkbox is checked to mark this as the latest stable release.
+   12. Publish the release by clicking the "Publish release" button!
+3. Navigate to the [release workflow run](https://github.com/slackapi/python-slack-sdk/actions/workflows/pypi-release.yml). You will need to approve the deployment!
+4. After a few minutes, the corresponding version will be available on <https://pypi.org/project/slack-sdk>.
+5. Close the current GitHub Milestone and create one for the next patch version.
+6. (Slack Internal) Communicate the release internally
     - Include a link to the GitHub release
-11. (Slack Internal) Tweet by @SlackAPI
+7. (Slack Internal) Tweet by @SlackAPI
     - Not necessary for patch updates, might be needed for minor updates,
       definitely needed for major updates. Include a link to the GitHub release
 
