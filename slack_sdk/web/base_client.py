@@ -348,6 +348,7 @@ class BaseClient:
         Returns:
             dict {status: int, headers: Headers, body: str}
         """
+
         headers = args["headers"]
         body: Optional[Union[bytes, str]] = None
         if args["json"]:
