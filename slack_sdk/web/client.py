@@ -2988,7 +2988,7 @@ class WebClient(BaseClient):
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
         unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
-        metadata: Optional[dict] = None,
+        metadata: Optional[Union[Dict, EventAndEntityMetadata]] = None,
         user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
