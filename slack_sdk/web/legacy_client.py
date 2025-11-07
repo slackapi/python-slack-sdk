@@ -3588,8 +3588,8 @@ class LegacyWebClient(LegacyBaseClient):
 
     def entity_presentDetails(
         self,
+        trigger_id: str,
         metadata: Optional[dict] = None,
-        trigger_id: str = None,
         user_auth_required: Optional[bool] = None,
         user_auth_url: Optional[str] = None,
         error: Optional[Dict[str, str]] = None,
