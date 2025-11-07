@@ -40,7 +40,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
             if callable(method) and hasattr(method, "validator"):
                 method()
 
-    def get_attribute(self: object, key: str):
+    def get_object_attribute(self, key: str):
         return getattr(self, key, None)
 
     def get_non_null_attributes(self) -> dict:
@@ -60,7 +60,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
                     return value
 
         def is_not_empty(self, key: str) -> bool:
-            value = self.get_attribute(self, key)
+            value = self.get_object_attribute(key)
             if value is None:
                 return False
 
@@ -78,7 +78,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
                 return value is not None
 
         return {
-            key: to_dict_compatible(value=self.get_attribute(self, key))
+            key: to_dict_compatible(value=self.get_object_attribute(key))
             for key in sorted(self.attributes)
             if is_not_empty(self, key)
         }

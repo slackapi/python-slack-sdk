@@ -6,12 +6,12 @@ import json
 
 from integration_tests.env_variable_names import SLACK_SDK_TEST_BOT_TOKEN
 from slack_sdk.models.metadata import (
-    Metadata, EventAndEntityMetadata, EntityMetadata, EntityType, ExternalRef, 
+    Metadata, EventAndEntityMetadata, EntityMetadata, ExternalRef, 
     EntityPayload, EntityAttributes, EntityTitle, TaskEntityFields, EntityStringField,
     EntityTitle, EntityAttributes, EntityFullSizePreview,
     TaskEntityFields, EntityTypedField, EntityStringField, EntityTimestampField,
     EntityEditSupport, EntityEditTextConfig, EntityCustomField, EntityUserIDField,
-    EntityIconField, ExternalRef as CustomExternalRef
+    EntityIconField, ExternalRef as CustomExternalRef, EntityArrayItemField
 )
 from slack_sdk.web import WebClient
 
@@ -135,7 +135,7 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNotNone(scheduled.get("message").get("metadata"))
 
     def test_publishing_entity_metadata(self):
-        client: WebClient = WebClient(token=self.bot_token,base_url='https://dev.slack.com/api/')
+        client: WebClient = WebClient(token=self.bot_token)
         new_message = client.chat_postMessage(
             channel="C014KLZN9M0",
             text="Message with entity metadata",
@@ -238,14 +238,14 @@ class TestWebClient(unittest.TestCase):
             custom_fields=custom_fields
         )
 
-        client: WebClient = WebClient(token=self.bot_token,base_url='https://dev.slack.com/api/')
+        client: WebClient = WebClient(token=self.bot_token)
         new_message = client.chat_postMessage(
             channel="C014KLZN9M0",
             text="Message with entity metadata",
             metadata=EventAndEntityMetadata(
                 entities=[
                     EntityMetadata(
-                    entity_type=EntityType.TASK,
+                    entity_type="slack#/entities/task",
                     external_ref=ExternalRef(id="abc123"),
                     url="https://myappdomain.com",
                     entity_payload=entity,
