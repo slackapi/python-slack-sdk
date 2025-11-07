@@ -40,7 +40,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
             if callable(method) and hasattr(method, "validator"):
                 method()
 
-    def get_attribute(self, key: str):
+    def get_attribute(self: object, key: str):
         return getattr(self, key, None)
 
     def get_non_null_attributes(self) -> dict:

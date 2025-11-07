@@ -1112,7 +1112,7 @@ class EntityPayload(JsonObject):
         """Set the entity attributes data."""
         self._entity_attributes = value
 
-    def get_attribute(self, key: str):
+    def get_attribute(self: object, key: str):
         if key == "attributes":
             return self._entity_attributes
         else:
