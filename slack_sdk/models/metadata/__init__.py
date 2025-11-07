@@ -1,6 +1,5 @@
 from typing import Dict, Any, Union, Optional, List
-from enum import StrEnum
-from slack_sdk.models.basic_objects import JsonObject
+from slack_sdk.models.basic_objects import JsonObject, EnumValidator, EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST
 
 
 class Metadata(JsonObject):
@@ -34,28 +33,28 @@ class Metadata(JsonObject):
 ## Work object entity metadata
 
 
-class EntityType(StrEnum):
-    """Entity type enumeration"""
+"""Entity types"""
+EntityType = {
+    "slack#/entities/task",
+    "slack#/entities/file",
+    "slack#/entities/item",
+    "slack#/entities/incident",
+    "slack#/entities/content_item",
+}
 
-    TASK = "slack#/entities/task"
-    FILE = "slack#/entities/file"
-    ITEM = "slack#/entities/item"
-    INCIDENT = "slack#/entities/incident"
-    CONTENT_ITEM = "slack#/entities/content_item"
 
-
-class CustomFieldType(StrEnum):
-    """Custom field type enumeration"""
-
-    INTEGER = "integer"
-    STRING = "string"
-    ARRAY = "array"
-    DATE = "slack#/types/date"
-    TIMESTAMP = "slack#/types/timestamp"
-    IMAGE = "slack#/types/image"
-    CHANNEL_ID = "slack#/types/channel_id"
-    USER = "slack#/types/user"
-    ENTITY_REF = "slack#/types/entity_ref"
+"""Custom field types"""
+CustomFieldType = {
+    "integer",
+    "string",
+    "array",
+    "slack#/types/date",
+    "slack#/types/timestamp",
+    "slack#/types/image",
+    "slack#/types/channel_id",
+    "slack#/types/user",
+    "slack#/types/entity_ref",
+}
 
 
 class ExternalRef(JsonObject):
@@ -693,7 +692,7 @@ class EntityCustomField(JsonObject):
         self,
         label: str,
         key: str,
-        type: Union[str, CustomFieldType],
+        type: str,
         value: Optional[Union[str, int, List[Union[Dict[str, Any], EntityArrayItemField]]]] = None,
         link: Optional[str] = None,
         icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
@@ -732,6 +731,10 @@ class EntityCustomField(JsonObject):
 
     def __repr__(self):
         return self.__str__()
+
+    @EnumValidator("type", CustomFieldType)
+    def type_valid(self):
+        return self.type is None or self.type in CustomFieldType
 
 
 class FileEntityFields(JsonObject):
@@ -1109,54 +1112,11 @@ class EntityPayload(JsonObject):
         """Set the entity attributes data."""
         self._entity_attributes = value
 
-    def get_non_null_attributes(self) -> dict:
-        """Override to handle the 'attributes' field name conflict"""
-        from slack_sdk.models.basic_objects import EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST
-
-        def to_dict_compatible(value):
-            if isinstance(value, (list, tuple)):
-                return [to_dict_compatible(v) for v in value]
-            else:
-                to_dict = getattr(value, "to_dict", None)
-                if to_dict and callable(to_dict):
-                    return {k: to_dict_compatible(v) for k, v in value.to_dict().items()}
-                else:
-                    return value
-
-        def is_not_empty(key: str) -> bool:
-            # Special handling for 'attributes' key - map to internal _entity_attributes
-            if key == "attributes":
-                value = self._entity_attributes
-            else:
-                value = getattr(self, key, None)
-
-            if value is None:
-                return False
-
-            # Handle empty array exceptions (from base class logic)
-            type_value = getattr(self, "type", None)
-            for empty_allowed in EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST:
-                if type_value == empty_allowed["type"] and key == empty_allowed["property"]:
-                    return True
-
-            has_len = getattr(value, "__len__", None) is not None
-            if has_len:
-                return len(value) > 0
-            else:
-                return value is not None
-
-        result = {}
-        # Use the class-level attributes set
-        for key in sorted(type(self).attributes):
-            if is_not_empty(key):
-                # Special handling for 'attributes' key - map to internal _entity_attributes
-                if key == "attributes":
-                    value = self._entity_attributes
-                else:
-                    value = getattr(self, key, None)
-                result[key] = to_dict_compatible(value)
-
-        return result
+    def get_attribute(self, key: str):
+        if key == "attributes":
+            return self._entity_attributes
+        else:
+            return getattr(self, key, None)
 
     def __str__(self):
         return str(self.get_non_null_attributes())
@@ -1181,7 +1141,7 @@ class EntityMetadata(JsonObject):
 
     def __init__(
         self,
-        entity_type: Union[str, EntityType],
+        entity_type: str,
         entity_payload: Union[Dict[str, Any], EntityPayload],
         external_ref: Union[Dict[str, Any], ExternalRef],
         url: str,
@@ -1200,6 +1160,10 @@ class EntityMetadata(JsonObject):
 
     def __repr__(self):
         return self.__str__()
+
+    @EnumValidator("entity_type", EntityType)
+    def entity_type_valid(self):
+        return self.entity_type is None or self.entity_type in EntityType
 
 
 class EventAndEntityMetadata(JsonObject):
