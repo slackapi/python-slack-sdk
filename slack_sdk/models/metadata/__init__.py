@@ -544,8 +544,6 @@ class EntityTimestampField(JsonObject):
     attributes = {
         "value",
         "label",
-        "link",
-        "icon",
         "type",
         "edit",
     }
@@ -554,16 +552,12 @@ class EntityTimestampField(JsonObject):
         self,
         value: int,
         label: Optional[str] = None,
-        link: Optional[str] = None,
-        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
         type: Optional[str] = None,
         edit: Optional[Union[Dict[str, Any], EntityEditSupport]] = None,
         **kwargs,
     ):
         self.value = value
         self.label = label
-        self.link = link
-        self.icon = icon
         self.type = type
         self.edit = edit
         self.additional_attributes = kwargs
