@@ -185,7 +185,6 @@ class TestWebClient(unittest.TestCase):
         self.assertIsNone(new_message.get("warning"))
 
     def test_publishing_entity_metadata_using_models(self):
-
         # Build the metadata
 
         title = EntityTitle(text="My title")
