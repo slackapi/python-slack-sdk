@@ -10,9 +10,9 @@ this project. If you use this package within your own software as is but don't p
 
 We recommend using [pyenv](https://github.com/pyenv/pyenv) for Python runtime management. If you use macOS, follow the following steps:
 
-```bash
-$ brew update
-$ brew install pyenv
+```sh
+brew update
+brew install pyenv
 ```
 
 You can hook `pyenv` into your shell automatically by running `pyenv init` and following the instructions.
@@ -23,7 +23,7 @@ GitHub Actions](https://github.com/slackapi/python-slack-sdk/blob/main/.github/w
 but make sure you are running at least one version that we execute our tests in
 locally so that you can run the tests yourself.
 
-```bash
+```sh
 $ pyenv install -l | grep -v "-e[conda|stackless|pypy]"
 
 $ pyenv install 3.9.6 # select the latest patch version
@@ -40,9 +40,9 @@ $ pyenv rehash
 
 Then, you can create a new [Virtual Environment](https://docs.python.org/3/tutorial/venv.html) specific to the Python version you just installed by running:
 
-```bash
-$ python -m venv env_3.9.6
-$ source env_3.9.6/bin/activate
+```sh
+python -m venv env_3.9.6
+source env_3.9.6/bin/activate
 ```
 
 At this point you have a clean, Python-version-specific environment "activated" for
@@ -55,8 +55,8 @@ run `source env_3.9.6/bin/activate` again.
 
 The last step is to install this project's dependencies and run all unit tests; to do so, you can run
 
-```bash
-$ ./scripts/run_validation.sh
+```sh
+./scripts/run_validation.sh
 ```
 
 Also check out [how
@@ -73,20 +73,20 @@ When you make changes to this SDK, please write unit tests verifying if the chan
 
 Run all the unit tests, code formatter, and code analyzer:
 
-```bash
-$ ./scripts/run_validation.sh
+```sh
+./scripts/run_validation.sh
 ```
 
 Run all the unit tests (no formatter nor code analyzer):
 
-```bash
-$ ./scripts/run_unit_tests.sh
+```sh
+./scripts/run_unit_tests.sh
 ```
 
 Run a specific unit test:
 
-```bash
-$ ./scripts/run_unit_tests.sh tests/web/test_web_client.py
+```sh
+./scripts/run_unit_tests.sh tests/web/test_web_client.py
 ```
 
 You can rely on GitHub Actions builds for running the tests on a variety of Python runtimes.
@@ -97,14 +97,14 @@ This project also has integration tests that verify the SDK works with the Slack
 
 Run all integration tests:
 
-```bash
-$ ./scripts/run_integration_tests.sh
+```sh
+./scripts/run_integration_tests.sh
 ```
 
 Run a specific integration test:
 
-```bash
-$ ./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client.py
+```sh
+./scripts/run_integration_tests.sh integration_tests/web/test_async_web_client.py
 ```
 
 #### Develop Locally
@@ -113,14 +113,14 @@ If you want to test the package locally you can.
 
 1. Build the package locally
    - Run
-     ```bash
+     ```sh
      scripts/build_pypi_package.sh
      ```
    - This will create a `.whl` file in the `./dist` folder
 2. Use the built package
    - Example `/dist/slack_sdk-1.2.3-py2.py3-none-any.whl` was created
    - From anywhere on your machine you can install this package to a project with
-     ```bash
+     ```sh
      pip install <project path>/dist/slack_sdk-1.2.3-py2.py3-none-any.whl
      ```
    - It is also possible to include `slack_sdk @ file:///<project path>/dist/slack_sdk-1.2.3-py2.py3-none-any.whl` in a [requirements.txt](https://pip.pypa.io/en/stable/user_guide/#requirements-files) file
@@ -131,75 +131,109 @@ See [`/docs/README`](https://github.com/slackapi/python-slack-sdk/blob/main/docs
 
 The API reference is generated from a script. You can generate and preview the **API _reference_ documents for `slack_sdk` package modules** by running:
 
-```bash
-$ ./scripts/generate_api_docs.sh
+```sh
+./scripts/generate_api_docs.sh
 ```
 
 ### Releasing
 
-1. Create the commit for the release:
+#### test.pypi.org deployment
 
-   - Bump the version number in adherence to [Semantic Versioning](http://semver.org/) in `slack_sdk/version.py`.
-   - Build the reference docs with `./scripts/generate_api_docs.sh`.
-   - Create a branch for the release with `git checkout -b v2.5.0`
-   - Make a commit that includes the new version number: `git commit -a -m 'version 2.5.0'`.
-   - Open a PR and merge after receiving at least one approval from other maintainers.
+[TestPyPI](https://test.pypi.org/) is a separate instance of the Python Package
+Index that allows you to try distribution tools and processes without affecting
+the real index. This is particularly useful when making changes related to the
+package configuration itself, for example, modifications to the `pyproject.toml` file.
 
-2. Distribute the release
+You can deploy this project to TestPyPI using GitHub Actions.
 
-   - Use the latest stable Python runtime
-     - `python -m venv env`
-     - `./scripts/deploy_to_prod_pypi_org.sh`
-   - Create a new GitHub Release from the [Releases page](https://github.com/slackapi/python-slack-sdk/releases) by clicking the "Draft a new release" button.
-      - Enter the new version number updated from the commit (e.g. `v2.5.0`) into the "Choose a tag" input.
-      - Ensure the tag `Target` branch is `main` (e.g `Target:main`).
-      - Click the "Create a new tag: x.x.x on publish" button. This won't create your tag immediately.
-      - Name the release after the version number updated from the commit (e.g. `version 2.5.0`)
-      - Auto-generate the release notes by clicking the "Auto-generate release
-      notes" button. This will pull in changes that will be included in your
-      release.
-      - Edit the resulting notes to ensure they have decent messaging that are
-      understandable by non-contributors, but each commit should still have it's
-      own line.
-      - Ensure that this version adheres to [semantic versioning][semver]. See
-      [Versioning](#versioning-and-tags) for correct version format. Version tags
-      should match the following pattern: `v2.5.0`.
+To deploy using GitHub Actions:
 
-   ```markdown
-   Refer to [v{version} milestone](https://github.com/slackapi/python-slack-sdk/milestone/{TODO}?closed=1) to know the complete list of the issues resolved by this release.
+1. Push your changes to a branch or tag
+2. Navigate to <https://github.com/slackapi/python-slack-sdk/actions/workflows/pypi-release.yml>
+3. Click on "Run workflow"
+4. Select your branch or tag from the dropdown
+5. Click "Run workflow" to build and deploy your branch to TestPyPI
 
-   **Updates**
+Alternatively, you can deploy from your local machine with:
 
-   1. [WebClient] #111 Make an awesome change - Thanks @SlackHQ
-   2. [RTMClient] #222 Make an awesome change - Thanks @SlackAPI
+```sh
+./scripts/deploy_to_test_pypi.sh
+```
 
-   **All Changes**
+#### Development Deployment
 
-   * All issues/pull requests: https://github.com/slackapi/python-slack-sdk/milestone/{milestone for the release}
-   * All changes: https://github.com/slackapi/python-slack-sdk/compare/{the previous release version tag}...{the release version tag}
-   ```
+Deploying a new version of this library to PyPI is triggered by publishing a GitHub Release.
+Before creating a new release, ensure that everything on a stable branch has
+landed, then [run the tests](#unit-tests).
 
-   - Close the milestone relating to the Release
-   - Create the next patch version Milestone. To be used by the following release.
+1. Create the commit for the release
+   1. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and [Developmental Release](https://peps.python.org/pep-0440/#developmental-releases).
+      - Example: if the current version is `1.2.3`, a proper development bump would be `1.2.4.dev0`
+      - `.dev` will indicate to pip that this is a [Development Release](https://peps.python.org/pep-0440/#developmental-releases)
+      - Note that the `dev` version can be bumped in development releases: `1.2.4.dev0` -> `1.2.4.dev1`
+   2. Build the docs with `./scripts/generate_api_docs.sh`.
+   3. Commit with a message including the new version number. For example `1.2.4.dev0` & push the commit to a branch where the development release will live (create it if it does not exist)
+      1. `git checkout -b future-release`
+      2. `git commit -m 'chore(release): version 1.2.4.dev0'`
+      3. `git push -u origin future-release`
+2. Create a new GitHub Release
+   1. Navigate to the [Releases page](https://github.com/slackapi/python-slack-sdk/releases).
+   2. Click the "Draft a new release" button.
+   3. Set the "Target" to the feature branch with the development changes.
+   4. Click "Tag: Select tag"
+   5. Input a new tag name manually. The tag name must match the version in `slack_sdk/version.py` prefixed with "v" (e.g., if version is `1.2.4.dev0`, enter `v1.2.4.dev0`)
+   6. Click the "Create a new tag" button. This won't create your tag immediately.
+   7. Click the "Generate release notes" button.
+   8. The release name should match the tag name!
+   9. Edit the resulting notes to ensure they have decent messaging that is understandable by non-contributors, but each commit should still have its own line.
+   10. Set this release as a pre-release.
+   11. Publish the release by clicking the "Publish release" button!
+3. Navigate to the [release workflow run](https://github.com/slackapi/python-slack-sdk/actions/workflows/pypi-release.yml). You will need to approve the deployment!
+4. After a few minutes, the corresponding version will be available on <https://pypi.org/project/slack-sdk>.
+5. (Slack Internal) Communicate the release internally
 
-3. (Slack Internal) Communicate the release internally
+#### Production Deployment
 
-   - Include a link to the GitHub release
+Deploying a new version of this library to PyPI is triggered by publishing a GitHub Release.
+Before creating a new release, ensure that everything on the `main` branch since
+the last tag is in a releasable state! At a minimum, [run the tests](#unit-tests).
 
-4. Make announcements
-
-   - #slack-api in dev4slack.slack.com
-   - #lang-python in community.slack.com
-
-5. (Slack Internal) Tweet by @SlackAPI
-
-   - Not necessary for patch updates, might be needed for minor updates, definitely needed for major updates. Include a link to the GitHub release
+1. Create the commit for the release
+   1. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and the [Versioning](#versioning-and-tags) section.
+   2. Build the docs with `./scripts/generate_api_docs.sh`.
+   3. Commit with a message including the new version number. For example `1.2.3` & push the commit to a branch and create a PR to sanity check.
+      1. `git checkout -b 1.2.3-release`
+      2. `git commit -m 'chore(release): version 1.2.3'`
+      3. `git push -u origin 1.2.3-release`
+   4. Add relevant labels to the PR and add the PR to a GitHub Milestone.
+   5. Merge in release PR after getting an approval from at least one maintainer.
+2. Create a new GitHub Release
+   1. Navigate to the [Releases page](https://github.com/slackapi/python-slack-sdk/releases).
+   2. Click the "Draft a new release" button.
+   3. Set the "Target" to the `main` branch.
+   4. Click "Tag: Select tag"
+   5. Input a new tag name manually. The tag name must match the version in `slack_sdk/version.py` prefixed with "v" (e.g., if version is `1.2.3`, enter `v1.2.3`)
+   6. Click the "Create a new tag" button. This won't create your tag immediately.
+   7. Click the "Generate release notes" button.
+   8. The release name should match the tag name!
+   9. Edit the resulting notes to ensure they have decent messaging that is understandable by non-contributors, but each commit should still have its own line.
+   10. Include a link to the current GitHub Milestone.
+   11. Ensure the "latest release" checkbox is checked to mark this as the latest stable release.
+   12. Publish the release by clicking the "Publish release" button!
+3. Navigate to the [release workflow run](https://github.com/slackapi/python-slack-sdk/actions/workflows/pypi-release.yml). You will need to approve the deployment!
+4. After a few minutes, the corresponding version will be available on <https://pypi.org/project/slack-sdk>.
+5. Close the current GitHub Milestone and create one for the next patch version.
+6. (Slack Internal) Communicate the release internally
+    - Include a link to the GitHub release
+7. (Slack Internal) Tweet by @SlackAPI
+    - Not necessary for patch updates, might be needed for minor updates,
+      definitely needed for major updates. Include a link to the GitHub release
 
 ## Workflow
 
 ### Versioning and Tags
 
-This project uses semantic versioning, expressed through the numbering scheme of
+This project uses [Semantic Versioning](http://semver.org/), expressed through the numbering scheme of
 [PEP-0440](https://www.python.org/dev/peps/pep-0440/).
 
 ### Branches

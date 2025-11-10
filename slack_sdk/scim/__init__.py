@@ -4,6 +4,7 @@ including Slack.
 
 Refer to https://docs.slack.dev/tools/python-slack-sdk/scim for details.
 """
+
 from .v1.client import SCIMClient
 from .v1.response import SCIMResponse
 from .v1.response import SearchUsersResponse, ReadUserResponse
