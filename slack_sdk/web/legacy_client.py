@@ -3008,7 +3008,6 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs = _remove_none_values(kwargs)
         _warn_if_message_text_content_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
-        print("**** entering .....")
         return self.api_call("chat.update", json=kwargs)
 
     def conversations_acceptSharedInvite(

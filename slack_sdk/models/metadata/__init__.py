@@ -1,5 +1,5 @@
 from typing import Dict, Any, Union, Optional, List
-from slack_sdk.models.basic_objects import JsonObject, EnumValidator, EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST
+from slack_sdk.models.basic_objects import JsonObject, EnumValidator
 
 
 class Metadata(JsonObject):
@@ -30,7 +30,10 @@ class Metadata(JsonObject):
         return self.__str__()
 
 
-## Work object entity metadata
+#
+# Work object entity metadata
+# https://docs.slack.dev/messaging/work-objects/
+#
 
 
 """Entity types"""
@@ -380,7 +383,7 @@ class EntityUserField(JsonObject):
         text: str,
         url: Optional[str] = None,
         email: Optional[str] = None,
-        icon: Optional[Union[Dict[str, Any], "EntityIconField"]] = None,
+        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
         **kwargs,
     ):
         self.text = text
@@ -1170,6 +1173,7 @@ class EventAndEntityMetadata(JsonObject):
     """Message metadata with entities
 
     https://docs.slack.dev/messaging/message-metadata/
+    https://docs.slack.dev/messaging/work-objects/
     """
 
     attributes = {"event_type", "event_payload", "entities"}
