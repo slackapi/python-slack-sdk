@@ -65,19 +65,27 @@ our continuous integration](https://github.com/slackapi/python-slack-sdk/blob/v3
 
 ## Tasks
 
+### Formatting
+
+This project uses code formatting tools to maintain consistent style. You can format the codebase by running:
+
+```sh
+./scripts/format.sh
+```
+
 ### Testing
 
 #### Unit Tests
 
 When you make changes to this SDK, please write unit tests verifying if the changes work as you expected. You can easily run all the tests and formatting/linter with the below scripts.
 
-Run all the unit tests, code formatter, and code analyzer:
+Run all the unit tests, code linter, and code analyzer:
 
 ```sh
 ./scripts/run_validation.sh
 ```
 
-Run all the unit tests (no formatter nor code analyzer):
+Run all the unit tests (no linter nor code analyzer):
 
 ```sh
 ./scripts/run_unit_tests.sh
