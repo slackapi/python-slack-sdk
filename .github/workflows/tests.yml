@@ -80,19 +80,24 @@ jobs:
           PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           directory: ./reports/
+          fail_ci_if_error: true
           flags: ${{ matrix.python-version }}
+          report-type: test_results
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
       - name: Upload test coverage to Codecov (only with latest supported version)
         if: startsWith(matrix.python-version, '3.14')
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
           # Run validation generates the coverage file
           files: ./coverage.xml
+          report-type: coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
   notifications:
     name: Regression notifications
     runs-on: ubuntu-latest
