@@ -71,6 +71,7 @@ from .blocks import (
     MarkdownBlock,
     RichTextBlock,
     SectionBlock,
+    TableBlock,
     VideoBlock,
 )
 
@@ -133,6 +134,7 @@ __all__ = [
     "InputBlock",
     "MarkdownBlock",
     "SectionBlock",
+    "TableBlock",
     "VideoBlock",
     "RichTextBlock",
 ]

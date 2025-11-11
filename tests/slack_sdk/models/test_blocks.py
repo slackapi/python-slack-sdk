@@ -29,6 +29,7 @@ from slack_sdk.models.blocks import (
     RichTextSectionElement,
     SectionBlock,
     StaticSelectElement,
+    TableBlock,
     VideoBlock,
 )
 from slack_sdk.models.blocks.basic_components import FeedbackButtonObject, SlackFile
@@ -1267,3 +1268,138 @@ class RichTextBlockTests(unittest.TestCase):
         self.assertIsNotNone(block_dict["elements"][1].get("elements"))
         self.assertIsNotNone(block_dict["elements"][2].get("elements"))
         self.assertIsNotNone(block_dict["elements"][3].get("elements"))
+
+
+# ----------------------------------------------
+# Table
+# ----------------------------------------------
+
+
+class TableBlockTests(unittest.TestCase):
+    def test_document(self):
+        """Test basic table block from Slack documentation example"""
+        input = {
+            "type": "table",
+            "column_settings": [{"is_wrapped": True}, {"align": "right"}],
+            "rows": [
+                [{"type": "raw_text", "text": "Header A"}, {"type": "raw_text", "text": "Header B"}],
+                [{"type": "raw_text", "text": "Data 1A"}, {"type": "raw_text", "text": "Data 1B"}],
+                [{"type": "raw_text", "text": "Data 2A"}, {"type": "raw_text", "text": "Data 2B"}],
+            ],
+        }
+        self.assertDictEqual(input, TableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_rich_text(self):
+        """Test table block with rich_text cells"""
+        input = {
+            "type": "table",
+            "column_settings": [{"is_wrapped": True}, {"align": "right"}],
+            "rows": [
+                [{"type": "raw_text", "text": "Header A"}, {"type": "raw_text", "text": "Header B"}],
+                [
+                    {"type": "raw_text", "text": "Data 1A"},
+                    {
+                        "type": "rich_text",
+                        "elements": [
+                            {
+                                "type": "rich_text_section",
+                                "elements": [{"text": "Data 1B", "type": "link", "url": "https://slack.com"}],
+                            }
+                        ],
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(input, TableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_minimal_table(self):
+        """Test table with only required fields"""
+        input = {
+            "type": "table",
+            "rows": [[{"type": "raw_text", "text": "Cell"}]],
+        }
+        self.assertDictEqual(input, TableBlock(**input).to_dict())
+
+    def test_with_block_id(self):
+        """Test table block with block_id"""
+        input = {
+            "type": "table",
+            "block_id": "table-123",
+            "rows": [
+                [{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}],
+                [{"type": "raw_text", "text": "1"}, {"type": "raw_text", "text": "2"}],
+            ],
+        }
+        self.assertDictEqual(input, TableBlock(**input).to_dict())
+
+    def test_column_settings_variations(self):
+        """Test various column_settings configurations"""
+        # Left align
+        input1 = {
+            "type": "table",
+            "column_settings": [{"align": "left"}],
+            "rows": [[{"type": "raw_text", "text": "Left"}]],
+        }
+        self.assertDictEqual(input1, TableBlock(**input1).to_dict())
+
+        # Center align
+        input2 = {
+            "type": "table",
+            "column_settings": [{"align": "center"}],
+            "rows": [[{"type": "raw_text", "text": "Center"}]],
+        }
+        self.assertDictEqual(input2, TableBlock(**input2).to_dict())
+
+        # With wrapping
+        input3 = {
+            "type": "table",
+            "column_settings": [{"is_wrapped": False}],
+            "rows": [[{"type": "raw_text", "text": "No wrap"}]],
+        }
+        self.assertDictEqual(input3, TableBlock(**input3).to_dict())
+
+        # Combined settings
+        input4 = {
+            "type": "table",
+            "column_settings": [{"align": "center", "is_wrapped": True}],
+            "rows": [[{"type": "raw_text", "text": "Both"}]],
+        }
+        self.assertDictEqual(input4, TableBlock(**input4).to_dict())
+
+    def test_column_settings_with_none(self):
+        """Test column_settings with None to skip columns"""
+        input = {
+            "type": "table",
+            "column_settings": [{"align": "left"}, None, {"align": "right"}],
+            "rows": [
+                [
+                    {"type": "raw_text", "text": "Left"},
+                    {"type": "raw_text", "text": "Default"},
+                    {"type": "raw_text", "text": "Right"},
+                ]
+            ],
+        }
+        self.assertDictEqual(input, TableBlock(**input).to_dict())
+
+    def test_rows_validation(self):
+        """Test that rows validation works correctly"""
+        # Empty rows should fail validation
+        with self.assertRaises(SlackObjectFormationError):
+            TableBlock(rows=[]).to_dict()
+
+    def test_multi_row_table(self):
+        """Test table with multiple rows"""
+        input = {
+            "type": "table",
+            "rows": [
+                [{"type": "raw_text", "text": "Name"}, {"type": "raw_text", "text": "Age"}],
+                [{"type": "raw_text", "text": "Alice"}, {"type": "raw_text", "text": "30"}],
+                [{"type": "raw_text", "text": "Bob"}, {"type": "raw_text", "text": "25"}],
+                [{"type": "raw_text", "text": "Charlie"}, {"type": "raw_text", "text": "35"}],
+            ],
+        }
+        block = TableBlock(**input)
+        self.assertEqual(len(block.rows), 4)
+        self.assertDictEqual(input, block.to_dict())
