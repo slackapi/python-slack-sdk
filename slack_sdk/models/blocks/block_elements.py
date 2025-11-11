@@ -561,6 +561,7 @@ class FeedbackButtonsElement(InteractiveElement):
         **others: dict,
     ):
         """Buttons to indicate positive or negative feedback.
+        https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element
 
         Args:
             action_id (required): An identifier for this action.
@@ -650,6 +651,7 @@ class IconButtonElement(InteractiveElement):
         **others: dict,
     ):
         """An icon button to perform actions.
+        https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element
 
         Args:
             action_id: An identifier for this action.
