@@ -345,11 +345,11 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
     if filename is None:
         # use the local filename if filename is missing
         if isinstance(file, (str, os.PathLike)):
-            filename = os.fspath(file).split(os.path.sep)[-1]
+            filename = os.path.basename(os.fspath(file))
         else:
             filename = "Uploaded file"
 
-    title = upload_file.get("title", "Uploaded file")
+    title = upload_file.get("title")
     if data is None:
         raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
 
