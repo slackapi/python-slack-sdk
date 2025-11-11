@@ -4898,7 +4898,7 @@ class WebClient(BaseClient):
         **kwargs,
     ) -> SlackResponse:
         """Revoke access to a List for specified entities.
-        https://docs.slack.dev/reference/methods/slacklists.access.delete
+        https://docs.slack.dev/reference/methods/slackLists.access.delete
         """
         kwargs.update({"list_id": list_id, "channel_ids": channel_ids, "user_ids": user_ids})
         kwargs = _remove_none_values(kwargs)
