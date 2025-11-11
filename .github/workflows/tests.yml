@@ -85,7 +85,7 @@ jobs:
           directory: ./reports/
           fail_ci_if_error: true
           flags: ${{ matrix.python-version }}
-          report-type: test_results
+          report_type: test_results
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
       - name: Upload test coverage to Codecov (only with latest supported version)
@@ -95,7 +95,7 @@ jobs:
           fail_ci_if_error: true
           # Run validation generates the coverage file
           files: ./coverage.xml
-          report-type: coverage
+          report_type: coverage
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
   notifications:
