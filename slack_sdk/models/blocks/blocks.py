@@ -755,16 +755,17 @@ class TableBlock(Block):
         Args:
             rows (required): A 2D array of table cells. Each row is an array of cell objects.
                 Each cell can be either a raw_text or rich_text element.
-                Example cell: {"type": "raw_text", "text": "Cell content"}
             column_settings: Optional array of column settings objects to configure text alignment
                 and wrapping behavior for each column. Use None/null to skip a column.
-                Each setting can have:
-                - align: "left" (default), "center", or "right"
-                - is_wrapped: boolean (default: false)
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
                 Maximum length for this field is 255 characters.
                 block_id should be unique for each message and each iteration of a message.
                 If a message is updated, use a new block_id.
+
+        Note:
+            - Cell format: {"type": "raw_text", "text": "Cell content"} or use RawTextObject helper
+            - Column settings options: align ("left", "center", "right"), is_wrapped (boolean)
+            - Tables must be sent in the attachments field, not top-level blocks
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)

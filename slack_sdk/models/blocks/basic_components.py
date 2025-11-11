@@ -148,6 +148,45 @@ class MarkdownTextObject(TextObject):
             title = f": {title}"
         return MarkdownTextObject(text=f"{link}{title}")
 
+
+class RawTextObject(TextObject):
+    """raw_text typed text object (used in table block cells)"""
+
+    type = "raw_text"
+    text_max_length = 3000
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return {"text", "type"}
+
+    def __init__(self, *, text: str):
+        """A raw text object used in table block cells.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            text (required): The text content for the table cell.
+                The minimum length is 1 and maximum length is 3000 characters.
+        """
+        super().__init__(text=text, type=self.type)
+
+    @staticmethod
+    def from_str(text: str) -> "RawTextObject":
+        """Transforms a string into a RawTextObject"""
+        return RawTextObject(text=text)
+
+    @staticmethod
+    def direct_from_string(text: str) -> Dict[str, Any]:
+        """Transforms a string into the required object shape to act as a RawTextObject"""
+        return RawTextObject.from_str(text).to_dict()
+
+    @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
+    def _validate_text_length(self):
+        return len(self.text) <= self.text_max_length
+
+    @JsonValidator("text attribute must have at least 1 character")
+    def _validate_text_min_length(self):
+        return len(self.text) >= 1
+
     @staticmethod
     def direct_from_link(link: Link, title: str = "") -> Dict[str, Any]:
         """

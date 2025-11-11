@@ -21,6 +21,7 @@ from slack_sdk.models.blocks import (
     Option,
     OverflowMenuElement,
     PlainTextObject,
+    RawTextObject,
     RichTextBlock,
     RichTextElementParts,
     RichTextListElement,
@@ -1271,6 +1272,58 @@ class RichTextBlockTests(unittest.TestCase):
 
 
 # ----------------------------------------------
+# RawTextObject
+# ----------------------------------------------
+
+
+class RawTextObjectTests(unittest.TestCase):
+    def test_basic_creation(self):
+        """Test basic RawTextObject creation"""
+        obj = RawTextObject(text="Hello")
+        expected = {"type": "raw_text", "text": "Hello"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_from_str(self):
+        """Test RawTextObject.from_str() helper"""
+        obj = RawTextObject.from_str("Test text")
+        expected = {"type": "raw_text", "text": "Test text"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_direct_from_string(self):
+        """Test RawTextObject.direct_from_string() helper"""
+        result = RawTextObject.direct_from_string("Direct text")
+        expected = {"type": "raw_text", "text": "Direct text"}
+        self.assertDictEqual(expected, result)
+
+    def test_text_length_validation_max(self):
+        """Test that text exceeding 3000 characters fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            RawTextObject(text="a" * 3001).to_dict()
+
+    def test_text_length_validation_at_max(self):
+        """Test that text at exactly 3000 characters passes validation"""
+        obj = RawTextObject(text="a" * 3000)
+        obj.to_dict()  # Should not raise
+
+    def test_text_length_validation_min(self):
+        """Test that empty text fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            RawTextObject(text="").to_dict()
+
+    def test_text_length_validation_at_min(self):
+        """Test that text with 1 character passes validation"""
+        obj = RawTextObject(text="a")
+        obj.to_dict()  # Should not raise
+
+    def test_attributes(self):
+        """Test that RawTextObject only has text and type attributes"""
+        obj = RawTextObject(text="Test")
+        self.assertEqual(obj.attributes, {"text", "type"})
+        # Should not have emoji attribute like PlainTextObject
+        self.assertNotIn("emoji", obj.to_dict())
+
+
+# ----------------------------------------------
 # Table
 # ----------------------------------------------
 
@@ -1403,3 +1456,26 @@ class TableBlockTests(unittest.TestCase):
         block = TableBlock(**input)
         self.assertEqual(len(block.rows), 4)
         self.assertDictEqual(input, block.to_dict())
+
+    def test_with_raw_text_object_helper(self):
+        """Test table using RawTextObject helper class"""
+        # Create table using RawTextObject helper
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Product").to_dict(), RawTextObject(text="Price").to_dict()],
+                [RawTextObject(text="Widget").to_dict(), RawTextObject(text="$10").to_dict()],
+                [RawTextObject(text="Gadget").to_dict(), RawTextObject(text="$20").to_dict()],
+            ],
+            column_settings=[{"is_wrapped": True}, {"align": "right"}],
+        )
+
+        expected = {
+            "type": "table",
+            "column_settings": [{"is_wrapped": True}, {"align": "right"}],
+            "rows": [
+                [{"type": "raw_text", "text": "Product"}, {"type": "raw_text", "text": "Price"}],
+                [{"type": "raw_text", "text": "Widget"}, {"type": "raw_text", "text": "$10"}],
+                [{"type": "raw_text", "text": "Gadget"}, {"type": "raw_text", "text": "$20"}],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
