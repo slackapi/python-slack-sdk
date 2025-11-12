@@ -22,7 +22,7 @@ import slack_sdk.errors as e
 from slack_sdk.models.views import View
 
 from ..models.attachments import Attachment
-from ..models.blocks import Block
+from ..models.blocks import Block, RichTextBlock
 from ..models.metadata import Metadata
 from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
@@ -4846,7 +4846,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Revoke access to a List for specified entities.
-        https://docs.slack.dev/reference/methods/slacklists.access.delete
+        https://docs.slack.dev/reference/methods/slackLists.access.delete
         """
         kwargs.update({"list_id": list_id, "channel_ids": channel_ids, "user_ids": user_ids})
         kwargs = _remove_none_values(kwargs)
@@ -4862,7 +4862,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the access level to a List for specified entities.
-        https://docs.slack.dev/reference/methods/slacklists.access.set
+        https://docs.slack.dev/reference/methods/slackLists.access.set
         """
         kwargs.update({"list_id": list_id, "access_level": access_level, "channel_ids": channel_ids, "user_ids": user_ids})
         kwargs = _remove_none_values(kwargs)
@@ -4872,7 +4872,7 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         name: str,
-        description_blocks: Optional[List[Dict[str, Any]]] = None,
+        description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
         schema: Optional[List[Dict[str, Any]]] = None,
         copy_from_list_id: Optional[str] = None,
         include_copied_list_records: Optional[bool] = None,
@@ -4880,7 +4880,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Creates a List.
-        https://docs.slack.dev/reference/methods/slacklists.create
+        https://docs.slack.dev/reference/methods/slackLists.create
         """
         kwargs.update(
             {
@@ -4903,7 +4903,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve List download URL from an export job to download List contents.
-        https://docs.slack.dev/reference/methods/slacklists.download.get
+        https://docs.slack.dev/reference/methods/slackLists.download.get
         """
         kwargs.update(
             {
@@ -4922,7 +4922,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Initiate a job to export List contents.
-        https://docs.slack.dev/reference/methods/slacklists.download.start
+        https://docs.slack.dev/reference/methods/slackLists.download.start
         """
         kwargs.update(
             {
@@ -4943,7 +4943,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add a new item to an existing List.
-        https://docs.slack.dev/reference/methods/slacklists.items.create
+        https://docs.slack.dev/reference/methods/slackLists.items.create
         """
         kwargs.update(
             {
@@ -4964,7 +4964,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes an item from an existing List.
-        https://docs.slack.dev/reference/methods/slacklists.items.delete
+        https://docs.slack.dev/reference/methods/slackLists.items.delete
         """
         kwargs.update(
             {
@@ -4983,7 +4983,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes multiple items from an existing List.
-        https://docs.slack.dev/reference/methods/slacklists.items.deletemultiple
+        https://docs.slack.dev/reference/methods/slackLists.items.deletemultiple
         """
         kwargs.update(
             {
@@ -5003,7 +5003,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get a row from a List.
-        https://docs.slack.dev/reference/methods/slacklists.items.info
+        https://docs.slack.dev/reference/methods/slackLists.items.info
         """
         kwargs.update(
             {
@@ -5025,7 +5025,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get records from a List.
-        https://docs.slack.dev/reference/methods/slacklists.items.list
+        https://docs.slack.dev/reference/methods/slackLists.items.list
         """
         kwargs.update(
             {
@@ -5046,7 +5046,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates cells in a List.
-        https://docs.slack.dev/reference/methods/slacklists.items.update
+        https://docs.slack.dev/reference/methods/slackLists.items.update
         """
         kwargs.update(
             {
@@ -5062,12 +5062,12 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         id: str,
         name: Optional[str] = None,
-        description_blocks: Optional[List[Dict[str, Any]]] = None,
+        description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
         todo_mode: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update a List.
-        https://docs.slack.dev/reference/methods/slacklists.update
+        https://docs.slack.dev/reference/methods/slackLists.update
         """
         kwargs.update(
             {
