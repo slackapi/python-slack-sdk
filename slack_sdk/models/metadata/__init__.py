@@ -59,7 +59,7 @@ CustomFieldType = {
     "slack#/types/entity_ref",
     "slack#/types/boolean",
     "slack#/types/link",
-    "slack#/types/email"
+    "slack#/types/email",
 }
 
 
@@ -614,11 +614,7 @@ class EntityImageField(JsonObject):
 class EntityBooleanCheckboxField(JsonObject):
     """Boolean checkbox properties"""
 
-    attributes = {
-        "type",
-        "text",
-        "description"
-    }
+    attributes = {"type", "text", "description"}
 
     def __init__(
         self,
@@ -638,16 +634,11 @@ class EntityBooleanCheckboxField(JsonObject):
     def __repr__(self):
         return self.__str__()
 
+
 class EntityBooleanTextField(JsonObject):
     """Boolean text properties"""
 
-    attributes = {
-        "type",
-        "true_text",
-        "false_text",
-        "true_description",
-        "false_description"
-    }
+    attributes = {"type", "true_text", "false_text", "true_description", "false_description"}
 
     def __init__(
         self,
@@ -659,10 +650,10 @@ class EntityBooleanTextField(JsonObject):
         **kwargs,
     ):
         self.type = type
-        self.true_text = true_text,
-        self.false_text = false_text,
-        self.true_description = true_description,
-        self.false_description = false_description,
+        self.true_text = (true_text,)
+        self.false_text = (false_text,)
+        self.true_description = (true_description,)
+        self.false_description = (false_description,)
         self.additional_attributes = kwargs
 
     def __str__(self):
@@ -753,7 +744,7 @@ class EntityCustomField(JsonObject):
         "item_type",
         "user",
         "entity_ref",
-        "boolean"
+        "boolean",
     }
 
     def __init__(
