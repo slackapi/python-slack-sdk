@@ -163,9 +163,9 @@ el.replaceWith(d);
             await self.api_call(
                 http_verb=&#34;PATCH&#34;,
                 path=f&#34;Users/{quote(id)}&#34;,
-                body_params=partial_user.to_dict()
-                if isinstance(partial_user, User)
-                else _to_dict_without_not_given(partial_user),
+                body_params=(
+                    partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+                ),
             )
         )
 
@@ -228,9 +228,11 @@ el.replaceWith(d);
             await self.api_call(
                 http_verb=&#34;PATCH&#34;,
                 path=f&#34;Groups/{quote(id)}&#34;,
-                body_params=partial_group.to_dict()
-                if isinstance(partial_group, Group)
-                else _to_dict_without_not_given(partial_group),
+                body_params=(
+                    partial_group.to_dict()
+                    if isinstance(partial_group, Group)
+                    else _to_dict_without_not_given(partial_group)
+                ),
             )
         )
 
@@ -620,9 +622,11 @@ See <a href="https://docs.slack.dev/admins/scim-api/">https://docs.slack.dev/adm
         await self.api_call(
             http_verb=&#34;PATCH&#34;,
             path=f&#34;Groups/{quote(id)}&#34;,
-            body_params=partial_group.to_dict()
-            if isinstance(partial_group, Group)
-            else _to_dict_without_not_given(partial_group),
+            body_params=(
+                partial_group.to_dict()
+                if isinstance(partial_group, Group)
+                else _to_dict_without_not_given(partial_group)
+            ),
         )
     )</code></pre>
 </details>
@@ -641,9 +645,9 @@ See <a href="https://docs.slack.dev/admins/scim-api/">https://docs.slack.dev/adm
         await self.api_call(
             http_verb=&#34;PATCH&#34;,
             path=f&#34;Users/{quote(id)}&#34;,
-            body_params=partial_user.to_dict()
-            if isinstance(partial_user, User)
-            else _to_dict_without_not_given(partial_user),
+            body_params=(
+                partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+            ),
         )
     )</code></pre>
 </details>
