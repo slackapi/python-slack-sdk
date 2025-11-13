@@ -75,82 +75,55 @@ class EntityMetadataTests(unittest.TestCase):
                         },
                     ],
                 }
-            ]
+            ],
         },
     }
 
     file_entity_json = {
-          "app_unfurl_url": "https://myappdomain.com/file/456?view=preview",
-          "entity_type": "slack#/entities/file",
-          "url": "https://myappdomain.com/file/456",
-          "external_ref": {
-            "id": "456",
-            "type": "DOC"
-          },
-          "entity_payload": {
+        "app_unfurl_url": "https://myappdomain.com/file/456?view=preview",
+        "entity_type": "slack#/entities/file",
+        "url": "https://myappdomain.com/file/456",
+        "external_ref": {"id": "456", "type": "DOC"},
+        "entity_payload": {
             "attributes": {
-              "title": {
-                "text": "Q4 Product Roadmap"
-              },
-              "display_type": "PDF Document",
-              "display_id": "DOC-456",
-              "product_icon": {
-                "alt_text": "Product Logo",
-                "url": "https://myappdomain.com/icons/logo.png"
-              },
-              "product_name": "FileVault Pro",
-              "locale": "en-US",
-              "full_size_preview": {
-                "is_supported": True,
-                "preview_url": "https://myappdomain.com/previews/456/full.png",
-                "mime_type": "image/png"
-              }
+                "title": {"text": "Q4 Product Roadmap"},
+                "display_type": "PDF Document",
+                "display_id": "DOC-456",
+                "product_icon": {"alt_text": "Product Logo", "url": "https://myappdomain.com/icons/logo.png"},
+                "product_name": "FileVault Pro",
+                "locale": "en-US",
+                "full_size_preview": {
+                    "is_supported": True,
+                    "preview_url": "https://myappdomain.com/previews/456/full.png",
+                    "mime_type": "image/png",
+                },
             },
             "fields": {
-              "preview": {
-                "alt_text": "Document preview thumbnail",
-                "label": "Preview",
-                "image_url": "https://myappdomain.com/previews/456/thumb.png",
-                "type": "slack#/types/image"
-              },
-              "date_created": {
-                "value": 1709554321,
-                "type": "slack#/types/timestamp"
-              },
-              "mime_type": {
-                "value": "application/pdf"
-              }
+                "preview": {
+                    "alt_text": "Document preview thumbnail",
+                    "label": "Preview",
+                    "image_url": "https://myappdomain.com/previews/456/thumb.png",
+                    "type": "slack#/types/image",
+                },
+                "date_created": {"value": 1709554321, "type": "slack#/types/timestamp"},
+                "mime_type": {"value": "application/pdf"},
             },
-            "slack_file": {
-              "id": "F123ABC456",
-              "type": "pdf"
-            },
-            "display_order": [
-              "date_created",
-              "mime_type",
-              "preview"
-            ],
+            "slack_file": {"id": "F123ABC456", "type": "pdf"},
+            "display_order": ["date_created", "mime_type", "preview"],
             "actions": {
-              "primary_actions": [
-                {
-                  "text": "Open",
-                  "action_id": "open_file",
-                  "value": "456",
-                  "style": "primary",
-                  "url": "https://myappdomain.com/file/456/view"
-                }
-              ],
-              "overflow_actions": [
-                {
-                  "text": "Delete",
-                  "action_id": "delete_file",
-                  "value": "456",
-                  "style": "danger"
-                }
-              ]
-            }
-          }
-        }
+                "primary_actions": [
+                    {
+                        "text": "Open",
+                        "action_id": "open_file",
+                        "value": "456",
+                        "style": "primary",
+                        "url": "https://myappdomain.com/file/456/view",
+                    }
+                ],
+                "overflow_actions": [{"text": "Delete", "action_id": "delete_file", "value": "456", "style": "danger"}],
+            },
+        },
+    }
 
     # ============================================================================
     # Methods returning re-usable metadata components
@@ -163,7 +136,7 @@ class EntityMetadataTests(unittest.TestCase):
             display_type="Incident",
             display_id="123",
         )
-    
+
     def sample_file_attributes(self):
         return EntityAttributes(
             title=EntityTitle(text="Q4 Product Roadmap"),
@@ -172,7 +145,9 @@ class EntityMetadataTests(unittest.TestCase):
             product_icon=EntityIconField(alt_text="Product Logo", url="https://myappdomain.com/icons/logo.png"),
             product_name="FileVault Pro",
             locale="en-US",
-            full_size_preview=EntityFullSizePreview(is_supported=True, preview_url="https://myappdomain.com/previews/456/full.png", mime_type="image/png")
+            full_size_preview=EntityFullSizePreview(
+                is_supported=True, preview_url="https://myappdomain.com/previews/456/full.png", mime_type="image/png"
+            ),
         )
 
     def user_array_custom_field(self):
@@ -209,12 +184,17 @@ class EntityMetadataTests(unittest.TestCase):
                 user=EntityUserIDField(user_id="USLACKBOT"),
             ),
         )
-    
+
     def file_fields(self):
         return FileEntityFields(
-            preview=EntityImageField(type="slack#/types/image", alt_text="Document preview thumbnail", label="Preview", image_url="https://myappdomain.com/previews/456/thumb.png"),
+            preview=EntityImageField(
+                type="slack#/types/image",
+                alt_text="Document preview thumbnail",
+                label="Preview",
+                image_url="https://myappdomain.com/previews/456/thumb.png",
+            ),
             date_created=EntityTimestampField(value=1709554321, type="slack#/types/timestamp"),
-            mime_type=EntityStringField(value="application/pdf")
+            mime_type=EntityStringField(value="application/pdf"),
         )
 
     def supported_full_size_preview(self):
@@ -224,8 +204,16 @@ class EntityMetadataTests(unittest.TestCase):
 
     def sample_file_actions(self):
         return EntityActions(
-            primary_actions=[EntityActionButton(text="Open", action_id="open_file", value="456", style="primary", url="https://myappdomain.com/file/456/view")],
-            overflow_actions=[EntityActionButton(text="Delete", action_id="delete_file", value="456", style="danger")]
+            primary_actions=[
+                EntityActionButton(
+                    text="Open",
+                    action_id="open_file",
+                    value="456",
+                    style="primary",
+                    url="https://myappdomain.com/file/456/view",
+                )
+            ],
+            overflow_actions=[EntityActionButton(text="Delete", action_id="delete_file", value="456", style="danger")],
         )
 
     # ============================================================================
@@ -267,7 +255,7 @@ class EntityMetadataTests(unittest.TestCase):
             self.task_fields().to_dict(),
             self.task_entity_json["entity_payload"]["fields"],
         )
-    
+
     def test_file_fields(self):
         self.assertDictEqual(
             self.file_fields().to_dict(),
@@ -311,7 +299,7 @@ class EntityMetadataTests(unittest.TestCase):
                         fields=self.file_fields(),
                         slack_file=FileEntitySlackFile(id="F123ABC456", type="pdf"),
                         display_order=["date_created", "mime_type", "preview"],
-                        actions=self.sample_file_actions()
+                        actions=self.sample_file_actions(),
                     ),
                 )
             ]
