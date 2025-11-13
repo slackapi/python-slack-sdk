@@ -57,6 +57,9 @@ CustomFieldType = {
     "slack#/types/channel_id",
     "slack#/types/user",
     "slack#/types/entity_ref",
+    "slack#/types/boolean",
+    "slack#/types/link",
+    "slack#/types/email"
 }
 
 
@@ -608,6 +611,67 @@ class EntityImageField(JsonObject):
         return self.__str__()
 
 
+class EntityBooleanCheckboxField(JsonObject):
+    """Boolean checkbox properties"""
+
+    attributes = {
+        "type",
+        "text",
+        "description"
+    }
+
+    def __init__(
+        self,
+        type: str,
+        text: str,
+        description: Optional[str],
+        **kwargs,
+    ):
+        self.type = type
+        self.text = text
+        self.description = description
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()
+
+class EntityBooleanTextField(JsonObject):
+    """Boolean text properties"""
+
+    attributes = {
+        "type",
+        "true_text",
+        "false_text",
+        "true_description",
+        "false_description"
+    }
+
+    def __init__(
+        self,
+        type: str,
+        true_text: str,
+        false_text: str,
+        true_description: Optional[str],
+        false_description: Optional[str],
+        **kwargs,
+    ):
+        self.type = type
+        self.true_text = true_text,
+        self.false_text = false_text,
+        self.true_description = true_description,
+        self.false_description = false_description,
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()
+
+
 class EntityArrayItemField(JsonObject):
     """Array item field for entity (similar to EntityTypedField but with optional type)"""
 
@@ -689,6 +753,7 @@ class EntityCustomField(JsonObject):
         "item_type",
         "user",
         "entity_ref",
+        "boolean"
     }
 
     def __init__(
@@ -709,6 +774,7 @@ class EntityCustomField(JsonObject):
         item_type: Optional[str] = None,
         user: Optional[Union[Dict[str, Any], EntityUserIDField, EntityUserField]] = None,
         entity_ref: Optional[Union[Dict[str, Any], EntityRefField]] = None,
+        boolean: Optional[Union[Dict[str, Any], EntityBooleanCheckboxField, EntityBooleanTextField]] = None,
         **kwargs,
     ):
         self.label = label
@@ -727,6 +793,7 @@ class EntityCustomField(JsonObject):
         self.item_type = item_type
         self.user = user
         self.entity_ref = entity_ref
+        self.boolean = boolean
         self.additional_attributes = kwargs
 
     def __str__(self):
