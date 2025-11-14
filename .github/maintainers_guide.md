@@ -175,15 +175,17 @@ Before creating a new release, ensure that everything on a stable branch has
 landed, then [run the tests](#unit-tests).
 
 1. Create the commit for the release
-   1. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and [Developmental Release](https://peps.python.org/pep-0440/#developmental-releases).
+   1. Use the latest supported Python version. Using a [virtual environment](#python-and-friends) is recommended.
+   2. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and [Developmental Release](https://peps.python.org/pep-0440/#developmental-releases).
       - Example: if the current version is `1.2.3`, a proper development bump would be `1.2.4.dev0`
       - `.dev` will indicate to pip that this is a [Development Release](https://peps.python.org/pep-0440/#developmental-releases)
       - Note that the `dev` version can be bumped in development releases: `1.2.4.dev0` -> `1.2.4.dev1`
-   2. Build the docs with `./scripts/generate_api_docs.sh`.
-   3. Commit with a message including the new version number. For example `1.2.4.dev0` & push the commit to a branch where the development release will live (create it if it does not exist)
+   3. Build the docs with `./scripts/generate_api_docs.sh`.
+   4. Commit with a message including the new version number. For example `1.2.4.dev0` & push the commit to a branch where the development release will live (create it if it does not exist)
       1. `git checkout -b future-release`
-      2. `git commit -m 'chore(release): version 1.2.4.dev0'`
-      3. `git push -u origin future-release`
+      2. `git add --all` (review files with `git status` before committing)
+      3. `git commit -m 'chore(release): version 1.2.4.dev0'`
+      4. `git push -u origin future-release`
 2. Create a new GitHub Release
    1. Navigate to the [Releases page](https://github.com/slackapi/python-slack-sdk/releases).
    2. Click the "Draft a new release" button.
@@ -207,14 +209,16 @@ Before creating a new release, ensure that everything on the `main` branch since
 the last tag is in a releasable state! At a minimum, [run the tests](#unit-tests).
 
 1. Create the commit for the release
-   1. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and the [Versioning](#versioning-and-tags) section.
-   2. Build the docs with `./scripts/generate_api_docs.sh`.
-   3. Commit with a message including the new version number. For example `1.2.3` & push the commit to a branch and create a PR to sanity check.
+   1. Use the latest supported Python version. Using a [virtual environment](#python-and-friends) is recommended.
+   2. In `slack_sdk/version.py` bump the version number in adherence to [Semantic Versioning](http://semver.org/) and the [Versioning](#versioning-and-tags) section.
+   3. Build the docs with `./scripts/generate_api_docs.sh`.
+   4. Commit with a message including the new version number. For example `1.2.3` & push the commit to a branch and create a PR to sanity check.
       1. `git checkout -b 1.2.3-release`
-      2. `git commit -m 'chore(release): version 1.2.3'`
-      3. `git push -u origin 1.2.3-release`
-   4. Add relevant labels to the PR and add the PR to a GitHub Milestone.
-   5. Merge in release PR after getting an approval from at least one maintainer.
+      2. `git add --all` (review files with `git status` before committing)
+      3. `git commit -m 'chore(release): version 1.2.3'`
+      4. `git push -u origin 1.2.3-release`
+   5. Add relevant labels to the PR and add the PR to a GitHub Milestone.
+   6. Merge in release PR after getting an approval from at least one maintainer.
 2. Create a new GitHub Release
    1. Navigate to the [Releases page](https://github.com/slackapi/python-slack-sdk/releases).
    2. Click the "Draft a new release" button.
