@@ -23,7 +23,7 @@ from slack_sdk.models.views import View
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block
-from ..models.metadata import Metadata
+from ..models.metadata import Metadata, EventAndEntityMetadata
 from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
@@ -2770,7 +2770,7 @@ class LegacyWebClient(LegacyBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
-        metadata: Optional[Union[Dict, Metadata]] = None,
+        metadata: Optional[Union[Dict, Metadata, EventAndEntityMetadata]] = None,
         markdown_text: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
@@ -2936,6 +2936,7 @@ class LegacyWebClient(LegacyBaseClient):
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
         unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
+        metadata: Optional[Union[Dict, EventAndEntityMetadata]] = None,
         user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
@@ -2952,6 +2953,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "source": source,
                 "unfurl_id": unfurl_id,
                 "unfurls": unfurls,
+                "metadata": metadata,
                 "user_auth_blocks": user_auth_blocks,
                 "user_auth_message": user_auth_message,
                 "user_auth_required": user_auth_required,
@@ -3582,6 +3584,29 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"include_categories": include_categories})
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
+
+    def entity_presentDetails(
+        self,
+        trigger_id: str,
+        metadata: Optional[dict] = None,
+        user_auth_required: Optional[bool] = None,
+        user_auth_url: Optional[str] = None,
+        error: Optional[Dict[str, str]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Provides entity details for the flexpane.
+        https://docs.slack.dev/reference/methods/entity.presentDetails/
+        """
+        kwargs.update({"trigger_id": trigger_id})
+        if metadata is not None:
+            kwargs.update({"metadata": metadata})
+        if user_auth_required is not None:
+            kwargs.update({"user_auth_required": user_auth_required})
+        if user_auth_url is not None:
+            kwargs.update({"user_auth_url": user_auth_url})
+        if error is not None:
+            kwargs.update({"error": error})
+        return self.api_call("entity.presentDetails", json=kwargs)
 
     def files_comments_delete(
         self,
