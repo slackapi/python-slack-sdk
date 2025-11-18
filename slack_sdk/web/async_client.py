@@ -22,7 +22,7 @@ from slack_sdk.web.async_chat_stream import AsyncChatStream
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block
-from ..models.metadata import Metadata, EventAndEntityMetadata
+from ..models.metadata import Metadata, EntityMetadata, EventAndEntityMetadata
 from .async_base_client import AsyncBaseClient, AsyncSlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
@@ -3650,10 +3650,10 @@ class AsyncWebClient(AsyncBaseClient):
     async def entity_presentDetails(
         self,
         trigger_id: str,
-        metadata: Optional[dict] = None,
+        metadata: Optional[Union[Dict, EntityMetadata]] = None,
         user_auth_required: Optional[bool] = None,
         user_auth_url: Optional[str] = None,
-        error: Optional[Dict[str, str]] = None,
+        error: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Provides entity details for the flexpane.
@@ -3668,6 +3668,7 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"user_auth_url": user_auth_url})
         if error is not None:
             kwargs.update({"error": error})
+        _parse_web_class_objects(kwargs)
         return await self.api_call("entity.presentDetails", json=kwargs)
 
     async def files_comments_delete(
