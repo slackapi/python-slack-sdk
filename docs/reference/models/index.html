@@ -223,6 +223,9 @@ functions should return true if valid, false if not.</p>
             if callable(method) and hasattr(method, &#34;validator&#34;):
                 method()
 
+    def get_object_attribute(self, key: str):
+        return getattr(self, key, None)
+
     def get_non_null_attributes(self) -&gt; dict:
         &#34;&#34;&#34;
         Construct a dictionary out of non-null keys (from attributes property)
@@ -240,7 +243,7 @@ functions should return true if valid, false if not.</p>
                     return value
 
         def is_not_empty(self, key: str) -&gt; bool:
-            value = getattr(self, key, None)
+            value = self.get_object_attribute(key)
             if value is None:
                 return False
 
@@ -258,7 +261,9 @@ functions should return true if valid, false if not.</p>
                 return value is not None
 
         return {
-            key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
+            key: to_dict_compatible(value=self.get_object_attribute(key))
+            for key in sorted(self.attributes)
+            if is_not_empty(self, key)
         }
 
     def to_dict(self, *args) -&gt; dict:
@@ -312,7 +317,40 @@ functions should return true if valid, false if not.</p>
 <li><a title="slack_sdk.models.dialogs.DialogBuilder" href="dialogs/index.html#slack_sdk.models.dialogs.DialogBuilder">DialogBuilder</a></li>
 <li><a title="slack_sdk.models.dialogs.DialogTextComponent" href="dialogs/index.html#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></li>
 <li><a title="slack_sdk.models.messages.message.Message" href="messages/message.html#slack_sdk.models.messages.message.Message">Message</a></li>
+<li><a title="slack_sdk.models.metadata.ContentItemEntityFields" href="metadata/index.html#slack_sdk.models.metadata.ContentItemEntityFields">ContentItemEntityFields</a></li>
+<li><a title="slack_sdk.models.metadata.EntityActionButton" href="metadata/index.html#slack_sdk.models.metadata.EntityActionButton">EntityActionButton</a></li>
+<li><a title="slack_sdk.models.metadata.EntityActionProcessingState" href="metadata/index.html#slack_sdk.models.metadata.EntityActionProcessingState">EntityActionProcessingState</a></li>
+<li><a title="slack_sdk.models.metadata.EntityActions" href="metadata/index.html#slack_sdk.models.metadata.EntityActions">EntityActions</a></li>
+<li><a title="slack_sdk.models.metadata.EntityArrayItemField" href="metadata/index.html#slack_sdk.models.metadata.EntityArrayItemField">EntityArrayItemField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityAttributes" href="metadata/index.html#slack_sdk.models.metadata.EntityAttributes">EntityAttributes</a></li>
+<li><a title="slack_sdk.models.metadata.EntityBooleanCheckboxField" href="metadata/index.html#slack_sdk.models.metadata.EntityBooleanCheckboxField">EntityBooleanCheckboxField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityBooleanTextField" href="metadata/index.html#slack_sdk.models.metadata.EntityBooleanTextField">EntityBooleanTextField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityCustomField" href="metadata/index.html#slack_sdk.models.metadata.EntityCustomField">EntityCustomField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityEditNumberConfig" href="metadata/index.html#slack_sdk.models.metadata.EntityEditNumberConfig">EntityEditNumberConfig</a></li>
+<li><a title="slack_sdk.models.metadata.EntityEditSelectConfig" href="metadata/index.html#slack_sdk.models.metadata.EntityEditSelectConfig">EntityEditSelectConfig</a></li>
+<li><a title="slack_sdk.models.metadata.EntityEditSupport" href="metadata/index.html#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a></li>
+<li><a title="slack_sdk.models.metadata.EntityEditTextConfig" href="metadata/index.html#slack_sdk.models.metadata.EntityEditTextConfig">EntityEditTextConfig</a></li>
+<li><a title="slack_sdk.models.metadata.EntityFullSizePreview" href="metadata/index.html#slack_sdk.models.metadata.EntityFullSizePreview">EntityFullSizePreview</a></li>
+<li><a title="slack_sdk.models.metadata.EntityFullSizePreviewError" href="metadata/index.html#slack_sdk.models.metadata.EntityFullSizePreviewError">EntityFullSizePreviewError</a></li>
+<li><a title="slack_sdk.models.metadata.EntityIconField" href="metadata/index.html#slack_sdk.models.metadata.EntityIconField">EntityIconField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityIconSlackFile" href="metadata/index.html#slack_sdk.models.metadata.EntityIconSlackFile">EntityIconSlackFile</a></li>
+<li><a title="slack_sdk.models.metadata.EntityImageField" href="metadata/index.html#slack_sdk.models.metadata.EntityImageField">EntityImageField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityMetadata" href="metadata/index.html#slack_sdk.models.metadata.EntityMetadata">EntityMetadata</a></li>
+<li><a title="slack_sdk.models.metadata.EntityPayload" href="metadata/index.html#slack_sdk.models.metadata.EntityPayload">EntityPayload</a></li>
+<li><a title="slack_sdk.models.metadata.EntityRefField" href="metadata/index.html#slack_sdk.models.metadata.EntityRefField">EntityRefField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityStringField" href="metadata/index.html#slack_sdk.models.metadata.EntityStringField">EntityStringField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityTimestampField" href="metadata/index.html#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityTitle" href="metadata/index.html#slack_sdk.models.metadata.EntityTitle">EntityTitle</a></li>
+<li><a title="slack_sdk.models.metadata.EntityTypedField" href="metadata/index.html#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityUserField" href="metadata/index.html#slack_sdk.models.metadata.EntityUserField">EntityUserField</a></li>
+<li><a title="slack_sdk.models.metadata.EntityUserIDField" href="metadata/index.html#slack_sdk.models.metadata.EntityUserIDField">EntityUserIDField</a></li>
+<li><a title="slack_sdk.models.metadata.EventAndEntityMetadata" href="metadata/index.html#slack_sdk.models.metadata.EventAndEntityMetadata">EventAndEntityMetadata</a></li>
+<li><a title="slack_sdk.models.metadata.ExternalRef" href="metadata/index.html#slack_sdk.models.metadata.ExternalRef">ExternalRef</a></li>
+<li><a title="slack_sdk.models.metadata.FileEntityFields" href="metadata/index.html#slack_sdk.models.metadata.FileEntityFields">FileEntityFields</a></li>
+<li><a title="slack_sdk.models.metadata.FileEntitySlackFile" href="metadata/index.html#slack_sdk.models.metadata.FileEntitySlackFile">FileEntitySlackFile</a></li>
+<li><a title="slack_sdk.models.metadata.IncidentEntityFields" href="metadata/index.html#slack_sdk.models.metadata.IncidentEntityFields">IncidentEntityFields</a></li>
 <li><a title="slack_sdk.models.metadata.Metadata" href="metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a></li>
+<li><a title="slack_sdk.models.metadata.TaskEntityFields" href="metadata/index.html#slack_sdk.models.metadata.TaskEntityFields">TaskEntityFields</a></li>
 <li><a title="slack_sdk.models.views.View" href="views/index.html#slack_sdk.models.views.View">View</a></li>
 <li><a title="slack_sdk.models.views.ViewState" href="views/index.html#slack_sdk.models.views.ViewState">ViewState</a></li>
 <li><a title="slack_sdk.models.views.ViewStateValue" href="views/index.html#slack_sdk.models.views.ViewStateValue">ViewStateValue</a></li>
@@ -361,7 +399,7 @@ def attributes(self) -&gt; Set[str]:
                 return value
 
     def is_not_empty(self, key: str) -&gt; bool:
-        value = getattr(self, key, None)
+        value = self.get_object_attribute(key)
         if value is None:
             return False
 
@@ -379,11 +417,26 @@ def attributes(self) -&gt; Set[str]:
             return value is not None
 
     return {
-        key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
+        key: to_dict_compatible(value=self.get_object_attribute(key))
+        for key in sorted(self.attributes)
+        if is_not_empty(self, key)
     }</code></pre>
 </details>
 <div class="desc"><p>Construct a dictionary out of non-null keys (from attributes property)
 present on this object</p></div>
+</dd>
+<dt id="slack_sdk.models.JsonObject.get_object_attribute"><code class="name flex">
+<span>def <span class="ident">get_object_attribute</span></span>(<span>self, key: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_object_attribute(self, key: str):
+    return getattr(self, key, None)</code></pre>
+</details>
+<div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.JsonObject.to_dict"><code class="name flex">
 <span>def <span class="ident">to_dict</span></span>(<span>self, *args) ‑> dict</span>
@@ -523,6 +576,7 @@ functions should return true if valid, false if not.</p>
 <ul class="">
 <li><code><a title="slack_sdk.models.JsonObject.attributes" href="#slack_sdk.models.JsonObject.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.JsonObject.get_non_null_attributes" href="#slack_sdk.models.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.JsonObject.get_object_attribute" href="#slack_sdk.models.JsonObject.get_object_attribute">get_object_attribute</a></code></li>
 <li><code><a title="slack_sdk.models.JsonObject.to_dict" href="#slack_sdk.models.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.JsonObject.validate_json" href="#slack_sdk.models.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
