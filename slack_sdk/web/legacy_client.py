@@ -23,7 +23,7 @@ from slack_sdk.models.views import View
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block
-from ..models.metadata import Metadata, EventAndEntityMetadata
+from ..models.metadata import Metadata, EntityMetadata, EventAndEntityMetadata
 from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
@@ -3588,10 +3588,10 @@ class LegacyWebClient(LegacyBaseClient):
     def entity_presentDetails(
         self,
         trigger_id: str,
-        metadata: Optional[dict] = None,
+        metadata: Optional[Union[Dict, EntityMetadata]] = None,
         user_auth_required: Optional[bool] = None,
         user_auth_url: Optional[str] = None,
-        error: Optional[Dict[str, str]] = None,
+        error: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Provides entity details for the flexpane.
@@ -3606,6 +3606,7 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"user_auth_url": user_auth_url})
         if error is not None:
             kwargs.update({"error": error})
+        _parse_web_class_objects(kwargs)
         return self.api_call("entity.presentDetails", json=kwargs)
 
     def files_comments_delete(

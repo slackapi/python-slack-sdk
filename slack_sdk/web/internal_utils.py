@@ -212,7 +212,11 @@ def _parse_web_class_objects(kwargs) -> None:
         kwargs.update({"attachments": dict_attachments})
 
     metadata = kwargs.get("metadata", None)
-    if metadata is not None and (isinstance(metadata, Metadata) or isinstance(metadata, EventAndEntityMetadata)):
+    if metadata is not None and (
+        isinstance(metadata, Metadata)
+        or isinstance(metadata, EntityMetadata)
+        or isinstance(metadata, EventAndEntityMetadata)
+    ):
         kwargs.update({"metadata": to_dict(metadata)})
 
 
