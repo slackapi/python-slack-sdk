@@ -106,7 +106,7 @@ class AmazonS3InstallationStore(InstallationStore, AsyncInstallationStore):
 
     def save_bot(self, bot: Bot):
         if bot.bot_token is None:
-            self.logger.debug("Skipped saving a new row because of the absense of bot token in it")
+            self.logger.debug("Skipped saving a new row because of the absence of bot token in it")
             return
 
         none = "none"
