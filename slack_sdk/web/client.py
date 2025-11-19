@@ -5035,7 +5035,7 @@ class WebClient(BaseClient):
         **kwargs,
     ) -> SlackResponse:
         """Deletes multiple items from an existing List.
-        https://docs.slack.dev/reference/methods/slackLists.items.deletemultiple
+        https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple
         """
         kwargs.update(
             {
