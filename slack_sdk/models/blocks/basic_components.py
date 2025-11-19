@@ -148,6 +148,14 @@ class MarkdownTextObject(TextObject):
             title = f": {title}"
         return MarkdownTextObject(text=f"{link}{title}")
 
+    @staticmethod
+    def direct_from_link(link: Link, title: str = "") -> Dict[str, Any]:
+        """
+        Transform a Link object directly into the required object shape
+        to act as a MarkdownTextObject
+        """
+        return MarkdownTextObject.from_link(link, title).to_dict()
+
 
 class RawTextObject(TextObject):
     """raw_text typed text object (used in table block cells)"""
@@ -186,14 +194,6 @@ class RawTextObject(TextObject):
     @JsonValidator("text attribute must have at least 1 character")
     def _validate_text_min_length(self):
         return len(self.text) >= 1
-
-    @staticmethod
-    def direct_from_link(link: Link, title: str = "") -> Dict[str, Any]:
-        """
-        Transform a Link object directly into the required object shape
-        to act as a MarkdownTextObject
-        """
-        return MarkdownTextObject.from_link(link, title).to_dict()
 
 
 class Option(JsonObject):
