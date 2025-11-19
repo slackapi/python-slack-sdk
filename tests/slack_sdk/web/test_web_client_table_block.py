@@ -10,7 +10,7 @@ class TestWebClientTableBlock(unittest.TestCase):
 
     def setUp(self):
         self.client = WebClient(token="xoxb-test-token", base_url="http://localhost:8888")
-        
+
         # Create a sample table block
         self.table = TableBlock(
             rows=[
@@ -95,7 +95,7 @@ class TestWebClientTableBlock(unittest.TestCase):
         json_data = call_args[1]["json"]
         attachments = json_data["attachments"]
         table_dict = attachments[0]["blocks"][0]
-        
+
         self.assertEqual(table_dict["type"], "table")
         self.assertEqual(table_dict["rows"][0][0]["type"], "raw_text")
         self.assertEqual(table_dict["rows"][0][0]["text"], "Name")
@@ -108,12 +108,12 @@ class TestWebClientTableBlock(unittest.TestCase):
         self.assertEqual(table_dict["type"], "table")
         self.assertIn("rows", table_dict)
         self.assertIn("column_settings", table_dict)
-        
+
         # Verify rows structure
         self.assertEqual(len(table_dict["rows"]), 3)
         self.assertEqual(table_dict["rows"][0][0]["type"], "raw_text")
         self.assertEqual(table_dict["rows"][0][0]["text"], "Product")
-        
+
         # Verify column settings
         self.assertEqual(len(table_dict["column_settings"]), 2)
         self.assertEqual(table_dict["column_settings"][0]["is_wrapped"], True)
@@ -124,9 +124,7 @@ class TestWebClientTableBlock(unittest.TestCase):
         """Test that only one table per message is allowed (per Slack documentation)"""
         mock_api_call.return_value = {"ok": True, "channel": "C123", "ts": "1234567890.123456"}
 
-        table2 = TableBlock(
-            rows=[[{"type": "raw_text", "text": "Another table"}]]
-        )
+        table2 = TableBlock(rows=[[{"type": "raw_text", "text": "Another table"}]])
 
         # According to docs, this should only send one table
         # The SDK doesn't enforce this, but Slack API will return error
@@ -167,7 +165,7 @@ class TestWebClientTableBlock(unittest.TestCase):
         )
 
         table_dict = table_with_rich_text.to_dict()
-        
+
         # Verify mixed cell types
         self.assertEqual(table_dict["rows"][0][0]["type"], "raw_text")
         self.assertEqual(table_dict["rows"][1][1]["type"], "rich_text")
