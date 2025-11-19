@@ -590,6 +590,7 @@ class FeedbackButtonObject(JsonObject):
     ):
         """
         A feedback button element object for either positive or negative feedback.
+        https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields
 
         Args:
             text (required): An object containing some text. Maximum length for this field is 75 characters.

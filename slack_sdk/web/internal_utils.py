@@ -17,7 +17,7 @@ from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block
-from slack_sdk.models.metadata import Metadata
+from slack_sdk.models.metadata import Metadata, EventAndEntityMetadata, EntityMetadata
 
 
 def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
@@ -187,12 +187,16 @@ def _build_req_args(
 
 
 def _parse_web_class_objects(kwargs) -> None:
-    def to_dict(obj: Union[Dict, Block, Attachment, Metadata]):
+    def to_dict(obj: Union[Dict, Block, Attachment, Metadata, EventAndEntityMetadata, EntityMetadata]):
         if isinstance(obj, Block):
             return obj.to_dict()
         if isinstance(obj, Attachment):
             return obj.to_dict()
         if isinstance(obj, Metadata):
+            return obj.to_dict()
+        if isinstance(obj, EventAndEntityMetadata):
+            return obj.to_dict()
+        if isinstance(obj, EntityMetadata):
             return obj.to_dict()
         return obj
 
@@ -208,7 +212,11 @@ def _parse_web_class_objects(kwargs) -> None:
         kwargs.update({"attachments": dict_attachments})
 
     metadata = kwargs.get("metadata", None)
-    if metadata is not None and isinstance(metadata, Metadata):
+    if metadata is not None and (
+        isinstance(metadata, Metadata)
+        or isinstance(metadata, EntityMetadata)
+        or isinstance(metadata, EventAndEntityMetadata)
+    ):
         kwargs.update({"metadata": to_dict(metadata)})
 
 
