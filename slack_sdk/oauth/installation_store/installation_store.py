@@ -2,6 +2,7 @@
 
 Refer to https://docs.slack.dev/tools/python-slack-sdk/oauth for details.
 """
+
 from logging import Logger
 from typing import Optional
 

@@ -2,6 +2,7 @@
 
 https://docs.slack.dev/tools/python-slack-sdk/oauth
 """
+
 from .authorize_url_generator import AuthorizeUrlGenerator
 from .authorize_url_generator import OpenIDConnectAuthorizeUrlGenerator
 from .installation_store import InstallationStore

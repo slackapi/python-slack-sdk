@@ -1037,6 +1037,8 @@ class RichTextBlockTests(unittest.TestCase):
                         {"type": "text", "text": "block", "style": {"code": True}},
                         {"type": "text", "text": " "},
                         {"type": "text", "text": "test", "style": {"italic": True}},
+                        {"type": "text", "text": " "},
+                        {"type": "text", "text": "links", "style": {"underline": True}},
                         {"type": "link", "url": "https://slack.com", "text": "Slack website!"},
                     ],
                 },
@@ -1138,6 +1140,8 @@ class RichTextBlockTests(unittest.TestCase):
                         _.Text(text="block", style=_.TextStyle(code=True)),
                         _.Text(text=" "),
                         _.Text(text="test", style=_.TextStyle(italic=True)),
+                        _.Text(text=" "),
+                        _.Text(text="links", style=_.TextStyle(underline=True)),
                         _.Link(text="Slack website!", url="https://slack.com"),
                     ]
                 ),

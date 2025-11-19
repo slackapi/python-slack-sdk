@@ -1,0 +1,12 @@
+# Salesforce Open Source project configuration
+# Learn more: https://github.com/salesforce/oss-template
+#ECCN:Open Source
+#GUSINFO:Open Source,Open Source Workflow
+
+# @slackapi/slack-platform-python
+# are code reviewers for all changes in this repo.
+* @slackapi/slack-platform-python
+
+# @slackapi/developer-education
+# are code reviewers for changes in the `/docs` directory.
+/docs/ @slackapi/developer-education

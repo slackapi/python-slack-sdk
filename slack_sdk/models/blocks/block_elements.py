@@ -561,6 +561,7 @@ class FeedbackButtonsElement(InteractiveElement):
         **others: dict,
     ):
         """Buttons to indicate positive or negative feedback.
+        https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element
 
         Args:
             action_id (required): An identifier for this action.
@@ -650,6 +651,7 @@ class IconButtonElement(InteractiveElement):
         **others: dict,
     ):
         """An icon button to perform actions.
+        https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element
 
         Args:
             action_id: An identifier for this action.
@@ -2032,11 +2034,13 @@ class RichTextElementParts:
             italic: Optional[bool] = None,
             strike: Optional[bool] = None,
             code: Optional[bool] = None,
+            underline: Optional[bool] = None,
         ):
             self.bold = bold
             self.italic = italic
             self.strike = strike
             self.code = code
+            self.underline = underline
 
         def to_dict(self, *args) -> dict:
             result = {
@@ -2044,6 +2048,7 @@ class RichTextElementParts:
                 "italic": self.italic,
                 "strike": self.strike,
                 "code": self.code,
+                "underline": self.underline,
             }
             return {k: v for k, v in result.items() if v is not None}
 
