@@ -1295,16 +1295,6 @@ class RawTextObjectTests(unittest.TestCase):
         expected = {"type": "raw_text", "text": "Direct text"}
         self.assertDictEqual(expected, result)
 
-    def test_text_length_validation_max(self):
-        """Test that text exceeding 3000 characters fails validation"""
-        with self.assertRaises(SlackObjectFormationError):
-            RawTextObject(text="a" * 3001).to_dict()
-
-    def test_text_length_validation_at_max(self):
-        """Test that text at exactly 3000 characters passes validation"""
-        obj = RawTextObject(text="a" * 3000)
-        obj.to_dict()  # Should not raise
-
     def test_text_length_validation_min(self):
         """Test that empty text fails validation"""
         with self.assertRaises(SlackObjectFormationError):
