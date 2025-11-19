@@ -12,8 +12,6 @@ from slack_sdk.web.chat_stream import ChatStream
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block, RichTextBlock
-from ..models.metadata import Metadata
-from ..models.blocks import Block
 from ..models.metadata import Metadata, EntityMetadata, EventAndEntityMetadata
 from .base_client import BaseClient, SlackResponse
 from .internal_utils import (

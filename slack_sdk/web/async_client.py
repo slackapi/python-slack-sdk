@@ -22,8 +22,6 @@ from slack_sdk.web.async_chat_stream import AsyncChatStream
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block, RichTextBlock
-from ..models.metadata import Metadata
-from ..models.blocks import Block
 from ..models.metadata import Metadata, EntityMetadata, EventAndEntityMetadata
 from .async_base_client import AsyncBaseClient, AsyncSlackResponse
 from .internal_utils import (
@@ -5073,7 +5071,7 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deletes multiple items from an existing List.
-        https://docs.slack.dev/reference/methods/slackLists.items.deletemultiple
+        https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple
         """
         kwargs.update(
             {

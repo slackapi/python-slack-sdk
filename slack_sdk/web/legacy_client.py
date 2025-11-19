@@ -23,8 +23,6 @@ from slack_sdk.models.views import View
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block, RichTextBlock
-from ..models.metadata import Metadata
-from ..models.blocks import Block
 from ..models.metadata import Metadata, EntityMetadata, EventAndEntityMetadata
 from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
@@ -5011,7 +5009,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes multiple items from an existing List.
-        https://docs.slack.dev/reference/methods/slackLists.items.deletemultiple
+        https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple
         """
         kwargs.update(
             {
