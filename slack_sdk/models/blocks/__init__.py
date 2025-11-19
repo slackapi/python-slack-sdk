@@ -16,6 +16,7 @@ from .basic_components import (
     Option,
     OptionGroup,
     PlainTextObject,
+    RawTextObject,
     TextObject,
 )
 from .block_elements import (
@@ -71,6 +72,7 @@ from .blocks import (
     MarkdownBlock,
     RichTextBlock,
     SectionBlock,
+    TableBlock,
     VideoBlock,
 )
 
@@ -83,6 +85,7 @@ __all__ = [
     "Option",
     "OptionGroup",
     "PlainTextObject",
+    "RawTextObject",
     "TextObject",
     "BlockElement",
     "ButtonElement",
@@ -133,6 +136,7 @@ __all__ = [
     "InputBlock",
     "MarkdownBlock",
     "SectionBlock",
+    "TableBlock",
     "VideoBlock",
     "RichTextBlock",
 ]

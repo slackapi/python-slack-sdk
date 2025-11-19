@@ -157,6 +157,40 @@ class MarkdownTextObject(TextObject):
         return MarkdownTextObject.from_link(link, title).to_dict()
 
 
+class RawTextObject(TextObject):
+    """raw_text typed text object"""
+
+    type = "raw_text"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return {"text", "type"}
+
+    def __init__(self, *, text: str):
+        """A raw text object used in table block cells.
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object/
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            text (required): The text content for the table block cell.
+        """
+        super().__init__(text=text, type=self.type)
+
+    @staticmethod
+    def from_str(text: str) -> "RawTextObject":
+        """Transforms a string into a RawTextObject"""
+        return RawTextObject(text=text)
+
+    @staticmethod
+    def direct_from_string(text: str) -> Dict[str, Any]:
+        """Transforms a string into the required object shape to act as a RawTextObject"""
+        return RawTextObject.from_str(text).to_dict()
+
+    @JsonValidator("text attribute must have at least 1 character")
+    def _validate_text_min_length(self):
+        return len(self.text) >= 1
+
+
 class Option(JsonObject):
     """Option object used in dialogs, legacy message actions (interactivity in attachments),
     and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
