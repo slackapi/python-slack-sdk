@@ -40,12 +40,2270 @@ el.replaceWith(d);
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityType"><code class="name">var <span class="ident">EntityType</span></code></dt>
+<dd>
+<div class="desc"><p>Custom field types</p></div>
+</dd>
+</dl>
 </section>
 <section>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="slack_sdk.models.metadata.ContentItemEntityFields"><code class="flex name class">
+<span>class <span class="ident">ContentItemEntityFields</span></span>
+<span>(</span><span>preview: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityImageField" href="#slack_sdk.models.metadata.EntityImageField">EntityImageField</a> | None = None,<br>description: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>created_by: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>date_created: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>date_updated: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>last_modified_by: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ContentItemEntityFields(JsonObject):
+    &#34;&#34;&#34;Fields specific to content item entities&#34;&#34;&#34;
+
+    attributes = {
+        &#34;preview&#34;,
+        &#34;description&#34;,
+        &#34;created_by&#34;,
+        &#34;date_created&#34;,
+        &#34;date_updated&#34;,
+        &#34;last_modified_by&#34;,
+    }
+
+    def __init__(
+        self,
+        preview: Optional[Union[Dict[str, Any], EntityImageField]] = None,
+        description: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        created_by: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        date_created: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        date_updated: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        last_modified_by: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        **kwargs,
+    ):
+        self.preview = preview
+        self.description = description
+        self.created_by = created_by
+        self.date_created = date_created
+        self.date_updated = date_updated
+        self.last_modified_by = last_modified_by
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Fields specific to content item entities</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.ContentItemEntityFields.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityActionButton"><code class="flex name class">
+<span>class <span class="ident">EntityActionButton</span></span>
+<span>(</span><span>text: str,<br>action_id: str,<br>value: str | None = None,<br>style: str | None = None,<br>url: str | None = None,<br>accessibility_label: str | None = None,<br>processing_state: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityActionProcessingState" href="#slack_sdk.models.metadata.EntityActionProcessingState">EntityActionProcessingState</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityActionButton(JsonObject):
+    &#34;&#34;&#34;Action button for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;text&#34;,
+        &#34;action_id&#34;,
+        &#34;value&#34;,
+        &#34;style&#34;,
+        &#34;url&#34;,
+        &#34;accessibility_label&#34;,
+        &#34;processing_state&#34;,
+    }
+
+    def __init__(
+        self,
+        text: str,
+        action_id: str,
+        value: Optional[str] = None,
+        style: Optional[str] = None,
+        url: Optional[str] = None,
+        accessibility_label: Optional[str] = None,
+        processing_state: Optional[Union[Dict[str, Any], EntityActionProcessingState]] = None,
+        **kwargs,
+    ):
+        self.text = text
+        self.action_id = action_id
+        self.value = value
+        self.style = style
+        self.url = url
+        self.accessibility_label = accessibility_label
+        self.processing_state = processing_state
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Action button for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityActionButton.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityActionProcessingState"><code class="flex name class">
+<span>class <span class="ident">EntityActionProcessingState</span></span>
+<span>(</span><span>enabled: bool, interstitial_text: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityActionProcessingState(JsonObject):
+    &#34;&#34;&#34;Processing state configuration for entity action button&#34;&#34;&#34;
+
+    attributes = {
+        &#34;enabled&#34;,
+        &#34;interstitial_text&#34;,
+    }
+
+    def __init__(
+        self,
+        enabled: bool,
+        interstitial_text: Optional[str] = None,
+        **kwargs,
+    ):
+        self.enabled = enabled
+        self.interstitial_text = interstitial_text
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Processing state configuration for entity action button</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityActionProcessingState.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityActions"><code class="flex name class">
+<span>class <span class="ident">EntityActions</span></span>
+<span>(</span><span>primary_actions: List[Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityActionButton" href="#slack_sdk.models.metadata.EntityActionButton">EntityActionButton</a>] | None = None,<br>overflow_actions: List[Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityActionButton" href="#slack_sdk.models.metadata.EntityActionButton">EntityActionButton</a>] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityActions(JsonObject):
+    &#34;&#34;&#34;Actions configuration for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;primary_actions&#34;,
+        &#34;overflow_actions&#34;,
+    }
+
+    def __init__(
+        self,
+        primary_actions: Optional[List[Union[Dict[str, Any], EntityActionButton]]] = None,
+        overflow_actions: Optional[List[Union[Dict[str, Any], EntityActionButton]]] = None,
+        **kwargs,
+    ):
+        self.primary_actions = primary_actions
+        self.overflow_actions = overflow_actions
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Actions configuration for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityActions.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityArrayItemField"><code class="flex name class">
+<span>class <span class="ident">EntityArrayItemField</span></span>
+<span>(</span><span>type: str | None = None,<br>label: str | None = None,<br>value: str | int | None = None,<br>link: str | None = None,<br>icon: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a> | None = None,<br>long: bool | None = None,<br>format: str | None = None,<br>image_url: str | None = None,<br>slack_file: Dict[str, Any] | None = None,<br>alt_text: str | None = None,<br>edit: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditSupport" href="#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a> | None = None,<br>tag_color: str | None = None,<br>user: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityUserIDField" href="#slack_sdk.models.metadata.EntityUserIDField">EntityUserIDField</a> | <a title="slack_sdk.models.metadata.EntityUserField" href="#slack_sdk.models.metadata.EntityUserField">EntityUserField</a> | None = None,<br>entity_ref: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityRefField" href="#slack_sdk.models.metadata.EntityRefField">EntityRefField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityArrayItemField(JsonObject):
+    &#34;&#34;&#34;Array item field for entity (similar to EntityTypedField but with optional type)&#34;&#34;&#34;
+
+    attributes = {
+        &#34;type&#34;,
+        &#34;label&#34;,
+        &#34;value&#34;,
+        &#34;link&#34;,
+        &#34;icon&#34;,
+        &#34;long&#34;,
+        &#34;format&#34;,
+        &#34;image_url&#34;,
+        &#34;slack_file&#34;,
+        &#34;alt_text&#34;,
+        &#34;edit&#34;,
+        &#34;tag_color&#34;,
+        &#34;user&#34;,
+        &#34;entity_ref&#34;,
+    }
+
+    def __init__(
+        self,
+        type: Optional[str] = None,
+        label: Optional[str] = None,
+        value: Optional[Union[str, int]] = None,
+        link: Optional[str] = None,
+        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
+        long: Optional[bool] = None,
+        format: Optional[str] = None,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Dict[str, Any]] = None,
+        alt_text: Optional[str] = None,
+        edit: Optional[Union[Dict[str, Any], EntityEditSupport]] = None,
+        tag_color: Optional[str] = None,
+        user: Optional[Union[Dict[str, Any], EntityUserIDField, EntityUserField]] = None,
+        entity_ref: Optional[Union[Dict[str, Any], EntityRefField]] = None,
+        **kwargs,
+    ):
+        self.type = type
+        self.label = label
+        self.value = value
+        self.link = link
+        self.icon = icon
+        self.long = long
+        self.format = format
+        self.image_url = image_url
+        self.slack_file = slack_file
+        self.alt_text = alt_text
+        self.edit = edit
+        self.tag_color = tag_color
+        self.user = user
+        self.entity_ref = entity_ref
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Array item field for entity (similar to EntityTypedField but with optional type)</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityArrayItemField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityAttributes"><code class="flex name class">
+<span>class <span class="ident">EntityAttributes</span></span>
+<span>(</span><span>title: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTitle" href="#slack_sdk.models.metadata.EntityTitle">EntityTitle</a>,<br>display_type: str | None = None,<br>display_id: str | None = None,<br>product_icon: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a> | None = None,<br>product_name: str | None = None,<br>locale: str | None = None,<br>full_size_preview: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityFullSizePreview" href="#slack_sdk.models.metadata.EntityFullSizePreview">EntityFullSizePreview</a> | None = None,<br>metadata_last_modified: int | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityAttributes(JsonObject):
+    &#34;&#34;&#34;Attributes for an entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;title&#34;,
+        &#34;display_type&#34;,
+        &#34;display_id&#34;,
+        &#34;product_icon&#34;,
+        &#34;product_name&#34;,
+        &#34;locale&#34;,
+        &#34;full_size_preview&#34;,
+        &#34;metadata_last_modified&#34;,
+    }
+
+    def __init__(
+        self,
+        title: Union[Dict[str, Any], EntityTitle],
+        display_type: Optional[str] = None,
+        display_id: Optional[str] = None,
+        product_icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
+        product_name: Optional[str] = None,
+        locale: Optional[str] = None,
+        full_size_preview: Optional[Union[Dict[str, Any], EntityFullSizePreview]] = None,
+        metadata_last_modified: Optional[int] = None,
+        **kwargs,
+    ):
+        self.title = title
+        self.display_type = display_type
+        self.display_id = display_id
+        self.product_icon = product_icon
+        self.product_name = product_name
+        self.locale = locale
+        self.full_size_preview = full_size_preview
+        self.metadata_last_modified = metadata_last_modified
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Attributes for an entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityAttributes.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityBooleanCheckboxField"><code class="flex name class">
+<span>class <span class="ident">EntityBooleanCheckboxField</span></span>
+<span>(</span><span>type: str, text: str, description: str | None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityBooleanCheckboxField(JsonObject):
+    &#34;&#34;&#34;Boolean checkbox properties&#34;&#34;&#34;
+
+    attributes = {&#34;type&#34;, &#34;text&#34;, &#34;description&#34;}
+
+    def __init__(
+        self,
+        type: str,
+        text: str,
+        description: Optional[str],
+        **kwargs,
+    ):
+        self.type = type
+        self.text = text
+        self.description = description
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Boolean checkbox properties</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityBooleanCheckboxField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityBooleanTextField"><code class="flex name class">
+<span>class <span class="ident">EntityBooleanTextField</span></span>
+<span>(</span><span>type: str,<br>true_text: str,<br>false_text: str,<br>true_description: str | None,<br>false_description: str | None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityBooleanTextField(JsonObject):
+    &#34;&#34;&#34;Boolean text properties&#34;&#34;&#34;
+
+    attributes = {&#34;type&#34;, &#34;true_text&#34;, &#34;false_text&#34;, &#34;true_description&#34;, &#34;false_description&#34;}
+
+    def __init__(
+        self,
+        type: str,
+        true_text: str,
+        false_text: str,
+        true_description: Optional[str],
+        false_description: Optional[str],
+        **kwargs,
+    ):
+        self.type = type
+        self.true_text = (true_text,)
+        self.false_text = (false_text,)
+        self.true_description = (true_description,)
+        self.false_description = (false_description,)
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Boolean text properties</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityBooleanTextField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityCustomField"><code class="flex name class">
+<span>class <span class="ident">EntityCustomField</span></span>
+<span>(</span><span>label: str,<br>key: str,<br>type: str,<br>value: str | int | List[Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityArrayItemField" href="#slack_sdk.models.metadata.EntityArrayItemField">EntityArrayItemField</a>] | None = None,<br>link: str | None = None,<br>icon: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a> | None = None,<br>long: bool | None = None,<br>format: str | None = None,<br>image_url: str | None = None,<br>slack_file: Dict[str, Any] | None = None,<br>alt_text: str | None = None,<br>tag_color: str | None = None,<br>edit: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditSupport" href="#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a> | None = None,<br>item_type: str | None = None,<br>user: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityUserIDField" href="#slack_sdk.models.metadata.EntityUserIDField">EntityUserIDField</a> | <a title="slack_sdk.models.metadata.EntityUserField" href="#slack_sdk.models.metadata.EntityUserField">EntityUserField</a> | None = None,<br>entity_ref: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityRefField" href="#slack_sdk.models.metadata.EntityRefField">EntityRefField</a> | None = None,<br>boolean: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityBooleanCheckboxField" href="#slack_sdk.models.metadata.EntityBooleanCheckboxField">EntityBooleanCheckboxField</a> | <a title="slack_sdk.models.metadata.EntityBooleanTextField" href="#slack_sdk.models.metadata.EntityBooleanTextField">EntityBooleanTextField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityCustomField(JsonObject):
+    &#34;&#34;&#34;Custom field for entity with flexible types&#34;&#34;&#34;
+
+    attributes = {
+        &#34;label&#34;,
+        &#34;key&#34;,
+        &#34;type&#34;,
+        &#34;value&#34;,
+        &#34;link&#34;,
+        &#34;icon&#34;,
+        &#34;long&#34;,
+        &#34;format&#34;,
+        &#34;image_url&#34;,
+        &#34;slack_file&#34;,
+        &#34;alt_text&#34;,
+        &#34;tag_color&#34;,
+        &#34;edit&#34;,
+        &#34;item_type&#34;,
+        &#34;user&#34;,
+        &#34;entity_ref&#34;,
+        &#34;boolean&#34;,
+    }
+
+    def __init__(
+        self,
+        label: str,
+        key: str,
+        type: str,
+        value: Optional[Union[str, int, List[Union[Dict[str, Any], EntityArrayItemField]]]] = None,
+        link: Optional[str] = None,
+        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
+        long: Optional[bool] = None,
+        format: Optional[str] = None,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Dict[str, Any]] = None,
+        alt_text: Optional[str] = None,
+        tag_color: Optional[str] = None,
+        edit: Optional[Union[Dict[str, Any], EntityEditSupport]] = None,
+        item_type: Optional[str] = None,
+        user: Optional[Union[Dict[str, Any], EntityUserIDField, EntityUserField]] = None,
+        entity_ref: Optional[Union[Dict[str, Any], EntityRefField]] = None,
+        boolean: Optional[Union[Dict[str, Any], EntityBooleanCheckboxField, EntityBooleanTextField]] = None,
+        **kwargs,
+    ):
+        self.label = label
+        self.key = key
+        self.type = type
+        self.value = value
+        self.link = link
+        self.icon = icon
+        self.long = long
+        self.format = format
+        self.image_url = image_url
+        self.slack_file = slack_file
+        self.alt_text = alt_text
+        self.tag_color = tag_color
+        self.edit = edit
+        self.item_type = item_type
+        self.user = user
+        self.entity_ref = entity_ref
+        self.boolean = boolean
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()
+
+    @EnumValidator(&#34;type&#34;, CustomFieldType)
+    def type_valid(self):
+        return self.type is None or self.type in CustomFieldType</code></pre>
+</details>
+<div class="desc"><p>Custom field for entity with flexible types</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityCustomField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityCustomField.type_valid"><code class="name flex">
+<span>def <span class="ident">type_valid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@EnumValidator(&#34;type&#34;, CustomFieldType)
+def type_valid(self):
+    return self.type is None or self.type in CustomFieldType</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityEditNumberConfig"><code class="flex name class">
+<span>class <span class="ident">EntityEditNumberConfig</span></span>
+<span>(</span><span>is_decimal_allowed: bool | None = None,<br>min_value: int | float | None = None,<br>max_value: int | float | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityEditNumberConfig(JsonObject):
+    &#34;&#34;&#34;Number configuration for entity edit support&#34;&#34;&#34;
+
+    attributes = {
+        &#34;is_decimal_allowed&#34;,
+        &#34;min_value&#34;,
+        &#34;max_value&#34;,
+    }
+
+    def __init__(
+        self,
+        is_decimal_allowed: Optional[bool] = None,
+        min_value: Optional[Union[int, float]] = None,
+        max_value: Optional[Union[int, float]] = None,
+        **kwargs,
+    ):
+        self.is_decimal_allowed = is_decimal_allowed
+        self.min_value = min_value
+        self.max_value = max_value
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Number configuration for entity edit support</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityEditNumberConfig.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityEditSelectConfig"><code class="flex name class">
+<span>class <span class="ident">EntityEditSelectConfig</span></span>
+<span>(</span><span>current_value: str | None = None,<br>current_values: List[str] | None = None,<br>static_options: List[Dict[str, Any]] | None = None,<br>fetch_options_dynamically: bool | None = None,<br>min_query_length: int | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityEditSelectConfig(JsonObject):
+    &#34;&#34;&#34;Select configuration for entity edit support&#34;&#34;&#34;
+
+    attributes = {
+        &#34;current_value&#34;,
+        &#34;current_values&#34;,
+        &#34;static_options&#34;,
+        &#34;fetch_options_dynamically&#34;,
+        &#34;min_query_length&#34;,
+    }
+
+    def __init__(
+        self,
+        current_value: Optional[str] = None,
+        current_values: Optional[List[str]] = None,
+        static_options: Optional[List[Dict[str, Any]]] = None,  # Option[]
+        fetch_options_dynamically: Optional[bool] = None,
+        min_query_length: Optional[int] = None,
+        **kwargs,
+    ):
+        self.current_value = current_value
+        self.current_values = current_values
+        self.static_options = static_options
+        self.fetch_options_dynamically = fetch_options_dynamically
+        self.min_query_length = min_query_length
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Select configuration for entity edit support</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityEditSelectConfig.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityEditSupport"><code class="flex name class">
+<span>class <span class="ident">EntityEditSupport</span></span>
+<span>(</span><span>enabled: bool,<br>placeholder: Dict[str, Any] | None = None,<br>hint: Dict[str, Any] | None = None,<br>optional: bool | None = None,<br>select: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditSelectConfig" href="#slack_sdk.models.metadata.EntityEditSelectConfig">EntityEditSelectConfig</a> | None = None,<br>number: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditNumberConfig" href="#slack_sdk.models.metadata.EntityEditNumberConfig">EntityEditNumberConfig</a> | None = None,<br>text: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditTextConfig" href="#slack_sdk.models.metadata.EntityEditTextConfig">EntityEditTextConfig</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityEditSupport(JsonObject):
+    &#34;&#34;&#34;Edit support configuration for entity fields&#34;&#34;&#34;
+
+    attributes = {
+        &#34;enabled&#34;,
+        &#34;placeholder&#34;,
+        &#34;hint&#34;,
+        &#34;optional&#34;,
+        &#34;select&#34;,
+        &#34;number&#34;,
+        &#34;text&#34;,
+    }
+
+    def __init__(
+        self,
+        enabled: bool,
+        placeholder: Optional[Dict[str, Any]] = None,  # PlainTextElement
+        hint: Optional[Dict[str, Any]] = None,  # PlainTextElement
+        optional: Optional[bool] = None,
+        select: Optional[Union[Dict[str, Any], EntityEditSelectConfig]] = None,
+        number: Optional[Union[Dict[str, Any], EntityEditNumberConfig]] = None,
+        text: Optional[Union[Dict[str, Any], EntityEditTextConfig]] = None,
+        **kwargs,
+    ):
+        self.enabled = enabled
+        self.placeholder = placeholder
+        self.hint = hint
+        self.optional = optional
+        self.select = select
+        self.number = number
+        self.text = text
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Edit support configuration for entity fields</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityEditSupport.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityEditTextConfig"><code class="flex name class">
+<span>class <span class="ident">EntityEditTextConfig</span></span>
+<span>(</span><span>min_length: int | None = None, max_length: int | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityEditTextConfig(JsonObject):
+    &#34;&#34;&#34;Text configuration for entity edit support&#34;&#34;&#34;
+
+    attributes = {
+        &#34;min_length&#34;,
+        &#34;max_length&#34;,
+    }
+
+    def __init__(
+        self,
+        min_length: Optional[int] = None,
+        max_length: Optional[int] = None,
+        **kwargs,
+    ):
+        self.min_length = min_length
+        self.max_length = max_length
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Text configuration for entity edit support</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityEditTextConfig.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityFullSizePreview"><code class="flex name class">
+<span>class <span class="ident">EntityFullSizePreview</span></span>
+<span>(</span><span>is_supported: bool,<br>preview_url: str | None = None,<br>mime_type: str | None = None,<br>error: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityFullSizePreviewError" href="#slack_sdk.models.metadata.EntityFullSizePreviewError">EntityFullSizePreviewError</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityFullSizePreview(JsonObject):
+    &#34;&#34;&#34;Full-size preview configuration for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;is_supported&#34;,
+        &#34;preview_url&#34;,
+        &#34;mime_type&#34;,
+        &#34;error&#34;,
+    }
+
+    def __init__(
+        self,
+        is_supported: bool,
+        preview_url: Optional[str] = None,
+        mime_type: Optional[str] = None,
+        error: Optional[Union[Dict[str, Any], EntityFullSizePreviewError]] = None,
+        **kwargs,
+    ):
+        self.is_supported = is_supported
+        self.preview_url = preview_url
+        self.mime_type = mime_type
+        self.error = error
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Full-size preview configuration for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityFullSizePreview.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityFullSizePreviewError"><code class="flex name class">
+<span>class <span class="ident">EntityFullSizePreviewError</span></span>
+<span>(</span><span>code: str, message: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityFullSizePreviewError(JsonObject):
+    &#34;&#34;&#34;Error information for full-size preview&#34;&#34;&#34;
+
+    attributes = {
+        &#34;code&#34;,
+        &#34;message&#34;,
+    }
+
+    def __init__(
+        self,
+        code: str,
+        message: Optional[str] = None,
+        **kwargs,
+    ):
+        self.code = code
+        self.message = message
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Error information for full-size preview</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityFullSizePreviewError.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityIconField"><code class="flex name class">
+<span>class <span class="ident">EntityIconField</span></span>
+<span>(</span><span>alt_text: str,<br>url: str | None = None,<br>slack_file: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconSlackFile" href="#slack_sdk.models.metadata.EntityIconSlackFile">EntityIconSlackFile</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityIconField(JsonObject):
+    &#34;&#34;&#34;Icon field for entity attributes&#34;&#34;&#34;
+
+    attributes = {
+        &#34;alt_text&#34;,
+        &#34;url&#34;,
+        &#34;slack_file&#34;,
+    }
+
+    def __init__(
+        self,
+        alt_text: str,
+        url: Optional[str] = None,
+        slack_file: Optional[Union[Dict[str, Any], EntityIconSlackFile]] = None,
+        **kwargs,
+    ):
+        self.alt_text = alt_text
+        self.url = url
+        self.slack_file = slack_file
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Icon field for entity attributes</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityIconField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityIconSlackFile"><code class="flex name class">
+<span>class <span class="ident">EntityIconSlackFile</span></span>
+<span>(</span><span>id: str | None = None, url: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityIconSlackFile(JsonObject):
+    &#34;&#34;&#34;Slack file reference for entity icon&#34;&#34;&#34;
+
+    attributes = {
+        &#34;id&#34;,
+        &#34;url&#34;,
+    }
+
+    def __init__(
+        self,
+        id: Optional[str] = None,
+        url: Optional[str] = None,
+        **kwargs,
+    ):
+        self.id = id
+        self.url = url
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Slack file reference for entity icon</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityIconSlackFile.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityImageField"><code class="flex name class">
+<span>class <span class="ident">EntityImageField</span></span>
+<span>(</span><span>alt_text: str,<br>label: str | None = None,<br>image_url: str | None = None,<br>slack_file: Dict[str, Any] | None = None,<br>title: str | None = None,<br>type: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityImageField(JsonObject):
+    &#34;&#34;&#34;Image field for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;alt_text&#34;,
+        &#34;label&#34;,
+        &#34;image_url&#34;,
+        &#34;slack_file&#34;,
+        &#34;title&#34;,
+        &#34;type&#34;,
+    }
+
+    def __init__(
+        self,
+        alt_text: str,
+        label: Optional[str] = None,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Dict[str, Any]] = None,
+        title: Optional[str] = None,
+        type: Optional[str] = None,
+        **kwargs,
+    ):
+        self.alt_text = alt_text
+        self.label = label
+        self.image_url = image_url
+        self.slack_file = slack_file
+        self.title = title
+        self.type = type
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Image field for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityImageField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityMetadata"><code class="flex name class">
+<span>class <span class="ident">EntityMetadata</span></span>
+<span>(</span><span>entity_type: str,<br>entity_payload: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityPayload" href="#slack_sdk.models.metadata.EntityPayload">EntityPayload</a>,<br>external_ref: Dict[str, Any] | <a title="slack_sdk.models.metadata.ExternalRef" href="#slack_sdk.models.metadata.ExternalRef">ExternalRef</a>,<br>url: str,<br>app_unfurl_url: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityMetadata(JsonObject):
+    &#34;&#34;&#34;Work object entity metadata
+
+    https://docs.slack.dev/messaging/work-objects/
+    &#34;&#34;&#34;
+
+    attributes = {
+        &#34;entity_type&#34;,
+        &#34;entity_payload&#34;,
+        &#34;external_ref&#34;,
+        &#34;url&#34;,
+        &#34;app_unfurl_url&#34;,
+    }
+
+    def __init__(
+        self,
+        entity_type: str,
+        entity_payload: Union[Dict[str, Any], EntityPayload],
+        external_ref: Union[Dict[str, Any], ExternalRef],
+        url: str,
+        app_unfurl_url: Optional[str] = None,
+        **kwargs,
+    ):
+        self.entity_type = entity_type
+        self.entity_payload = entity_payload
+        self.external_ref = external_ref
+        self.url = url
+        self.app_unfurl_url = app_unfurl_url
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()
+
+    @EnumValidator(&#34;entity_type&#34;, EntityType)
+    def entity_type_valid(self):
+        return self.entity_type is None or self.entity_type in EntityType</code></pre>
+</details>
+<div class="desc"><p>Work object entity metadata</p>
+<p><a href="https://docs.slack.dev/messaging/work-objects/">https://docs.slack.dev/messaging/work-objects/</a></p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityMetadata.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityMetadata.entity_type_valid"><code class="name flex">
+<span>def <span class="ident">entity_type_valid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@EnumValidator(&#34;entity_type&#34;, EntityType)
+def entity_type_valid(self):
+    return self.entity_type is None or self.entity_type in EntityType</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityPayload"><code class="flex name class">
+<span>class <span class="ident">EntityPayload</span></span>
+<span>(</span><span>attributes: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityAttributes" href="#slack_sdk.models.metadata.EntityAttributes">EntityAttributes</a>,<br>fields: Dict[str, Any] | <a title="slack_sdk.models.metadata.ContentItemEntityFields" href="#slack_sdk.models.metadata.ContentItemEntityFields">ContentItemEntityFields</a> | <a title="slack_sdk.models.metadata.FileEntityFields" href="#slack_sdk.models.metadata.FileEntityFields">FileEntityFields</a> | <a title="slack_sdk.models.metadata.IncidentEntityFields" href="#slack_sdk.models.metadata.IncidentEntityFields">IncidentEntityFields</a> | <a title="slack_sdk.models.metadata.TaskEntityFields" href="#slack_sdk.models.metadata.TaskEntityFields">TaskEntityFields</a> | None = None,<br>custom_fields: List[Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityCustomField" href="#slack_sdk.models.metadata.EntityCustomField">EntityCustomField</a>] | None = None,<br>slack_file: Dict[str, Any] | <a title="slack_sdk.models.metadata.FileEntitySlackFile" href="#slack_sdk.models.metadata.FileEntitySlackFile">FileEntitySlackFile</a> | None = None,<br>display_order: List[str] | None = None,<br>actions: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityActions" href="#slack_sdk.models.metadata.EntityActions">EntityActions</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityPayload(JsonObject):
+    &#34;&#34;&#34;Payload schema for an entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;attributes&#34;,
+        &#34;fields&#34;,
+        &#34;custom_fields&#34;,
+        &#34;slack_file&#34;,
+        &#34;display_order&#34;,
+        &#34;actions&#34;,
+    }
+
+    def __init__(
+        self,
+        attributes: Union[Dict[str, Any], EntityAttributes],
+        fields: Optional[
+            Union[Dict[str, Any], ContentItemEntityFields, FileEntityFields, IncidentEntityFields, TaskEntityFields]
+        ] = None,
+        custom_fields: Optional[List[Union[Dict[str, Any], EntityCustomField]]] = None,
+        slack_file: Optional[Union[Dict[str, Any], FileEntitySlackFile]] = None,
+        display_order: Optional[List[str]] = None,
+        actions: Optional[Union[Dict[str, Any], EntityActions]] = None,
+        **kwargs,
+    ):
+        # Store entity attributes data with a different internal name to avoid
+        # shadowing the class-level &#39;attributes&#39; set used for JSON serialization
+        self._entity_attributes = attributes
+        self.fields = fields
+        self.custom_fields = custom_fields
+        self.slack_file = slack_file
+        self.display_order = display_order
+        self.actions = actions
+        self.additional_attributes = kwargs
+
+    @property
+    def entity_attributes(self) -&gt; Union[Dict[str, Any], EntityAttributes]:
+        &#34;&#34;&#34;Get the entity attributes data.
+
+        Note: Use this property to access the attributes data. The class-level
+        &#39;attributes&#39; is reserved for the JSON serialization schema.
+        &#34;&#34;&#34;
+        return self._entity_attributes
+
+    @entity_attributes.setter
+    def entity_attributes(self, value: Union[Dict[str, Any], EntityAttributes]):
+        &#34;&#34;&#34;Set the entity attributes data.&#34;&#34;&#34;
+        self._entity_attributes = value
+
+    def get_object_attribute(self, key: str):
+        if key == &#34;attributes&#34;:
+            return self._entity_attributes
+        else:
+            return getattr(self, key, None)
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Payload schema for an entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityPayload.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityPayload.entity_attributes"><code class="name">prop <span class="ident">entity_attributes</span> : Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityAttributes" href="#slack_sdk.models.metadata.EntityAttributes">EntityAttributes</a></code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def entity_attributes(self) -&gt; Union[Dict[str, Any], EntityAttributes]:
+    &#34;&#34;&#34;Get the entity attributes data.
+
+    Note: Use this property to access the attributes data. The class-level
+    &#39;attributes&#39; is reserved for the JSON serialization schema.
+    &#34;&#34;&#34;
+    return self._entity_attributes</code></pre>
+</details>
+<div class="desc"><p>Get the entity attributes data.</p>
+<p>Note: Use this property to access the attributes data. The class-level
+'attributes' is reserved for the JSON serialization schema.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityPayload.get_object_attribute"><code class="name flex">
+<span>def <span class="ident">get_object_attribute</span></span>(<span>self, key: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_object_attribute(self, key: str):
+    if key == &#34;attributes&#34;:
+        return self._entity_attributes
+    else:
+        return getattr(self, key, None)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityRefField"><code class="flex name class">
+<span>class <span class="ident">EntityRefField</span></span>
+<span>(</span><span>entity_url: str,<br>external_ref: Dict[str, Any] | <a title="slack_sdk.models.metadata.ExternalRef" href="#slack_sdk.models.metadata.ExternalRef">ExternalRef</a>,<br>title: str,<br>display_type: str | None = None,<br>icon: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityRefField(JsonObject):
+    &#34;&#34;&#34;Entity reference field&#34;&#34;&#34;
+
+    attributes = {
+        &#34;entity_url&#34;,
+        &#34;external_ref&#34;,
+        &#34;title&#34;,
+        &#34;display_type&#34;,
+        &#34;icon&#34;,
+    }
+
+    def __init__(
+        self,
+        entity_url: str,
+        external_ref: Union[Dict[str, Any], ExternalRef],
+        title: str,
+        display_type: Optional[str] = None,
+        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
+        **kwargs,
+    ):
+        self.entity_url = entity_url
+        self.external_ref = external_ref
+        self.title = title
+        self.display_type = display_type
+        self.icon = icon
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Entity reference field</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityRefField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityStringField"><code class="flex name class">
+<span>class <span class="ident">EntityStringField</span></span>
+<span>(</span><span>value: str,<br>label: str | None = None,<br>format: str | None = None,<br>link: str | None = None,<br>icon: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a> | None = None,<br>long: bool | None = None,<br>type: str | None = None,<br>tag_color: str | None = None,<br>edit: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditSupport" href="#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityStringField(JsonObject):
+    &#34;&#34;&#34;String field for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;value&#34;,
+        &#34;label&#34;,
+        &#34;format&#34;,
+        &#34;link&#34;,
+        &#34;icon&#34;,
+        &#34;long&#34;,
+        &#34;type&#34;,
+        &#34;tag_color&#34;,
+        &#34;edit&#34;,
+    }
+
+    def __init__(
+        self,
+        value: str,
+        label: Optional[str] = None,
+        format: Optional[str] = None,
+        link: Optional[str] = None,
+        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
+        long: Optional[bool] = None,
+        type: Optional[str] = None,
+        tag_color: Optional[str] = None,
+        edit: Optional[Union[Dict[str, Any], EntityEditSupport]] = None,
+        **kwargs,
+    ):
+        self.value = value
+        self.label = label
+        self.format = format
+        self.link = link
+        self.icon = icon
+        self.long = long
+        self.type = type
+        self.tag_color = tag_color
+        self.edit = edit
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>String field for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityStringField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityTimestampField"><code class="flex name class">
+<span>class <span class="ident">EntityTimestampField</span></span>
+<span>(</span><span>value: int,<br>label: str | None = None,<br>type: str | None = None,<br>edit: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditSupport" href="#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityTimestampField(JsonObject):
+    &#34;&#34;&#34;Timestamp field for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;value&#34;,
+        &#34;label&#34;,
+        &#34;type&#34;,
+        &#34;edit&#34;,
+    }
+
+    def __init__(
+        self,
+        value: int,
+        label: Optional[str] = None,
+        type: Optional[str] = None,
+        edit: Optional[Union[Dict[str, Any], EntityEditSupport]] = None,
+        **kwargs,
+    ):
+        self.value = value
+        self.label = label
+        self.type = type
+        self.edit = edit
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Timestamp field for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityTimestampField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityTitle"><code class="flex name class">
+<span>class <span class="ident">EntityTitle</span></span>
+<span>(</span><span>text: str,<br>edit: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditSupport" href="#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityTitle(JsonObject):
+    &#34;&#34;&#34;Title for entity attributes&#34;&#34;&#34;
+
+    attributes = {
+        &#34;text&#34;,
+        &#34;edit&#34;,
+    }
+
+    def __init__(
+        self,
+        text: str,
+        edit: Optional[Union[Dict[str, Any], EntityEditSupport]] = None,
+        **kwargs,
+    ):
+        self.text = text
+        self.edit = edit
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Title for entity attributes</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityTitle.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityTypedField"><code class="flex name class">
+<span>class <span class="ident">EntityTypedField</span></span>
+<span>(</span><span>type: str,<br>label: str | None = None,<br>value: str | int | None = None,<br>link: str | None = None,<br>icon: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a> | None = None,<br>long: bool | None = None,<br>format: str | None = None,<br>image_url: str | None = None,<br>slack_file: Dict[str, Any] | None = None,<br>alt_text: str | None = None,<br>edit: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityEditSupport" href="#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a> | None = None,<br>tag_color: str | None = None,<br>user: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityUserIDField" href="#slack_sdk.models.metadata.EntityUserIDField">EntityUserIDField</a> | <a title="slack_sdk.models.metadata.EntityUserField" href="#slack_sdk.models.metadata.EntityUserField">EntityUserField</a> | None = None,<br>entity_ref: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityRefField" href="#slack_sdk.models.metadata.EntityRefField">EntityRefField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityTypedField(JsonObject):
+    &#34;&#34;&#34;Typed field for entity with various display options&#34;&#34;&#34;
+
+    attributes = {
+        &#34;type&#34;,
+        &#34;label&#34;,
+        &#34;value&#34;,
+        &#34;link&#34;,
+        &#34;icon&#34;,
+        &#34;long&#34;,
+        &#34;format&#34;,
+        &#34;image_url&#34;,
+        &#34;slack_file&#34;,
+        &#34;alt_text&#34;,
+        &#34;edit&#34;,
+        &#34;tag_color&#34;,
+        &#34;user&#34;,
+        &#34;entity_ref&#34;,
+    }
+
+    def __init__(
+        self,
+        type: str,
+        label: Optional[str] = None,
+        value: Optional[Union[str, int]] = None,
+        link: Optional[str] = None,
+        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
+        long: Optional[bool] = None,
+        format: Optional[str] = None,
+        image_url: Optional[str] = None,
+        slack_file: Optional[Dict[str, Any]] = None,
+        alt_text: Optional[str] = None,
+        edit: Optional[Union[Dict[str, Any], EntityEditSupport]] = None,
+        tag_color: Optional[str] = None,
+        user: Optional[Union[Dict[str, Any], EntityUserIDField, EntityUserField]] = None,
+        entity_ref: Optional[Union[Dict[str, Any], EntityRefField]] = None,
+        **kwargs,
+    ):
+        self.type = type
+        self.label = label
+        self.value = value
+        self.link = link
+        self.icon = icon
+        self.long = long
+        self.format = format
+        self.image_url = image_url
+        self.slack_file = slack_file
+        self.alt_text = alt_text
+        self.edit = edit
+        self.tag_color = tag_color
+        self.user = user
+        self.entity_ref = entity_ref
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Typed field for entity with various display options</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityTypedField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityUserField"><code class="flex name class">
+<span>class <span class="ident">EntityUserField</span></span>
+<span>(</span><span>text: str,<br>url: str | None = None,<br>email: str | None = None,<br>icon: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityUserField(JsonObject):
+    &#34;&#34;&#34;User field for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;text&#34;,
+        &#34;url&#34;,
+        &#34;email&#34;,
+        &#34;icon&#34;,
+    }
+
+    def __init__(
+        self,
+        text: str,
+        url: Optional[str] = None,
+        email: Optional[str] = None,
+        icon: Optional[Union[Dict[str, Any], EntityIconField]] = None,
+        **kwargs,
+    ):
+        self.text = text
+        self.url = url
+        self.email = email
+        self.icon = icon
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>User field for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityUserField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EntityUserIDField"><code class="flex name class">
+<span>class <span class="ident">EntityUserIDField</span></span>
+<span>(</span><span>user_id: str, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EntityUserIDField(JsonObject):
+    &#34;&#34;&#34;User ID field for entity&#34;&#34;&#34;
+
+    attributes = {
+        &#34;user_id&#34;,
+    }
+
+    def __init__(
+        self,
+        user_id: str,
+        **kwargs,
+    ):
+        self.user_id = user_id
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>User ID field for entity</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EntityUserIDField.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.EventAndEntityMetadata"><code class="flex name class">
+<span>class <span class="ident">EventAndEntityMetadata</span></span>
+<span>(</span><span>event_type: str | None = None,<br>event_payload: Dict[str, Any] | None = None,<br>entities: List[Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityMetadata" href="#slack_sdk.models.metadata.EntityMetadata">EntityMetadata</a>] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EventAndEntityMetadata(JsonObject):
+    &#34;&#34;&#34;Message metadata with entities
+
+    https://docs.slack.dev/messaging/message-metadata/
+    https://docs.slack.dev/messaging/work-objects/
+    &#34;&#34;&#34;
+
+    attributes = {&#34;event_type&#34;, &#34;event_payload&#34;, &#34;entities&#34;}
+
+    def __init__(
+        self,
+        event_type: Optional[str] = None,
+        event_payload: Optional[Dict[str, Any]] = None,
+        entities: Optional[List[Union[Dict[str, Any], EntityMetadata]]] = None,
+        **kwargs,
+    ):
+        self.event_type = event_type
+        self.event_payload = event_payload
+        self.entities = entities
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Message metadata with entities</p>
+<p><a href="https://docs.slack.dev/messaging/message-metadata/">https://docs.slack.dev/messaging/message-metadata/</a>
+<a href="https://docs.slack.dev/messaging/work-objects/">https://docs.slack.dev/messaging/work-objects/</a></p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.EventAndEntityMetadata.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.ExternalRef"><code class="flex name class">
+<span>class <span class="ident">ExternalRef</span></span>
+<span>(</span><span>id: str, type: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ExternalRef(JsonObject):
+    &#34;&#34;&#34;Reference (and optional type) used to identify an entity within the developer&#39;s system&#34;&#34;&#34;
+
+    attributes = {
+        &#34;id&#34;,
+        &#34;type&#34;,
+    }
+
+    def __init__(
+        self,
+        id: str,
+        type: Optional[str] = None,
+        **kwargs,
+    ):
+        self.id = id
+        self.type = type
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Reference (and optional type) used to identify an entity within the developer's system</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.ExternalRef.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.FileEntityFields"><code class="flex name class">
+<span>class <span class="ident">FileEntityFields</span></span>
+<span>(</span><span>preview: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityImageField" href="#slack_sdk.models.metadata.EntityImageField">EntityImageField</a> | None = None,<br>created_by: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>date_created: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>date_updated: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>last_modified_by: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>file_size: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>mime_type: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>full_size_preview: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityFullSizePreview" href="#slack_sdk.models.metadata.EntityFullSizePreview">EntityFullSizePreview</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileEntityFields(JsonObject):
+    &#34;&#34;&#34;Fields specific to file entities&#34;&#34;&#34;
+
+    attributes = {
+        &#34;preview&#34;,
+        &#34;created_by&#34;,
+        &#34;date_created&#34;,
+        &#34;date_updated&#34;,
+        &#34;last_modified_by&#34;,
+        &#34;file_size&#34;,
+        &#34;mime_type&#34;,
+        &#34;full_size_preview&#34;,
+    }
+
+    def __init__(
+        self,
+        preview: Optional[Union[Dict[str, Any], EntityImageField]] = None,
+        created_by: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        date_created: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        date_updated: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        last_modified_by: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        file_size: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        mime_type: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        full_size_preview: Optional[Union[Dict[str, Any], EntityFullSizePreview]] = None,
+        **kwargs,
+    ):
+        self.preview = preview
+        self.created_by = created_by
+        self.date_created = date_created
+        self.date_updated = date_updated
+        self.last_modified_by = last_modified_by
+        self.file_size = file_size
+        self.mime_type = mime_type
+        self.full_size_preview = full_size_preview
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Fields specific to file entities</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.FileEntityFields.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.FileEntitySlackFile"><code class="flex name class">
+<span>class <span class="ident">FileEntitySlackFile</span></span>
+<span>(</span><span>id: str, type: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FileEntitySlackFile(JsonObject):
+    &#34;&#34;&#34;Slack file reference for file entities&#34;&#34;&#34;
+
+    attributes = {
+        &#34;id&#34;,
+        &#34;type&#34;,
+    }
+
+    def __init__(
+        self,
+        id: str,
+        type: Optional[str] = None,
+        **kwargs,
+    ):
+        self.id = id
+        self.type = type
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Slack file reference for file entities</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.FileEntitySlackFile.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.metadata.IncidentEntityFields"><code class="flex name class">
+<span>class <span class="ident">IncidentEntityFields</span></span>
+<span>(</span><span>status: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>priority: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>urgency: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>created_by: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>assigned_to: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>date_created: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>date_updated: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>description: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>service: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IncidentEntityFields(JsonObject):
+    &#34;&#34;&#34;Fields specific to incident entities&#34;&#34;&#34;
+
+    attributes = {
+        &#34;status&#34;,
+        &#34;priority&#34;,
+        &#34;urgency&#34;,
+        &#34;created_by&#34;,
+        &#34;assigned_to&#34;,
+        &#34;date_created&#34;,
+        &#34;date_updated&#34;,
+        &#34;description&#34;,
+        &#34;service&#34;,
+    }
+
+    def __init__(
+        self,
+        status: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        priority: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        urgency: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        created_by: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        assigned_to: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        date_created: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        date_updated: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        description: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        service: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        **kwargs,
+    ):
+        self.status = status
+        self.priority = priority
+        self.urgency = urgency
+        self.created_by = created_by
+        self.assigned_to = assigned_to
+        self.date_created = date_created
+        self.date_updated = date_updated
+        self.description = description
+        self.service = service
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Fields specific to incident entities</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.IncidentEntityFields.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.metadata.Metadata"><code class="flex name class">
 <span>class <span class="ident">Metadata</span></span>
 <span>(</span><span>event_type: str, event_payload: Dict[str, Any], **kwargs)</span>
@@ -107,6 +2365,81 @@ el.replaceWith(d);
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.metadata.TaskEntityFields"><code class="flex name class">
+<span>class <span class="ident">TaskEntityFields</span></span>
+<span>(</span><span>description: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>created_by: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>date_created: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>date_updated: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a> | None = None,<br>assignee: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>status: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>due_date: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a> | None = None,<br>priority: Dict[str, Any] | <a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TaskEntityFields(JsonObject):
+    &#34;&#34;&#34;Fields specific to task entities&#34;&#34;&#34;
+
+    attributes = {
+        &#34;description&#34;,
+        &#34;created_by&#34;,
+        &#34;date_created&#34;,
+        &#34;date_updated&#34;,
+        &#34;assignee&#34;,
+        &#34;status&#34;,
+        &#34;due_date&#34;,
+        &#34;priority&#34;,
+    }
+
+    def __init__(
+        self,
+        description: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        created_by: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        date_created: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        date_updated: Optional[Union[Dict[str, Any], EntityTimestampField]] = None,
+        assignee: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        status: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        due_date: Optional[Union[Dict[str, Any], EntityTypedField]] = None,
+        priority: Optional[Union[Dict[str, Any], EntityStringField]] = None,
+        **kwargs,
+    ):
+        self.description = description
+        self.created_by = created_by
+        self.date_created = date_created
+        self.date_updated = date_updated
+        self.assignee = assignee
+        self.status = status
+        self.due_date = due_date
+        self.priority = priority
+        self.additional_attributes = kwargs
+
+    def __str__(self):
+        return str(self.get_non_null_attributes())
+
+    def __repr__(self):
+        return self.__str__()</code></pre>
+</details>
+<div class="desc"><p>Fields specific to task entities</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.metadata.TaskEntityFields.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -120,12 +2453,219 @@ el.replaceWith(d);
 <li><code><a title="slack_sdk.models" href="../index.html">slack_sdk.models</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityType" href="#slack_sdk.models.metadata.EntityType">EntityType</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.ContentItemEntityFields" href="#slack_sdk.models.metadata.ContentItemEntityFields">ContentItemEntityFields</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.ContentItemEntityFields.attributes" href="#slack_sdk.models.metadata.ContentItemEntityFields.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityActionButton" href="#slack_sdk.models.metadata.EntityActionButton">EntityActionButton</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityActionButton.attributes" href="#slack_sdk.models.metadata.EntityActionButton.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityActionProcessingState" href="#slack_sdk.models.metadata.EntityActionProcessingState">EntityActionProcessingState</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityActionProcessingState.attributes" href="#slack_sdk.models.metadata.EntityActionProcessingState.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityActions" href="#slack_sdk.models.metadata.EntityActions">EntityActions</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityActions.attributes" href="#slack_sdk.models.metadata.EntityActions.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityArrayItemField" href="#slack_sdk.models.metadata.EntityArrayItemField">EntityArrayItemField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityArrayItemField.attributes" href="#slack_sdk.models.metadata.EntityArrayItemField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityAttributes" href="#slack_sdk.models.metadata.EntityAttributes">EntityAttributes</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityAttributes.attributes" href="#slack_sdk.models.metadata.EntityAttributes.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityBooleanCheckboxField" href="#slack_sdk.models.metadata.EntityBooleanCheckboxField">EntityBooleanCheckboxField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityBooleanCheckboxField.attributes" href="#slack_sdk.models.metadata.EntityBooleanCheckboxField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityBooleanTextField" href="#slack_sdk.models.metadata.EntityBooleanTextField">EntityBooleanTextField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityBooleanTextField.attributes" href="#slack_sdk.models.metadata.EntityBooleanTextField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityCustomField" href="#slack_sdk.models.metadata.EntityCustomField">EntityCustomField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityCustomField.attributes" href="#slack_sdk.models.metadata.EntityCustomField.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.metadata.EntityCustomField.type_valid" href="#slack_sdk.models.metadata.EntityCustomField.type_valid">type_valid</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityEditNumberConfig" href="#slack_sdk.models.metadata.EntityEditNumberConfig">EntityEditNumberConfig</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityEditNumberConfig.attributes" href="#slack_sdk.models.metadata.EntityEditNumberConfig.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityEditSelectConfig" href="#slack_sdk.models.metadata.EntityEditSelectConfig">EntityEditSelectConfig</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityEditSelectConfig.attributes" href="#slack_sdk.models.metadata.EntityEditSelectConfig.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityEditSupport" href="#slack_sdk.models.metadata.EntityEditSupport">EntityEditSupport</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityEditSupport.attributes" href="#slack_sdk.models.metadata.EntityEditSupport.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityEditTextConfig" href="#slack_sdk.models.metadata.EntityEditTextConfig">EntityEditTextConfig</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityEditTextConfig.attributes" href="#slack_sdk.models.metadata.EntityEditTextConfig.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityFullSizePreview" href="#slack_sdk.models.metadata.EntityFullSizePreview">EntityFullSizePreview</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityFullSizePreview.attributes" href="#slack_sdk.models.metadata.EntityFullSizePreview.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityFullSizePreviewError" href="#slack_sdk.models.metadata.EntityFullSizePreviewError">EntityFullSizePreviewError</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityFullSizePreviewError.attributes" href="#slack_sdk.models.metadata.EntityFullSizePreviewError.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityIconField" href="#slack_sdk.models.metadata.EntityIconField">EntityIconField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityIconField.attributes" href="#slack_sdk.models.metadata.EntityIconField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityIconSlackFile" href="#slack_sdk.models.metadata.EntityIconSlackFile">EntityIconSlackFile</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityIconSlackFile.attributes" href="#slack_sdk.models.metadata.EntityIconSlackFile.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityImageField" href="#slack_sdk.models.metadata.EntityImageField">EntityImageField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityImageField.attributes" href="#slack_sdk.models.metadata.EntityImageField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityMetadata" href="#slack_sdk.models.metadata.EntityMetadata">EntityMetadata</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityMetadata.attributes" href="#slack_sdk.models.metadata.EntityMetadata.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.metadata.EntityMetadata.entity_type_valid" href="#slack_sdk.models.metadata.EntityMetadata.entity_type_valid">entity_type_valid</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityPayload" href="#slack_sdk.models.metadata.EntityPayload">EntityPayload</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityPayload.attributes" href="#slack_sdk.models.metadata.EntityPayload.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.metadata.EntityPayload.entity_attributes" href="#slack_sdk.models.metadata.EntityPayload.entity_attributes">entity_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.metadata.EntityPayload.get_object_attribute" href="#slack_sdk.models.metadata.EntityPayload.get_object_attribute">get_object_attribute</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityRefField" href="#slack_sdk.models.metadata.EntityRefField">EntityRefField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityRefField.attributes" href="#slack_sdk.models.metadata.EntityRefField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityStringField" href="#slack_sdk.models.metadata.EntityStringField">EntityStringField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityStringField.attributes" href="#slack_sdk.models.metadata.EntityStringField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityTimestampField" href="#slack_sdk.models.metadata.EntityTimestampField">EntityTimestampField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityTimestampField.attributes" href="#slack_sdk.models.metadata.EntityTimestampField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityTitle" href="#slack_sdk.models.metadata.EntityTitle">EntityTitle</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityTitle.attributes" href="#slack_sdk.models.metadata.EntityTitle.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityTypedField" href="#slack_sdk.models.metadata.EntityTypedField">EntityTypedField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityTypedField.attributes" href="#slack_sdk.models.metadata.EntityTypedField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityUserField" href="#slack_sdk.models.metadata.EntityUserField">EntityUserField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityUserField.attributes" href="#slack_sdk.models.metadata.EntityUserField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EntityUserIDField" href="#slack_sdk.models.metadata.EntityUserIDField">EntityUserIDField</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EntityUserIDField.attributes" href="#slack_sdk.models.metadata.EntityUserIDField.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.EventAndEntityMetadata" href="#slack_sdk.models.metadata.EventAndEntityMetadata">EventAndEntityMetadata</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.EventAndEntityMetadata.attributes" href="#slack_sdk.models.metadata.EventAndEntityMetadata.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.ExternalRef" href="#slack_sdk.models.metadata.ExternalRef">ExternalRef</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.ExternalRef.attributes" href="#slack_sdk.models.metadata.ExternalRef.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.FileEntityFields" href="#slack_sdk.models.metadata.FileEntityFields">FileEntityFields</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.FileEntityFields.attributes" href="#slack_sdk.models.metadata.FileEntityFields.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.FileEntitySlackFile" href="#slack_sdk.models.metadata.FileEntitySlackFile">FileEntitySlackFile</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.FileEntitySlackFile.attributes" href="#slack_sdk.models.metadata.FileEntitySlackFile.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.IncidentEntityFields" href="#slack_sdk.models.metadata.IncidentEntityFields">IncidentEntityFields</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.IncidentEntityFields.attributes" href="#slack_sdk.models.metadata.IncidentEntityFields.attributes">attributes</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="slack_sdk.models.metadata.Metadata" href="#slack_sdk.models.metadata.Metadata">Metadata</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.metadata.Metadata.attributes" href="#slack_sdk.models.metadata.Metadata.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.metadata.TaskEntityFields" href="#slack_sdk.models.metadata.TaskEntityFields">TaskEntityFields</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.metadata.TaskEntityFields.attributes" href="#slack_sdk.models.metadata.TaskEntityFields.attributes">attributes</a></code></li>
 </ul>
 </li>
 </ul>

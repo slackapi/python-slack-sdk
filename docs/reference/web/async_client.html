@@ -2790,7 +2790,7 @@ el.replaceWith(d);
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
-        metadata: Optional[Union[Dict, Metadata]] = None,
+        metadata: Optional[Union[Dict, Metadata, EventAndEntityMetadata]] = None,
         markdown_text: Optional[str] = None,
         **kwargs,
     ) -&gt; AsyncSlackResponse:
@@ -3019,6 +3019,7 @@ el.replaceWith(d);
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
         unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
+        metadata: Optional[Union[Dict, EventAndEntityMetadata]] = None,
         user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
@@ -3035,6 +3036,7 @@ el.replaceWith(d);
                 &#34;source&#34;: source,
                 &#34;unfurl_id&#34;: unfurl_id,
                 &#34;unfurls&#34;: unfurls,
+                &#34;metadata&#34;: metadata,
                 &#34;user_auth_blocks&#34;: user_auth_blocks,
                 &#34;user_auth_message&#34;: user_auth_message,
                 &#34;user_auth_required&#34;: user_auth_required,
@@ -3665,6 +3667,30 @@ el.replaceWith(d);
         &#34;&#34;&#34;
         kwargs.update({&#34;include_categories&#34;: include_categories})
         return await self.api_call(&#34;emoji.list&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    async def entity_presentDetails(
+        self,
+        trigger_id: str,
+        metadata: Optional[Union[Dict, EntityMetadata]] = None,
+        user_auth_required: Optional[bool] = None,
+        user_auth_url: Optional[str] = None,
+        error: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Provides entity details for the flexpane.
+        https://docs.slack.dev/reference/methods/entity.presentDetails/
+        &#34;&#34;&#34;
+        kwargs.update({&#34;trigger_id&#34;: trigger_id})
+        if metadata is not None:
+            kwargs.update({&#34;metadata&#34;: metadata})
+        if user_auth_required is not None:
+            kwargs.update({&#34;user_auth_required&#34;: user_auth_required})
+        if user_auth_url is not None:
+            kwargs.update({&#34;user_auth_url&#34;: user_auth_url})
+        if error is not None:
+            kwargs.update({&#34;error&#34;: error})
+        _parse_web_class_objects(kwargs)
+        return await self.api_call(&#34;entity.presentDetails&#34;, json=kwargs)
 
     async def files_comments_delete(
         self,
@@ -4919,6 +4945,249 @@ el.replaceWith(d);
             }
         )
         return await self.api_call(&#34;search.messages&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
+    async def slackLists_access_delete(
+        self,
+        *,
+        list_id: str,
+        channel_ids: Optional[List[str]] = None,
+        user_ids: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Revoke access to a List for specified entities.
+        https://docs.slack.dev/reference/methods/slackLists.access.delete
+        &#34;&#34;&#34;
+        kwargs.update({&#34;list_id&#34;: list_id, &#34;channel_ids&#34;: channel_ids, &#34;user_ids&#34;: user_ids})
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.access.delete&#34;, json=kwargs)
+
+    async def slackLists_access_set(
+        self,
+        *,
+        list_id: str,
+        access_level: str,
+        channel_ids: Optional[List[str]] = None,
+        user_ids: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Set the access level to a List for specified entities.
+        https://docs.slack.dev/reference/methods/slackLists.access.set
+        &#34;&#34;&#34;
+        kwargs.update({&#34;list_id&#34;: list_id, &#34;access_level&#34;: access_level, &#34;channel_ids&#34;: channel_ids, &#34;user_ids&#34;: user_ids})
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.access.set&#34;, json=kwargs)
+
+    async def slackLists_create(
+        self,
+        *,
+        name: str,
+        description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
+        schema: Optional[List[Dict[str, Any]]] = None,
+        copy_from_list_id: Optional[str] = None,
+        include_copied_list_records: Optional[bool] = None,
+        todo_mode: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Creates a List.
+        https://docs.slack.dev/reference/methods/slackLists.create
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;name&#34;: name,
+                &#34;description_blocks&#34;: description_blocks,
+                &#34;schema&#34;: schema,
+                &#34;copy_from_list_id&#34;: copy_from_list_id,
+                &#34;include_copied_list_records&#34;: include_copied_list_records,
+                &#34;todo_mode&#34;: todo_mode,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.create&#34;, json=kwargs)
+
+    async def slackLists_download_get(
+        self,
+        *,
+        list_id: str,
+        job_id: str,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Retrieve List download URL from an export job to download List contents.
+        https://docs.slack.dev/reference/methods/slackLists.download.get
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;job_id&#34;: job_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.download.get&#34;, json=kwargs)
+
+    async def slackLists_download_start(
+        self,
+        *,
+        list_id: str,
+        include_archived: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Initiate a job to export List contents.
+        https://docs.slack.dev/reference/methods/slackLists.download.start
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;include_archived&#34;: include_archived,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.download.start&#34;, json=kwargs)
+
+    async def slackLists_items_create(
+        self,
+        *,
+        list_id: str,
+        duplicated_item_id: Optional[str] = None,
+        parent_item_id: Optional[str] = None,
+        initial_fields: Optional[List[Dict[str, Any]]] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Add a new item to an existing List.
+        https://docs.slack.dev/reference/methods/slackLists.items.create
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;duplicated_item_id&#34;: duplicated_item_id,
+                &#34;parent_item_id&#34;: parent_item_id,
+                &#34;initial_fields&#34;: initial_fields,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.items.create&#34;, json=kwargs)
+
+    async def slackLists_items_delete(
+        self,
+        *,
+        list_id: str,
+        id: str,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Deletes an item from an existing List.
+        https://docs.slack.dev/reference/methods/slackLists.items.delete
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;id&#34;: id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.items.delete&#34;, json=kwargs)
+
+    async def slackLists_items_deleteMultiple(
+        self,
+        *,
+        list_id: str,
+        ids: List[str],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Deletes multiple items from an existing List.
+        https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;ids&#34;: ids,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.items.deleteMultiple&#34;, json=kwargs)
+
+    async def slackLists_items_info(
+        self,
+        *,
+        list_id: str,
+        id: str,
+        include_is_subscribed: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Get a row from a List.
+        https://docs.slack.dev/reference/methods/slackLists.items.info
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;id&#34;: id,
+                &#34;include_is_subscribed&#34;: include_is_subscribed,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.items.info&#34;, json=kwargs)
+
+    async def slackLists_items_list(
+        self,
+        *,
+        list_id: str,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        archived: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Get records from a List.
+        https://docs.slack.dev/reference/methods/slackLists.items.list
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;limit&#34;: limit,
+                &#34;cursor&#34;: cursor,
+                &#34;archived&#34;: archived,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.items.list&#34;, json=kwargs)
+
+    async def slackLists_items_update(
+        self,
+        *,
+        list_id: str,
+        cells: List[Dict[str, Any]],
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Updates cells in a List.
+        https://docs.slack.dev/reference/methods/slackLists.items.update
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;list_id&#34;: list_id,
+                &#34;cells&#34;: cells,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.items.update&#34;, json=kwargs)
+
+    async def slackLists_update(
+        self,
+        *,
+        id: str,
+        name: Optional[str] = None,
+        description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
+        todo_mode: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Update a List.
+        https://docs.slack.dev/reference/methods/slackLists.update
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;id&#34;: id,
+                &#34;name&#34;: name,
+                &#34;description_blocks&#34;: description_blocks,
+                &#34;todo_mode&#34;: todo_mode,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call(&#34;slackLists.update&#34;, json=kwargs)
 
     async def stars_add(
         self,
@@ -10066,7 +10335,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://docs.slack.dev/reference/methods/chat.postEphemeral">https://docs.slack.dev/reference/methods/chat.postEphemeral</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_postMessage"><code class="name flex">
-<span>async def <span class="ident">chat_postMessage</span></span>(<span>self,<br>*,<br>channel: str,<br>text: str | None = None,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>reply_broadcast: bool | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>container_id: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>mrkdwn: bool | None = None,<br>link_names: bool | None = None,<br>username: str | None = None,<br>parse: str | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>markdown_text: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_postMessage</span></span>(<span>self,<br>*,<br>channel: str,<br>text: str | None = None,<br>as_user: bool | None = None,<br>attachments: str | Sequence[Dict | <a title="slack_sdk.models.attachments.Attachment" href="../models/attachments/index.html#slack_sdk.models.attachments.Attachment">Attachment</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>thread_ts: str | None = None,<br>reply_broadcast: bool | None = None,<br>unfurl_links: bool | None = None,<br>unfurl_media: bool | None = None,<br>container_id: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>mrkdwn: bool | None = None,<br>link_names: bool | None = None,<br>username: str | None = None,<br>parse: str | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | <a title="slack_sdk.models.metadata.EventAndEntityMetadata" href="../models/metadata/index.html#slack_sdk.models.metadata.EventAndEntityMetadata">EventAndEntityMetadata</a> | None = None,<br>markdown_text: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10092,7 +10361,7 @@ Each authorization represents an app installation that the event is visible to.
     link_names: Optional[bool] = None,
     username: Optional[str] = None,
     parse: Optional[str] = None,  # none, full
-    metadata: Optional[Union[Dict, Metadata]] = None,
+    metadata: Optional[Union[Dict, Metadata, EventAndEntityMetadata]] = None,
     markdown_text: Optional[str] = None,
     **kwargs,
 ) -&gt; AsyncSlackResponse:
@@ -10414,7 +10683,7 @@ await streamer.stop()
 </code></pre></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.chat_unfurl"><code class="name flex">
-<span>async def <span class="ident">chat_unfurl</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>ts: str | None = None,<br>source: str | None = None,<br>unfurl_id: str | None = None,<br>unfurls: Dict[str, Dict] | None = None,<br>user_auth_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>user_auth_message: str | None = None,<br>user_auth_required: bool | None = None,<br>user_auth_url: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">chat_unfurl</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>ts: str | None = None,<br>source: str | None = None,<br>unfurl_id: str | None = None,<br>unfurls: Dict[str, Dict] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.EventAndEntityMetadata" href="../models/metadata/index.html#slack_sdk.models.metadata.EventAndEntityMetadata">EventAndEntityMetadata</a> | None = None,<br>user_auth_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>user_auth_message: str | None = None,<br>user_auth_required: bool | None = None,<br>user_auth_url: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10429,6 +10698,7 @@ await streamer.stop()
     source: Optional[str] = None,
     unfurl_id: Optional[str] = None,
     unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
+    metadata: Optional[Union[Dict, EventAndEntityMetadata]] = None,
     user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     user_auth_message: Optional[str] = None,
     user_auth_required: Optional[bool] = None,
@@ -10445,6 +10715,7 @@ await streamer.stop()
             &#34;source&#34;: source,
             &#34;unfurl_id&#34;: unfurl_id,
             &#34;unfurls&#34;: unfurls,
+            &#34;metadata&#34;: metadata,
             &#34;user_auth_blocks&#34;: user_auth_blocks,
             &#34;user_auth_message&#34;: user_auth_message,
             &#34;user_auth_required&#34;: user_auth_required,
@@ -11475,6 +11746,41 @@ or received but have not yet been approved by all parties.
 </details>
 <div class="desc"><p>Lists custom emoji for a team.
 <a href="https://docs.slack.dev/reference/methods/emoji.list">https://docs.slack.dev/reference/methods/emoji.list</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.entity_presentDetails"><code class="name flex">
+<span>async def <span class="ident">entity_presentDetails</span></span>(<span>self,<br>trigger_id: str,<br>metadata: Dict | <a title="slack_sdk.models.metadata.EntityMetadata" href="../models/metadata/index.html#slack_sdk.models.metadata.EntityMetadata">EntityMetadata</a> | None = None,<br>user_auth_required: bool | None = None,<br>user_auth_url: str | None = None,<br>error: Dict[str, Any] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def entity_presentDetails(
+    self,
+    trigger_id: str,
+    metadata: Optional[Union[Dict, EntityMetadata]] = None,
+    user_auth_required: Optional[bool] = None,
+    user_auth_url: Optional[str] = None,
+    error: Optional[Dict[str, Any]] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Provides entity details for the flexpane.
+    https://docs.slack.dev/reference/methods/entity.presentDetails/
+    &#34;&#34;&#34;
+    kwargs.update({&#34;trigger_id&#34;: trigger_id})
+    if metadata is not None:
+        kwargs.update({&#34;metadata&#34;: metadata})
+    if user_auth_required is not None:
+        kwargs.update({&#34;user_auth_required&#34;: user_auth_required})
+    if user_auth_url is not None:
+        kwargs.update({&#34;user_auth_url&#34;: user_auth_url})
+    if error is not None:
+        kwargs.update({&#34;error&#34;: error})
+    _parse_web_class_objects(kwargs)
+    return await self.api_call(&#34;entity.presentDetails&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Provides entity details for the flexpane.
+<a href="https://docs.slack.dev/reference/methods/entity.presentDetails/">https://docs.slack.dev/reference/methods/entity.presentDetails/</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.files_comments_delete"><code class="name flex">
 <span>async def <span class="ident">files_comments_delete</span></span>(<span>self, *, file: str, id: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
@@ -13451,6 +13757,381 @@ multiparty direct message.</p></div>
 <div class="desc"><p>Searches for messages matching a query.
 <a href="https://docs.slack.dev/reference/methods/search.messages">https://docs.slack.dev/reference/methods/search.messages</a></p></div>
 </dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_access_delete"><code class="name flex">
+<span>async def <span class="ident">slackLists_access_delete</span></span>(<span>self,<br>*,<br>list_id: str,<br>channel_ids: List[str] | None = None,<br>user_ids: List[str] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_access_delete(
+    self,
+    *,
+    list_id: str,
+    channel_ids: Optional[List[str]] = None,
+    user_ids: Optional[List[str]] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Revoke access to a List for specified entities.
+    https://docs.slack.dev/reference/methods/slackLists.access.delete
+    &#34;&#34;&#34;
+    kwargs.update({&#34;list_id&#34;: list_id, &#34;channel_ids&#34;: channel_ids, &#34;user_ids&#34;: user_ids})
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.access.delete&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Revoke access to a List for specified entities.
+<a href="https://docs.slack.dev/reference/methods/slackLists.access.delete">https://docs.slack.dev/reference/methods/slackLists.access.delete</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_access_set"><code class="name flex">
+<span>async def <span class="ident">slackLists_access_set</span></span>(<span>self,<br>*,<br>list_id: str,<br>access_level: str,<br>channel_ids: List[str] | None = None,<br>user_ids: List[str] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_access_set(
+    self,
+    *,
+    list_id: str,
+    access_level: str,
+    channel_ids: Optional[List[str]] = None,
+    user_ids: Optional[List[str]] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Set the access level to a List for specified entities.
+    https://docs.slack.dev/reference/methods/slackLists.access.set
+    &#34;&#34;&#34;
+    kwargs.update({&#34;list_id&#34;: list_id, &#34;access_level&#34;: access_level, &#34;channel_ids&#34;: channel_ids, &#34;user_ids&#34;: user_ids})
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.access.set&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Set the access level to a List for specified entities.
+<a href="https://docs.slack.dev/reference/methods/slackLists.access.set">https://docs.slack.dev/reference/methods/slackLists.access.set</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_create"><code class="name flex">
+<span>async def <span class="ident">slackLists_create</span></span>(<span>self,<br>*,<br>name: str,<br>description_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.RichTextBlock" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.RichTextBlock">RichTextBlock</a>] | None = None,<br>schema: List[Dict[str, Any]] | None = None,<br>copy_from_list_id: str | None = None,<br>include_copied_list_records: bool | None = None,<br>todo_mode: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_create(
+    self,
+    *,
+    name: str,
+    description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
+    schema: Optional[List[Dict[str, Any]]] = None,
+    copy_from_list_id: Optional[str] = None,
+    include_copied_list_records: Optional[bool] = None,
+    todo_mode: Optional[bool] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Creates a List.
+    https://docs.slack.dev/reference/methods/slackLists.create
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;name&#34;: name,
+            &#34;description_blocks&#34;: description_blocks,
+            &#34;schema&#34;: schema,
+            &#34;copy_from_list_id&#34;: copy_from_list_id,
+            &#34;include_copied_list_records&#34;: include_copied_list_records,
+            &#34;todo_mode&#34;: todo_mode,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.create&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Creates a List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.create">https://docs.slack.dev/reference/methods/slackLists.create</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_download_get"><code class="name flex">
+<span>async def <span class="ident">slackLists_download_get</span></span>(<span>self, *, list_id: str, job_id: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_download_get(
+    self,
+    *,
+    list_id: str,
+    job_id: str,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Retrieve List download URL from an export job to download List contents.
+    https://docs.slack.dev/reference/methods/slackLists.download.get
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;job_id&#34;: job_id,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.download.get&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Retrieve List download URL from an export job to download List contents.
+<a href="https://docs.slack.dev/reference/methods/slackLists.download.get">https://docs.slack.dev/reference/methods/slackLists.download.get</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_download_start"><code class="name flex">
+<span>async def <span class="ident">slackLists_download_start</span></span>(<span>self, *, list_id: str, include_archived: bool | None = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_download_start(
+    self,
+    *,
+    list_id: str,
+    include_archived: Optional[bool] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Initiate a job to export List contents.
+    https://docs.slack.dev/reference/methods/slackLists.download.start
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;include_archived&#34;: include_archived,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.download.start&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Initiate a job to export List contents.
+<a href="https://docs.slack.dev/reference/methods/slackLists.download.start">https://docs.slack.dev/reference/methods/slackLists.download.start</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_create"><code class="name flex">
+<span>async def <span class="ident">slackLists_items_create</span></span>(<span>self,<br>*,<br>list_id: str,<br>duplicated_item_id: str | None = None,<br>parent_item_id: str | None = None,<br>initial_fields: List[Dict[str, Any]] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_items_create(
+    self,
+    *,
+    list_id: str,
+    duplicated_item_id: Optional[str] = None,
+    parent_item_id: Optional[str] = None,
+    initial_fields: Optional[List[Dict[str, Any]]] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Add a new item to an existing List.
+    https://docs.slack.dev/reference/methods/slackLists.items.create
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;duplicated_item_id&#34;: duplicated_item_id,
+            &#34;parent_item_id&#34;: parent_item_id,
+            &#34;initial_fields&#34;: initial_fields,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.items.create&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Add a new item to an existing List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.items.create">https://docs.slack.dev/reference/methods/slackLists.items.create</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_delete"><code class="name flex">
+<span>async def <span class="ident">slackLists_items_delete</span></span>(<span>self, *, list_id: str, id: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_items_delete(
+    self,
+    *,
+    list_id: str,
+    id: str,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Deletes an item from an existing List.
+    https://docs.slack.dev/reference/methods/slackLists.items.delete
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;id&#34;: id,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.items.delete&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Deletes an item from an existing List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.items.delete">https://docs.slack.dev/reference/methods/slackLists.items.delete</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_deleteMultiple"><code class="name flex">
+<span>async def <span class="ident">slackLists_items_deleteMultiple</span></span>(<span>self, *, list_id: str, ids: List[str], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_items_deleteMultiple(
+    self,
+    *,
+    list_id: str,
+    ids: List[str],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Deletes multiple items from an existing List.
+    https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;ids&#34;: ids,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.items.deleteMultiple&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Deletes multiple items from an existing List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple">https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_info"><code class="name flex">
+<span>async def <span class="ident">slackLists_items_info</span></span>(<span>self, *, list_id: str, id: str, include_is_subscribed: bool | None = None, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_items_info(
+    self,
+    *,
+    list_id: str,
+    id: str,
+    include_is_subscribed: Optional[bool] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Get a row from a List.
+    https://docs.slack.dev/reference/methods/slackLists.items.info
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;id&#34;: id,
+            &#34;include_is_subscribed&#34;: include_is_subscribed,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.items.info&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Get a row from a List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.items.info">https://docs.slack.dev/reference/methods/slackLists.items.info</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_list"><code class="name flex">
+<span>async def <span class="ident">slackLists_items_list</span></span>(<span>self,<br>*,<br>list_id: str,<br>limit: int | None = None,<br>cursor: str | None = None,<br>archived: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_items_list(
+    self,
+    *,
+    list_id: str,
+    limit: Optional[int] = None,
+    cursor: Optional[str] = None,
+    archived: Optional[bool] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Get records from a List.
+    https://docs.slack.dev/reference/methods/slackLists.items.list
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;limit&#34;: limit,
+            &#34;cursor&#34;: cursor,
+            &#34;archived&#34;: archived,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.items.list&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Get records from a List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.items.list">https://docs.slack.dev/reference/methods/slackLists.items.list</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_update"><code class="name flex">
+<span>async def <span class="ident">slackLists_items_update</span></span>(<span>self, *, list_id: str, cells: List[Dict[str, Any]], **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_items_update(
+    self,
+    *,
+    list_id: str,
+    cells: List[Dict[str, Any]],
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Updates cells in a List.
+    https://docs.slack.dev/reference/methods/slackLists.items.update
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;list_id&#34;: list_id,
+            &#34;cells&#34;: cells,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.items.update&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Updates cells in a List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.items.update">https://docs.slack.dev/reference/methods/slackLists.items.update</a></p></div>
+</dd>
+<dt id="slack_sdk.web.async_client.AsyncWebClient.slackLists_update"><code class="name flex">
+<span>async def <span class="ident">slackLists_update</span></span>(<span>self,<br>*,<br>id: str,<br>name: str | None = None,<br>description_blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.RichTextBlock" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.RichTextBlock">RichTextBlock</a>] | None = None,<br>todo_mode: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def slackLists_update(
+    self,
+    *,
+    id: str,
+    name: Optional[str] = None,
+    description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
+    todo_mode: Optional[bool] = None,
+    **kwargs,
+) -&gt; AsyncSlackResponse:
+    &#34;&#34;&#34;Update a List.
+    https://docs.slack.dev/reference/methods/slackLists.update
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;id&#34;: id,
+            &#34;name&#34;: name,
+            &#34;description_blocks&#34;: description_blocks,
+            &#34;todo_mode&#34;: todo_mode,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return await self.api_call(&#34;slackLists.update&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Update a List.
+<a href="https://docs.slack.dev/reference/methods/slackLists.update">https://docs.slack.dev/reference/methods/slackLists.update</a></p></div>
+</dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.stars_add"><code class="name flex">
 <span>async def <span class="ident">stars_add</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>file: str | None = None,<br>file_comment: str | None = None,<br>timestamp: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
@@ -14968,6 +15649,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.dnd_setSnooze" href="#slack_sdk.web.async_client.AsyncWebClient.dnd_setSnooze">dnd_setSnooze</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.dnd_teamInfo" href="#slack_sdk.web.async_client.AsyncWebClient.dnd_teamInfo">dnd_teamInfo</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.emoji_list" href="#slack_sdk.web.async_client.AsyncWebClient.emoji_list">emoji_list</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.entity_presentDetails" href="#slack_sdk.web.async_client.AsyncWebClient.entity_presentDetails">entity_presentDetails</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_comments_delete" href="#slack_sdk.web.async_client.AsyncWebClient.files_comments_delete">files_comments_delete</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_completeUploadExternal" href="#slack_sdk.web.async_client.AsyncWebClient.files_completeUploadExternal">files_completeUploadExternal</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.files_delete" href="#slack_sdk.web.async_client.AsyncWebClient.files_delete">files_delete</a></code></li>
@@ -15037,6 +15719,18 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.search_all" href="#slack_sdk.web.async_client.AsyncWebClient.search_all">search_all</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.search_files" href="#slack_sdk.web.async_client.AsyncWebClient.search_files">search_files</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.search_messages" href="#slack_sdk.web.async_client.AsyncWebClient.search_messages">search_messages</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_access_delete" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_access_delete">slackLists_access_delete</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_access_set" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_access_set">slackLists_access_set</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_create" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_create">slackLists_create</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_download_get" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_download_get">slackLists_download_get</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_download_start" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_download_start">slackLists_download_start</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_create" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_items_create">slackLists_items_create</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_delete" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_items_delete">slackLists_items_delete</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_deleteMultiple" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_items_deleteMultiple">slackLists_items_deleteMultiple</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_info" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_items_info">slackLists_items_info</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_list" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_items_list">slackLists_items_list</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_items_update" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_items_update">slackLists_items_update</a></code></li>
+<li><code><a title="slack_sdk.web.async_client.AsyncWebClient.slackLists_update" href="#slack_sdk.web.async_client.AsyncWebClient.slackLists_update">slackLists_update</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.stars_add" href="#slack_sdk.web.async_client.AsyncWebClient.stars_add">stars_add</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.stars_list" href="#slack_sdk.web.async_client.AsyncWebClient.stars_list">stars_list</a></code></li>
 <li><code><a title="slack_sdk.web.async_client.AsyncWebClient.stars_remove" href="#slack_sdk.web.async_client.AsyncWebClient.stars_remove">stars_remove</a></code></li>
