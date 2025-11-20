@@ -4121,6 +4121,20 @@ class AsyncWebClient(AsyncBaseClient):
         )
         if channels:
             kwargs["channels"] = ",".join(channels)
+        
+        # Parse Block objects and serialize blocks/attachments to JSON
+        _parse_web_class_objects(kwargs)
+        
+        # Serialize blocks to JSON if present and not already a string
+        blocks = kwargs.get("blocks")
+        if blocks is not None and not isinstance(blocks, str):
+            kwargs["blocks"] = json.dumps(blocks)
+        
+        # Serialize attachments to JSON if present and not already a string
+        attachments = kwargs.get("attachments")
+        if attachments is not None and not isinstance(attachments, str):
+            kwargs["attachments"] = json.dumps(attachments)
+        
         return await self.api_call("files.completeUploadExternal", params=kwargs)
 
     async def functions_completeSuccess(
