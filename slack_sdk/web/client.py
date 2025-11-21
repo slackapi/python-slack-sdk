@@ -4111,7 +4111,9 @@ class WebClient(BaseClient):
         )
         if channels:
             kwargs["channels"] = ",".join(channels)
-        return self.api_call("files.completeUploadExternal", params=kwargs)
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("files.completeUploadExternal", json=kwargs)
 
     def functions_completeSuccess(
         self,

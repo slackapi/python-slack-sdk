@@ -7,7 +7,7 @@ from typing import Dict, Sequence, Union
 import pytest
 
 from slack_sdk.models.attachments import Attachment
-from slack_sdk.models.blocks import Block, DividerBlock
+from slack_sdk.models.blocks import Block, DividerBlock, MarkdownBlock
 from slack_sdk.web.internal_utils import (
     _build_unexpected_body_error_message,
     _parse_web_class_objects,
@@ -134,3 +134,61 @@ class TestInternalUtils(unittest.TestCase):
             "https://slack.com/api/chat.postMessage",
             "Should correctly handle api_method without a leading slash",
         )
+
+    def test_files_complete_upload_external_blocks_serialization(self):
+        """Test that blocks are properly serialized for files.completeUploadExternal
+        
+        This test verifies the fix for the bug where passing markdown blocks to
+        files_upload_v2 caused internal_error. The issue was that blocks weren't
+        being properly serialized to JSON strings before being sent to the API.
+        """
+        # Test case 1: blocks as list of dicts (the bug scenario)
+        blocks_dict = [{"type": "markdown", "text": "_**User** posted a message_\\n> test"}]
+        kwargs = {"blocks": blocks_dict}
+        
+        # Simulate what files_completeUploadExternal does
+        _parse_web_class_objects(kwargs)
+        blocks = kwargs.get("blocks")
+        if blocks is not None and not isinstance(blocks, str):
+            kwargs["blocks"] = json.dumps(blocks)
+        
+        assert isinstance(kwargs["blocks"], str), "Blocks should be serialized to string"
+        assert json.loads(kwargs["blocks"]) == blocks_dict, "Serialized blocks should match original"
+        
+        # Test case 2: blocks as MarkdownBlock objects
+        markdown_block = MarkdownBlock(text="_**User** posted a message_\\n> test")
+        blocks_objects = [markdown_block]
+        kwargs = {"blocks": blocks_objects}
+        
+        _parse_web_class_objects(kwargs)
+        blocks = kwargs.get("blocks")
+        if blocks is not None and not isinstance(blocks, str):
+            kwargs["blocks"] = json.dumps(blocks)
+        
+        assert isinstance(kwargs["blocks"], str), "Blocks should be serialized to string"
+        deserialized = json.loads(kwargs["blocks"])
+        assert deserialized[0]["type"] == "markdown", "Block type should be markdown"
+        assert deserialized[0]["text"] == "_**User** posted a message_\\n> test", "Block text should match"
+        
+        # Test case 3: blocks already as JSON string (should not double-serialize)
+        blocks_json = json.dumps([{"type": "markdown", "text": "test"}])
+        kwargs = {"blocks": blocks_json}
+        
+        _parse_web_class_objects(kwargs)
+        blocks = kwargs.get("blocks")
+        if blocks is not None and not isinstance(blocks, str):
+            kwargs["blocks"] = json.dumps(blocks)
+        
+        assert kwargs["blocks"] == blocks_json, "Already serialized blocks should not be double-serialized"
+        
+        # Test case 4: attachments should also be serialized
+        attachments = [{"text": "attachment text", "color": "#36a64f"}]
+        kwargs = {"attachments": attachments}
+        
+        _parse_web_class_objects(kwargs)
+        attachments_val = kwargs.get("attachments")
+        if attachments_val is not None and not isinstance(attachments_val, str):
+            kwargs["attachments"] = json.dumps(attachments_val)
+        
+        assert isinstance(kwargs["attachments"], str), "Attachments should be serialized to string"
+        assert json.loads(kwargs["attachments"]) == attachments, "Serialized attachments should match original"

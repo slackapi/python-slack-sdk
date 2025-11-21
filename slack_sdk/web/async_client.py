@@ -4121,7 +4121,9 @@ class AsyncWebClient(AsyncBaseClient):
         )
         if channels:
             kwargs["channels"] = ",".join(channels)
-        return await self.api_call("files.completeUploadExternal", params=kwargs)
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("files.completeUploadExternal", json=kwargs)
 
     async def functions_completeSuccess(
         self,
