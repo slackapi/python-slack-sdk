@@ -135,7 +135,7 @@ signature_verifier = SignatureVerifier(signing_secret=signing_secret)
 
 @app.post("/slack/events")
 async def slack_app(req: Request):
-    data=req.body.decode("utf-8")
+    data = req.body.decode("utf-8")
     if not signature_verifier.is_valid(
         body=data,
         timestamp=req.headers.get("X-Slack-Request-Timestamp"),
