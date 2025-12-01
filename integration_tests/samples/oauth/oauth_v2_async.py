@@ -135,12 +135,18 @@ signature_verifier = SignatureVerifier(signing_secret=signing_secret)
 
 @app.post("/slack/events")
 async def slack_app(req: Request):
+    data=req.body.decode("utf-8")
     if not signature_verifier.is_valid(
-        body=req.body.decode("utf-8"),
+        body=data,
         timestamp=req.headers.get("X-Slack-Request-Timestamp"),
         signature=req.headers.get("X-Slack-Signature"),
     ):
         return HTTPResponse(status=403, body="invalid request")
+
+    if data and "url_verification" in data:
+        body = json.loads(data)
+        if body.get("type") == "url_verification" and "challenge" in body:
+            return HTTPResponse(status=200, body=body["challenge"])
 
     if "command" in req.form and req.form.get("command") == "/open-modal":
         try:
