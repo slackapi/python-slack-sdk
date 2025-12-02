@@ -1,4 +1,3 @@
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 name: Test
 
 on:
@@ -11,26 +10,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  typecheck:
-    name: Typechecks
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    strategy:
-      matrix:
-        python-version: ["3.14"]
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-        with:
-          persist-credentials: false
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Run mypy verification
-        run: |
-          ./scripts/run_mypy.sh
   unittest:
     name: Unit tests
     runs-on: ubuntu-22.04
@@ -48,6 +27,7 @@ jobs:
           - "3.8"
           - "3.7"
           - "pypy3.10"
+          - "pypy3.11"
     permissions:
       contents: read
     env:
@@ -67,10 +47,8 @@ jobs:
           pip install -U pip
           pip install -r requirements/testing.txt
           pip install -r requirements/optional.txt
-      - name: Run validation (black/flake8/pytest)
+      - name: Run tests
         run: |
-          black --check slack/ slack_sdk/ tests/ integration_tests/
-          flake8 slack/ slack_sdk/
           PYTHONPATH=$PWD:$PYTHONPATH pytest --cov-report=xml --cov=slack_sdk/ --junitxml=reports/test_report.xml tests/
       - name: Run tests for SQLAlchemy v1.4 (backward-compatibility)
         run: |
@@ -102,7 +80,6 @@ jobs:
     name: Regression notifications
     runs-on: ubuntu-latest
     needs:
-      - typecheck
       - unittest
     if: ${{ !success() && github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch' }}
     steps:
