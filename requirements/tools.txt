@@ -6,4 +6,4 @@ mypy<=1.19.0; platform_python_implementation == "CPython"
 flake8>=5.0.4,<8
 #  Don't change this version without running CI builds;
 #  The latest version may not be available for older Python runtime
-black==23.3.0;
+black==24.3.0;
