@@ -1,4 +1,4 @@
-name: Test
+name: Python CI
 
 on:
   push:
@@ -9,7 +9,44 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
+env:
+  LATEST_SUPPORTED_PY: "3.14"
+
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
+      - name: Run lint verification
+        run: ./scripts/lint.sh
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
+      - name: Run mypy verification
+        run: ./scripts/run_mypy.sh
+
   unittest:
     name: Unit tests
     runs-on: ubuntu-22.04
@@ -67,7 +104,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
       - name: Upload test coverage to Codecov (only with latest supported version)
-        if: startsWith(matrix.python-version, '3.14')
+        if: startsWith(matrix.python-version, env.LATEST_SUPPORTED_PY)
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           fail_ci_if_error: true
@@ -76,10 +113,13 @@ jobs:
           report_type: coverage
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+
   notifications:
     name: Regression notifications
     runs-on: ubuntu-latest
     needs:
+      - lint
+      - typecheck
       - unittest
     if: ${{ !success() && github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch' }}
     steps:
