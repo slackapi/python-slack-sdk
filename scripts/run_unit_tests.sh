@@ -10,10 +10,12 @@ cd ${script_dir}/..
 
 pip install -U pip
 pip install -U -r requirements/testing.txt \
-  -U -r requirements/optional.txt
+  -U -r requirements/optional.txt \
+  -U -r requirements/tools.txt
 
 echo "Generating code ..." && python scripts/codegen.py --path .
-echo "Running black (code formatter) ..." && black slack_sdk/
+echo "Running black (code formatter) ..." && ./scripts/format.sh --no-install
 
+echo "Running tests ..."
 test_target="${1:-tests/}"
 PYTHONPATH=$PWD:$PYTHONPATH pytest $test_target
