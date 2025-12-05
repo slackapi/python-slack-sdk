@@ -12,4 +12,3 @@ moto>=4.0.13,<6
 # For AsyncSQLAlchemy tests
 greenlet<=4
 aiosqlite<=1
--r tools.txt
