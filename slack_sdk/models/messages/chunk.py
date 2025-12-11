@@ -1,0 +1,157 @@
+import logging
+from typing import Any, Dict, Literal, Optional, Sequence, Set, Union
+
+from slack_sdk.errors import SlackObjectFormationError
+from slack_sdk.models import show_unknown_key_warning
+from slack_sdk.models.basic_objects import JsonObject
+
+LOGGER = logging.getLogger(__name__)
+
+
+class Chunk(JsonObject):
+    """
+    Chunk for streaming messages.
+
+    https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
+    """
+
+    attributes = {"type"}
+    logger = logging.getLogger(__name__)
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+    ):
+        self.type = type
+
+    @classmethod
+    def parse(cls, chunk: Union[Dict, "Chunk"]) -> Optional["Chunk"]:
+        if chunk is None:
+            return None
+        elif isinstance(chunk, Chunk):
+            return chunk
+        else:
+            if "type" in chunk:
+                type = chunk["type"]
+                if type == MarkdownTextChunk.type:
+                    return MarkdownTextChunk(**chunk)
+                elif type == TaskUpdateChunk.type:
+                    return TaskUpdateChunk(**chunk)
+                else:
+                    cls.logger.warning(f"Unknown chunk detected and skipped ({chunk})")
+                    return None
+            else:
+                cls.logger.warning(f"Unknown chunk detected and skipped ({chunk})")
+                return None
+
+
+class MarkdownTextChunk(Chunk):
+    type = "markdown_text"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"text"})
+
+    def __init__(
+        self,
+        *,
+        text: str,
+        **others: Dict,
+    ):
+        """Used for streaming text content with markdown formatting support.
+
+        https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
+        """
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.text = text
+
+
+class URLSource(JsonObject):
+    type = "url"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "url",
+                "text",
+                "icon_url",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        url: str,
+        text: str,
+        icon_url: Optional[str] = None,
+        **others: Dict,
+    ):
+        show_unknown_key_warning(self, others)
+        self._url = url
+        self._text = text
+        self._icon_url = icon_url
+
+    def to_dict(self) -> Dict[str, Any]:
+        self.validate_json()
+        json: Dict[str, Union[str, Dict]] = {
+            "type": self.type,
+            "url": self._url,
+            "text": self._text,
+        }
+        if self._icon_url:
+            json["icon_url"] = self._icon_url
+        return json
+
+
+class TaskUpdateChunk(Chunk):
+    type = "task_update"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "id",
+                "title",
+                "status",
+                "details",
+                "output",
+                "sources",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        title: str,
+        status: Literal["pending", "in_progress", "complete", "error"],
+        details: Optional[str] = None,
+        output: Optional[str] = None,
+        sources: Optional[Sequence[Union[Dict, URLSource]]] = None,
+        **others: Dict,
+    ):
+        """Used for displaying tool execution progress in a timeline-style UI.
+
+        https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
+        """
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.id = id
+        self.title = title
+        self.status = status
+        self.details = details
+        self.output = output
+        if sources is not None:
+            self.sources = []
+            for src in sources:
+                if isinstance(src, Dict):
+                    self.sources.append(src)
+                elif isinstance(src, URLSource):
+                    self.sources.append(src.to_dict())
+                else:
+                    raise SlackObjectFormationError(f"Unsupported type for source in task update chunk: {type(src)}")

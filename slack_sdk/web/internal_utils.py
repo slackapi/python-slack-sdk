@@ -11,13 +11,14 @@ from io import IOBase
 from ssl import SSLContext
 from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin
-from urllib.request import OpenerDirector, ProxyHandler, HTTPSHandler, Request, urlopen
+from urllib.request import HTTPSHandler, OpenerDirector, ProxyHandler, Request, urlopen
 
 from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block
-from slack_sdk.models.metadata import Metadata, EventAndEntityMetadata, EntityMetadata
+from slack_sdk.models.messages.chunk import Chunk
+from slack_sdk.models.metadata import EntityMetadata, EventAndEntityMetadata, Metadata
 
 
 def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
@@ -187,10 +188,12 @@ def _build_req_args(
 
 
 def _parse_web_class_objects(kwargs) -> None:
-    def to_dict(obj: Union[Dict, Block, Attachment, Metadata, EventAndEntityMetadata, EntityMetadata]):
+    def to_dict(obj: Union[Dict, Block, Attachment, Chunk, Metadata, EventAndEntityMetadata, EntityMetadata]):
         if isinstance(obj, Block):
             return obj.to_dict()
         if isinstance(obj, Attachment):
+            return obj.to_dict()
+        if isinstance(obj, Chunk):
             return obj.to_dict()
         if isinstance(obj, Metadata):
             return obj.to_dict()
@@ -210,6 +213,11 @@ def _parse_web_class_objects(kwargs) -> None:
     if attachments is not None and isinstance(attachments, Sequence) and (not isinstance(attachments, str)):
         dict_attachments = [to_dict(a) for a in attachments]
         kwargs.update({"attachments": dict_attachments})
+
+    chunks = kwargs.get("chunks", None)
+    if chunks is not None and isinstance(chunks, Sequence) and (not isinstance(chunks, str)):
+        dict_chunks = [to_dict(c) for c in chunks]
+        kwargs.update({"chunks": dict_chunks})
 
     metadata = kwargs.get("metadata", None)
     if metadata is not None and (
