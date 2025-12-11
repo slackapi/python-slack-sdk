@@ -57,9 +57,9 @@ See the [`chat.postEphemeral`](/reference/methods/chat.postEphemeral) API method
 
 You can have your app's messages stream in to replicate conventional AI chatbot behavior. This is done through three Web API methods:
 
-* [`chat_startStream`](/reference/methods/chat.startstream)
-* [`chat_appendStream`](/reference/methods/chat.appendstream)
-* [`chat_stopStream`](/reference/methods/chat.stopstream)
+* [`chat_startStream`](/reference/methods/chat.startStream)
+* [`chat_appendStream`](/reference/methods/chat.appendStream)
+* [`chat_stopStream`](/reference/methods/chat.stopStream)
 
 :::tip[The Python Slack SDK provides a [`chat_stream()`](https://docs.slack.dev/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods.]
 
