@@ -69,7 +69,7 @@ import os
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 ```
 
-Refer to our [best practices for security](/authentication/best-practices-for-security) page for more information.
+Refer to our [best practices for security](/security) page for more information.
 
 ## Installing on a single workspace {#single-workspace}
 
