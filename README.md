@@ -1,8 +1,8 @@
 <h1 align="center">Python Slack SDK</h1>
 
 <p align="center">
-    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/tests.yml">
-        <img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/tests.yml"></a>
+    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml">
+        <img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml"></a>
     <a href="https://codecov.io/gh/slackapi/python-slack-sdk">
         <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/python-slack-sdk"></a>
     <a href="https://pepy.tech/project/slack-sdk">
@@ -302,3 +302,4 @@ helpful and collaborative way.
 [slack-community]: https://slackcommunity.com/
 [files_upload_v2]: https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0
 [aiohttp]: https://aiohttp.readthedocs.io/
+

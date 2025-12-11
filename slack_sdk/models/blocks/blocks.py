@@ -95,6 +95,8 @@ class Block(JsonObject):
                     return VideoBlock(**block)
                 elif type == RichTextBlock.type:
                     return RichTextBlock(**block)
+                elif type == TableBlock.type:
+                    return TableBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -375,6 +377,7 @@ class ContextActionsBlock(Block):
         **others: dict,
     ):
         """Displays actions as contextual info, which can include both feedback buttons and icon buttons.
+        https://docs.slack.dev/reference/block-kit/blocks/context-actions-block
 
         Args:
             elements (required): An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.
@@ -730,3 +733,47 @@ class RichTextBlock(Block):
         show_unknown_key_warning(self, others)
 
         self.elements = BlockElement.parse_all(elements)
+
+
+class TableBlock(Block):
+    type = "table"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"rows", "column_settings"})
+
+    def __init__(
+        self,
+        *,
+        rows: Sequence[Sequence[Dict[str, Any]]],
+        column_settings: Optional[Sequence[Optional[Dict[str, Any]]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays structured information in a table.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            rows (required): An array consisting of table rows. Maximum 100 rows.
+                Each row object is an array with a max of 20 table cells.
+                Table cells can have a type of raw_text or rich_text.
+            column_settings: An array describing column behavior. If there are fewer items in the column_settings array
+                than there are columns in the table, then the items in the the column_settings array will describe
+                the same number of columns in the table as there are in the array itself.
+                Any additional columns will have the default behavior. Maximum 20 items.
+                See below for column settings schema.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.rows = rows
+        self.column_settings = column_settings
+
+    @JsonValidator("rows attribute must be specified")
+    def _validate_rows(self):
+        return self.rows is not None and len(self.rows) > 0

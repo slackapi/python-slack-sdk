@@ -378,6 +378,7 @@ def title_length(self) -&gt; bool:
     ):
         &#34;&#34;&#34;
         A feedback button element object for either positive or negative feedback.
+        https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields
 
         Args:
             text (required): An object containing some text. Maximum length for this field is 75 characters.
@@ -410,7 +411,8 @@ def title_length(self) -&gt; bool:
         return json</code></pre>
 </details>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>A feedback button element object for either positive or negative feedback.</p>
+<p>A feedback button element object for either positive or negative feedback.
+<a href="https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields">https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
@@ -1246,6 +1248,130 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.basic_components.RawTextObject"><code class="flex name class">
+<span>class <span class="ident">RawTextObject</span></span>
+<span>(</span><span>*, text: str)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RawTextObject(TextObject):
+    &#34;&#34;&#34;raw_text typed text object&#34;&#34;&#34;
+
+    type = &#34;raw_text&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return {&#34;text&#34;, &#34;type&#34;}
+
+    def __init__(self, *, text: str):
+        &#34;&#34;&#34;A raw text object used in table block cells.
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object/
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            text (required): The text content for the table block cell.
+        &#34;&#34;&#34;
+        super().__init__(text=text, type=self.type)
+
+    @staticmethod
+    def from_str(text: str) -&gt; &#34;RawTextObject&#34;:
+        &#34;&#34;&#34;Transforms a string into a RawTextObject&#34;&#34;&#34;
+        return RawTextObject(text=text)
+
+    @staticmethod
+    def direct_from_string(text: str) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;Transforms a string into the required object shape to act as a RawTextObject&#34;&#34;&#34;
+        return RawTextObject.from_str(text).to_dict()
+
+    @JsonValidator(&#34;text attribute must have at least 1 character&#34;)
+    def _validate_text_min_length(self):
+        return len(self.text) &gt;= 1</code></pre>
+</details>
+<div class="desc"><p>raw_text typed text object</p>
+<p>A raw text object used in table block cells.
+<a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object/">https://docs.slack.dev/reference/block-kit/composition-objects/text-object/</a>
+<a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>The text content for the table block cell.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.basic_components.RawTextObject.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.basic_components.RawTextObject.direct_from_string"><code class="name flex">
+<span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def direct_from_string(text: str) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;Transforms a string into the required object shape to act as a RawTextObject&#34;&#34;&#34;
+    return RawTextObject.from_str(text).to_dict()</code></pre>
+</details>
+<div class="desc"><p>Transforms a string into the required object shape to act as a RawTextObject</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.basic_components.RawTextObject.from_str"><code class="name flex">
+<span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.RawTextObject" href="#slack_sdk.models.blocks.basic_components.RawTextObject">RawTextObject</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def from_str(text: str) -&gt; &#34;RawTextObject&#34;:
+    &#34;&#34;&#34;Transforms a string into a RawTextObject&#34;&#34;&#34;
+    return RawTextObject(text=text)</code></pre>
+</details>
+<div class="desc"><p>Transforms a string into a RawTextObject</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.basic_components.RawTextObject.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return {&#34;text&#34;, &#34;type&#34;}</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.logger" href="#slack_sdk.models.blocks.basic_components.TextObject.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.TextObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.basic_components.SlackFile"><code class="flex name class">
 <span>class <span class="ident">SlackFile</span></span>
 <span>(</span><span>*, id: str | None = None, url: str | None = None)</span>
@@ -1394,6 +1520,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></li>
 <li><a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.RawTextObject" href="#slack_sdk.models.blocks.basic_components.RawTextObject">RawTextObject</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -1628,6 +1755,15 @@ def subtype(self) -&gt; Optional[str]:
 <li><code><a title="slack_sdk.models.blocks.basic_components.PlainTextObject.direct_from_string" href="#slack_sdk.models.blocks.basic_components.PlainTextObject.direct_from_string">direct_from_string</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.basic_components.PlainTextObject.from_str" href="#slack_sdk.models.blocks.basic_components.PlainTextObject.from_str">from_str</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.basic_components.PlainTextObject.type" href="#slack_sdk.models.blocks.basic_components.PlainTextObject.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.basic_components.RawTextObject" href="#slack_sdk.models.blocks.basic_components.RawTextObject">RawTextObject</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.basic_components.RawTextObject.attributes" href="#slack_sdk.models.blocks.basic_components.RawTextObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.RawTextObject.direct_from_string" href="#slack_sdk.models.blocks.basic_components.RawTextObject.direct_from_string">direct_from_string</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.RawTextObject.from_str" href="#slack_sdk.models.blocks.basic_components.RawTextObject.from_str">from_str</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.basic_components.RawTextObject.type" href="#slack_sdk.models.blocks.basic_components.RawTextObject.type">type</a></code></li>
 </ul>
 </li>
 <li>

@@ -1,6 +1,6 @@
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from logging import Logger
 from uuid import uuid4
 
@@ -55,7 +55,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
 
     def issue(self, *args, **kwargs) -> str:
         state: str = str(uuid4())
-        now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
+        now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
         with self.engine.begin() as conn:
             conn.execute(
                 self.oauth_states.insert(),
@@ -67,7 +67,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         try:
             with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > datetime.utcnow()))
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > datetime.now(tz=timezone.utc)))
                 result = conn.execute(query)
                 for row in result.mappings():
                     self.logger.debug(f"consume's query result: {row}")
@@ -124,7 +124,7 @@ class AsyncSQLAlchemyOAuthStateStore(AsyncOAuthStateStore):
 
     async def async_issue(self, *args, **kwargs) -> str:
         state: str = str(uuid4())
-        now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
+        now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
         async with self.engine.begin() as conn:
             await conn.execute(
                 self.oauth_states.insert(),
@@ -136,7 +136,7 @@ class AsyncSQLAlchemyOAuthStateStore(AsyncOAuthStateStore):
         try:
             async with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > datetime.utcnow()))
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > datetime.now(tz=timezone.utc)))
                 result = await conn.execute(query)
                 for row in result.mappings():
                     self.logger.debug(f"consume's query result: {row}")

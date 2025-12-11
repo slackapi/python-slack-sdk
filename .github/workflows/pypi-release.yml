@@ -1,0 +1,87 @@
+name: Upload A Release to pypi.org or test.pypi.org
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (build only, do not publish)"
+        required: false
+        type: boolean
+
+jobs:
+  release-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          ref: ${{ github.event.release.tag_name || github.ref }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.x"
+
+      - name: Build release distributions
+        run: |
+          scripts/build_pypi_package.sh
+
+      - name: Persist dist folder
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: release-dist
+          path: dist/
+
+  test-pypi-publish:
+    runs-on: ubuntu-latest
+    needs:
+      - release-build
+    # Run this job for workflow_dispatch events when dry_run input is not 'true'
+    # Note: The comparison is against a string value 'true' since GitHub Actions inputs are strings
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run != 'true'
+    environment:
+      name: testpypi
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Retrieve dist folder
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: release-dist
+          path: dist/
+
+      - name: Publish release distributions to test.pypi.org
+        # Using OIDC for PyPI publishing (no API tokens needed)
+        # See: https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-pypi
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  pypi-publish:
+    runs-on: ubuntu-latest
+    needs:
+      - release-build
+    if: github.event_name == 'release'
+    environment:
+      name: pypi
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Retrieve dist folder
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: release-dist
+          path: dist/
+
+      - name: Publish release distributions to pypi.org
+        # Using OIDC for PyPI publishing (no API tokens needed)
+        # See: https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-pypi
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0

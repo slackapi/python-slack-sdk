@@ -123,12 +123,18 @@ signature_verifier = SignatureVerifier(signing_secret=signing_secret)
 
 @app.route("/slack/events", methods=["POST"])
 def slack_app():
+    data = request.get_data()
     if not signature_verifier.is_valid(
-        body=request.get_data(),
+        body=data,
         timestamp=request.headers.get("X-Slack-Request-Timestamp"),
         signature=request.headers.get("X-Slack-Signature"),
     ):
         return make_response("invalid request", 403)
+
+    if data and b"url_verification" in data:
+        body = json.loads(data)
+        if body.get("type") == "url_verification" and "challenge" in body:
+            return make_response(body["challenge"], 200)
 
     if "command" in request.form and request.form["command"] == "/open-modal":
         try:
@@ -193,4 +199,4 @@ if __name__ == "__main__":
 
     # python3 integration_tests/samples/oauth/oauth_v2.py
     # ngrok http 3000
-    # https://{yours}.ngrok.io/slack/oauth/start
+    # https://{yours}.ngrok.io/slack/install

@@ -236,6 +236,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                     return VideoBlock(**block)
                 elif type == RichTextBlock.type:
                     return RichTextBlock(**block)
+                elif type == TableBlock.type:
+                    return TableBlock(**block)
                 else:
                     cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
                     return None
@@ -269,6 +271,7 @@ to create visually rich and compellingly interactive messages.
 <li><a title="slack_sdk.models.blocks.blocks.MarkdownBlock" href="#slack_sdk.models.blocks.blocks.MarkdownBlock">MarkdownBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.RichTextBlock" href="#slack_sdk.models.blocks.blocks.RichTextBlock">RichTextBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.SectionBlock" href="#slack_sdk.models.blocks.blocks.SectionBlock">SectionBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.TableBlock" href="#slack_sdk.models.blocks.blocks.TableBlock">TableBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.VideoBlock" href="#slack_sdk.models.blocks.blocks.VideoBlock">VideoBlock</a></li>
 </ul>
 <h3>Class variables</h3>
@@ -433,6 +436,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;Displays actions as contextual info, which can include both feedback buttons and icon buttons.
+        https://docs.slack.dev/reference/block-kit/blocks/context-actions-block
 
         Args:
             elements (required): An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.
@@ -457,7 +461,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
-<p>Displays actions as contextual info, which can include both feedback buttons and icon buttons.</p>
+<p>Displays actions as contextual info, which can include both feedback buttons and icon buttons.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/context-actions-block">https://docs.slack.dev/reference/block-kit/blocks/context-actions-block</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
@@ -1578,6 +1583,123 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.blocks.TableBlock"><code class="flex name class">
+<span>class <span class="ident">TableBlock</span></span>
+<span>(</span><span>*,<br>rows: Sequence[Sequence[Dict[str, Any]]],<br>column_settings: Sequence[Dict[str, Any] | None] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TableBlock(Block):
+    type = &#34;table&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;rows&#34;, &#34;column_settings&#34;})
+
+    def __init__(
+        self,
+        *,
+        rows: Sequence[Sequence[Dict[str, Any]]],
+        column_settings: Optional[Sequence[Optional[Dict[str, Any]]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays structured information in a table.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            rows (required): An array consisting of table rows. Maximum 100 rows.
+                Each row object is an array with a max of 20 table cells.
+                Table cells can have a type of raw_text or rich_text.
+            column_settings: An array describing column behavior. If there are fewer items in the column_settings array
+                than there are columns in the table, then the items in the the column_settings array will describe
+                the same number of columns in the table as there are in the array itself.
+                Any additional columns will have the default behavior. Maximum 20 items.
+                See below for column settings schema.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.rows = rows
+        self.column_settings = column_settings
+
+    @JsonValidator(&#34;rows attribute must be specified&#34;)
+    def _validate_rows(self):
+        return self.rows is not None and len(self.rows) &gt; 0</code></pre>
+</details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
+<p>Displays structured information in a table.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>rows</code></strong> :&ensp;<code>required</code></dt>
+<dd>An array consisting of table rows. Maximum 100 rows.
+Each row object is an array with a max of 20 table cells.
+Table cells can have a type of raw_text or rich_text.</dd>
+<dt><strong><code>column_settings</code></strong></dt>
+<dd>An array describing column behavior. If there are fewer items in the column_settings array
+than there are columns in the table, then the items in the the column_settings array will describe
+the same number of columns in the table as there are in the array itself.
+Any additional columns will have the default behavior. Maximum 20 items.
+See below for column settings schema.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A unique identifier for a block. If not specified, a block_id will be generated.
+You can use this block_id when you receive an interaction payload to identify the source of the action.
+Maximum length for this field is 255 characters.
+block_id should be unique for each message and each iteration of a message.
+If a message is updated, use a new block_id.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.TableBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.TableBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return super().attributes.union({&#34;rows&#34;, &#34;column_settings&#34;})</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.block_id_max_length" href="#slack_sdk.models.blocks.blocks.Block.block_id_max_length">block_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.blocks.VideoBlock"><code class="flex name class">
 <span>class <span class="ident">VideoBlock</span></span>
 <span>(</span><span>*,<br>block_id: str | None = None,<br>alt_text: str | None = None,<br>video_url: str | None = None,<br>thumbnail_url: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>title_url: str | None = None,<br>description: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>provider_icon_url: str | None = None,<br>provider_name: str | None = None,<br>author_name: str | None = None,<br>**others: dict)</span>
@@ -1899,6 +2021,13 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <li><code><a title="slack_sdk.models.blocks.blocks.SectionBlock.fields_max_length" href="#slack_sdk.models.blocks.blocks.SectionBlock.fields_max_length">fields_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.SectionBlock.text_max_length" href="#slack_sdk.models.blocks.blocks.SectionBlock.text_max_length">text_max_length</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.SectionBlock.type" href="#slack_sdk.models.blocks.blocks.SectionBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.TableBlock" href="#slack_sdk.models.blocks.blocks.TableBlock">TableBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.TableBlock.attributes" href="#slack_sdk.models.blocks.blocks.TableBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.TableBlock.type" href="#slack_sdk.models.blocks.blocks.TableBlock.type">type</a></code></li>
 </ul>
 </li>
 <li>
