@@ -1,11 +1,9 @@
 import logging
-from typing import Any, Dict, Literal, Optional, Sequence, Set, Union
+from typing import Any, Dict, Optional, Sequence, Set, Union
 
 from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject
-
-LOGGER = logging.getLogger(__name__)
 
 
 class Chunk(JsonObject):
@@ -128,7 +126,7 @@ class TaskUpdateChunk(Chunk):
         *,
         id: str,
         title: str,
-        status: Literal["pending", "in_progress", "complete", "error"],
+        status: str,  # "pending", "in_progress", "complete", "error"
         details: Optional[str] = None,
         output: Optional[str] = None,
         sources: Optional[Sequence[Union[Dict, URLSource]]] = None,
