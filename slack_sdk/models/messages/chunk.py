@@ -71,7 +71,7 @@ class URLSource(JsonObject):
     type = "url"
 
     @property
-    def attributes(self) -> Set[str]:  # type: ignore[override]
+    def attributes(self) -> Set[str]:
         return super().attributes.union(
             {
                 "url",
