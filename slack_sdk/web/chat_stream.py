@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Dict, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.blocks.blocks import Block
+from slack_sdk.models.messages.chunk import Chunk
 from slack_sdk.models.metadata import Metadata
 from slack_sdk.web.slack_response import SlackResponse
 
@@ -65,7 +66,8 @@ class ChatStream:
     def append(
         self,
         *,
-        markdown_text: str,
+        markdown_text: Optional[str] = None,
+        chunks: Optional[Sequence[Chunk]] = None,
         **kwargs,
     ) -> Optional[SlackResponse]:
         """Append to the stream.
@@ -74,6 +76,7 @@ class ChatStream:
         is stopped this method cannot be called.
 
         Args:
+            chunks: An array of streaming chunks that can contain either markdown text or task updates.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -101,9 +104,10 @@ class ChatStream:
             raise e.SlackRequestError(f"Cannot append to stream: stream state is {self._state}")
         if kwargs.get("token"):
             self._token = kwargs.pop("token")
-        self._buffer += markdown_text
-        if len(self._buffer) >= self._buffer_size:
-            return self._flush_buffer(**kwargs)
+        if markdown_text is not None:
+            self._buffer += markdown_text
+        if len(self._buffer) >= self._buffer_size or chunks is not None:
+            return self._flush_buffer(chunks=chunks, **kwargs)
         details = {
             "buffer_length": len(self._buffer),
             "buffer_size": self._buffer_size,
@@ -119,6 +123,7 @@ class ChatStream:
         self,
         *,
         markdown_text: Optional[str] = None,
+        chunks: Optional[Sequence[Chunk]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
@@ -127,6 +132,7 @@ class ChatStream:
 
         Args:
             blocks: A list of blocks that will be rendered at the bottom of the finalized message.
+            chunks: An array of streaming chunks that can contain either markdown text or task updates.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
@@ -167,26 +173,36 @@ class ChatStream:
                 raise e.SlackRequestError("Failed to stop stream: stream not started")
             self._stream_ts = str(response["ts"])
             self._state = "in_progress"
+        flushings = []
+        if len(self._buffer) != 0:
+            flushings.append({"type": "markdown_text", "text": self._buffer})
+        if chunks is not None:
+            flushings.extend(chunks)
         response = self._client.chat_stopStream(
             token=self._token,
             channel=self._stream_args["channel"],
             ts=self._stream_ts,
             blocks=blocks,
-            markdown_text=self._buffer,
+            chunks=flushings,
             metadata=metadata,
             **kwargs,
         )
         self._state = "completed"
         return response
 
-    def _flush_buffer(self, **kwargs) -> SlackResponse:
-        """Flush the internal buffer by making appropriate API calls."""
+    def _flush_buffer(self, chunks: Optional[Sequence[Chunk]] = None, **kwargs) -> SlackResponse:
+        """Flush the internal buffer with chunks by making appropriate API calls."""
+        flushings = []
+        if len(self._buffer) != 0:
+            flushings.append({"type": "markdown_text", "text": self._buffer})
+        if chunks is not None:
+            flushings.extend(chunks)
         if not self._stream_ts:
             response = self._client.chat_startStream(
                 **self._stream_args,
                 token=self._token,
                 **kwargs,
-                markdown_text=self._buffer,
+                chunks=flushings,
             )
             self._stream_ts = response.get("ts")
             self._state = "in_progress"
@@ -196,7 +212,7 @@ class ChatStream:
                 channel=self._stream_args["channel"],
                 ts=self._stream_ts,
                 **kwargs,
-                markdown_text=self._buffer,
+                chunks=flushings,
             )
         self._buffer = ""
         return response
