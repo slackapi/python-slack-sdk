@@ -2,18 +2,18 @@ import json
 import unittest
 from io import BytesIO
 from pathlib import Path
-from typing import Dict, Sequence, Union
+from typing import Dict
 
-import pytest
 
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block, DividerBlock
+from slack_sdk.models.messages.chunk import MarkdownTextChunk, TaskUpdateChunk
 from slack_sdk.web.internal_utils import (
     _build_unexpected_body_error_message,
+    _get_url,
+    _next_cursor_is_present,
     _parse_web_class_objects,
     _to_v2_file_upload_item,
-    _next_cursor_is_present,
-    _get_url,
 )
 
 
@@ -57,6 +57,20 @@ class TestInternalUtils(unittest.TestCase):
             for attachment in kwargs["attachments"]:
                 assert isinstance(attachment, Dict)
 
+    def test_can_parse_sequence_of_chunks(self):
+        for chunks in [
+            [MarkdownTextChunk(text="fiz"), TaskUpdateChunk(id="001", title="baz", status="complete")],  # list
+            (
+                MarkdownTextChunk(text="fiz"),
+                TaskUpdateChunk(id="001", title="baz", status="complete"),
+            ),  # tuple
+        ]:
+            kwargs = {"chunks": chunks}
+            _parse_web_class_objects(kwargs)
+            assert kwargs["chunks"]
+            for chunks in kwargs["chunks"]:
+                assert isinstance(chunks, Dict)
+
     def test_can_parse_str_blocks(self):
         input = json.dumps([Block(block_id="42").to_dict(), Block(block_id="24").to_dict()])
         kwargs = {"blocks": input}
@@ -70,6 +84,15 @@ class TestInternalUtils(unittest.TestCase):
         _parse_web_class_objects(kwargs)
         assert isinstance(kwargs["attachments"], str)
         assert input == kwargs["attachments"]
+
+    def test_can_parse_str_chunks(self):
+        input = json.dumps(
+            [MarkdownTextChunk(text="fiz").to_dict(), TaskUpdateChunk(id="001", title="baz", status="complete").to_dict()]
+        )
+        kwargs = {"chunks": input}
+        _parse_web_class_objects(kwargs)
+        assert isinstance(kwargs["chunks"], str)
+        assert input == kwargs["chunks"]
 
     def test_can_parse_user_auth_blocks(self):
         kwargs = {
