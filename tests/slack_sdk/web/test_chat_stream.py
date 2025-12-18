@@ -106,7 +106,10 @@ class TestChatStream(unittest.TestCase):
             stop_request = self.thread.server.chat_stream_requests.get("/chat.stopStream", {})
             self.assertEqual(stop_request.get("channel"), "C0123456789")
             self.assertEqual(stop_request.get("ts"), "123.123")
-            self.assertEqual(stop_request.get("chunks"), [{"type": "markdown_text", "text": "nice!"}])
+            self.assertEqual(
+                json.dumps(stop_request.get("chunks")),
+                '[{"type": "markdown_text", "text": "nice!"}]',
+            )
 
     def test_streams_a_long_message(self):
         streamer = self.client.chat_stream(
@@ -147,13 +150,19 @@ class TestChatStream(unittest.TestCase):
             start_request = self.thread.server.chat_stream_requests.get("/chat.startStream", {})
             self.assertEqual(start_request.get("channel"), "C0123456789")
             self.assertEqual(start_request.get("thread_ts"), "123.000")
-            self.assertEqual(start_request.get("chunks"), [{"type": "markdown_text", "text": "**this messag"}])
+            self.assertEqual(
+                json.dumps(start_request.get("chunks")),
+                '[{"type": "markdown_text", "text": "**this messag"}]',
+            )
             self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
             self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
 
             append_request = self.thread.server.chat_stream_requests.get("/chat.appendStream", {})
             self.assertEqual(append_request.get("channel"), "C0123456789")
-            self.assertEqual(append_request.get("chunks"), [{"type": "markdown_text", "text": "e is bold!"}])
+            self.assertEqual(
+                json.dumps(append_request.get("chunks")),
+                '[{"type": "markdown_text", "text": "e is bold!"}]',
+            )
             self.assertEqual(append_request.get("token"), "xoxb-chat_stream_test_token1")
             self.assertEqual(append_request.get("ts"), "123.123")
 
@@ -163,7 +172,10 @@ class TestChatStream(unittest.TestCase):
                 '[{"elements": [{"negative_button": {"text": {"emoji": true, "text": "bad", "type": "plain_text"}, "value": "-1"}, "positive_button": {"text": {"emoji": true, "text": "good", "type": "plain_text"}, "value": "+1"}, "type": "feedback_buttons"}, {"icon": "trash", "text": {"emoji": true, "text": "delete", "type": "plain_text"}, "type": "icon_button"}], "type": "context_actions"}]',
             )
             self.assertEqual(stop_request.get("channel"), "C0123456789")
-            self.assertEqual(stop_request.get("chunks"), [{"type": "markdown_text", "text": "**"}])
+            self.assertEqual(
+                json.dumps(stop_request.get("chunks")),
+                '[{"type": "markdown_text", "text": "**"}]',
+            )
             self.assertEqual(stop_request.get("token"), "xoxb-chat_stream_test_token2")
             self.assertEqual(stop_request.get("ts"), "123.123")
 
