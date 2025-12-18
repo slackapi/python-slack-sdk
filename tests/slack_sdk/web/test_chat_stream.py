@@ -7,6 +7,7 @@ from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.blocks.basic_components import FeedbackButtonObject
 from slack_sdk.models.blocks.block_elements import FeedbackButtonsElement, IconButtonElement
 from slack_sdk.models.blocks.blocks import ContextActionsBlock
+from slack_sdk.models.messages.chunk import MarkdownTextChunk, TaskUpdateChunk
 from tests.mock_web_api_server import cleanup_mock_web_api_server, setup_mock_web_api_server
 from tests.slack_sdk.web.mock_web_api_handler import MockHandler
 
@@ -105,7 +106,10 @@ class TestChatStream(unittest.TestCase):
             stop_request = self.thread.server.chat_stream_requests.get("/chat.stopStream", {})
             self.assertEqual(stop_request.get("channel"), "C0123456789")
             self.assertEqual(stop_request.get("ts"), "123.123")
-            self.assertEqual(stop_request.get("markdown_text"), "nice!")
+            self.assertEqual(
+                json.dumps(stop_request.get("chunks")),
+                '[{"text": "nice!", "type": "markdown_text"}]',
+            )
 
     def test_streams_a_long_message(self):
         streamer = self.client.chat_stream(
@@ -146,13 +150,19 @@ class TestChatStream(unittest.TestCase):
             start_request = self.thread.server.chat_stream_requests.get("/chat.startStream", {})
             self.assertEqual(start_request.get("channel"), "C0123456789")
             self.assertEqual(start_request.get("thread_ts"), "123.000")
-            self.assertEqual(start_request.get("markdown_text"), "**this messag")
+            self.assertEqual(
+                json.dumps(start_request.get("chunks")),
+                '[{"text": "**this messag", "type": "markdown_text"}]',
+            )
             self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
             self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
 
             append_request = self.thread.server.chat_stream_requests.get("/chat.appendStream", {})
             self.assertEqual(append_request.get("channel"), "C0123456789")
-            self.assertEqual(append_request.get("markdown_text"), "e is bold!")
+            self.assertEqual(
+                json.dumps(append_request.get("chunks")),
+                '[{"text": "e is bold!", "type": "markdown_text"}]',
+            )
             self.assertEqual(append_request.get("token"), "xoxb-chat_stream_test_token1")
             self.assertEqual(append_request.get("ts"), "123.123")
 
@@ -162,9 +172,73 @@ class TestChatStream(unittest.TestCase):
                 '[{"elements": [{"negative_button": {"text": {"emoji": true, "text": "bad", "type": "plain_text"}, "value": "-1"}, "positive_button": {"text": {"emoji": true, "text": "good", "type": "plain_text"}, "value": "+1"}, "type": "feedback_buttons"}, {"icon": "trash", "text": {"emoji": true, "text": "delete", "type": "plain_text"}, "type": "icon_button"}], "type": "context_actions"}]',
             )
             self.assertEqual(stop_request.get("channel"), "C0123456789")
-            self.assertEqual(stop_request.get("markdown_text"), "**")
+            self.assertEqual(
+                json.dumps(stop_request.get("chunks")),
+                '[{"text": "**", "type": "markdown_text"}]',
+            )
             self.assertEqual(stop_request.get("token"), "xoxb-chat_stream_test_token2")
             self.assertEqual(stop_request.get("ts"), "123.123")
+
+    def test_streams_a_chunk_message(self):
+        streamer = self.client.chat_stream(
+            channel="C0123456789",
+            recipient_team_id="T0123456789",
+            recipient_user_id="U0123456789",
+            thread_ts="123.000",
+        )
+        streamer.append(markdown_text="**this is ")
+        streamer.append(markdown_text="buffered**")
+        streamer.append(
+            chunks=[
+                TaskUpdateChunk(
+                    id="001",
+                    title="Counting...",
+                    status="pending",
+                ),
+            ],
+        )
+        streamer.append(
+            chunks=[
+                MarkdownTextChunk(text="**this is unbuffered**"),
+            ],
+        )
+        streamer.append(markdown_text="\n")
+        streamer.stop(
+            chunks=[
+                MarkdownTextChunk(text=":space_invader:"),
+            ],
+        )
+
+        self.assertEqual(self.received_requests.get("/chat.startStream", 0), 1)
+        self.assertEqual(self.received_requests.get("/chat.appendStream", 0), 1)
+        self.assertEqual(self.received_requests.get("/chat.stopStream", 0), 1)
+
+        if hasattr(self.thread.server, "chat_stream_requests"):
+            start_request = self.thread.server.chat_stream_requests.get("/chat.startStream", {})
+            self.assertEqual(start_request.get("channel"), "C0123456789")
+            self.assertEqual(start_request.get("thread_ts"), "123.000")
+            self.assertEqual(
+                json.dumps(start_request.get("chunks")),
+                '[{"text": "**this is buffered**", "type": "markdown_text"}, {"id": "001", "status": "pending", "title": "Counting...", "type": "task_update"}]',
+            )
+            self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
+            self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
+
+            append_request = self.thread.server.chat_stream_requests.get("/chat.appendStream", {})
+            self.assertEqual(append_request.get("channel"), "C0123456789")
+            self.assertEqual(append_request.get("ts"), "123.123")
+            self.assertEqual(
+                json.dumps(append_request.get("chunks")),
+                '[{"text": "**this is unbuffered**", "type": "markdown_text"}]',
+            )
+
+            stop_request = self.thread.server.chat_stream_requests.get("/chat.stopStream", {})
+            self.assertEqual(stop_request.get("channel"), "C0123456789")
+            self.assertEqual(stop_request.get("ts"), "123.123")
+            self.assertEqual(
+                json.dumps(stop_request.get("chunks")),
+                '[{"text": "\\n", "type": "markdown_text"}, {"text": ":space_invader:", "type": "markdown_text"}]',
+            )
 
     def test_streams_errors_when_appending_to_an_unstarted_stream(self):
         streamer = self.client.chat_stream(

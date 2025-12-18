@@ -2631,7 +2631,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         channel: str,
         ts: str,
-        markdown_text: str,
+        markdown_text: Optional[str] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
