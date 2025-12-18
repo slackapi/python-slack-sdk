@@ -108,7 +108,7 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(stop_request.get("ts"), "123.123")
             self.assertEqual(
                 json.dumps(stop_request.get("chunks")),
-                '[{"type": "markdown_text", "text": "nice!"}]',
+                '[{"text": "nice!", "type": "markdown_text"}]',
             )
 
     def test_streams_a_long_message(self):
@@ -152,7 +152,7 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(start_request.get("thread_ts"), "123.000")
             self.assertEqual(
                 json.dumps(start_request.get("chunks")),
-                '[{"type": "markdown_text", "text": "**this messag"}]',
+                '[{"text": "**this messag", "type": "markdown_text"}]',
             )
             self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
             self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
@@ -161,7 +161,7 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(append_request.get("channel"), "C0123456789")
             self.assertEqual(
                 json.dumps(append_request.get("chunks")),
-                '[{"type": "markdown_text", "text": "e is bold!"}]',
+                '[{"text": "e is bold!", "type": "markdown_text"}]',
             )
             self.assertEqual(append_request.get("token"), "xoxb-chat_stream_test_token1")
             self.assertEqual(append_request.get("ts"), "123.123")
@@ -174,7 +174,7 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(stop_request.get("channel"), "C0123456789")
             self.assertEqual(
                 json.dumps(stop_request.get("chunks")),
-                '[{"type": "markdown_text", "text": "**"}]',
+                '[{"text": "**", "type": "markdown_text"}]',
             )
             self.assertEqual(stop_request.get("token"), "xoxb-chat_stream_test_token2")
             self.assertEqual(stop_request.get("ts"), "123.123")
@@ -219,7 +219,7 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(start_request.get("thread_ts"), "123.000")
             self.assertEqual(
                 json.dumps(start_request.get("chunks")),
-                '[{"type": "markdown_text", "text": "**this is buffered**"}, {"id": "001", "status": "pending", "title": "Counting...", "type": "task_update"}]',
+                '[{"text": "**this is buffered**", "type": "markdown_text"}, {"id": "001", "status": "pending", "title": "Counting...", "type": "task_update"}]',
             )
             self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
             self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
@@ -237,7 +237,7 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(stop_request.get("ts"), "123.123")
             self.assertEqual(
                 json.dumps(stop_request.get("chunks")),
-                '[{"type": "markdown_text", "text": "\\n"}, {"text": ":space_invader:", "type": "markdown_text"}]',
+                '[{"text": "\\n", "type": "markdown_text"}, {"text": ":space_invader:", "type": "markdown_text"}]',
             )
 
     def test_streams_errors_when_appending_to_an_unstarted_stream(self):

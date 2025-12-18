@@ -10,11 +10,11 @@
 
 import json
 import logging
-from typing import TYPE_CHECKING, Dict, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.blocks.blocks import Block
-from slack_sdk.models.messages.chunk import Chunk
+from slack_sdk.models.messages.chunk import Chunk, MarkdownTextChunk
 from slack_sdk.models.metadata import Metadata
 from slack_sdk.web.async_slack_response import AsyncSlackResponse
 
@@ -183,9 +183,9 @@ class AsyncChatStream:
                 raise e.SlackRequestError("Failed to stop stream: stream not started")
             self._stream_ts = str(response["ts"])
             self._state = "in_progress"
-        flushings = []
+        flushings: List[Chunk] = []
         if len(self._buffer) != 0:
-            flushings.append({"type": "markdown_text", "text": self._buffer})
+            flushings.append(MarkdownTextChunk(text=self._buffer))
         if chunks is not None:
             flushings.extend(chunks)
         response = await self._client.chat_stopStream(
@@ -202,9 +202,9 @@ class AsyncChatStream:
 
     async def _flush_buffer(self, chunks: Optional[Sequence[Chunk]] = None, **kwargs) -> AsyncSlackResponse:
         """Flush the internal buffer with chunks by making appropriate API calls."""
-        flushings = []
+        flushings: List[Chunk] = []
         if len(self._buffer) != 0:
-            flushings.append({"type": "markdown_text", "text": self._buffer})
+            flushings.append(MarkdownTextChunk(text=self._buffer))
         if chunks is not None:
             flushings.extend(chunks)
         if not self._stream_ts:
