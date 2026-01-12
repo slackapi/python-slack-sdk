@@ -1,5 +1,4 @@
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-name: Test
+name: Python CI
 
 on:
   push:
@@ -10,27 +9,44 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
+env:
+  LATEST_SUPPORTED_PY: "3.14"
+
 jobs:
-  typecheck:
-    name: Typechecks
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    strategy:
-      matrix:
-        python-version: ["3.14"]
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
+      - name: Run lint verification
+        run: ./scripts/lint.sh
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
       - name: Run mypy verification
-        run: |
-          ./scripts/run_mypy.sh
+        run: ./scripts/run_mypy.sh
+
   unittest:
     name: Unit tests
     runs-on: ubuntu-22.04
@@ -48,13 +64,14 @@ jobs:
           - "3.8"
           - "3.7"
           - "pypy3.10"
+          - "pypy3.11"
     permissions:
       contents: read
     env:
       CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: "1"
       FORCE_COLOR: "1"
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
       - name: Set up Python ${{ matrix.python-version }}
@@ -67,10 +84,8 @@ jobs:
           pip install -U pip
           pip install -r requirements/testing.txt
           pip install -r requirements/optional.txt
-      - name: Run validation (black/flake8/pytest)
+      - name: Run tests
         run: |
-          black --check slack/ slack_sdk/ tests/ integration_tests/
-          flake8 slack/ slack_sdk/
           PYTHONPATH=$PWD:$PYTHONPATH pytest --cov-report=xml --cov=slack_sdk/ --junitxml=reports/test_report.xml tests/
       - name: Run tests for SQLAlchemy v1.4 (backward-compatibility)
         run: |
@@ -80,7 +95,7 @@ jobs:
           PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           directory: ./reports/
           fail_ci_if_error: true
@@ -89,8 +104,8 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
       - name: Upload test coverage to Codecov (only with latest supported version)
-        if: startsWith(matrix.python-version, '3.14')
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        if: startsWith(matrix.python-version, env.LATEST_SUPPORTED_PY)
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           fail_ci_if_error: true
           # Run validation generates the coverage file
@@ -98,10 +113,12 @@ jobs:
           report_type: coverage
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
+
   notifications:
     name: Regression notifications
     runs-on: ubuntu-latest
     needs:
+      - lint
       - typecheck
       - unittest
     if: ${{ !success() && github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch' }}
