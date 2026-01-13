@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject, JsonValidator
+from slack_sdk.models.messages.chunk import URLSource
 
 from ...errors import SlackObjectFormationError
 from .basic_components import MarkdownTextObject, PlainTextObject, SlackFile, TextObject
@@ -97,6 +98,8 @@ class Block(JsonObject):
                     return RichTextBlock(**block)
                 elif type == TableBlock.type:
                     return TableBlock(**block)
+                elif type == TaskCardBlock.type:
+                    return TaskCardBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -777,3 +780,46 @@ class TableBlock(Block):
     @JsonValidator("rows attribute must be specified")
     def _validate_rows(self):
         return self.rows is not None and len(self.rows) > 0
+
+
+class TaskCardBlock(Block):
+    type = "task_card"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "task_id",
+                "title",
+                "details",
+                "output",
+                "sources",
+                "status",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        task_id: str,
+        title: str,
+        details: Optional[Union[RichTextBlock, dict]] = None,
+        output: Optional[Union[RichTextBlock, dict]] = None,
+        sources: Optional[Sequence[Union[URLSource, dict]]] = None,
+        status: str,  # pending, in_progress, complete, error
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.task_id = task_id
+        self.title = title
+        self.details = details
+        self.output = output
+        self.sources = sources
+        self.status = status
+
+    @JsonValidator("status must be an expected value (pending, in_progress, complete, or error)")
+    def _validate_rows(self):
+        return self.status in ["pending", "in_progress", "complete", "error"]
