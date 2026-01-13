@@ -77,7 +77,7 @@ class AsyncChatStream:
         self,
         *,
         markdown_text: Optional[str] = None,
-        chunks: Optional[Sequence[Chunk]] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         **kwargs,
     ) -> Optional[AsyncSlackResponse]:
         """Append to the stream.
@@ -133,7 +133,7 @@ class AsyncChatStream:
         self,
         *,
         markdown_text: Optional[str] = None,
-        chunks: Optional[Sequence[Chunk]] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
@@ -183,7 +183,7 @@ class AsyncChatStream:
                 raise e.SlackRequestError("Failed to stop stream: stream not started")
             self._stream_ts = str(response["ts"])
             self._state = "in_progress"
-        flushings: List[Chunk] = []
+        flushings: List[Union[Dict, Chunk]] = []
         if len(self._buffer) != 0:
             flushings.append(MarkdownTextChunk(text=self._buffer))
         if chunks is not None:
@@ -200,9 +200,9 @@ class AsyncChatStream:
         self._state = "completed"
         return response
 
-    async def _flush_buffer(self, chunks: Optional[Sequence[Chunk]] = None, **kwargs) -> AsyncSlackResponse:
+    async def _flush_buffer(self, chunks: Optional[Sequence[Union[Dict, Chunk]]] = None, **kwargs) -> AsyncSlackResponse:
         """Flush the internal buffer with chunks by making appropriate API calls."""
-        flushings: List[Chunk] = []
+        flushings: List[Union[Dict, Chunk]] = []
         if len(self._buffer) != 0:
             flushings.append(MarkdownTextChunk(text=self._buffer))
         if chunks is not None:
