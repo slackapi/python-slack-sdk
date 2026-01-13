@@ -73,6 +73,7 @@ from .blocks import (
     RichTextBlock,
     SectionBlock,
     TableBlock,
+    TaskCardBlock,
     VideoBlock,
 )
 
@@ -137,6 +138,7 @@ __all__ = [
     "MarkdownBlock",
     "SectionBlock",
     "TableBlock",
+    "TaskCardBlock",
     "VideoBlock",
     "RichTextBlock",
 ]
