@@ -185,6 +185,7 @@ class TestChatStream(unittest.TestCase):
             recipient_team_id="T0123456789",
             recipient_user_id="U0123456789",
             thread_ts="123.000",
+            task_display_mode="timeline",
         )
         streamer.append(markdown_text="**this is ")
         streamer.append(markdown_text="buffered**")
@@ -223,6 +224,7 @@ class TestChatStream(unittest.TestCase):
             )
             self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
             self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
+            self.assertEqual(start_request.get("task_display_mode"), "timeline")
 
             append_request = self.thread.server.chat_stream_requests.get("/chat.appendStream", {})
             self.assertEqual(append_request.get("channel"), "C0123456789")
