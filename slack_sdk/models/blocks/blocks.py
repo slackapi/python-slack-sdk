@@ -825,6 +825,7 @@ class TaskCardBlock(Block):
             details: Details of the task in the form of a single "rich_text" entity.
             output: Output of the task in the form of a single "rich_text" entity.
             sources: List of sources used to generate a response
+            status: The state of a task. Either "pending" or "in_progress" or "complete" or "error".
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
