@@ -20,7 +20,7 @@ class PlanUpdateChunkTests(unittest.TestCase):
             PlanUpdateChunk(title="Crunching numbers...").to_dict(),
             {
                 "type": "plan_update",
-                "text": "Crunching numbers...",
+                "title": "Crunching numbers...",
             },
         )
 
