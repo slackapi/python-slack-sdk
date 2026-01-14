@@ -100,6 +100,8 @@ class Block(JsonObject):
                     return TableBlock(**block)
                 elif type == TaskCardBlock.type:
                     return TaskCardBlock(**block)
+                elif type == PlanBlock.type:
+                    return PlanBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -823,3 +825,46 @@ class TaskCardBlock(Block):
     @JsonValidator("status must be an expected value (pending, in_progress, complete, or error)")
     def _validate_rows(self):
         return self.status in ["pending", "in_progress", "complete", "error"]
+
+
+class PlanBlock(Block):
+    type = "plan"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "plan_id",
+                "title",
+                "tasks",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        plan_id: str,
+        title: str,
+        tasks: Optional[Sequence[Union[Dict, TaskCardBlock]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """A collection of related tasks.
+        https://docs.slack.dev/reference/block-kit/blocks/plan-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            plan_id (required): ID for the plan (May be removed / made optional, feel free to pass in a random UUID
+                for now)
+            title (required): Title of the plan in plain text
+            tasks: Details of the task in the form of a single "rich_text" entity.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.plan_id = plan_id
+        self.title = title
+        self.tasks = tasks
