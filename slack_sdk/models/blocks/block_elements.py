@@ -1663,7 +1663,7 @@ class UrlSourceElement(BlockElement):
     type = "url"
 
     @property
-    def attributes(self) -> Set[str]:
+    def attributes(self) -> Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
                 "url",
