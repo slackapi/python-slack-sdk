@@ -55,6 +55,7 @@ from .block_elements import (
     StaticSelectElement,
     TimePickerElement,
     UrlInputElement,
+    UrlSourceElement,
     UserMultiSelectElement,
     UserSelectElement,
 )
@@ -112,6 +113,7 @@ __all__ = [
     "PlainTextInputElement",
     "EmailInputElement",
     "UrlInputElement",
+    "UrlSourceElement",
     "NumberInputElement",
     "RadioButtonsElement",
     "SelectElement",

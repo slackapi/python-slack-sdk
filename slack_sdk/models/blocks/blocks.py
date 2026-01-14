@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject, JsonValidator
-from slack_sdk.models.messages.chunk import URLSource
 
 from ...errors import SlackObjectFormationError
 from .basic_components import MarkdownTextObject, PlainTextObject, SlackFile, TextObject
@@ -17,6 +16,7 @@ from .block_elements import (
     InputInteractiveElement,
     InteractiveElement,
     RichTextElement,
+    UrlSourceElement,
 )
 
 # -------------------------------------------------
@@ -805,7 +805,7 @@ class TaskCardBlock(Block):
         title: str,
         details: Optional[Union[RichTextBlock, dict]] = None,
         output: Optional[Union[RichTextBlock, dict]] = None,
-        sources: Optional[Sequence[Union[URLSource, dict]]] = None,
+        sources: Optional[Sequence[Union[UrlSourceElement, dict]]] = None,
         status: str,  # pending, in_progress, complete, error
         block_id: Optional[str] = None,
         **others: dict,
