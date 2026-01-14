@@ -34,6 +34,8 @@ class Chunk(JsonObject):
                 type = chunk["type"]
                 if type == MarkdownTextChunk.type:
                     return MarkdownTextChunk(**chunk)
+                elif type == PlanUpdateChunk.type:
+                    return PlanUpdateChunk(**chunk)
                 elif type == TaskUpdateChunk.type:
                     return TaskUpdateChunk(**chunk)
                 else:
