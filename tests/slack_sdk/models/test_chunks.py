@@ -1,6 +1,6 @@
 import unittest
 
-from slack_sdk.models.messages.chunk import MarkdownTextChunk, TaskUpdateChunk, URLSource
+from slack_sdk.models.messages.chunk import MarkdownTextChunk, PlanUpdateChunk, TaskUpdateChunk, URLSource
 
 
 class MarkdownTextChunkTests(unittest.TestCase):
@@ -10,6 +10,17 @@ class MarkdownTextChunkTests(unittest.TestCase):
             {
                 "type": "markdown_text",
                 "text": "greetings!",
+            },
+        )
+
+
+class PlanUpdateChunkTests(unittest.TestCase):
+    def test_json(self):
+        self.assertDictEqual(
+            PlanUpdateChunk(title="Crunching numbers...").to_dict(),
+            {
+                "type": "plan_update",
+                "text": "Crunching numbers...",
             },
         )
 
