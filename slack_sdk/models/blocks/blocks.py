@@ -812,6 +812,20 @@ class TaskCardBlock(Block):
         block_id: Optional[str] = None,
         **others: dict,
     ):
+        """A discrete action or tool call.
+        https://docs.slack.dev/reference/block-kit/blocks/task-card-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            task_id (required): ID for the task
+            title (required): Title of the task in plain text
+            details: Details of the task in the form of a single "rich_text" entity.
+            output: Output of the task in the form of a single "rich_text" entity.
+            sources: List of sources used to generate a response
+        """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
