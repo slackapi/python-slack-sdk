@@ -1,6 +1,7 @@
 import unittest
 
-from slack_sdk.models.messages.chunk import MarkdownTextChunk, TaskUpdateChunk, URLSource
+from slack_sdk.models.blocks.block_elements import UrlSourceElement
+from slack_sdk.models.messages.chunk import MarkdownTextChunk, TaskUpdateChunk
 
 
 class MarkdownTextChunkTests(unittest.TestCase):
@@ -47,7 +48,11 @@ class TaskUpdateChunkTests(unittest.TestCase):
                 status="complete",
                 output="Found a solution",
                 sources=[
-                    URLSource(
+                    UrlSourceElement(
+                        text="Discussion of Life's Questions",
+                        url="https://www.answers.com",
+                    ),
+                    UrlSourceElement(
                         text="The Free Encyclopedia",
                         url="https://wikipedia.org",
                         icon_url="https://example.com/globe.png",
@@ -61,6 +66,11 @@ class TaskUpdateChunkTests(unittest.TestCase):
                 "status": "complete",
                 "output": "Found a solution",
                 "sources": [
+                    {
+                        "type": "url",
+                        "text": "Discussion of Life's Questions",
+                        "url": "https://www.answers.com",
+                    },
                     {
                         "type": "url",
                         "text": "The Free Encyclopedia",

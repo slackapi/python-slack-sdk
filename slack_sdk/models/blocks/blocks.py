@@ -16,6 +16,7 @@ from .block_elements import (
     InputInteractiveElement,
     InteractiveElement,
     RichTextElement,
+    UrlSourceElement,
 )
 
 # -------------------------------------------------
@@ -97,6 +98,10 @@ class Block(JsonObject):
                     return RichTextBlock(**block)
                 elif type == TableBlock.type:
                     return TableBlock(**block)
+                elif type == TaskCardBlock.type:
+                    return TaskCardBlock(**block)
+                elif type == PlanBlock.type:
+                    return PlanBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -777,3 +782,104 @@ class TableBlock(Block):
     @JsonValidator("rows attribute must be specified")
     def _validate_rows(self):
         return self.rows is not None and len(self.rows) > 0
+
+
+class TaskCardBlock(Block):
+    type = "task_card"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "task_id",
+                "title",
+                "details",
+                "output",
+                "sources",
+                "status",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        task_id: str,
+        title: str,
+        details: Optional[Union[RichTextBlock, dict]] = None,
+        output: Optional[Union[RichTextBlock, dict]] = None,
+        sources: Optional[Sequence[Union[UrlSourceElement, dict]]] = None,
+        status: str,  # pending, in_progress, complete, error
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """A discrete action or tool call.
+        https://docs.slack.dev/reference/block-kit/blocks/task-card-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            task_id (required): ID for the task
+            title (required): Title of the task in plain text
+            details: Details of the task in the form of a single "rich_text" entity.
+            output: Output of the task in the form of a single "rich_text" entity.
+            sources: List of sources used to generate a response
+            status: The state of a task. Either "pending" or "in_progress" or "complete" or "error".
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.task_id = task_id
+        self.title = title
+        self.details = details
+        self.output = output
+        self.sources = sources
+        self.status = status
+
+    @JsonValidator("status must be an expected value (pending, in_progress, complete, or error)")
+    def _validate_rows(self):
+        return self.status in ["pending", "in_progress", "complete", "error"]
+
+
+class PlanBlock(Block):
+    type = "plan"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "plan_id",
+                "title",
+                "tasks",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        plan_id: str,
+        title: str,
+        tasks: Optional[Sequence[Union[Dict, TaskCardBlock]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """A collection of related tasks.
+        https://docs.slack.dev/reference/block-kit/blocks/plan-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            plan_id (required): ID for the plan (May be removed / made optional, feel free to pass in a random UUID
+                for now)
+            title (required): Title of the plan in plain text
+            tasks: Details of the task in the form of a single "rich_text" entity.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.plan_id = plan_id
+        self.title = title
+        self.tasks = tasks
