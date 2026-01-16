@@ -3,6 +3,7 @@ from typing import Dict, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject
+from slack_sdk.models.blocks.block_elements import UrlSourceElement
 
 
 class Chunk(JsonObject):
