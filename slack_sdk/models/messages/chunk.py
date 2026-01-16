@@ -1,9 +1,9 @@
 import logging
-from typing import Any, Dict, Optional, Sequence, Set, Union
+from typing import Dict, Optional, Sequence, Set, Union
 
-from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject
+from slack_sdk.models.blocks.block_elements import UrlSourceElement
 
 
 class Chunk(JsonObject):
@@ -67,44 +67,6 @@ class MarkdownTextChunk(Chunk):
         self.text = text
 
 
-class URLSource(JsonObject):
-    type = "url"
-
-    @property
-    def attributes(self) -> Set[str]:
-        return super().attributes.union(
-            {
-                "url",
-                "text",
-                "icon_url",
-            }
-        )
-
-    def __init__(
-        self,
-        *,
-        url: str,
-        text: str,
-        icon_url: Optional[str] = None,
-        **others: Dict,
-    ):
-        show_unknown_key_warning(self, others)
-        self._url = url
-        self._text = text
-        self._icon_url = icon_url
-
-    def to_dict(self) -> Dict[str, Any]:
-        self.validate_json()
-        json: Dict[str, Union[str, Dict]] = {
-            "type": self.type,
-            "url": self._url,
-            "text": self._text,
-        }
-        if self._icon_url:
-            json["icon_url"] = self._icon_url
-        return json
-
-
 class TaskUpdateChunk(Chunk):
     type = "task_update"
 
@@ -129,7 +91,7 @@ class TaskUpdateChunk(Chunk):
         status: str,  # "pending", "in_progress", "complete", "error"
         details: Optional[str] = None,
         output: Optional[str] = None,
-        sources: Optional[Sequence[Union[Dict, URLSource]]] = None,
+        sources: Optional[Sequence[Union[Dict, UrlSourceElement]]] = None,
         **others: Dict,
     ):
         """Used for displaying tool execution progress in a timeline-style UI.
@@ -144,12 +106,4 @@ class TaskUpdateChunk(Chunk):
         self.status = status
         self.details = details
         self.output = output
-        if sources is not None:
-            self.sources = []
-            for src in sources:
-                if isinstance(src, Dict):
-                    self.sources.append(src)
-                elif isinstance(src, URLSource):
-                    self.sources.append(src.to_dict())
-                else:
-                    raise SlackObjectFormationError(f"Unsupported type for source in task update chunk: {type(src)}")
+        self.sources = sources

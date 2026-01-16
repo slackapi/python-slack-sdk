@@ -21,6 +21,7 @@ from slack_sdk.models.blocks import (
     Option,
     OverflowMenuElement,
     PlainTextObject,
+    PlanBlock,
     RawTextObject,
     RichTextBlock,
     RichTextElementParts,
@@ -31,6 +32,7 @@ from slack_sdk.models.blocks import (
     SectionBlock,
     StaticSelectElement,
     TableBlock,
+    TaskCardBlock,
     VideoBlock,
 )
 from slack_sdk.models.blocks.basic_components import FeedbackButtonObject, SlackFile
@@ -888,6 +890,87 @@ class MarkdownBlockTests(unittest.TestCase):
         }
         with self.assertRaises(SlackObjectFormationError):
             MarkdownBlock(**input).validate_json()
+
+
+# ----------------------------------------------
+# Plan
+# ----------------------------------------------
+
+
+class PlanBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "plan",
+            "plan_id": "plan_1",
+            "title": "Thinking completed",
+            "tasks": [
+                {
+                    "task_id": "call_001",
+                    "title": "Fetched user profile information",
+                    "status": "in_progress",
+                    "details": {
+                        "type": "rich_text",
+                        "elements": [
+                            {"type": "rich_text_section", "elements": [{"type": "text", "text": "Searched database..."}]}
+                        ],
+                    },
+                    "output": {
+                        "type": "rich_text",
+                        "elements": [
+                            {"type": "rich_text_section", "elements": [{"type": "text", "text": "Profile data loaded"}]}
+                        ],
+                    },
+                },
+                {
+                    "task_id": "call_002",
+                    "title": "Checked user permissions",
+                    "status": "pending",
+                },
+                {
+                    "task_id": "call_003",
+                    "title": "Generated comprehensive user report",
+                    "status": "complete",
+                    "output": {
+                        "type": "rich_text",
+                        "elements": [
+                            {"type": "rich_text_section", "elements": [{"type": "text", "text": "15 data points compiled"}]}
+                        ],
+                    },
+                },
+            ],
+        }
+        self.assertDictEqual(input, PlanBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+
+# ----------------------------------------------
+# Task card
+# ----------------------------------------------
+
+
+class TaskCardBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "task_card",
+            "task_id": "task_1",
+            "title": "Fetching weather data",
+            "status": "pending",
+            "output": {
+                "type": "rich_text",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [{"type": "text", "text": "Found weather data for Chicago from 2 sources"}],
+                    }
+                ],
+            },
+            "sources": [
+                {"type": "url", "url": "https://weather.com/", "text": "weather.com"},
+                {"type": "url", "url": "https://www.accuweather.com/", "text": "accuweather.com"},
+            ],
+        }
+        self.assertDictEqual(input, TaskCardBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
 
 
 # ----------------------------------------------
