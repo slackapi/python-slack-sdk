@@ -1,7 +1,7 @@
 import unittest
 
 from slack_sdk.models.blocks.block_elements import UrlSourceElement
-from slack_sdk.models.messages.chunk import MarkdownTextChunk, TaskUpdateChunk
+from slack_sdk.models.messages.chunk import MarkdownTextChunk, PlanUpdateChunk, TaskUpdateChunk
 
 
 class MarkdownTextChunkTests(unittest.TestCase):
