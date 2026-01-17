@@ -34,6 +34,8 @@ class Chunk(JsonObject):
                 type = chunk["type"]
                 if type == MarkdownTextChunk.type:
                     return MarkdownTextChunk(**chunk)
+                elif type == PlanUpdateChunk.type:
+                    return PlanUpdateChunk(**chunk)
                 elif type == TaskUpdateChunk.type:
                     return TaskUpdateChunk(**chunk)
                 else:
@@ -65,6 +67,29 @@ class MarkdownTextChunk(Chunk):
         show_unknown_key_warning(self, others)
 
         self.text = text
+
+
+class PlanUpdateChunk(Chunk):
+    type = "plan_update"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"title"})
+
+    def __init__(
+        self,
+        *,
+        title: str,
+        **others: Dict,
+    ):
+        """An updated title of plans for task and tool calls.
+
+        https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
+        """
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.title = title
 
 
 class TaskUpdateChunk(Chunk):

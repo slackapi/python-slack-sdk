@@ -4,10 +4,9 @@ from io import BytesIO
 from pathlib import Path
 from typing import Dict
 
-
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block, DividerBlock
-from slack_sdk.models.messages.chunk import MarkdownTextChunk, TaskUpdateChunk
+from slack_sdk.models.messages.chunk import MarkdownTextChunk, PlanUpdateChunk, TaskUpdateChunk
 from slack_sdk.web.internal_utils import (
     _build_unexpected_body_error_message,
     _get_url,
@@ -59,9 +58,14 @@ class TestInternalUtils(unittest.TestCase):
 
     def test_can_parse_sequence_of_chunks(self):
         for chunks in [
-            [MarkdownTextChunk(text="fiz"), TaskUpdateChunk(id="001", title="baz", status="complete")],  # list
+            [
+                MarkdownTextChunk(text="fiz"),
+                PlanUpdateChunk(title="fuz"),
+                TaskUpdateChunk(id="001", title="baz", status="complete"),
+            ],  # list
             (
                 MarkdownTextChunk(text="fiz"),
+                PlanUpdateChunk(title="fuz"),
                 TaskUpdateChunk(id="001", title="baz", status="complete"),
             ),  # tuple
         ]:
@@ -87,7 +91,11 @@ class TestInternalUtils(unittest.TestCase):
 
     def test_can_parse_str_chunks(self):
         input = json.dumps(
-            [MarkdownTextChunk(text="fiz").to_dict(), TaskUpdateChunk(id="001", title="baz", status="complete").to_dict()]
+            [
+                MarkdownTextChunk(text="fiz").to_dict(),
+                PlanUpdateChunk(title="fuz").to_dict(),
+                TaskUpdateChunk(id="001", title="baz", status="complete").to_dict(),
+            ]
         )
         kwargs = {"chunks": input}
         _parse_web_class_objects(kwargs)
