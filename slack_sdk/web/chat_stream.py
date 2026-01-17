@@ -29,6 +29,7 @@ class ChatStream:
         buffer_size: int,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
+        task_display_mode: Optional[str] = None,
         **kwargs,
     ):
         """Initialize a new ChatStream instance.
@@ -44,6 +45,8 @@ class ChatStream:
             recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
               streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
+              interleaved with text and "plan" displays all tasks together.
             buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -56,6 +59,7 @@ class ChatStream:
             "thread_ts": thread_ts,
             "recipient_team_id": recipient_team_id,
             "recipient_user_id": recipient_user_id,
+            "task_display_mode": task_display_mode,
             **kwargs,
         }
         self._buffer = ""

@@ -2890,6 +2890,7 @@ class LegacyWebClient(LegacyBaseClient):
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        task_display_mode: Optional[str] = None,  # timeline, plan
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a new streaming conversation.
@@ -2903,6 +2904,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "recipient_team_id": recipient_team_id,
                 "recipient_user_id": recipient_user_id,
                 "chunks": chunks,
+                "task_display_mode": task_display_mode,
             }
         )
         _parse_web_class_objects(kwargs)
