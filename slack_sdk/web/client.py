@@ -2879,6 +2879,7 @@ class WebClient(BaseClient):
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        task_display_mode: Optional[str] = None,  # timeline, plan
         **kwargs,
     ) -> SlackResponse:
         """Starts a new streaming conversation.
@@ -2892,6 +2893,7 @@ class WebClient(BaseClient):
                 "recipient_team_id": recipient_team_id,
                 "recipient_user_id": recipient_user_id,
                 "chunks": chunks,
+                "task_display_mode": task_display_mode,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2934,6 +2936,7 @@ class WebClient(BaseClient):
         thread_ts: str,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
+        task_display_mode: Optional[str] = None,
         **kwargs,
     ) -> ChatStream:
         """Stream markdown text into a conversation.
@@ -2960,6 +2963,8 @@ class WebClient(BaseClient):
             recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
               streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
+              interleaved with text and "plan" displays all tasks together.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -2985,6 +2990,7 @@ class WebClient(BaseClient):
             thread_ts=thread_ts,
             recipient_team_id=recipient_team_id,
             recipient_user_id=recipient_user_id,
+            task_display_mode=task_display_mode,
             buffer_size=buffer_size,
             **kwargs,
         )
