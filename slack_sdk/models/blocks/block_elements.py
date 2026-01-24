@@ -1668,7 +1668,6 @@ class UrlSourceElement(BlockElement):
             {
                 "url",
                 "text",
-                "icon_url",
             }
         )
 
@@ -1677,7 +1676,6 @@ class UrlSourceElement(BlockElement):
         *,
         url: str,
         text: str,
-        icon_url: Optional[str] = None,
         **others: Dict,
     ):
         """
@@ -1687,13 +1685,11 @@ class UrlSourceElement(BlockElement):
         Args:
             url (required): The URL type source.
             text (required): Display text for the URL.
-            icon_url: Optional icon URL to display with the source.
         """
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
         self.url = url
         self.text = text
-        self.icon_url = icon_url
 
 
 # -------------------------------------------------

@@ -196,17 +196,17 @@ class ChatStream:
 
     def _flush_buffer(self, chunks: Optional[Sequence[Union[Dict, Chunk]]] = None, **kwargs) -> SlackResponse:
         """Flush the internal buffer with chunks by making appropriate API calls."""
-        flushings: List[Union[Dict, Chunk]] = []
+        chunks_to_flush: List[Union[Dict, Chunk]] = []
         if len(self._buffer) != 0:
-            flushings.append(MarkdownTextChunk(text=self._buffer))
+            chunks_to_flush.append(MarkdownTextChunk(text=self._buffer))
         if chunks is not None:
-            flushings.extend(chunks)
+            chunks_to_flush.extend(chunks)
         if not self._stream_ts:
             response = self._client.chat_startStream(
                 **self._stream_args,
                 token=self._token,
                 **kwargs,
-                chunks=flushings,
+                chunks=chunks_to_flush,
             )
             self._stream_ts = response.get("ts")
             self._state = "in_progress"
@@ -216,7 +216,7 @@ class ChatStream:
                 channel=self._stream_args["channel"],
                 ts=self._stream_ts,
                 **kwargs,
-                chunks=flushings,
+                chunks=chunks_to_flush,
             )
         self._buffer = ""
         return response
