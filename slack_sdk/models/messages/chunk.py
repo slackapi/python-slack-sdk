@@ -82,7 +82,7 @@ class PlanUpdateChunk(Chunk):
         title: str,
         **others: Dict,
     ):
-        """An updated title of plans for task and tool calls.
+        """Used for displaying an updated title of a plan.
 
         https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
         """
@@ -119,7 +119,7 @@ class TaskUpdateChunk(Chunk):
         sources: Optional[Sequence[Union[Dict, UrlSourceElement]]] = None,
         **others: Dict,
     ):
-        """Used for displaying tool execution progress in a timeline-style UI.
+        """Used for displaying task progress in a timeline-style UI.
 
         https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
         """

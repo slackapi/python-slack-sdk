@@ -298,13 +298,13 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block: dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1358,7 +1358,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        &#34;&#34;&#34;A collection of related tasks.
+        &#34;&#34;&#34;Displays a collection of related tasks.
         https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
         Args:
@@ -1381,7 +1381,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
-<p>A collection of related tasks.
+<p>Displays a collection of related tasks.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/plan-block/">https://docs.slack.dev/reference/block-kit/blocks/plan-block/</a></p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1861,7 +1861,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        &#34;&#34;&#34;A discrete action or tool call.
+        &#34;&#34;&#34;Displays a single task, representing a single action.
         https://docs.slack.dev/reference/block-kit/blocks/task-card-block/
 
         Args:
@@ -1873,8 +1873,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             title (required): Title of the task in plain text
             details: Details of the task in the form of a single &#34;rich_text&#34; entity.
             output: Output of the task in the form of a single &#34;rich_text&#34; entity.
-            sources: List of sources used to generate a response
-            status: The state of a task. Either &#34;pending&#34; or &#34;in_progress&#34; or &#34;complete&#34; or &#34;error&#34;.
+            sources: Array of URL source elements used to generate a response.
+            status: The state of a task. Either &#34;pending&#34;, &#34;in_progress&#34;, &#34;complete&#34;, or &#34;error&#34;.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -1893,7 +1893,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
-<p>A discrete action or tool call.
+<p>Displays a single task, representing a single action.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/task-card-block/">https://docs.slack.dev/reference/block-kit/blocks/task-card-block/</a></p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1911,9 +1911,9 @@ If a message is updated, use a new block_id.</dd>
 <dt><strong><code>output</code></strong></dt>
 <dd>Output of the task in the form of a single "rich_text" entity.</dd>
 <dt><strong><code>sources</code></strong></dt>
-<dd>List of sources used to generate a response</dd>
+<dd>Array of URL source elements used to generate a response.</dd>
 <dt><strong><code>status</code></strong></dt>
-<dd>The state of a task. Either "pending" or "in_progress" or "complete" or "error".</dd>
+<dd>The state of a task. Either "pending", "in_progress", "complete", or "error".</dd>
 </dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">

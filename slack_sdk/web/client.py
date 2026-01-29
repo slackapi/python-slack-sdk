@@ -2964,7 +2964,7 @@ class WebClient(BaseClient):
               streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
-              interleaved with text and "plan" displays all tasks together.
+              with text and "plan" displays all tasks together.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
