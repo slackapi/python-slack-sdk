@@ -66,7 +66,6 @@ class TaskUpdateChunkTests(unittest.TestCase):
                     UrlSourceElement(
                         text="The Free Encyclopedia",
                         url="https://wikipedia.org",
-                        icon_url="https://example.com/globe.png",
                     ),
                 ],
             ).to_dict(),
@@ -86,7 +85,6 @@ class TaskUpdateChunkTests(unittest.TestCase):
                         "type": "url",
                         "text": "The Free Encyclopedia",
                         "url": "https://wikipedia.org",
-                        "icon_url": "https://example.com/globe.png",
                     },
                 ],
             },

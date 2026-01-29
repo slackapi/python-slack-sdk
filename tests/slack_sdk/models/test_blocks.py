@@ -901,7 +901,6 @@ class PlanBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
             "type": "plan",
-            "plan_id": "plan_1",
             "title": "Thinking completed",
             "tasks": [
                 {
