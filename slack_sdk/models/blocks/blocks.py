@@ -871,7 +871,7 @@ class PlanBlock(Block):
                 block_id should be unique for each message and each iteration of a message.
                 If a message is updated, use a new block_id.
             title (required): Title of the plan in plain text
-            tasks: Details of the task in the form of a single "rich_text" entity.
+            tasks: A sequence of task card blocks. Each task represents a single action within the plan.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
