@@ -55,6 +55,7 @@ from .block_elements import (
     StaticSelectElement,
     TimePickerElement,
     UrlInputElement,
+    UrlSourceElement,
     UserMultiSelectElement,
     UserSelectElement,
 )
@@ -70,9 +71,11 @@ from .blocks import (
     ImageBlock,
     InputBlock,
     MarkdownBlock,
+    PlanBlock,
     RichTextBlock,
     SectionBlock,
     TableBlock,
+    TaskCardBlock,
     VideoBlock,
 )
 
@@ -111,6 +114,7 @@ __all__ = [
     "PlainTextInputElement",
     "EmailInputElement",
     "UrlInputElement",
+    "UrlSourceElement",
     "NumberInputElement",
     "RadioButtonsElement",
     "SelectElement",
@@ -135,8 +139,10 @@ __all__ = [
     "ImageBlock",
     "InputBlock",
     "MarkdownBlock",
+    "PlanBlock",
     "SectionBlock",
     "TableBlock",
+    "TaskCardBlock",
     "VideoBlock",
     "RichTextBlock",
 ]

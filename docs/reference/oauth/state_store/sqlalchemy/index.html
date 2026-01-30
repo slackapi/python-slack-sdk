@@ -99,7 +99,7 @@ el.replaceWith(d);
 
     async def async_issue(self, *args, **kwargs) -&gt; str:
         state: str = str(uuid4())
-        now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
+        now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
         async with self.engine.begin() as conn:
             await conn.execute(
                 self.oauth_states.insert(),
@@ -111,7 +111,7 @@ el.replaceWith(d);
         try:
             async with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.now(tz=timezone.utc)))
                 result = await conn.execute(query)
                 for row in result.mappings():
                     self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
@@ -191,7 +191,7 @@ def logger(self) -&gt; Logger:
     try:
         async with self.engine.begin() as conn:
             c = self.oauth_states.c
-            query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
+            query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.now(tz=timezone.utc)))
             result = await conn.execute(query)
             for row in result.mappings():
                 self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
@@ -215,7 +215,7 @@ def logger(self) -&gt; Logger:
 </summary>
 <pre><code class="python">async def async_issue(self, *args, **kwargs) -&gt; str:
     state: str = str(uuid4())
-    now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
+    now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
     async with self.engine.begin() as conn:
         await conn.execute(
             self.oauth_states.insert(),
@@ -293,7 +293,7 @@ def logger(self) -&gt; Logger:
 
     def issue(self, *args, **kwargs) -&gt; str:
         state: str = str(uuid4())
-        now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
+        now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
         with self.engine.begin() as conn:
             conn.execute(
                 self.oauth_states.insert(),
@@ -305,7 +305,7 @@ def logger(self) -&gt; Logger:
         try:
             with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.now(tz=timezone.utc)))
                 result = conn.execute(query)
                 for row in result.mappings():
                     self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
@@ -385,7 +385,7 @@ def logger(self) -&gt; Logger:
     try:
         with self.engine.begin() as conn:
             c = self.oauth_states.c
-            query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.utcnow()))
+            query = self.oauth_states.select().where(and_(c.state == state, c.expire_at &gt; datetime.now(tz=timezone.utc)))
             result = conn.execute(query)
             for row in result.mappings():
                 self.logger.debug(f&#34;consume&#39;s query result: {row}&#34;)
@@ -422,7 +422,7 @@ def logger(self) -&gt; Logger:
 </summary>
 <pre><code class="python">def issue(self, *args, **kwargs) -&gt; str:
     state: str = str(uuid4())
-    now = datetime.utcfromtimestamp(time.time() + self.expiration_seconds)
+    now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
     with self.engine.begin() as conn:
         conn.execute(
             self.oauth_states.insert(),
