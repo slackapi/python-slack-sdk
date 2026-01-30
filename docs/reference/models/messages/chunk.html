@@ -121,7 +121,7 @@ el.replaceWith(d);
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.messages.chunk.Chunk.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>chunk: Dict | ForwardRef('<a title="slack_sdk.models.messages.chunk.Chunk" href="#slack_sdk.models.messages.chunk.Chunk">Chunk</a>')) ‑> <a title="slack_sdk.models.messages.chunk.Chunk" href="#slack_sdk.models.messages.chunk.Chunk">Chunk</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>chunk: Dict | <a title="slack_sdk.models.messages.chunk.Chunk" href="#slack_sdk.models.messages.chunk.Chunk">Chunk</a>) ‑> <a title="slack_sdk.models.messages.chunk.Chunk" href="#slack_sdk.models.messages.chunk.Chunk">Chunk</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -235,7 +235,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         title: str,
         **others: Dict,
     ):
-        &#34;&#34;&#34;An updated title of plans for task and tool calls.
+        &#34;&#34;&#34;Used for displaying an updated title of a plan.
 
         https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
         &#34;&#34;&#34;
@@ -246,7 +246,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Chunk for streaming messages.</p>
 <p><a href="https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming">https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming</a></p>
-<p>An updated title of plans for task and tool calls.</p>
+<p>Used for displaying an updated title of a plan.</p>
 <p><a href="https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming">https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -324,7 +324,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         sources: Optional[Sequence[Union[Dict, UrlSourceElement]]] = None,
         **others: Dict,
     ):
-        &#34;&#34;&#34;Used for displaying tool execution progress in a timeline-style UI.
+        &#34;&#34;&#34;Used for displaying task progress in a timeline-style UI.
 
         https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
         &#34;&#34;&#34;
@@ -340,7 +340,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </details>
 <div class="desc"><p>Chunk for streaming messages.</p>
 <p><a href="https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming">https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming</a></p>
-<p>Used for displaying tool execution progress in a timeline-style UI.</p>
+<p>Used for displaying task progress in a timeline-style UI.</p>
 <p><a href="https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming">https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">

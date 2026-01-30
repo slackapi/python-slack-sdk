@@ -812,7 +812,7 @@ class TaskCardBlock(Block):
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        """A discrete action or tool call.
+        """Displays a single task, representing a single action.
         https://docs.slack.dev/reference/block-kit/blocks/task-card-block/
 
         Args:
@@ -824,8 +824,8 @@ class TaskCardBlock(Block):
             title (required): Title of the task in plain text
             details: Details of the task in the form of a single "rich_text" entity.
             output: Output of the task in the form of a single "rich_text" entity.
-            sources: List of sources used to generate a response
-            status: The state of a task. Either "pending" or "in_progress" or "complete" or "error".
+            sources: Array of URL source elements used to generate a response.
+            status: The state of a task. Either "pending", "in_progress", "complete", or "error".
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -862,7 +862,7 @@ class PlanBlock(Block):
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        """A collection of related tasks.
+        """Displays a collection of related tasks.
         https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
         Args:
@@ -871,7 +871,7 @@ class PlanBlock(Block):
                 block_id should be unique for each message and each iteration of a message.
                 If a message is updated, use a new block_id.
             title (required): Title of the plan in plain text
-            tasks: Details of the task in the form of a single "rich_text" entity.
+            tasks: A sequence of task card blocks. Each task represents a single action within the plan.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)

@@ -56,7 +56,7 @@ class AsyncChatStream:
               streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
-              interleaved with text and "plan" displays all tasks together.
+               with text and "plan" displays all tasks together.
             buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -90,7 +90,7 @@ class AsyncChatStream:
         is stopped this method cannot be called.
 
         Args:
-            chunks: An array of streaming chunks that can contain either markdown text or task updates.
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -146,7 +146,7 @@ class AsyncChatStream:
 
         Args:
             blocks: A list of blocks that will be rendered at the bottom of the finalized message.
-            chunks: An array of streaming chunks that can contain either markdown text or task updates.
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you

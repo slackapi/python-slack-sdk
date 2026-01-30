@@ -320,13 +320,13 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: dict | ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block: dict | <a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -458,13 +458,13 @@ def subtype(self) -&gt; Optional[str]:
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.BlockElement.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block_element: dict | ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>')) ‑> <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block_element: dict | <a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>) ‑> <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.BlockElement.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>') | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]) ‑> List[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[dict | <a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]) ‑> List[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1278,7 +1278,7 @@ offering a confirm and deny button.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.ConfirmObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>confirm: ForwardRef('<a title="slack_sdk.models.blocks.ConfirmObject" href="#slack_sdk.models.blocks.ConfirmObject">ConfirmObject</a>') | Dict[str, Any])</span>
+<span>def <span class="ident">parse</span></span>(<span>confirm: <a title="slack_sdk.models.blocks.ConfirmObject" href="#slack_sdk.models.blocks.ConfirmObject">ConfirmObject</a> | Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1650,7 +1650,7 @@ from conversation lists. Defaults to false.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.ConversationFilter.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>filter: dict | ForwardRef('<a title="slack_sdk.models.blocks.ConversationFilter" href="#slack_sdk.models.blocks.ConversationFilter">ConversationFilter</a>'))</span>
+<span>def <span class="ident">parse</span></span>(<span>filter: dict | <a title="slack_sdk.models.blocks.ConversationFilter" href="#slack_sdk.models.blocks.ConversationFilter">ConversationFilter</a>)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2842,7 +2842,7 @@ screen readers instead of the button <code>text</code> object.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.FeedbackButtonObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>feedback_button: ForwardRef('<a title="slack_sdk.models.blocks.FeedbackButtonObject" href="#slack_sdk.models.blocks.FeedbackButtonObject">FeedbackButtonObject</a>') | Dict[str, Any])</span>
+<span>def <span class="ident">parse</span></span>(<span>feedback_button: <a title="slack_sdk.models.blocks.FeedbackButtonObject" href="#slack_sdk.models.blocks.FeedbackButtonObject">FeedbackButtonObject</a> | Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4727,7 +4727,7 @@ def from_single_value(value_and_label: str):
 <div class="desc"><p>Creates a simple Option instance with the same value and label</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.Option.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>options: Sequence[Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.Option" href="#slack_sdk.models.blocks.Option">Option</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None</span>
+<span>def <span class="ident">parse_all</span></span>(<span>options: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.Option" href="#slack_sdk.models.blocks.Option">Option</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4925,7 +4925,7 @@ UI) and a list of Option objects.</p>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.OptionGroup.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Sequence[Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.OptionGroup" href="#slack_sdk.models.blocks.OptionGroup">OptionGroup</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] | None</span>
+<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.OptionGroup" href="#slack_sdk.models.blocks.OptionGroup">OptionGroup</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -5354,7 +5354,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.PlanBlock"><code class="flex name class">
 <span>class <span class="ident">PlanBlock</span></span>
-<span>(</span><span>*,<br>plan_id: str,<br>title: str,<br>tasks: Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.TaskCardBlock" href="blocks.html#slack_sdk.models.blocks.blocks.TaskCardBlock">TaskCardBlock</a>] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>title: str,<br>tasks: Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.TaskCardBlock" href="blocks.html#slack_sdk.models.blocks.blocks.TaskCardBlock">TaskCardBlock</a>] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -5368,7 +5368,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return super().attributes.union(
             {
-                &#34;plan_id&#34;,
                 &#34;title&#34;,
                 &#34;tasks&#34;,
             }
@@ -5377,13 +5376,12 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     def __init__(
         self,
         *,
-        plan_id: str,
         title: str,
         tasks: Optional[Sequence[Union[Dict, TaskCardBlock]]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        &#34;&#34;&#34;A collection of related tasks.
+        &#34;&#34;&#34;Displays a collection of related tasks.
         https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
         Args:
@@ -5391,22 +5389,19 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                 Maximum length for this field is 255 characters.
                 block_id should be unique for each message and each iteration of a message.
                 If a message is updated, use a new block_id.
-            plan_id (required): ID for the plan (May be removed / made optional, feel free to pass in a random UUID
-                for now)
             title (required): Title of the plan in plain text
             tasks: Details of the task in the form of a single &#34;rich_text&#34; entity.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.plan_id = plan_id
         self.title = title
         self.tasks = tasks</code></pre>
 </details>
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
-<p>A collection of related tasks.
+<p>Displays a collection of related tasks.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/plan-block/">https://docs.slack.dev/reference/block-kit/blocks/plan-block/</a></p>
 <h2 id="args">Args</h2>
 <dl>
@@ -5415,9 +5410,6 @@ to create visually rich and compellingly interactive messages.
 Maximum length for this field is 255 characters.
 block_id should be unique for each message and each iteration of a message.
 If a message is updated, use a new block_id.</dd>
-<dt><strong><code>plan_id</code></strong> :&ensp;<code>required</code></dt>
-<dd>ID for the plan (May be removed / made optional, feel free to pass in a random UUID
-for now)</dd>
 <dt><strong><code>title</code></strong> :&ensp;<code>required</code></dt>
 <dd>Title of the plan in plain text</dd>
 <dt><strong><code>tasks</code></strong></dt>
@@ -5448,7 +5440,6 @@ for now)</dd>
 def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union(
         {
-            &#34;plan_id&#34;,
             &#34;title&#34;,
             &#34;tasks&#34;,
         }
@@ -6152,7 +6143,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.RichTextInputElement"><code class="flex name class">
 <span>class <span class="ident">RichTextInputElement</span></span>
-<span>(</span><span>*,<br>action_id: str | None = None,<br>placeholder: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>initial_value: Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.RichTextBlock" href="#slack_sdk.models.blocks.RichTextBlock">RichTextBlock</a>') | None = None,<br>dispatch_action_config: dict | <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a> | None = None,<br>focus_on_load: bool | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>action_id: str | None = None,<br>placeholder: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>initial_value: Dict[str, Any] | <a title="slack_sdk.models.blocks.RichTextBlock" href="#slack_sdk.models.blocks.RichTextBlock">RichTextBlock</a> | None = None,<br>dispatch_action_config: dict | <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a> | None = None,<br>focus_on_load: bool | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -7358,7 +7349,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        &#34;&#34;&#34;A discrete action or tool call.
+        &#34;&#34;&#34;Displays a single task, representing a single action.
         https://docs.slack.dev/reference/block-kit/blocks/task-card-block/
 
         Args:
@@ -7370,8 +7361,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             title (required): Title of the task in plain text
             details: Details of the task in the form of a single &#34;rich_text&#34; entity.
             output: Output of the task in the form of a single &#34;rich_text&#34; entity.
-            sources: List of sources used to generate a response
-            status: The state of a task. Either &#34;pending&#34; or &#34;in_progress&#34; or &#34;complete&#34; or &#34;error&#34;.
+            sources: Array of URL source elements used to generate a response.
+            status: The state of a task. Either &#34;pending&#34;, &#34;in_progress&#34;, &#34;complete&#34;, or &#34;error&#34;.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -7390,7 +7381,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>Blocks are a series of components that can be combined
 to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
-<p>A discrete action or tool call.
+<p>Displays a single task, representing a single action.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/task-card-block/">https://docs.slack.dev/reference/block-kit/blocks/task-card-block/</a></p>
 <h2 id="args">Args</h2>
 <dl>
@@ -7408,9 +7399,9 @@ If a message is updated, use a new block_id.</dd>
 <dt><strong><code>output</code></strong></dt>
 <dd>Output of the task in the form of a single "rich_text" entity.</dd>
 <dt><strong><code>sources</code></strong></dt>
-<dd>List of sources used to generate a response</dd>
+<dd>Array of URL source elements used to generate a response.</dd>
 <dt><strong><code>status</code></strong></dt>
-<dd>The state of a task. Either "pending" or "in_progress" or "complete" or "error".</dd>
+<dd>The state of a task. Either "pending", "in_progress", "complete", or "error".</dd>
 </dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -7556,7 +7547,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.TextObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>text: str | Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.TextObject" href="#slack_sdk.models.blocks.TextObject">TextObject</a>'),<br>default_type: str = 'mrkdwn') ‑> <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>text: str | Dict[str, Any] | <a title="slack_sdk.models.blocks.TextObject" href="#slack_sdk.models.blocks.TextObject">TextObject</a>,<br>default_type: str = 'mrkdwn') ‑> <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -7863,7 +7854,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.UrlSourceElement"><code class="flex name class">
 <span>class <span class="ident">UrlSourceElement</span></span>
-<span>(</span><span>*, url: str, text: str, icon_url: str | None = None, **others: Dict)</span>
+<span>(</span><span>*, url: str, text: str, **others: Dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -7879,7 +7870,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             {
                 &#34;url&#34;,
                 &#34;text&#34;,
-                &#34;icon_url&#34;,
             }
         )
 
@@ -7888,27 +7878,24 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         *,
         url: str,
         text: str,
-        icon_url: Optional[str] = None,
         **others: Dict,
     ):
         &#34;&#34;&#34;
-        A URL source element to reference in a task card block.
+        A URL source element that displays a URL source for referencing within a task card block.
         https://docs.slack.dev/reference/block-kit/block-elements/url-source-element
 
         Args:
             url (required): The URL type source.
             text (required): Display text for the URL.
-            icon_url: Optional icon URL to display with the source.
         &#34;&#34;&#34;
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
         self.url = url
-        self.text = text
-        self.icon_url = icon_url</code></pre>
+        self.text = text</code></pre>
 </details>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
-<p>A URL source element to reference in a task card block.
+<p>A URL source element that displays a URL source for referencing within a task card block.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/url-source-element">https://docs.slack.dev/reference/block-kit/block-elements/url-source-element</a></p>
 <h2 id="args">Args</h2>
 <dl>
@@ -7916,8 +7903,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <dd>The URL type source.</dd>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>Display text for the URL.</dd>
-<dt><strong><code>icon_url</code></strong></dt>
-<dd>Optional icon URL to display with the source.</dd>
 </dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -7946,7 +7931,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         {
             &#34;url&#34;,
             &#34;text&#34;,
-            &#34;icon_url&#34;,
         }
     )</code></pre>
 </details>
