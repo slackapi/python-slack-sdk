@@ -90,7 +90,7 @@ class AsyncChatStream:
         is stopped this method cannot be called.
 
         Args:
-            chunks: An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -146,7 +146,7 @@ class AsyncChatStream:
 
         Args:
             blocks: A list of blocks that will be rendered at the bottom of the finalized message.
-            chunks: An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you

@@ -123,7 +123,7 @@ el.replaceWith(d);
         is stopped this method cannot be called.
 
         Args:
-            chunks: An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -179,7 +179,7 @@ el.replaceWith(d);
 
         Args:
             blocks: A list of blocks that will be rendered at the bottom of the finalized message.
-            chunks: An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
@@ -239,17 +239,17 @@ el.replaceWith(d);
 
     async def _flush_buffer(self, chunks: Optional[Sequence[Union[Dict, Chunk]]] = None, **kwargs) -&gt; AsyncSlackResponse:
         &#34;&#34;&#34;Flush the internal buffer with chunks by making appropriate API calls.&#34;&#34;&#34;
-        flushings: List[Union[Dict, Chunk]] = []
+        chunks_to_flush: List[Union[Dict, Chunk]] = []
         if len(self._buffer) != 0:
-            flushings.append(MarkdownTextChunk(text=self._buffer))
+            chunks_to_flush.append(MarkdownTextChunk(text=self._buffer))
         if chunks is not None:
-            flushings.extend(chunks)
+            chunks_to_flush.extend(chunks)
         if not self._stream_ts:
             response = await self._client.chat_startStream(
                 **self._stream_args,
                 token=self._token,
                 **kwargs,
-                chunks=flushings,
+                chunks=chunks_to_flush,
             )
             self._stream_ts = response.get(&#34;ts&#34;)
             self._state = &#34;in_progress&#34;
@@ -259,7 +259,7 @@ el.replaceWith(d);
                 channel=self._stream_args[&#34;channel&#34;],
                 ts=self._stream_ts,
                 **kwargs,
-                chunks=flushings,
+                chunks=chunks_to_flush,
             )
         self._buffer = &#34;&#34;
         return response</code></pre>
@@ -317,7 +317,7 @@ decreases the number of method calls made for the same amount of text, which is 
     is stopped this method cannot be called.
 
     Args:
-        chunks: An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.
+        chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
         markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
           what will be appended to the message received so far.
         **kwargs: Additional arguments passed to the underlying API calls.
@@ -366,7 +366,7 @@ is stopped this method cannot be called.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>chunks</code></strong></dt>
-<dd>An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.</dd>
+<dd>An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.</dd>
 <dt><strong><code>markdown_text</code></strong></dt>
 <dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
 what will be appended to the message received so far.</dd>
@@ -413,7 +413,7 @@ streamer.stop()
 
     Args:
         blocks: A list of blocks that will be rendered at the bottom of the finalized message.
-        chunks: An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.
+        chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
         markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
           what will be appended to the message received so far.
         metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
@@ -477,7 +477,7 @@ streamer.stop()
 <dt><strong><code>blocks</code></strong></dt>
 <dd>A list of blocks that will be rendered at the bottom of the finalized message.</dd>
 <dt><strong><code>chunks</code></strong></dt>
-<dd>An array of streaming chunks. Chunks can be markdown text chunks or task update chunks.</dd>
+<dd>An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.</dd>
 <dt><strong><code>markdown_text</code></strong></dt>
 <dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
 what will be appended to the message received so far.</dd>

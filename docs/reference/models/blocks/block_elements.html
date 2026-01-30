@@ -4666,7 +4666,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.block_elements.UrlSourceElement"><code class="flex name class">
 <span>class <span class="ident">UrlSourceElement</span></span>
-<span>(</span><span>*, url: str, text: str, icon_url: str | None = None, **others: Dict)</span>
+<span>(</span><span>*, url: str, text: str, **others: Dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -4682,7 +4682,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             {
                 &#34;url&#34;,
                 &#34;text&#34;,
-                &#34;icon_url&#34;,
             }
         )
 
@@ -4691,7 +4690,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         *,
         url: str,
         text: str,
-        icon_url: Optional[str] = None,
         **others: Dict,
     ):
         &#34;&#34;&#34;
@@ -4701,13 +4699,11 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         Args:
             url (required): The URL type source.
             text (required): Display text for the URL.
-            icon_url: Optional icon URL to display with the source.
         &#34;&#34;&#34;
         super().__init__(type=self.type)
         show_unknown_key_warning(self, others)
         self.url = url
-        self.text = text
-        self.icon_url = icon_url</code></pre>
+        self.text = text</code></pre>
 </details>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
@@ -4719,8 +4715,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <dd>The URL type source.</dd>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>Display text for the URL.</dd>
-<dt><strong><code>icon_url</code></strong></dt>
-<dd>Optional icon URL to display with the source.</dd>
 </dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -4749,7 +4743,6 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         {
             &#34;url&#34;,
             &#34;text&#34;,
-            &#34;icon_url&#34;,
         }
     )</code></pre>
 </details>
