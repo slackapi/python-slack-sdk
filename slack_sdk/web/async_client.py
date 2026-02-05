@@ -17,12 +17,13 @@ from io import IOBase
 from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
+from slack_sdk.models.messages.chunk import Chunk
 from slack_sdk.models.views import View
 from slack_sdk.web.async_chat_stream import AsyncChatStream
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block, RichTextBlock
-from ..models.metadata import Metadata, EntityMetadata, EventAndEntityMetadata
+from ..models.metadata import EntityMetadata, EventAndEntityMetadata, Metadata
 from .async_base_client import AsyncBaseClient, AsyncSlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
@@ -2630,7 +2631,8 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         channel: str,
         ts: str,
-        markdown_text: str,
+        markdown_text: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Appends text to an existing streaming conversation.
@@ -2641,8 +2643,10 @@ class AsyncWebClient(AsyncBaseClient):
                 "channel": channel,
                 "ts": ts,
                 "markdown_text": markdown_text,
+                "chunks": chunks,
             }
         )
+        _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         return await self.api_call("chat.appendStream", json=kwargs)
 
@@ -2884,6 +2888,8 @@ class AsyncWebClient(AsyncBaseClient):
         markdown_text: Optional[str] = None,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        task_display_mode: Optional[str] = None,  # timeline, plan
         **kwargs,
     ) -> AsyncSlackResponse:
         """Starts a new streaming conversation.
@@ -2896,8 +2902,11 @@ class AsyncWebClient(AsyncBaseClient):
                 "markdown_text": markdown_text,
                 "recipient_team_id": recipient_team_id,
                 "recipient_user_id": recipient_user_id,
+                "chunks": chunks,
+                "task_display_mode": task_display_mode,
             }
         )
+        _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         return await self.api_call("chat.startStream", json=kwargs)
 
@@ -2909,6 +2918,7 @@ class AsyncWebClient(AsyncBaseClient):
         markdown_text: Optional[str] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Stops a streaming conversation.
@@ -2921,6 +2931,7 @@ class AsyncWebClient(AsyncBaseClient):
                 "markdown_text": markdown_text,
                 "blocks": blocks,
                 "metadata": metadata,
+                "chunks": chunks,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2935,6 +2946,7 @@ class AsyncWebClient(AsyncBaseClient):
         thread_ts: str,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
+        task_display_mode: Optional[str] = None,
         **kwargs,
     ) -> AsyncChatStream:
         """Stream markdown text into a conversation.
@@ -2961,6 +2973,8 @@ class AsyncWebClient(AsyncBaseClient):
             recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
               streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
+              with text and "plan" displays all tasks together.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -2986,6 +3000,7 @@ class AsyncWebClient(AsyncBaseClient):
             thread_ts=thread_ts,
             recipient_team_id=recipient_team_id,
             recipient_user_id=recipient_user_id,
+            task_display_mode=task_display_mode,
             buffer_size=buffer_size,
             **kwargs,
         )
