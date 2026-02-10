@@ -298,13 +298,13 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block: dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1365,7 +1365,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                 block_id should be unique for each message and each iteration of a message.
                 If a message is updated, use a new block_id.
             title (required): Title of the plan in plain text
-            tasks: Details of the task in the form of a single &#34;rich_text&#34; entity.
+            tasks: A sequence of task card blocks. Each task represents a single action within the plan.
         &#34;&#34;&#34;
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -1388,7 +1388,7 @@ If a message is updated, use a new block_id.</dd>
 <dt><strong><code>title</code></strong> :&ensp;<code>required</code></dt>
 <dd>Title of the plan in plain text</dd>
 <dt><strong><code>tasks</code></strong></dt>
-<dd>Details of the task in the form of a single "rich_text" entity.</dd>
+<dd>A sequence of task card blocks. Each task represents a single action within the plan.</dd>
 </dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
