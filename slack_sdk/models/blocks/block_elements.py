@@ -1655,6 +1655,44 @@ class UrlInputElement(InputInteractiveElement):
 
 
 # -------------------------------------------------
+# Url Source Element
+# -------------------------------------------------
+
+
+class UrlSourceElement(BlockElement):
+    type = "url"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "url",
+                "text",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        url: str,
+        text: str,
+        **others: Dict,
+    ):
+        """
+        A URL source element that displays a URL source for referencing within a task card block.
+        https://docs.slack.dev/reference/block-kit/block-elements/url-source-element
+
+        Args:
+            url (required): The URL type source.
+            text (required): Display text for the URL.
+        """
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.url = url
+        self.text = text
+
+
+# -------------------------------------------------
 # Number Input Element
 # -------------------------------------------------
 

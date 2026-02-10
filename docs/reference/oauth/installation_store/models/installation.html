@@ -222,14 +222,18 @@ el.replaceWith(d);
             &#34;bot_scopes&#34;: &#34;,&#34;.join(self.bot_scopes) if self.bot_scopes else None,
             &#34;bot_refresh_token&#34;: self.bot_refresh_token,
             &#34;bot_token_expires_at&#34;: (
-                datetime.utcfromtimestamp(self.bot_token_expires_at) if self.bot_token_expires_at is not None else None
+                datetime.fromtimestamp(self.bot_token_expires_at, tz=timezone.utc)
+                if self.bot_token_expires_at is not None
+                else None
             ),
             &#34;user_id&#34;: self.user_id,
             &#34;user_token&#34;: self.user_token,
             &#34;user_scopes&#34;: &#34;,&#34;.join(self.user_scopes) if self.user_scopes else None,
             &#34;user_refresh_token&#34;: self.user_refresh_token,
             &#34;user_token_expires_at&#34;: (
-                datetime.utcfromtimestamp(self.user_token_expires_at) if self.user_token_expires_at is not None else None
+                datetime.fromtimestamp(self.user_token_expires_at, tz=timezone.utc)
+                if self.user_token_expires_at is not None
+                else None
             ),
             &#34;incoming_webhook_url&#34;: self.incoming_webhook_url,
             &#34;incoming_webhook_channel&#34;: self.incoming_webhook_channel,
@@ -237,7 +241,7 @@ el.replaceWith(d);
             &#34;incoming_webhook_configuration_url&#34;: self.incoming_webhook_configuration_url,
             &#34;is_enterprise_install&#34;: self.is_enterprise_install,
             &#34;token_type&#34;: self.token_type,
-            &#34;installed_at&#34;: datetime.utcfromtimestamp(self.installed_at),
+            &#34;installed_at&#34;: datetime.fromtimestamp(self.installed_at, tz=timezone.utc),
         }
 
     def to_dict_for_copying(self) -&gt; Dict[str, Any]:

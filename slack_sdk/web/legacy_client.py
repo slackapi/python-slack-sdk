@@ -19,11 +19,12 @@ from io import IOBase
 from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
+from slack_sdk.models.messages.chunk import Chunk
 from slack_sdk.models.views import View
 
 from ..models.attachments import Attachment
 from ..models.blocks import Block, RichTextBlock
-from ..models.metadata import Metadata, EntityMetadata, EventAndEntityMetadata
+from ..models.metadata import EntityMetadata, EventAndEntityMetadata, Metadata
 from .legacy_base_client import LegacyBaseClient, SlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
@@ -2631,7 +2632,8 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         channel: str,
         ts: str,
-        markdown_text: str,
+        markdown_text: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Appends text to an existing streaming conversation.
@@ -2642,8 +2644,10 @@ class LegacyWebClient(LegacyBaseClient):
                 "channel": channel,
                 "ts": ts,
                 "markdown_text": markdown_text,
+                "chunks": chunks,
             }
         )
+        _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         return self.api_call("chat.appendStream", json=kwargs)
 
@@ -2885,6 +2889,8 @@ class LegacyWebClient(LegacyBaseClient):
         markdown_text: Optional[str] = None,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        task_display_mode: Optional[str] = None,  # timeline, plan
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a new streaming conversation.
@@ -2897,8 +2903,11 @@ class LegacyWebClient(LegacyBaseClient):
                 "markdown_text": markdown_text,
                 "recipient_team_id": recipient_team_id,
                 "recipient_user_id": recipient_user_id,
+                "chunks": chunks,
+                "task_display_mode": task_display_mode,
             }
         )
+        _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
         return self.api_call("chat.startStream", json=kwargs)
 
@@ -2910,6 +2919,7 @@ class LegacyWebClient(LegacyBaseClient):
         markdown_text: Optional[str] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Stops a streaming conversation.
@@ -2922,6 +2932,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "markdown_text": markdown_text,
                 "blocks": blocks,
                 "metadata": metadata,
+                "chunks": chunks,
             }
         )
         _parse_web_class_objects(kwargs)

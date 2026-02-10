@@ -48,7 +48,7 @@ el.replaceWith(d);
 <dl>
 <dt id="slack_sdk.web.async_chat_stream.AsyncChatStream"><code class="flex name class">
 <span>class <span class="ident">AsyncChatStream</span></span>
-<span>(</span><span>client: AsyncWebClient,<br>*,<br>channel: str,<br>logger: logging.Logger,<br>thread_ts: str,<br>buffer_size: int,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>**kwargs)</span>
+<span>(</span><span>client: AsyncWebClient,<br>*,<br>channel: str,<br>logger: logging.Logger,<br>thread_ts: str,<br>buffer_size: int,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>task_display_mode: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -72,6 +72,7 @@ el.replaceWith(d);
         buffer_size: int,
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
+        task_display_mode: Optional[str] = None,
         **kwargs,
     ):
         &#34;&#34;&#34;Initialize a new ChatStream instance.
@@ -87,6 +88,8 @@ el.replaceWith(d);
             recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
               streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            task_display_mode: Specifies how tasks are displayed in the message. A &#34;timeline&#34; displays individual tasks
+               with text and &#34;plan&#34; displays all tasks together.
             buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -99,6 +102,7 @@ el.replaceWith(d);
             &#34;thread_ts&#34;: thread_ts,
             &#34;recipient_team_id&#34;: recipient_team_id,
             &#34;recipient_user_id&#34;: recipient_user_id,
+            &#34;task_display_mode&#34;: task_display_mode,
             **kwargs,
         }
         self._buffer = &#34;&#34;
@@ -109,7 +113,8 @@ el.replaceWith(d);
     async def append(
         self,
         *,
-        markdown_text: str,
+        markdown_text: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         **kwargs,
     ) -&gt; Optional[AsyncSlackResponse]:
         &#34;&#34;&#34;Append to the stream.
@@ -118,6 +123,7 @@ el.replaceWith(d);
         is stopped this method cannot be called.
 
         Args:
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -145,9 +151,10 @@ el.replaceWith(d);
             raise e.SlackRequestError(f&#34;Cannot append to stream: stream state is {self._state}&#34;)
         if kwargs.get(&#34;token&#34;):
             self._token = kwargs.pop(&#34;token&#34;)
-        self._buffer += markdown_text
-        if len(self._buffer) &gt;= self._buffer_size:
-            return await self._flush_buffer(**kwargs)
+        if markdown_text is not None:
+            self._buffer += markdown_text
+        if len(self._buffer) &gt;= self._buffer_size or chunks is not None:
+            return await self._flush_buffer(chunks=chunks, **kwargs)
         details = {
             &#34;buffer_length&#34;: len(self._buffer),
             &#34;buffer_size&#34;: self._buffer_size,
@@ -163,6 +170,7 @@ el.replaceWith(d);
         self,
         *,
         markdown_text: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
         **kwargs,
@@ -171,6 +179,7 @@ el.replaceWith(d);
 
         Args:
             blocks: A list of blocks that will be rendered at the bottom of the finalized message.
+            chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
             markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
@@ -211,26 +220,36 @@ el.replaceWith(d);
                 raise e.SlackRequestError(&#34;Failed to stop stream: stream not started&#34;)
             self._stream_ts = str(response[&#34;ts&#34;])
             self._state = &#34;in_progress&#34;
+        flushings: List[Union[Dict, Chunk]] = []
+        if len(self._buffer) != 0:
+            flushings.append(MarkdownTextChunk(text=self._buffer))
+        if chunks is not None:
+            flushings.extend(chunks)
         response = await self._client.chat_stopStream(
             token=self._token,
             channel=self._stream_args[&#34;channel&#34;],
             ts=self._stream_ts,
             blocks=blocks,
-            markdown_text=self._buffer,
+            chunks=flushings,
             metadata=metadata,
             **kwargs,
         )
         self._state = &#34;completed&#34;
         return response
 
-    async def _flush_buffer(self, **kwargs) -&gt; AsyncSlackResponse:
-        &#34;&#34;&#34;Flush the internal buffer by making appropriate API calls.&#34;&#34;&#34;
+    async def _flush_buffer(self, chunks: Optional[Sequence[Union[Dict, Chunk]]] = None, **kwargs) -&gt; AsyncSlackResponse:
+        &#34;&#34;&#34;Flush the internal buffer with chunks by making appropriate API calls.&#34;&#34;&#34;
+        chunks_to_flush: List[Union[Dict, Chunk]] = []
+        if len(self._buffer) != 0:
+            chunks_to_flush.append(MarkdownTextChunk(text=self._buffer))
+        if chunks is not None:
+            chunks_to_flush.extend(chunks)
         if not self._stream_ts:
             response = await self._client.chat_startStream(
                 **self._stream_args,
                 token=self._token,
                 **kwargs,
-                markdown_text=self._buffer,
+                chunks=chunks_to_flush,
             )
             self._stream_ts = response.get(&#34;ts&#34;)
             self._state = &#34;in_progress&#34;
@@ -240,7 +259,7 @@ el.replaceWith(d);
                 channel=self._stream_args[&#34;channel&#34;],
                 ts=self._stream_ts,
                 **kwargs,
-                markdown_text=self._buffer,
+                chunks=chunks_to_flush,
             )
         self._buffer = &#34;&#34;
         return response</code></pre>
@@ -266,6 +285,9 @@ request.</dd>
 streaming to channels.</dd>
 <dt><strong><code>recipient_user_id</code></strong></dt>
 <dd>The encoded ID of the user to receive the streaming text. Required when streaming to channels.</dd>
+<dt><strong><code>task_display_mode</code></strong></dt>
+<dd>Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
+with text and "plan" displays all tasks together.</dd>
 <dt><strong><code>buffer_size</code></strong></dt>
 <dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value
 decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.</dd>
@@ -275,7 +297,7 @@ decreases the number of method calls made for the same amount of text, which is 
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.web.async_chat_stream.AsyncChatStream.append"><code class="name flex">
-<span>async def <span class="ident">append</span></span>(<span>self, *, markdown_text: str, **kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a> | None</span>
+<span>async def <span class="ident">append</span></span>(<span>self,<br>*,<br>markdown_text: str | None = None,<br>chunks: Sequence[Dict | <a title="slack_sdk.models.messages.chunk.Chunk" href="../models/messages/chunk.html#slack_sdk.models.messages.chunk.Chunk">Chunk</a>] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a> | None</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -285,7 +307,8 @@ decreases the number of method calls made for the same amount of text, which is 
 <pre><code class="python">async def append(
     self,
     *,
-    markdown_text: str,
+    markdown_text: Optional[str] = None,
+    chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
     **kwargs,
 ) -&gt; Optional[AsyncSlackResponse]:
     &#34;&#34;&#34;Append to the stream.
@@ -294,6 +317,7 @@ decreases the number of method calls made for the same amount of text, which is 
     is stopped this method cannot be called.
 
     Args:
+        chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
         markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
           what will be appended to the message received so far.
         **kwargs: Additional arguments passed to the underlying API calls.
@@ -321,9 +345,10 @@ decreases the number of method calls made for the same amount of text, which is 
         raise e.SlackRequestError(f&#34;Cannot append to stream: stream state is {self._state}&#34;)
     if kwargs.get(&#34;token&#34;):
         self._token = kwargs.pop(&#34;token&#34;)
-    self._buffer += markdown_text
-    if len(self._buffer) &gt;= self._buffer_size:
-        return await self._flush_buffer(**kwargs)
+    if markdown_text is not None:
+        self._buffer += markdown_text
+    if len(self._buffer) &gt;= self._buffer_size or chunks is not None:
+        return await self._flush_buffer(chunks=chunks, **kwargs)
     details = {
         &#34;buffer_length&#34;: len(self._buffer),
         &#34;buffer_size&#34;: self._buffer_size,
@@ -340,6 +365,8 @@ decreases the number of method calls made for the same amount of text, which is 
 is stopped this method cannot be called.</p>
 <h2 id="args">Args</h2>
 <dl>
+<dt><strong><code>chunks</code></strong></dt>
+<dd>An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.</dd>
 <dt><strong><code>markdown_text</code></strong></dt>
 <dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
 what will be appended to the message received so far.</dd>
@@ -366,7 +393,7 @@ streamer.stop()
 </code></pre></div>
 </dd>
 <dt id="slack_sdk.web.async_chat_stream.AsyncChatStream.stop"><code class="name flex">
-<span>async def <span class="ident">stop</span></span>(<span>self,<br>*,<br>markdown_text: str | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">stop</span></span>(<span>self,<br>*,<br>markdown_text: str | None = None,<br>chunks: Sequence[Dict | <a title="slack_sdk.models.messages.chunk.Chunk" href="../models/messages/chunk.html#slack_sdk.models.messages.chunk.Chunk">Chunk</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -377,6 +404,7 @@ streamer.stop()
     self,
     *,
     markdown_text: Optional[str] = None,
+    chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
     blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     metadata: Optional[Union[Dict, Metadata]] = None,
     **kwargs,
@@ -385,6 +413,7 @@ streamer.stop()
 
     Args:
         blocks: A list of blocks that will be rendered at the bottom of the finalized message.
+        chunks: An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.
         markdown_text: Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
           what will be appended to the message received so far.
         metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
@@ -425,12 +454,17 @@ streamer.stop()
             raise e.SlackRequestError(&#34;Failed to stop stream: stream not started&#34;)
         self._stream_ts = str(response[&#34;ts&#34;])
         self._state = &#34;in_progress&#34;
+    flushings: List[Union[Dict, Chunk]] = []
+    if len(self._buffer) != 0:
+        flushings.append(MarkdownTextChunk(text=self._buffer))
+    if chunks is not None:
+        flushings.extend(chunks)
     response = await self._client.chat_stopStream(
         token=self._token,
         channel=self._stream_args[&#34;channel&#34;],
         ts=self._stream_ts,
         blocks=blocks,
-        markdown_text=self._buffer,
+        chunks=flushings,
         metadata=metadata,
         **kwargs,
     )
@@ -442,6 +476,8 @@ streamer.stop()
 <dl>
 <dt><strong><code>blocks</code></strong></dt>
 <dd>A list of blocks that will be rendered at the bottom of the finalized message.</dd>
+<dt><strong><code>chunks</code></strong></dt>
+<dd>An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.</dd>
 <dt><strong><code>markdown_text</code></strong></dt>
 <dd>Accepts message text formatted in markdown. Limit this field to 12,000 characters. This text is
 what will be appended to the message received so far.</dd>
