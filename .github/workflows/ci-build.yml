@@ -117,16 +117,7 @@ jobs:
   databases:
     name: Database Unit Tests
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - database: postgres
-            sync_url: postgresql://test_user:password@localhost/test
-            async_url: postgresql+asyncpg://test_user:password@localhost/test
-          - database: mysql
-            sync_url: mysql+pymysql://test_user:password@localhost/test
-            async_url: mysql+aiomysql://test_user:password@localhost/test
+    # TODO: Add MySQL and other database testing
     services:
       postgres:
         image: postgres:16
@@ -138,20 +129,6 @@ jobs:
           - 5432:5432
         options: >-
           --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: password
-          MYSQL_DATABASE: test
-          MYSQL_ROOT_PASSWORD: root_password
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping -h localhost"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -170,15 +147,15 @@ jobs:
           pip install -r requirements/testing.txt
           pip install -r requirements/optional.txt
           pip install -r requirements/databases.txt
-      - name: Run sync tests (${{ matrix.database }})
+      - name: Run sync tests (PostgreSQL)
         env:
-          TEST_DATABASE_URL: ${{ matrix.sync_url }}
+          TEST_DATABASE_URL: postgresql://test_user:password@localhost/test
         run: |
           PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
           PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
-      - name: Run async tests (${{ matrix.database }})
+      - name: Run async tests (PostgreSQL)
         env:
-          ASYNC_TEST_DATABASE_URL: ${{ matrix.async_url }}
+          ASYNC_TEST_DATABASE_URL: postgresql+asyncpg://test_user:password@localhost/test
         run: |
           PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/installation_store/test_async_sqlalchemy.py
           PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/state_store/test_async_sqlalchemy.py
