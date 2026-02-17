@@ -7,12 +7,19 @@ from sqlalchemy.engine import Engine
 from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.installation_store.sqlalchemy import SQLAlchemyInstallationStore
 
+database_url = os.environ.get("TEST_DATABASE_URL", "sqlite:///:memory:")
+
+
+def setUpModule():
+    """Emit database configuration for CI visibility across builds."""
+    print(f"\n[InstallationStore/SQLAlchemy] Database: {database_url}")
+
 
 class TestSQLAlchemy(unittest.TestCase):
     engine: Engine
 
     def setUp(self):
-        self.engine = sqlalchemy.create_engine(os.environ.get("TEST_DATABASE_URL", "sqlite:///:memory:"))
+        self.engine = sqlalchemy.create_engine(database_url)
         self.store = SQLAlchemyInstallationStore(client_id="111.222", engine=self.engine)
         self.store.metadata.create_all(self.engine)
 

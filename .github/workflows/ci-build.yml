@@ -174,14 +174,14 @@ jobs:
         env:
           TEST_DATABASE_URL: ${{ matrix.sync_url }}
         run: |
-          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
-          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
       - name: Run async tests (${{ matrix.database }})
         env:
           ASYNC_TEST_DATABASE_URL: ${{ matrix.async_url }}
         run: |
-          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/installation_store/test_async_sqlalchemy.py
-          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_async_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/installation_store/test_async_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/state_store/test_async_sqlalchemy.py
 
   notifications:
     name: Regression notifications

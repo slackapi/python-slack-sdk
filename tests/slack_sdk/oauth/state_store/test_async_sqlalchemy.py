@@ -6,13 +6,20 @@ from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from slack_sdk.oauth.state_store.sqlalchemy import AsyncSQLAlchemyOAuthStateStore
 
+database_url = os.environ.get("ASYNC_TEST_DATABASE_URL", "sqlite+aiosqlite:///:memory:")
+
+
+def setUpModule():
+    """Emit database configuration for CI visibility across builds."""
+    print(f"\n[StateStore/AsyncSQLAlchemy] Database: {database_url}")
+
 
 class TestSQLAlchemy(unittest.TestCase):
     engine: AsyncEngine
 
     @async_test
     async def setUp(self):
-        self.engine = create_async_engine(os.environ.get("ASYNC_TEST_DATABASE_URL", "sqlite+aiosqlite:///:memory:"))
+        self.engine = create_async_engine(database_url)
         self.store = AsyncSQLAlchemyOAuthStateStore(engine=self.engine, expiration_seconds=2)
         async with self.engine.begin() as conn:
             await conn.run_sync(self.store.metadata.create_all)
