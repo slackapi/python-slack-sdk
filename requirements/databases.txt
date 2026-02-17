@@ -3,7 +3,3 @@
 # PostgreSQL drivers
 psycopg2-binary>=2.9,<3
 asyncpg>=0.27,<1
-
-# MySQL drivers
-PyMySQL>=1.0,<2
-aiomysql>=0.1,<1
