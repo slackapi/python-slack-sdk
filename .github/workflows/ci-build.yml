@@ -118,6 +118,7 @@ jobs:
     name: Database Unit Tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - database: postgres
@@ -135,15 +136,25 @@ jobs:
           POSTGRES_DB: test
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       mysql:
         image: mysql:8.0
         env:
           MYSQL_USER: test_user
           MYSQL_PASSWORD: password
           MYSQL_DATABASE: test
-          MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+          MYSQL_ROOT_PASSWORD: root_password
         ports:
           - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
