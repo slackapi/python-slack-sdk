@@ -1,3 +1,4 @@
+import os
 import unittest
 
 import sqlalchemy
@@ -11,7 +12,7 @@ class TestSQLAlchemy(unittest.TestCase):
     engine: Engine
 
     def setUp(self):
-        self.engine = sqlalchemy.create_engine("sqlite:///:memory:")
+        self.engine = sqlalchemy.create_engine(os.environ.get("TEST_DATABASE_URL", "sqlite:///:memory:"))
         self.store = SQLAlchemyInstallationStore(client_id="111.222", engine=self.engine)
         self.store.metadata.create_all(self.engine)
 
@@ -291,7 +292,6 @@ class TestSQLAlchemy(unittest.TestCase):
         self.assertIsNone(installation)
 
     def test_timezone_aware_datetime_compatibility(self):
-        """Test that timezone-aware datetimes work with database storage"""
         installation = Installation(
             app_id="A111",
             enterprise_id="E111",

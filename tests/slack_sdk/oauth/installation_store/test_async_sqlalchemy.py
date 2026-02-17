@@ -1,3 +1,4 @@
+import os
 import unittest
 from tests.helpers import async_test
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
@@ -11,7 +12,7 @@ class TestAsyncSQLAlchemy(unittest.TestCase):
 
     @async_test
     async def setUp(self):
-        self.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
+        self.engine = create_async_engine(os.environ.get("ASYNC_TEST_DATABASE_URL", "sqlite+aiosqlite:///:memory:"))
         self.store = AsyncSQLAlchemyInstallationStore(client_id="111.222", engine=self.engine)
         async with self.engine.begin() as conn:
             await conn.run_sync(self.store.metadata.create_all)
@@ -298,7 +299,6 @@ class TestAsyncSQLAlchemy(unittest.TestCase):
         self.assertIsNone(installation)
 
     async def test_timezone_aware_datetime_compatibility(self):
-        """Test that timezone-aware datetimes work with database storage"""
         installation = Installation(
             app_id="A111",
             enterprise_id="E111",

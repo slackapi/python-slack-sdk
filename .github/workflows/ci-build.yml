@@ -114,6 +114,64 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
 
+  databases:
+    name: Database Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - database: postgres
+            sync_url: postgresql://test_user:password@localhost/test
+            async_url: postgresql+asyncpg://test_user:password@localhost/test
+          - database: mysql
+            sync_url: mysql+pymysql://test_user:password@localhost/test
+            async_url: mysql+aiomysql://test_user:password@localhost/test
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: password
+          MYSQL_DATABASE: test
+          MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+        ports:
+          - 3306:3306
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install -U pip
+          pip install -r requirements/testing.txt
+          pip install -r requirements/optional.txt
+          pip install -r requirements/databases.txt
+      - name: Run sync tests (${{ matrix.database }})
+        env:
+          TEST_DATABASE_URL: ${{ matrix.sync_url }}
+        run: |
+          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
+      - name: Run async tests (${{ matrix.database }})
+        env:
+          ASYNC_TEST_DATABASE_URL: ${{ matrix.async_url }}
+        run: |
+          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/installation_store/test_async_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_async_sqlalchemy.py
+
   notifications:
     name: Regression notifications
     runs-on: ubuntu-latest
@@ -121,6 +179,7 @@ jobs:
       - lint
       - typecheck
       - unittest
+      - databases
     if: ${{ !success() && github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch' }}
     steps:
       - name: Send notifications of failing tests
