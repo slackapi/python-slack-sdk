@@ -115,12 +115,15 @@ jobs:
           verbose: true
 
   databases:
+    # TODO: Add MySQL and other database testing when possible
     name: Database Unit Tests
     runs-on: ubuntu-latest
-    # TODO: Add MySQL and other database testing
+    timeout-minutes: 5
+    permissions:
+      contents: read
     services:
       postgres:
-        image: postgres:16
+        image: postgres@sha256:e4842c8a99ca99339e1693e6fe5fe62c7becb31991f066f989047dfb2fbf47af # 16
         env:
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: password
