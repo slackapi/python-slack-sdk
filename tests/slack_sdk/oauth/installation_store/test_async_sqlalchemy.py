@@ -305,6 +305,7 @@ class TestAsyncSQLAlchemy(unittest.TestCase):
         installation = await store.async_find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(installation)
 
+    @async_test
     async def test_timezone_aware_datetime_compatibility(self):
         installation = Installation(
             app_id="A111",
