@@ -296,3 +296,27 @@ class TestAsyncSQLAlchemy(unittest.TestCase):
         self.assertIsNone(installation)
         installation = await store.async_find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(installation)
+
+    async def test_timezone_aware_datetime_compatibility(self):
+        """Test that timezone-aware datetimes work with database storage"""
+        installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxb-111",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+        )
+
+        # First save
+        await self.store.async_save(installation)
+        found = await self.store.async_find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(found)
+        self.assertEqual(found.app_id, "A111")
+
+        # Second save (update) - tests WHERE clause with installed_at comparison
+        await self.store.async_save(installation)
+        found = await self.store.async_find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(found)

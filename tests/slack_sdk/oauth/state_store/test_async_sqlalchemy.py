@@ -36,3 +36,18 @@ class TestSQLAlchemy(unittest.TestCase):
         await asyncio.sleep(3)
         result = await self.store.async_consume(state)
         self.assertFalse(result)
+
+    @async_test
+    async def test_timezone_aware_datetime_compatibility(self):
+        """Test that timezone-aware datetimes work with database storage"""
+        # Issue a state (tests INSERT with timezone-aware datetime)
+        state = await self.store.async_issue()
+        self.assertIsNotNone(state)
+
+        # Consume it immediately (tests WHERE clause comparison with timezone-aware datetime)
+        result = await self.store.async_consume(state)
+        self.assertTrue(result)
+
+        # Second consume should fail (state already consumed)
+        result = await self.store.async_consume(state)
+        self.assertFalse(result)

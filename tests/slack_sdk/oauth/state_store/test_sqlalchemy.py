@@ -31,3 +31,17 @@ class TestSQLAlchemy(unittest.TestCase):
         time.sleep(3)
         result = self.store.consume(state)
         self.assertFalse(result)
+
+    def test_timezone_aware_datetime_compatibility(self):
+        """Test that timezone-aware datetimes work with database storage"""
+        # Issue a state (tests INSERT with timezone-aware datetime)
+        state = self.store.issue()
+        self.assertIsNotNone(state)
+
+        # Consume it immediately (tests WHERE clause comparison with timezone-aware datetime)
+        result = self.store.consume(state)
+        self.assertTrue(result)
+
+        # Second consume should fail (state already consumed)
+        result = self.store.consume(state)
+        self.assertFalse(result)
