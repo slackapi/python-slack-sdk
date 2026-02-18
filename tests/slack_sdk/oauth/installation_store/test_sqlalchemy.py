@@ -1,3 +1,4 @@
+import os
 import unittest
 
 import sqlalchemy
@@ -6,12 +7,19 @@ from sqlalchemy.engine import Engine
 from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.installation_store.sqlalchemy import SQLAlchemyInstallationStore
 
+database_url = os.environ.get("TEST_DATABASE_URL", "sqlite:///:memory:")
+
+
+def setUpModule():
+    """Emit database configuration for CI visibility across builds."""
+    print(f"\n[InstallationStore/SQLAlchemy] Database: {database_url}")
+
 
 class TestSQLAlchemy(unittest.TestCase):
     engine: Engine
 
     def setUp(self):
-        self.engine = sqlalchemy.create_engine("sqlite:///:memory:")
+        self.engine = sqlalchemy.create_engine(database_url)
         self.store = SQLAlchemyInstallationStore(client_id="111.222", engine=self.engine)
         self.store.metadata.create_all(self.engine)
 
@@ -289,3 +297,26 @@ class TestSQLAlchemy(unittest.TestCase):
         self.assertIsNone(installation)
         installation = store.find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(installation)
+
+    def test_timezone_aware_datetime_compatibility(self):
+        installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxb-111",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+        )
+
+        # First save
+        self.store.save(installation)
+        found = self.store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(found)
+        self.assertEqual(found.app_id, "A111")
+
+        # Second save (update) - tests WHERE clause with installed_at comparison
+        self.store.save(installation)
+        found = self.store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(found)

@@ -10,6 +10,7 @@ import sqlalchemy
 from sqlalchemy import Table, Column, Integer, String, DateTime, and_, MetaData
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.asyncio import AsyncEngine
+from slack_sdk.oauth.sqlalchemy_utils import normalize_datetime_for_db
 
 
 class SQLAlchemyOAuthStateStore(OAuthStateStore):
@@ -55,7 +56,7 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
 
     def issue(self, *args, **kwargs) -> str:
         state: str = str(uuid4())
-        now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
+        now = normalize_datetime_for_db(datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc))
         with self.engine.begin() as conn:
             conn.execute(
                 self.oauth_states.insert(),
@@ -65,9 +66,10 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
 
     def consume(self, state: str) -> bool:
         try:
+            now = normalize_datetime_for_db(datetime.now(tz=timezone.utc))
             with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > datetime.now(tz=timezone.utc)))
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > now))
                 result = conn.execute(query)
                 for row in result.mappings():
                     self.logger.debug(f"consume's query result: {row}")
@@ -124,7 +126,7 @@ class AsyncSQLAlchemyOAuthStateStore(AsyncOAuthStateStore):
 
     async def async_issue(self, *args, **kwargs) -> str:
         state: str = str(uuid4())
-        now = datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc)
+        now = normalize_datetime_for_db(datetime.fromtimestamp(time.time() + self.expiration_seconds, tz=timezone.utc))
         async with self.engine.begin() as conn:
             await conn.execute(
                 self.oauth_states.insert(),
@@ -134,9 +136,10 @@ class AsyncSQLAlchemyOAuthStateStore(AsyncOAuthStateStore):
 
     async def async_consume(self, state: str) -> bool:
         try:
+            now = normalize_datetime_for_db(datetime.now(tz=timezone.utc))
             async with self.engine.begin() as conn:
                 c = self.oauth_states.c
-                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > datetime.now(tz=timezone.utc)))
+                query = self.oauth_states.select().where(and_(c.state == state, c.expire_at > now))
                 result = await conn.execute(query)
                 for row in result.mappings():
                     self.logger.debug(f"consume's query result: {row}")
