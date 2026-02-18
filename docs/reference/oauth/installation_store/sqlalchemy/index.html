@@ -99,6 +99,9 @@ el.replaceWith(d);
         async with self.engine.begin() as conn:
             i = installation.to_dict()
             i[&#34;client_id&#34;] = self.client_id
+            i[&#34;installed_at&#34;] = normalize_datetime_for_db(i.get(&#34;installed_at&#34;))
+            i[&#34;bot_token_expires_at&#34;] = normalize_datetime_for_db(i.get(&#34;bot_token_expires_at&#34;))
+            i[&#34;user_token_expires_at&#34;] = normalize_datetime_for_db(i.get(&#34;user_token_expires_at&#34;))
 
             i_column = self.installations.c
             installations_rows = await conn.execute(
@@ -130,6 +133,8 @@ el.replaceWith(d);
             # bots
             b = bot.to_dict()
             b[&#34;client_id&#34;] = self.client_id
+            b[&#34;installed_at&#34;] = normalize_datetime_for_db(b.get(&#34;installed_at&#34;))
+            b[&#34;bot_token_expires_at&#34;] = normalize_datetime_for_db(b.get(&#34;bot_token_expires_at&#34;))
 
             b_column = self.bots.c
             bots_rows = await conn.execute(
@@ -526,6 +531,9 @@ def logger(self) -&gt; Logger:
         with self.engine.begin() as conn:
             i = installation.to_dict()
             i[&#34;client_id&#34;] = self.client_id
+            i[&#34;installed_at&#34;] = normalize_datetime_for_db(i.get(&#34;installed_at&#34;))
+            i[&#34;bot_token_expires_at&#34;] = normalize_datetime_for_db(i.get(&#34;bot_token_expires_at&#34;))
+            i[&#34;user_token_expires_at&#34;] = normalize_datetime_for_db(i.get(&#34;user_token_expires_at&#34;))
 
             i_column = self.installations.c
             installations_rows = conn.execute(
@@ -557,6 +565,8 @@ def logger(self) -&gt; Logger:
             # bots
             b = bot.to_dict()
             b[&#34;client_id&#34;] = self.client_id
+            b[&#34;installed_at&#34;] = normalize_datetime_for_db(b.get(&#34;installed_at&#34;))
+            b[&#34;bot_token_expires_at&#34;] = normalize_datetime_for_db(b.get(&#34;bot_token_expires_at&#34;))
 
             b_column = self.bots.c
             bots_rows = conn.execute(
