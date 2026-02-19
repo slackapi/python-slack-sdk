@@ -39,3 +39,7 @@ logs/
 .pytype/
 *.db
 .env*
+
+/plans/
+AGENTS.md
+.claude/CLAUDE.md
