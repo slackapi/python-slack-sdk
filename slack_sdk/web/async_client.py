@@ -2059,6 +2059,19 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"app_id": app_id})
         return await self.api_call("apps.manifest.validate", params=kwargs)
 
+    async def apps_user_connection_update(
+        self,
+        *,
+        user_id: str,
+        status: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Updates the connection status between a user and an app.
+        https://docs.slack.dev/reference/methods/apps.user.connection.update
+        """
+        kwargs.update({"user_id": user_id, "status": status})
+        return await self.api_call("apps.user.connection.update", params=kwargs)
+
     async def tooling_tokens_rotate(
         self,
         *,
