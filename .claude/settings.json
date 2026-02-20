@@ -5,7 +5,6 @@
 			"Bash(./scripts/format.sh:*)",
 			"Bash(./scripts/generate_api_docs.sh:*)",
 			"Bash(./scripts/install.sh:*)",
-			"Bash(./scripts/install_all_and_run_tests.sh:*)",
 			"Bash(./scripts/lint.sh:*)",
 			"Bash(./scripts/run_mypy.sh:*)",
 			"Bash(./scripts/run_tests.sh:*)",
