@@ -8,10 +8,7 @@ set -e
 script_dir=`dirname $0`
 cd ${script_dir}/..
 
-pip install -U pip
-pip install -U -r requirements/testing.txt \
-  -U -r requirements/optional.txt \
-  -U -r requirements/tools.txt
+./scripts/install.sh
 
 echo "Generating code ..." && python scripts/codegen.py --path .
 echo "Running black (code formatter) ..." && ./scripts/format.sh --no-install
