@@ -88,13 +88,13 @@ Run all the unit tests, code linter, and code analyzer:
 Run all the unit tests (no linter nor code analyzer):
 
 ```sh
-./scripts/run_unit_tests.sh
+./scripts/run_tests.sh
 ```
 
 Run a specific unit test:
 
 ```sh
-./scripts/run_unit_tests.sh tests/web/test_web_client.py
+./scripts/run_tests.sh tests/web/test_web_client.py
 ```
 
 You can rely on GitHub Actions builds for running the tests on a variety of Python runtimes.
