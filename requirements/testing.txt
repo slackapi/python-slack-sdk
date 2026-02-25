@@ -7,6 +7,7 @@ click==8.0.4  # black is affected by https://github.com/pallets/click/issues/222
 psutil>=6.0.0,<8
 #  used only under slack_sdk/*_store
 boto3<=2
+google-cloud-storage>=2.7.0,<3
 # For AWS tests
 moto>=4.0.13,<6
 # For AsyncSQLAlchemy tests
