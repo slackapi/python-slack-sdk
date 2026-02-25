@@ -2071,6 +2071,45 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"refresh_token": refresh_token})
         return await self.api_call("tooling.tokens.rotate", params=kwargs)
 
+    async def assistant_search_context(
+        self,
+        *,
+        query: str,
+        action_token: str,
+        channel_types: Optional[Union[str, Sequence[str]]] = None,
+        content_types: Optional[Union[str, Sequence[str]]] = None,
+        context_channel_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        include_bots: Optional[bool] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Searches messages across your Slack organization—perfect for broad, specific, and real-time data retrieval.
+        https://api.slack.com/methods/assistant.search.context
+        """
+        kwargs.update(
+            {
+                "query": query,
+                "action_token": action_token,
+                "context_channel_id": context_channel_id,
+                "cursor": cursor,
+                "include_bots": include_bots,
+                "limit": limit,
+            }
+        )
+
+        if isinstance(channel_types, (list, tuple)):
+            kwargs.update({"channel_types": ",".join(channel_types)})
+        else:
+            kwargs.update({"channel_types": channel_types})
+
+        if isinstance(content_types, (list, tuple)):
+            kwargs.update({"content_types": ",".join(content_types)})
+        else:
+            kwargs.update({"content_types": content_types})
+
+        return await self.api_call("assistant.search.context", params=kwargs)
+
     async def assistant_threads_setStatus(
         self,
         *,
