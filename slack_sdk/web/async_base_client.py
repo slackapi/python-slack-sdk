@@ -18,6 +18,7 @@ from .internal_utils import (
     _get_url,
     get_user_agent,
 )
+from .ssl_utils import create_ssl_context_with_certifi_fallback
 from ..proxy_env_variable_loader import load_http_proxy_from_env
 
 from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
@@ -55,7 +56,7 @@ class AsyncBaseClient:
         """The maximum number of seconds the client will wait
         to connect and receive a response from Slack.
         Default is 30 seconds."""
-        self.ssl = ssl
+        self.ssl = create_ssl_context_with_certifi_fallback(ssl)
         """An [`ssl.SSLContext`](https://docs.python.org/3/library/ssl.html#ssl.SSLContext)
         instance, helpful for specifying your own custom
         certificate chain."""

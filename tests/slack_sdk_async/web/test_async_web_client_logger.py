@@ -1,5 +1,6 @@
 import logging
 import unittest
+from unittest.mock import patch
 
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.web import async_base_client
@@ -39,11 +40,12 @@ class TestAsyncWebClientLogger(unittest.TestCase):
             client.logger = self.test_logger
 
     def test_ensure_async_web_client_with_logger_is_copyable(self):
-        client = AsyncWebClient(
-            base_url="http://localhost:8888",
-            token="xoxb-api_test",
-            logger=self.test_logger,
-        )
-        client_copy = create_copy(client)
-        self.assertEqual(client.logger, self.test_logger)
-        self.assertEqual(client_copy.logger, self.test_logger)
+        with patch("slack_sdk.web.async_base_client.create_ssl_context_with_certifi_fallback", return_value=None):
+            client = AsyncWebClient(
+                base_url="http://localhost:8888",
+                token="xoxb-api_test",
+                logger=self.test_logger,
+            )
+            client_copy = create_copy(client)
+            self.assertEqual(client.logger, self.test_logger)
+            self.assertEqual(client_copy.logger, self.test_logger)
