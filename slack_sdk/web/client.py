@@ -2049,6 +2049,19 @@ class WebClient(BaseClient):
         kwargs.update({"app_id": app_id})
         return self.api_call("apps.manifest.validate", params=kwargs)
 
+    def apps_user_connection_update(
+        self,
+        *,
+        user_id: str,
+        status: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Updates the connection status between a user and an app.
+        https://docs.slack.dev/reference/methods/apps.user.connection.update
+        """
+        kwargs.update({"user_id": user_id, "status": status})
+        return self.api_call("apps.user.connection.update", params=kwargs)
+
     def tooling_tokens_rotate(
         self,
         *,
