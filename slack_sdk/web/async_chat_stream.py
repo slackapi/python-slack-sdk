@@ -120,7 +120,7 @@ class AsyncChatStream:
             self._token = kwargs.pop("token")
         if markdown_text is not None:
             self._buffer += markdown_text
-        if len(self._buffer) >= self._buffer_size or chunks is not None:
+        if not self._stream_ts or len(self._buffer) >= self._buffer_size or chunks is not None:
             return await self._flush_buffer(chunks=chunks, **kwargs)
         details = {
             "buffer_length": len(self._buffer),
@@ -179,14 +179,10 @@ class AsyncChatStream:
         if markdown_text:
             self._buffer += markdown_text
         if not self._stream_ts:
-            response = await self._client.chat_startStream(
-                **self._stream_args,
-                token=self._token,
-            )
-            if not response.get("ts"):
+            await self._flush_buffer(chunks=chunks, **kwargs)
+            if not self._stream_ts:
                 raise e.SlackRequestError("Failed to stop stream: stream not started")
-            self._stream_ts = str(response["ts"])
-            self._state = "in_progress"
+            chunks = None
         flushings: List[Union[Dict, Chunk]] = []
         if len(self._buffer) != 0:
             flushings.append(MarkdownTextChunk(text=self._buffer))

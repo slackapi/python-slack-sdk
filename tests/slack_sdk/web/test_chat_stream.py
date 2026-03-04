@@ -103,13 +103,14 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
             self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
 
+            self.assertEqual(
+                json.dumps(start_request.get("chunks")),
+                '[{"text": "nice!", "type": "markdown_text"}]',
+            )
+
             stop_request = self.thread.server.chat_stream_requests.get("/chat.stopStream", {})
             self.assertEqual(stop_request.get("channel"), "C0123456789")
             self.assertEqual(stop_request.get("ts"), "123.123")
-            self.assertEqual(
-                json.dumps(stop_request.get("chunks")),
-                '[{"text": "nice!", "type": "markdown_text"}]',
-            )
 
     def test_streams_a_long_message(self):
         streamer = self.client.chat_stream(
@@ -211,7 +212,7 @@ class TestChatStream(unittest.TestCase):
         )
 
         self.assertEqual(self.received_requests.get("/chat.startStream", 0), 1)
-        self.assertEqual(self.received_requests.get("/chat.appendStream", 0), 1)
+        self.assertEqual(self.received_requests.get("/chat.appendStream", 0), 2)
         self.assertEqual(self.received_requests.get("/chat.stopStream", 0), 1)
 
         if hasattr(self.thread.server, "chat_stream_requests"):
@@ -220,19 +221,11 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(start_request.get("thread_ts"), "123.000")
             self.assertEqual(
                 json.dumps(start_request.get("chunks")),
-                '[{"text": "**this is buffered**", "type": "markdown_text"}, {"id": "001", "status": "pending", "title": "Counting...", "type": "task_update"}]',
+                '[{"text": "**this is ", "type": "markdown_text"}]',
             )
             self.assertEqual(start_request.get("recipient_team_id"), "T0123456789")
             self.assertEqual(start_request.get("recipient_user_id"), "U0123456789")
             self.assertEqual(start_request.get("task_display_mode"), "timeline")
-
-            append_request = self.thread.server.chat_stream_requests.get("/chat.appendStream", {})
-            self.assertEqual(append_request.get("channel"), "C0123456789")
-            self.assertEqual(append_request.get("ts"), "123.123")
-            self.assertEqual(
-                json.dumps(append_request.get("chunks")),
-                '[{"text": "**this is unbuffered**", "type": "markdown_text"}]',
-            )
 
             stop_request = self.thread.server.chat_stream_requests.get("/chat.stopStream", {})
             self.assertEqual(stop_request.get("channel"), "C0123456789")
