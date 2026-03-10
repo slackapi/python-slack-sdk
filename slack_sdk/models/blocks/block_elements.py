@@ -212,7 +212,7 @@ class ButtonElement(InteractiveElement):
             text (required): A text object that defines the button's text.
                 Can only be of type: plain_text.
                 Maximum length for the text in this field is 75 characters.
-            action_id (required): An identifier for this action.
+            action_id: An identifier for this action.
                 You can use this when you receive an interaction payload to identify the source of the action.
                 Should be unique among all other action_ids in the containing block.
                 Maximum length for this field is 255 characters.
