@@ -56,7 +56,7 @@ class AsyncChatStream:
               streaming to channels.
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
-               with text and "plan" displays all tasks together.
+              with text and "plan" displays all tasks together.
             buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
             **kwargs: Additional arguments passed to the underlying API calls.

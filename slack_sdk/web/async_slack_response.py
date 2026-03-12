@@ -163,12 +163,10 @@ class AsyncSlackResponse:
             raise StopAsyncIteration
 
     @overload
-    def get(self, key: str, default: None = None) -> Optional[Any]:
-        ...
+    def get(self, key: str, default: None = None) -> Optional[Any]: ...
 
     @overload
-    def get(self, key: str, default: T) -> T:
-        ...
+    def get(self, key: str, default: T) -> T: ...
 
     def get(self, key, default=None):
         """Retrieves any key from the response data.
