@@ -204,12 +204,10 @@ el.replaceWith(d);
             raise StopIteration
 
     @overload
-    def get(self, key: str, default: None = None) -&gt; Optional[Any]:
-        ...
+    def get(self, key: str, default: None = None) -&gt; Optional[Any]: ...
 
     @overload
-    def get(self, key: str, default: T) -&gt; T:
-        ...
+    def get(self, key: str, default: T) -&gt; T: ...
 
     def get(self, key, default=None):
         &#34;&#34;&#34;Retrieves any key from the response data.

@@ -269,12 +269,10 @@ in more complex ways than the integrations we provide out of the box.</p>
             raise StopIteration
 
     @overload
-    def get(self, key: str, default: None = None) -&gt; Optional[Any]:
-        ...
+    def get(self, key: str, default: None = None) -&gt; Optional[Any]: ...
 
     @overload
-    def get(self, key: str, default: T) -&gt; T:
-        ...
+    def get(self, key: str, default: T) -&gt; T: ...
 
     def get(self, key, default=None):
         &#34;&#34;&#34;Retrieves any key from the response data.
@@ -2447,6 +2445,19 @@ This method returns it's own object. e.g. 'self'</p>
             kwargs.update({&#34;manifest&#34;: json.dumps(manifest)})
         kwargs.update({&#34;app_id&#34;: app_id})
         return self.api_call(&#34;apps.manifest.validate&#34;, params=kwargs)
+
+    def apps_user_connection_update(
+        self,
+        *,
+        user_id: str,
+        status: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Updates the connection status between a user and an app.
+        https://docs.slack.dev/reference/methods/apps.user.connection.update
+        &#34;&#34;&#34;
+        kwargs.update({&#34;user_id&#34;: user_id, &#34;status&#34;: status})
+        return self.api_call(&#34;apps.user.connection.update&#34;, params=kwargs)
 
     def tooling_tokens_rotate(
         self,
@@ -9576,6 +9587,30 @@ Each authorization represents an app installation that the event is visible to.
 <div class="desc"><p>Uninstalls your app from a workspace.
 <a href="https://docs.slack.dev/reference/methods/apps.uninstall">https://docs.slack.dev/reference/methods/apps.uninstall</a></p></div>
 </dd>
+<dt id="slack_sdk.web.WebClient.apps_user_connection_update"><code class="name flex">
+<span>def <span class="ident">apps_user_connection_update</span></span>(<span>self, *, user_id: str, status: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_user_connection_update(
+    self,
+    *,
+    user_id: str,
+    status: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Updates the connection status between a user and an app.
+    https://docs.slack.dev/reference/methods/apps.user.connection.update
+    &#34;&#34;&#34;
+    kwargs.update({&#34;user_id&#34;: user_id, &#34;status&#34;: status})
+    return self.api_call(&#34;apps.user.connection.update&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Updates the connection status between a user and an app.
+<a href="https://docs.slack.dev/reference/methods/apps.user.connection.update">https://docs.slack.dev/reference/methods/apps.user.connection.update</a></p></div>
+</dd>
 <dt id="slack_sdk.web.WebClient.assistant_threads_setStatus"><code class="name flex">
 <span>def <span class="ident">assistant_threads_setStatus</span></span>(<span>self,<br>*,<br>channel_id: str,<br>thread_ts: str,<br>status: str,<br>loading_messages: List[str] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -15987,6 +16022,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.WebClient.apps_manifest_update" href="#slack_sdk.web.WebClient.apps_manifest_update">apps_manifest_update</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.apps_manifest_validate" href="#slack_sdk.web.WebClient.apps_manifest_validate">apps_manifest_validate</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.apps_uninstall" href="#slack_sdk.web.WebClient.apps_uninstall">apps_uninstall</a></code></li>
+<li><code><a title="slack_sdk.web.WebClient.apps_user_connection_update" href="#slack_sdk.web.WebClient.apps_user_connection_update">apps_user_connection_update</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.assistant_threads_setStatus" href="#slack_sdk.web.WebClient.assistant_threads_setStatus">assistant_threads_setStatus</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.assistant_threads_setSuggestedPrompts" href="#slack_sdk.web.WebClient.assistant_threads_setSuggestedPrompts">assistant_threads_setSuggestedPrompts</a></code></li>
 <li><code><a title="slack_sdk.web.WebClient.assistant_threads_setTitle" href="#slack_sdk.web.WebClient.assistant_threads_setTitle">assistant_threads_setTitle</a></code></li>
