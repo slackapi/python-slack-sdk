@@ -46,17 +46,11 @@ def start_thread_socket_mode_server(self, port: int):
     self.reset_server_state = reset_server_state
 
     async def health(request: web.Request):
-        wr = web.Response()
-        await wr.prepare(request)
-        wr.set_status(200)
-        return wr
+        return web.Response(status=200)
 
     async def disconnect(request: web.Request):
         state["disconnect"] = True
-        wr = web.Response()
-        await wr.prepare(request)
-        wr.set_status(200)
-        return wr
+        return web.Response(status=200)
 
     async def link(request):
         connected = True
