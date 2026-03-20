@@ -24,7 +24,6 @@ from slack.web.classes.elements import (
 from slack.web.classes.objects import ConfirmObject, Option
 from . import STRING_3001_CHARS, STRING_301_CHARS
 
-
 # -------------------------------------------------
 # Interactive Elements
 # -------------------------------------------------

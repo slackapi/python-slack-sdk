@@ -10,7 +10,6 @@ from unittest import TestCase
 
 from aiohttp import WSMsgType, web
 
-
 socket_mode_envelopes = [
     """{"envelope_id":"1d3c79ab-0ffb-41f3-a080-d19e85f53649","payload":{"token":"verification-token","team_id":"T111","team_domain":"xxx","channel_id":"C111","channel_name":"random","user_id":"U111","user_name":"testxyz","command":"/hello-socket-mode","text":"","api_app_id":"A111","response_url":"https://hooks.slack.com/commands/T111/111/xxx","trigger_id":"111.222.xxx"},"type":"slash_commands","accepts_response_payload":true}""",
     """{"envelope_id":"cda4159a-72a5-4744-aba3-4d66eb52682b","payload":{"token":"verification-token","team_id":"T111","api_app_id":"A111","event":{"client_msg_id":"f0582a78-72db-4feb-b2f3-1e47d66365c8","type":"app_mention","text":"<@U111>","user":"U222","ts":"1610241741.000200","team":"T111","blocks":[{"type":"rich_text","block_id":"Sesm","elements":[{"type":"rich_text_section","elements":[{"type":"user","user_id":"U111"}]}]}],"channel":"C111","event_ts":"1610241741.000200"},"type":"event_callback","event_id":"Ev111","event_time":1610241741,"authorizations":[{"enterprise_id":null,"team_id":"T111","user_id":"U222","is_bot":true,"is_enterprise_install":false}],"is_ext_shared_channel":false,"event_context":"1-app_mention-T111-C111"},"type":"events_api","accepts_response_payload":false,"retry_attempt":0,"retry_reason":""}""",
