@@ -18,7 +18,6 @@ from slack.web.classes.elements import ButtonElement, ImageElement, LinkButtonEl
 from slack.web.classes.objects import PlainTextObject, MarkdownTextObject
 from . import STRING_3001_CHARS
 
-
 # https://docs.slack.dev/reference/block-kit/blocks
 
 
