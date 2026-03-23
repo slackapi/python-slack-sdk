@@ -10,5 +10,5 @@ if [[ "$1" != "--no-install" ]]; then
     pip install -U -r requirements/tools.txt
 fi
 
-black --check slack/ slack_sdk/ tests/ integration_tests/
-flake8 slack/ slack_sdk/
+ruff format --check slack/ slack_sdk/ tests/ integration_tests/
+ruff check slack/ slack_sdk/ tests/ integration_tests/

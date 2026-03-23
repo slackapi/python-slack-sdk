@@ -14,7 +14,7 @@ current_py=$(python --version | sed -E 's/Python ([0-9]+\.[0-9]+).*/\1/')
 ./scripts/install.sh
 
 echo "Generating code ..." && python scripts/codegen.py --path .
-echo "Running black (code formatter) ..." && ./scripts/format.sh --no-install
+echo "Running ruff (code formatter) ..." && ./scripts/format.sh --no-install
 
 echo "Running linting checks ..." && ./scripts/lint.sh --no-install
 

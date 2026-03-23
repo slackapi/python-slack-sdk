@@ -3,7 +3,6 @@ aiohttp<4  # used for a WebSocket server mock
 pytest>=7.0.1,<9
 pytest-asyncio<2  # for async
 pytest-cov>=2,<8
-click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
 psutil>=6.0.0,<8
 #  used only under slack_sdk/*_store
 boto3<=2

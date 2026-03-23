@@ -54,8 +54,14 @@ optional-dependencies.optional = { file = ["requirements/optional.txt"] }
 [tool.distutils.bdist_wheel]
 universal = true
 
-[tool.black]
+[tool.ruff]
 line-length = 125
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+"slack_sdk/web/legacy_client.py" = ["E402"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
