@@ -2,9 +2,14 @@
 
 import hashlib
 import hmac
-from collections.abc import Mapping
 from time import time
-from typing import Optional, Union
+from typing import Dict, Optional, Union, TYPE_CHECKING
+
+# Fallback to Dict for Python 3.7/3.8 compatibility (safe to remove once these versions are no longer supported)
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+else:
+    Mapping = Dict
 
 
 class Clock:
