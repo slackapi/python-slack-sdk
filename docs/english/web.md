@@ -179,7 +179,7 @@ for event in returned_message:
         continue
 
 feedback_block = create_feedback_block()
-streamer.stop()
+streamer.stop(blocks=feedback_block)
 ```
 
 ## Formatting messages with Block Kit {#block-kit}
