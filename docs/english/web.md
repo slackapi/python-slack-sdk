@@ -61,11 +61,8 @@ You can have your app's messages stream in to replicate conventional AI chatbot 
 * [`chat_appendStream`](/reference/methods/chat.appendStream)
 * [`chat_stopStream`](/reference/methods/chat.stopStream)
 
-:::tip[The Python Slack SDK provides a [`chat_stream()`](https://docs.slack.dev/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods.]
 
-See the [_Streaming messages_](/tools/bolt-python/concepts/message-sending#streaming-messages) section of the Bolt for Python docs for implementation instructions. 
-
-:::
+You can streamline calling these methods by using the [`chat_stream()`](#chat_stream) helper.
 
 #### Starting the message stream {#starting-stream}
 
@@ -160,6 +157,30 @@ def handle_message(message, client):
 ```
 
 See [Formatting messages with Block Kit](#block-kit) below for more details on using Block Kit with messages.
+
+#### Using the `chat_stream()` helper {#chat_stream}
+
+The Python Slack SDK provides a [`chat_stream()`](https://docs.slack.dev/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods. Here's an excerpt from our [Assistant template app](https://github.com/slack-samples/bolt-python-assistant-template):
+
+```python
+streamer = client.chat_stream(
+    channel=channel_id,
+    recipient_team_id=team_id,
+    recipient_user_id=user_id,
+    thread_ts=thread_ts,
+)
+
+# Loop over OpenAI response stream
+# https://platform.openai.com/docs/api-reference/responses/create
+for event in returned_message:
+    if event.type == "response.output_text.delta":
+        streamer.append(markdown_text=f"{event.delta}")
+    else:
+        continue
+
+feedback_block = create_feedback_block()
+streamer.stop(blocks=feedback_block)
+```
 
 ## Formatting messages with Block Kit {#block-kit}
 

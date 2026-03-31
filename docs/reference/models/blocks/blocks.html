@@ -1601,7 +1601,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                 else:
                     field_objects.append(PlainTextObject(**d))  # type: ignore[arg-type]
             else:
-                self.logger.warning(f&#34;Unsupported filed detected and skipped {f}&#34;)
+                self.logger.warning(f&#34;Unsupported field detected and skipped {f}&#34;)
         self.fields = field_objects
         self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
         self.expand = expand
