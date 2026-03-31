@@ -179,7 +179,7 @@ class SectionBlock(Block):
                 else:
                     field_objects.append(PlainTextObject(**d))  # type: ignore[arg-type]
             else:
-                self.logger.warning(f"Unsupported filed detected and skipped {f}")
+                self.logger.warning(f"Unsupported field detected and skipped: {f}")
         self.fields = field_objects
         self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
         self.expand = expand
