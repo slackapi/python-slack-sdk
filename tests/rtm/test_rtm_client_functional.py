@@ -12,6 +12,8 @@ from tests.rtm.mock_web_api_server import (
     cleanup_mock_web_api_server,
 )
 
+websockets_key = web.AppKey("websockets", list) if hasattr(web, "AppKey") else "websockets"
+
 
 class TestRTMClientFunctional(unittest.TestCase):
     def setUp(self):
@@ -53,7 +55,7 @@ class TestRTMClientFunctional(unittest.TestCase):
 
     async def mock_server(self):
         app = web.Application()
-        app["websockets"] = []
+        app[websockets_key] = []
         app.router.add_get("/", self.websocket_handler)
         app.on_shutdown.append(self.on_shutdown)
         runner = web.AppRunner(app)
@@ -65,16 +67,16 @@ class TestRTMClientFunctional(unittest.TestCase):
         ws = web.WebSocketResponse()
         await ws.prepare(request)
 
-        request.app["websockets"].append(ws)
+        request.app[websockets_key].append(ws)
         try:
             async for msg in ws:
                 await ws.send_json({"type": "message", "message_sent": msg.json()})
         finally:
-            request.app["websockets"].remove(ws)
+            request.app[websockets_key].remove(ws)
         return ws
 
     async def on_shutdown(self, app):
-        for ws in set(app["websockets"]):
+        for ws in set(app[websockets_key]):
             await ws.close(code=WSCloseCode.GOING_AWAY, message="Server shutdown")
 
     # -------------------------------------------
