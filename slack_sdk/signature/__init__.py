@@ -3,7 +3,13 @@
 import hashlib
 import hmac
 from time import time
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, TYPE_CHECKING
+
+# Fallback to Dict for Python 3.7/3.8 compatibility (safe to remove once these versions are no longer supported)
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+else:
+    Mapping = Dict
 
 
 class Clock:
@@ -18,7 +24,7 @@ class SignatureVerifier:
         Slack signs its requests using a secret that's unique to your app.
         With the help of signing secrets, your app can more confidently verify
         whether requests from us are authentic.
-        https://api.slack.com/authentication/verifying-requests-from-slack
+        https://docs.slack.dev/authentication/verifying-requests-from-slack/
         """
         self.signing_secret = signing_secret
         self.clock = clock
@@ -26,7 +32,7 @@ class SignatureVerifier:
     def is_valid_request(
         self,
         body: Union[str, bytes],
-        headers: Dict[str, str],
+        headers: Mapping[str, str],
     ) -> bool:
         """Verifies if the given signature is valid"""
         if headers is None:
@@ -34,15 +40,15 @@ class SignatureVerifier:
         normalized_headers = {k.lower(): v for k, v in headers.items()}
         return self.is_valid(
             body=body,
-            timestamp=normalized_headers.get("x-slack-request-timestamp", None),  # type: ignore[arg-type]
-            signature=normalized_headers.get("x-slack-signature", None),  # type: ignore[arg-type]
+            timestamp=normalized_headers.get("x-slack-request-timestamp", None),
+            signature=normalized_headers.get("x-slack-signature", None),
         )
 
     def is_valid(
         self,
         body: Union[str, bytes],
-        timestamp: str,
-        signature: str,
+        timestamp: Optional[str],
+        signature: Optional[str],
     ) -> bool:
         """Verifies if the given signature is valid"""
         if timestamp is None or signature is None:

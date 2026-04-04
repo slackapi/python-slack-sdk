@@ -73,7 +73,7 @@ class AsyncSCIMClient:
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         """API client for SCIM API
-        See https://api.slack.com/scim for more details
+        See https://docs.slack.dev/admins/scim-api/ for more details
 
         Args:
             token: An admin user's token, which starts with `xoxp-`
@@ -149,9 +149,9 @@ class AsyncSCIMClient:
             await self.api_call(
                 http_verb="PATCH",
                 path=f"Users/{quote(id)}",
-                body_params=partial_user.to_dict()
-                if isinstance(partial_user, User)
-                else _to_dict_without_not_given(partial_user),
+                body_params=(
+                    partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+                ),
             )
         )
 
@@ -214,9 +214,11 @@ class AsyncSCIMClient:
             await self.api_call(
                 http_verb="PATCH",
                 path=f"Groups/{quote(id)}",
-                body_params=partial_group.to_dict()
-                if isinstance(partial_group, Group)
-                else _to_dict_without_not_given(partial_group),
+                body_params=(
+                    partial_group.to_dict()
+                    if isinstance(partial_group, Group)
+                    else _to_dict_without_not_given(partial_group)
+                ),
             )
         )
 

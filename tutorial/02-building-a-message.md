@@ -2,7 +2,7 @@
 
 The code for this step is available [here](PythOnBoardingBot/onboarding_tutorial.py).
 
-> 💡 **[Block Kit](https://api.slack.com/block-kit)** is a UI framework for Slack apps that offers a balance of control and flexibility when building experiences in messages and other surfaces. Customize the order and appearance of information and guide users through your app's capabilities by composing, updating, sequencing, and stacking blocks — reusable components that work almost everywhere in Slack. You can experiment and prototype with Block Kit using the [Block Kit Builder](https://api.slack.com/tools/block-kit-builder).
+> 💡 **[Block Kit](https://docs.slack.dev/block-kit/)** is a UI framework for Slack apps that offers a balance of control and flexibility when building experiences in messages and other surfaces. Customize the order and appearance of information and guide users through your app's capabilities by composing, updating, sequencing, and stacking blocks — reusable components that work almost everywhere in Slack. You can experiment and prototype with Block Kit using the [Block Kit Builder](https://api.slack.com/tools/block-kit-builder).
 
 We're going to be using Block Kit to build our onboarding tutorial messages.
 

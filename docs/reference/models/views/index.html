@@ -48,7 +48,7 @@ el.replaceWith(d);
 <dl>
 <dt id="slack_sdk.models.views.View"><code class="flex name class">
 <span>class <span class="ident">View</span></span>
-<span>(</span><span>type: str,<br>id: str | None = None,<br>callback_id: str | None = None,<br>external_id: str | None = None,<br>team_id: str | None = None,<br>bot_id: str | None = None,<br>app_id: str | None = None,<br>root_view_id: str | None = None,<br>previous_view_id: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>submit: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>close: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>private_metadata: str | None = None,<br>state: dict | ForwardRef('<a title="slack_sdk.models.views.ViewState" href="#slack_sdk.models.views.ViewState">ViewState</a>') | None = None,<br>hash: str | None = None,<br>clear_on_close: bool | None = None,<br>notify_on_close: bool | None = None,<br>**kwargs)</span>
+<span>(</span><span>type: str,<br>id: str | None = None,<br>callback_id: str | None = None,<br>external_id: str | None = None,<br>team_id: str | None = None,<br>bot_id: str | None = None,<br>app_id: str | None = None,<br>root_view_id: str | None = None,<br>previous_view_id: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>submit: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>close: str | dict | <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a> | None = None,<br>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>private_metadata: str | None = None,<br>state: dict | <a title="slack_sdk.models.views.ViewState" href="#slack_sdk.models.views.ViewState">ViewState</a> | None = None,<br>hash: str | None = None,<br>clear_on_close: bool | None = None,<br>notify_on_close: bool | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -58,7 +58,7 @@ el.replaceWith(d);
 <pre><code class="python">class View(JsonObject):
     &#34;&#34;&#34;View object for modals and Home tabs.
 
-    https://api.slack.com/reference/surfaces/views
+    https://docs.slack.dev/reference/views/
     &#34;&#34;&#34;
 
     types = [&#34;modal&#34;, &#34;home&#34;, &#34;workflow_step&#34;]
@@ -175,7 +175,7 @@ el.replaceWith(d);
         return self.__str__()</code></pre>
 </details>
 <div class="desc"><p>View object for modals and Home tabs.</p>
-<p><a href="https://api.slack.com/reference/surfaces/views">https://api.slack.com/reference/surfaces/views</a></p></div>
+<p><a href="https://docs.slack.dev/reference/views/">https://docs.slack.dev/reference/views/</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -229,7 +229,7 @@ el.replaceWith(d);
 </dd>
 <dt id="slack_sdk.models.views.ViewState"><code class="flex name class">
 <span>class <span class="ident">ViewState</span></span>
-<span>(</span><span>*,<br>values: Dict[str, Dict[str, dict | ForwardRef('<a title="slack_sdk.models.views.ViewStateValue" href="#slack_sdk.models.views.ViewStateValue">ViewStateValue</a>')]])</span>
+<span>(</span><span>*,<br>values: Dict[str, Dict[str, dict | <a title="slack_sdk.models.views.ViewStateValue" href="#slack_sdk.models.views.ViewStateValue">ViewStateValue</a>]])</span>
 </code></dt>
 <dd>
 <details class="source">

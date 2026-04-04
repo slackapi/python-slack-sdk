@@ -1,4 +1,5 @@
 """Internal module for checking aiohttp compatibility of async modules"""
+
 import logging
 from typing import Callable
 

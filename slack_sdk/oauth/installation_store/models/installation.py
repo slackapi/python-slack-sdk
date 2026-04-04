@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from time import time
 from typing import Optional, Union, Dict, Any, Sequence
 
@@ -173,14 +173,18 @@ class Installation:
             "bot_scopes": ",".join(self.bot_scopes) if self.bot_scopes else None,
             "bot_refresh_token": self.bot_refresh_token,
             "bot_token_expires_at": (
-                datetime.utcfromtimestamp(self.bot_token_expires_at) if self.bot_token_expires_at is not None else None
+                datetime.fromtimestamp(self.bot_token_expires_at, tz=timezone.utc)
+                if self.bot_token_expires_at is not None
+                else None
             ),
             "user_id": self.user_id,
             "user_token": self.user_token,
             "user_scopes": ",".join(self.user_scopes) if self.user_scopes else None,
             "user_refresh_token": self.user_refresh_token,
             "user_token_expires_at": (
-                datetime.utcfromtimestamp(self.user_token_expires_at) if self.user_token_expires_at is not None else None
+                datetime.fromtimestamp(self.user_token_expires_at, tz=timezone.utc)
+                if self.user_token_expires_at is not None
+                else None
             ),
             "incoming_webhook_url": self.incoming_webhook_url,
             "incoming_webhook_channel": self.incoming_webhook_channel,
@@ -188,7 +192,7 @@ class Installation:
             "incoming_webhook_configuration_url": self.incoming_webhook_configuration_url,
             "is_enterprise_install": self.is_enterprise_install,
             "token_type": self.token_type,
-            "installed_at": datetime.utcfromtimestamp(self.installed_at),
+            "installed_at": datetime.fromtimestamp(self.installed_at, tz=timezone.utc),
         }
 
     def to_dict_for_copying(self) -> Dict[str, Any]:

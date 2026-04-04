@@ -1,4 +1,5 @@
 """Internal module for loading proxy-related env variables"""
+
 import logging
 import os
 from typing import Optional

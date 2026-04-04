@@ -53,7 +53,7 @@ class AsyncWebhookClient:
     ):
         """API client for Incoming Webhooks and `response_url`
 
-        https://api.slack.com/messaging/webhooks
+        https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/
 
         Args:
             url: Complete URL to send data (e.g., `https://hooks.slack.com/XXX`)

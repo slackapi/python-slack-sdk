@@ -38,8 +38,8 @@ el.replaceWith(d);
 <section id="section-intro">
 <p>websocket-client bassd Socket Mode client</p>
 <ul>
-<li><a href="https://api.slack.com/apis/connections/socket">https://api.slack.com/apis/connections/socket</a></li>
-<li><a href="https://slack.dev/python-slack-sdk/socket-mode/">https://slack.dev/python-slack-sdk/socket-mode/</a></li>
+<li><a href="https://docs.slack.dev/apis/events-api/using-socket-mode/">https://docs.slack.dev/apis/events-api/using-socket-mode/</a></li>
+<li><a href="https://docs.slack.dev/tools/python-slack-sdk/socket-mode/">https://docs.slack.dev/tools/python-slack-sdk/socket-mode/</a></li>
 <li><a href="https://pypi.org/project/websocket-client/">https://pypi.org/project/websocket-client/</a></li>
 </ul>
 </section>
@@ -91,7 +91,7 @@ el.replaceWith(d);
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
 
-    close: bool  # type: ignore[assignment]
+    closed: bool
     connect_operation_lock: Lock
 
     on_open_listeners: List[Callable[[WebSocketApp], None]]
@@ -213,10 +213,10 @@ el.replaceWith(d);
 
         self.current_session = websocket.WebSocketApp(
             self.wss_uri,
-            on_open=on_open,  # type: ignore[arg-type]
-            on_message=on_message,  # type: ignore[arg-type]
-            on_error=on_error,  # type: ignore[arg-type]
-            on_close=on_close,  # type: ignore[arg-type]
+            on_open=on_open,
+            on_message=on_message,
+            on_error=on_error,
+            on_close=on_close,
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 
@@ -258,7 +258,7 @@ el.replaceWith(d);
                     )
                     raise e
 
-    def close(self) -&gt; None:  # type: ignore[explicit-override, no-redef]
+    def close(self) -&gt; None:
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
@@ -384,7 +384,7 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def close(self) -&gt; None:  # type: ignore[explicit-override, no-redef]
+<pre><code class="python">def close(self) -&gt; None:
     self.closed = True
     self.auto_reconnect_enabled = False
     self.disconnect()
@@ -441,10 +441,10 @@ el.replaceWith(d);
 
     self.current_session = websocket.WebSocketApp(
         self.wss_uri,
-        on_open=on_open,  # type: ignore[arg-type]
-        on_message=on_message,  # type: ignore[arg-type]
-        on_error=on_error,  # type: ignore[arg-type]
-        on_close=on_close,  # type: ignore[arg-type]
+        on_open=on_open,
+        on_message=on_message,
+        on_error=on_error,
+        on_close=on_close,
     )
     self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 

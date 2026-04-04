@@ -1,7 +1,7 @@
 """websockets bassd Socket Mode client
 
-* https://api.slack.com/apis/connections/socket
-* https://slack.dev/python-slack-sdk/socket-mode/
+* https://docs.slack.dev/apis/events-api/using-socket-mode/
+* https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
 * https://pypi.org/project/websockets/
 
 """

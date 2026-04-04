@@ -87,7 +87,7 @@ el.replaceWith(d);
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
         &#34;&#34;&#34;API client for SCIM API
-        See https://api.slack.com/scim for more details
+        See https://docs.slack.dev/admins/scim-api/ for more details
 
         Args:
             token: An admin user&#39;s token, which starts with `xoxp-`
@@ -163,9 +163,9 @@ el.replaceWith(d);
             await self.api_call(
                 http_verb=&#34;PATCH&#34;,
                 path=f&#34;Users/{quote(id)}&#34;,
-                body_params=partial_user.to_dict()
-                if isinstance(partial_user, User)
-                else _to_dict_without_not_given(partial_user),
+                body_params=(
+                    partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+                ),
             )
         )
 
@@ -228,9 +228,11 @@ el.replaceWith(d);
             await self.api_call(
                 http_verb=&#34;PATCH&#34;,
                 path=f&#34;Groups/{quote(id)}&#34;,
-                body_params=partial_group.to_dict()
-                if isinstance(partial_group, Group)
-                else _to_dict_without_not_given(partial_group),
+                body_params=(
+                    partial_group.to_dict()
+                    if isinstance(partial_group, Group)
+                    else _to_dict_without_not_given(partial_group)
+                ),
             )
         )
 
@@ -416,7 +418,7 @@ el.replaceWith(d);
         return resp</code></pre>
 </details>
 <div class="desc"><p>API client for SCIM API
-See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more details</p>
+See <a href="https://docs.slack.dev/admins/scim-api/">https://docs.slack.dev/admins/scim-api/</a> for more details</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>token</code></strong></dt>
@@ -620,9 +622,11 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         await self.api_call(
             http_verb=&#34;PATCH&#34;,
             path=f&#34;Groups/{quote(id)}&#34;,
-            body_params=partial_group.to_dict()
-            if isinstance(partial_group, Group)
-            else _to_dict_without_not_given(partial_group),
+            body_params=(
+                partial_group.to_dict()
+                if isinstance(partial_group, Group)
+                else _to_dict_without_not_given(partial_group)
+            ),
         )
     )</code></pre>
 </details>
@@ -641,9 +645,9 @@ See <a href="https://api.slack.com/scim">https://api.slack.com/scim</a> for more
         await self.api_call(
             http_verb=&#34;PATCH&#34;,
             path=f&#34;Users/{quote(id)}&#34;,
-            body_params=partial_user.to_dict()
-            if isinstance(partial_user, User)
-            else _to_dict_without_not_given(partial_user),
+            body_params=(
+                partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+            ),
         )
     )</code></pre>
 </details>

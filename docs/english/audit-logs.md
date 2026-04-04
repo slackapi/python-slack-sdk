@@ -1,6 +1,6 @@
 # Audit Logs API client
 
-The [Audit Logs API](/admins/audit-logs-api) is a set of APIs that you can use to monitor what's happening in your [Enterprise Grid](/enterprise-grid) organization.
+The [Audit Logs API](/admins/audit-logs-api) is a set of APIs that you can use to monitor what's happening in your [Enterprise Grid](/enterprise) organization.
 
 The Audit Logs API can be used by Security Information and Event Management (SIEM) tools to provide an analysis of how your Slack organization is being accessed. You can also use this API to write your own apps to see how members of your organization are using Slack.
 

@@ -22,7 +22,7 @@ class TestWebClient(unittest.TestCase):
     one for the inviting workspace(list and send invites) another for the recipient
     workspace (accept and approve) sent invites. Before being able to run this test suite,
     we also need to have manually created a slack connect shared channel and added
-    these two bots as members first. See: https://api.slack.com/apis/connect
+    these two bots as members first. See: https://docs.slack.dev/apis/slack-connect/
 
     In addition to conversations.connect:* scopes, your sender bot token should have channels:manage scopes.
     """

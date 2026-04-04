@@ -1,7 +1,7 @@
 """aiohttp based Socket Mode client
 
-* https://api.slack.com/apis/connections/socket
-* https://slack.dev/python-slack-sdk/socket-mode/
+* https://docs.slack.dev/apis/events-api/using-socket-mode/
+* https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
 * https://pypi.org/project/aiohttp/
 
 """
@@ -379,7 +379,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     autoping=False,
                     heartbeat=self.ping_interval,
                     proxy=self.proxy,
-                    ssl=self.web_client.ssl,
+                    ssl=self.web_client.ssl if self.web_client.ssl is not None else True,
                 )
                 session_id: str = await self.session_id()
                 self.auto_reconnect_enabled = self.default_auto_reconnect_enabled

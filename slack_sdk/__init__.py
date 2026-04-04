@@ -1,5 +1,5 @@
 """
-* The SDK website: https://slack.dev/python-slack-sdk/
+* The SDK website: https://docs.slack.dev/tools/python-slack-sdk
 * PyPI package: https://pypi.org/project/slack-sdk/
 
 Here is the list of key modules in this SDK:
@@ -37,6 +37,7 @@ Here is the list of key modules in this SDK:
 * `slack_sdk.scim.v1.async_client`
 
 """
+
 import logging
 from logging import NullHandler
 

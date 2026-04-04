@@ -8,6 +8,8 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "black"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

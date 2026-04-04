@@ -247,7 +247,7 @@ def placeholder_length(self) -&gt; bool:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DialogBuilder(JsonObject):
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementation
+    attributes: Set[str] = set()
 
     _callback_id: Optional[str]
     _elements: List[Union[DialogTextComponent, AbstractDialogSelector]]
@@ -348,7 +348,7 @@ def placeholder_length(self) -&gt; bool:
         &#34;&#34;&#34;
         Text elements are single-line plain text fields.
 
-        https://api.slack.com/dialogs#attributes_text_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -403,7 +403,7 @@ def placeholder_length(self) -&gt; bool:
         character count to the max_length you have set or the default,
         3000.
 
-        https://api.slack.com/dialogs#attributes_textarea_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_textarea_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -456,7 +456,7 @@ def placeholder_length(self) -&gt; bool:
         A select element may contain up to 100 selections, provided as a list of
         Option or OptionGroup objects
 
-        https://api.slack.com/dialogs#attributes_select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -499,7 +499,7 @@ def placeholder_length(self) -&gt; bool:
         A list of options can be loaded from an external URL and used in your dialog
         menus.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_external
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -542,7 +542,7 @@ def placeholder_length(self) -&gt; bool:
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn&#39;t need access to a related OAuth scope.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_users
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -577,7 +577,7 @@ def placeholder_length(self) -&gt; bool:
         You can also provide a select menu with a list of channels. Specify your
         data_source as channels to limit only to public channels
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -613,7 +613,7 @@ def placeholder_length(self) -&gt; bool:
         private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -687,7 +687,7 @@ dialog to Slack</p></div>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="slack_sdk.models.dialogs.DialogBuilder.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="slack_sdk.models.dialogs.DialogBuilder.attributes"><code class="name">var <span class="ident">attributes</span> : Set[str]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
@@ -772,7 +772,7 @@ def callback_id_present(self) -&gt; bool:
     You can also provide a select menu with a list of channels. Specify your
     data_source as channels to limit only to public channels
 
-    https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+    https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
     Args:
         name: Name of form element. Required. No more than 300 characters.
@@ -796,7 +796,7 @@ def callback_id_present(self) -&gt; bool:
 </details>
 <div class="desc"><p>You can also provide a select menu with a list of channels. Specify your
 data_source as channels to limit only to public channels</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -835,7 +835,7 @@ completing the element. 150 character maximum.</dd>
     private channels, direct messages, MPIMs, and whatever else we consider a
     conversation-like thing.
 
-    https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+    https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
     Args:
         name: Name of form element. Required. No more than 300 characters.
@@ -860,7 +860,7 @@ completing the element. 150 character maximum.</dd>
 <div class="desc"><p>You can also provide a select menu with a list of conversations - including
 private channels, direct messages, MPIMs, and whatever else we consider a
 conversation-like thing.</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -917,7 +917,7 @@ def elements_length(self) -&gt; bool:
     A list of options can be loaded from an external URL and used in your dialog
     menus.
 
-    https://api.slack.com/dialogs#dynamic_select_elements_external
+    https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external
 
     Args:
         name: Name of form element. Required. No more than 300 characters.
@@ -950,7 +950,7 @@ a single item from a list. True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A list of options can be loaded from an external URL and used in your dialog
 menus.</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_external">https://api.slack.com/dialogs#dynamic_select_elements_external</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1074,7 +1074,7 @@ def state_length(self) -&gt; bool:
     A select element may contain up to 100 selections, provided as a list of
     Option or OptionGroup objects
 
-    https://api.slack.com/dialogs#attributes_select_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements
 
     Args:
         name: Name of form element. Required. No more than 300 characters.
@@ -1104,7 +1104,7 @@ a single item from a list. True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A select element may contain up to 100 selections, provided as a list of
 Option or OptionGroup objects</p>
-<p><a href="https://api.slack.com/dialogs#attributes_select_elements">https://api.slack.com/dialogs#attributes_select_elements</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1209,7 +1209,7 @@ def submit_label_valid(self) -&gt; bool:
     character count to the max_length you have set or the default,
     3000.
 
-    https://api.slack.com/dialogs#attributes_textarea_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#attributes_textarea_elements
 
     Args:
         name: Name of form element. Required. No more than 300 characters.
@@ -1249,7 +1249,7 @@ encountered these on the world wide web. Use this element if you want a
 relatively long answer from users. The element UI provides a remaining
 character count to the max_length you have set or the default,
 3000.</p>
-<p><a href="https://api.slack.com/dialogs#attributes_textarea_elements">https://api.slack.com/dialogs#attributes_textarea_elements</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_textarea_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_textarea_elements</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1303,7 +1303,7 @@ subtype.</dd>
     &#34;&#34;&#34;
     Text elements are single-line plain text fields.
 
-    https://api.slack.com/dialogs#attributes_text_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements
 
     Args:
         name: Name of form element. Required. No more than 300 characters.
@@ -1339,7 +1339,7 @@ subtype.</dd>
     return self</code></pre>
 </details>
 <div class="desc"><p>Text elements are single-line plain text fields.</p>
-<p><a href="https://api.slack.com/dialogs#attributes_text_elements">https://api.slack.com/dialogs#attributes_text_elements</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1445,7 +1445,7 @@ def title_present(self) -&gt; bool:
     assignee. Slack pre-populates the user list in client-side, so your app
     doesn&#39;t need access to a related OAuth scope.
 
-    https://api.slack.com/dialogs#dynamic_select_elements_users
+    https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users
 
     Args:
         name: Name of form element. Required. No more than 300 characters.
@@ -1471,7 +1471,7 @@ def title_present(self) -&gt; bool:
 when you are creating a bug tracking app, you want to include a field for an
 assignee. Slack pre-populates the user list in client-side, so your app
 doesn't need access to a related OAuth scope.</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_users">https://api.slack.com/dialogs#dynamic_select_elements_users</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1525,7 +1525,7 @@ completing the element. 150 character maximum.</dd>
         You can also provide a select menu with a list of channels. Specify your
         data_source as channels to limit only to public channels
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -1547,7 +1547,7 @@ completing the element. 150 character maximum.</dd>
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>You can also provide a select menu with a list of channels. Specify your
 data_source as channels to limit only to public channels</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1618,7 +1618,7 @@ completing the element. 150 character maximum.</dd>
         private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -1641,7 +1641,7 @@ completing the element. 150 character maximum.</dd>
 <p>You can also provide a select menu with a list of conversations - including
 private channels, direct messages, MPIMs, and whatever else we consider a
 conversation-like thing.</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations">https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1720,7 +1720,7 @@ completing the element. 150 character maximum.</dd>
         A list of options can be loaded from an external URL and used in your dialog
         menus.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_external
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -1750,7 +1750,7 @@ a single item from a list. True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A list of options can be loaded from an external URL and used in your dialog
 menus.</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_external">https://api.slack.com/dialogs#dynamic_select_elements_external</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1829,7 +1829,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     single item from a list. True to web roots, this selection is displayed as a
     dropdown menu.
 
-    https://api.slack.com/dialogs#select_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
     &#34;&#34;&#34;
 
     data_source = &#34;static&#34;
@@ -1854,7 +1854,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         A select element may contain up to 100 selections, provided as a list of
         Option or OptionGroup objects
 
-        https://api.slack.com/dialogs#attributes_select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -1891,13 +1891,13 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>Use the select element for multiple choice selections allowing users to pick a
 single item from a list. True to web roots, this selection is displayed as a
 dropdown menu.</p>
-<p><a href="https://api.slack.com/dialogs#select_elements">https://api.slack.com/dialogs#select_elements</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
 <p>Use the select element for multiple choice selections allowing users to pick
 a single item from a list. True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A select element may contain up to 100 selections, provided as a list of
 Option or OptionGroup objects</p>
-<p><a href="https://api.slack.com/dialogs#attributes_select_elements">https://api.slack.com/dialogs#attributes_select_elements</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>
@@ -1982,7 +1982,7 @@ def options_length(self) -&gt; bool:
     answer from users. The element UI provides a remaining character count to the
     max_length you have set or the default, 3000.
 
-    https://api.slack.com/dialogs#textarea_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#textarea_elements
     &#34;&#34;&#34;
 
     type = &#34;textarea&#34;
@@ -1992,7 +1992,7 @@ def options_length(self) -&gt; bool:
 these on the world wide web. Use this element if you want a relatively long
 answer from users. The element UI provides a remaining character count to the
 max_length you have set or the default, 3000.</p>
-<p><a href="https://api.slack.com/dialogs#textarea_elements">https://api.slack.com/dialogs#textarea_elements</a></p></div>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#textarea_elements">https://docs.slack.dev/legacy/legacy-dialogs/#textarea_elements</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.dialogs.DialogTextComponent" href="#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></li>
@@ -2375,14 +2375,14 @@ def value_length(self) -&gt; bool:
     &#34;&#34;&#34;
     Text elements are single-line plain text fields.
 
-    https://api.slack.com/dialogs#text_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#text_elements
     &#34;&#34;&#34;
 
     type = &#34;text&#34;
     max_value_length = 150</code></pre>
 </details>
 <div class="desc"><p>Text elements are single-line plain text fields.</p>
-<p><a href="https://api.slack.com/dialogs#text_elements">https://api.slack.com/dialogs#text_elements</a></p></div>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#text_elements">https://docs.slack.dev/legacy/legacy-dialogs/#text_elements</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.dialogs.DialogTextComponent" href="#slack_sdk.models.dialogs.DialogTextComponent">DialogTextComponent</a></li>
@@ -2443,7 +2443,7 @@ def value_length(self) -&gt; bool:
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn&#39;t need access to a related OAuth scope.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_users
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -2467,7 +2467,7 @@ def value_length(self) -&gt; bool:
 when you are creating a bug tracking app, you want to include a field for an
 assignee. Slack pre-populates the user list in client-side, so your app
 doesn't need access to a related OAuth scope.</p>
-<p><a href="https://api.slack.com/dialogs#dynamic_select_elements_users">https://api.slack.com/dialogs#dynamic_select_elements_users</a></p>
+<p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong></dt>

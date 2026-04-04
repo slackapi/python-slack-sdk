@@ -565,7 +565,7 @@ class LegacyBaseClient:
         On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
         header. The signature is created by combining the signing secret with the
         body of the request we're sending using a standard HMAC-SHA256 keyed hash.
-        https://api.slack.com/docs/verifying-requests-from-slack#how_to_make_a_request_signature_in_4_easy_steps__an_overview
+        https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview
         Args:
             signing_secret: Your application's signing secret, available in the
                 Slack API dashboard

@@ -7,7 +7,7 @@ from slack_sdk.models.basic_objects import BaseObject
 class Link(BaseObject):
     def __init__(self, *, url: str, text: str):
         """Base class used to generate links in Slack's not-quite Markdown, not quite HTML syntax
-        https://api.slack.com/reference/surfaces/formatting#linking_to_urls
+        https://docs.slack.dev/messaging/formatting-message-text/#linking_to_urls
         """
         self.url = url
         self.text = text
@@ -30,7 +30,7 @@ class DateLink(Link):
         link: Optional[str] = None,
     ):
         """Text containing a date or time should display that date in the local timezone of the person seeing the text.
-        https://api.slack.com/reference/surfaces/formatting#date-formatting
+        https://docs.slack.dev/messaging/formatting-message-text/#date-formatting
         """
         if isinstance(date, datetime):
             epoch = int(date.timestamp())
@@ -55,7 +55,7 @@ class ObjectLink(Link):
 
     def __init__(self, *, object_id: str, text: str = ""):
         """Convenience class to create links to specific object types
-        https://api.slack.com/reference/surfaces/formatting#linking-channels
+        https://docs.slack.dev/messaging/formatting-message-text/#linking-channels
         """
         prefix = self.prefix_mapping.get(object_id[0].upper(), "@")
         super().__init__(url=f"{prefix}{object_id}", text=text)
@@ -64,7 +64,7 @@ class ObjectLink(Link):
 class ChannelLink(Link):
     def __init__(self):
         """Represents an @channel link, which notifies everyone present in this channel.
-        https://api.slack.com/reference/surfaces/formatting
+        https://docs.slack.dev/messaging/formatting-message-text/
         """
         super().__init__(url="!channel", text="channel")
 
@@ -72,7 +72,7 @@ class ChannelLink(Link):
 class HereLink(Link):
     def __init__(self):
         """Represents an @here link, which notifies all online users of this channel.
-        https://api.slack.com/reference/surfaces/formatting
+        https://docs.slack.dev/messaging/formatting-message-text/
         """
         super().__init__(url="!here", text="here")
 
@@ -80,6 +80,6 @@ class HereLink(Link):
 class EveryoneLink(Link):
     def __init__(self):
         """Represents an @everyone link, which notifies all users of this workspace.
-        https://api.slack.com/reference/surfaces/formatting
+        https://docs.slack.dev/messaging/formatting-message-text/
         """
         super().__init__(url="!everyone", text="everyone")

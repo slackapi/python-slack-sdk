@@ -11,13 +11,14 @@ from io import IOBase
 from ssl import SSLContext
 from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin
-from urllib.request import OpenerDirector, ProxyHandler, HTTPSHandler, Request, urlopen
+from urllib.request import HTTPSHandler, OpenerDirector, ProxyHandler, Request, urlopen
 
 from slack_sdk import version
 from slack_sdk.errors import SlackRequestError
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block
-from slack_sdk.models.metadata import Metadata
+from slack_sdk.models.messages.chunk import Chunk
+from slack_sdk.models.metadata import EntityMetadata, EventAndEntityMetadata, Metadata
 
 
 def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
@@ -187,12 +188,18 @@ def _build_req_args(
 
 
 def _parse_web_class_objects(kwargs) -> None:
-    def to_dict(obj: Union[Dict, Block, Attachment, Metadata]):
+    def to_dict(obj: Union[Dict, Block, Attachment, Chunk, Metadata, EventAndEntityMetadata, EntityMetadata]):
         if isinstance(obj, Block):
             return obj.to_dict()
         if isinstance(obj, Attachment):
             return obj.to_dict()
+        if isinstance(obj, Chunk):
+            return obj.to_dict()
         if isinstance(obj, Metadata):
+            return obj.to_dict()
+        if isinstance(obj, EventAndEntityMetadata):
+            return obj.to_dict()
+        if isinstance(obj, EntityMetadata):
             return obj.to_dict()
         return obj
 
@@ -207,8 +214,17 @@ def _parse_web_class_objects(kwargs) -> None:
         dict_attachments = [to_dict(a) for a in attachments]
         kwargs.update({"attachments": dict_attachments})
 
+    chunks = kwargs.get("chunks", None)
+    if chunks is not None and isinstance(chunks, Sequence) and (not isinstance(chunks, str)):
+        dict_chunks = [to_dict(c) for c in chunks]
+        kwargs.update({"chunks": dict_chunks})
+
     metadata = kwargs.get("metadata", None)
-    if metadata is not None and isinstance(metadata, Metadata):
+    if metadata is not None and (
+        isinstance(metadata, Metadata)
+        or isinstance(metadata, EntityMetadata)
+        or isinstance(metadata, EventAndEntityMetadata)
+    ):
         kwargs.update({"metadata": to_dict(metadata)})
 
 
@@ -272,19 +288,19 @@ def _warn_if_message_text_content_is_missing(endpoint: str, kwargs: Dict[str, An
         "system push notifications, assistive technology such as screen readers, etc."
     )
 
-    # https://api.slack.com/reference/messaging/attachments
+    # https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments
     # Check if the fallback field exists for all the attachments
     # Not all attachments have a fallback property; warn about this too!
     missing_fallback_message = (
         f"Additionally, the attachment-level `fallback` argument is missing in the request payload for a {endpoint} call"
         " - To avoid this warning, it is recommended to always provide a top-level `text` argument when posting a"
         " message. Alternatively you can provide an attachment-level `fallback` argument, though this is now considered"
-        " a legacy field (see https://api.slack.com/reference/messaging/attachments#legacy_fields for more details)."
+        " a legacy field (see https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#legacy_fields for more details)."  # noqa: E501
     )
 
     # Additionally, specifically for attachments, there is a legacy field available at the attachment level called `fallback`
     # Even with a missing text, one can provide a `fallback` per attachment.
-    # More details here: https://api.slack.com/reference/messaging/attachments#legacy_fields
+    # More details here: https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#legacy_fields
     attachments = kwargs.get("attachments")
     # Note that this method does not verify attachments
     # if the value is already serialized as a single str value.
@@ -345,11 +361,11 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
     if filename is None:
         # use the local filename if filename is missing
         if isinstance(file, (str, os.PathLike)):
-            filename = os.fspath(file).split(os.path.sep)[-1]
+            filename = os.path.basename(os.fspath(file))
         else:
             filename = "Uploaded file"
 
-    title = upload_file.get("title", "Uploaded file")
+    title = upload_file.get("title")
     if data is None:
         raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
 

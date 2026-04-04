@@ -4,44 +4,47 @@ from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
     BlockElement,
     ButtonElement,
-    DatePickerElement,
-    TimePickerElement,
-    ExternalDataSelectElement,
-    ImageElement,
-    LinkButtonElement,
-    UserSelectElement,
-    StaticSelectElement,
-    CheckboxesElement,
-    StaticMultiSelectElement,
-    ExternalDataMultiSelectElement,
-    UserMultiSelectElement,
-    ConversationMultiSelectElement,
     ChannelMultiSelectElement,
-    OverflowMenuElement,
-    PlainTextInputElement,
-    RadioButtonsElement,
-    ConversationSelectElement,
     ChannelSelectElement,
+    CheckboxesElement,
     ConfirmObject,
-    Option,
+    ConversationMultiSelectElement,
+    ConversationSelectElement,
+    DatePickerElement,
+    ExternalDataMultiSelectElement,
+    ExternalDataSelectElement,
+    FeedbackButtonsElement,
+    IconButtonElement,
+    ImageElement,
     InputInteractiveElement,
     InteractiveElement,
+    LinkButtonElement,
+    Option,
+    OverflowMenuElement,
+    PlainTextInputElement,
     PlainTextObject,
+    RadioButtonsElement,
     RichTextBlock,
+    StaticMultiSelectElement,
+    StaticSelectElement,
+    TimePickerElement,
+    UserMultiSelectElement,
+    UserSelectElement,
 )
 from slack_sdk.models.blocks.basic_components import SlackFile
 from slack_sdk.models.blocks.block_elements import (
     DateTimePickerElement,
     EmailInputElement,
+    FileInputElement,
     NumberInputElement,
+    RichTextElementParts,
+    RichTextInputElement,
+    RichTextSectionElement,
     UrlInputElement,
     WorkflowButtonElement,
-    RichTextInputElement,
-    FileInputElement,
-    RichTextSectionElement,
-    RichTextElementParts,
 )
-from . import STRING_3001_CHARS, STRING_301_CHARS
+
+from . import STRING_301_CHARS, STRING_3001_CHARS
 
 
 class BlockElementTests(unittest.TestCase):
@@ -112,7 +115,7 @@ class ButtonElementTests(unittest.TestCase):
         input = {
             "type": "button",
             "text": {"type": "plain_text", "text": "Link Button"},
-            "url": "https://api.slack.com/block-kit",
+            "url": "https://docs.slack.dev/block-kit/",
         }
         self.assertDictEqual(input, ButtonElement(**input).to_dict())
         self.assertDictEqual(input, LinkButtonElement(**input).to_dict())
@@ -441,6 +444,67 @@ class DateTimePickerElementTests(unittest.TestCase):
             "focus_on_load": True,
         }
         self.assertDictEqual(input, DateTimePickerElement(**input).to_dict())
+
+
+# ----------------------------------------------
+# FeedbackButtons
+# ----------------------------------------------
+
+
+class FeedbackButtonsTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "feedback_buttons",
+            "action_id": "feedback-123",
+            "positive_button": {
+                "text": {"type": "plain_text", "text": "+1"},
+                "accessibility_label": "Positive feedback",
+                "value": "positive",
+            },
+            "negative_button": {
+                "text": {"type": "plain_text", "text": "-1"},
+                "accessibility_label": "Negative feedback",
+                "value": "negative",
+            },
+        }
+        self.assertDictEqual(input, FeedbackButtonsElement(**input).to_dict())
+
+
+# ----------------------------------------------
+# IconButton
+# ----------------------------------------------
+
+
+class IconButtonTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "icon_button",
+            "action_id": "icon-123",
+            "icon": "trash",
+            "text": {"type": "plain_text", "text": "Delete"},
+            "accessibility_label": "Delete item",
+            "value": "delete_item",
+            "visible_to_user_ids": ["U123456", "U789012"],
+        }
+        self.assertDictEqual(input, IconButtonElement(**input).to_dict())
+
+    def test_with_confirm(self):
+        input = {
+            "type": "icon_button",
+            "action_id": "icon-456",
+            "icon": "trash",
+            "text": {"type": "plain_text", "text": "Delete"},
+            "value": "trash",
+            "confirm": {
+                "title": {"type": "plain_text", "text": "Are you sure?"},
+                "text": {"type": "plain_text", "text": "This will send a warning."},
+                "confirm": {"type": "plain_text", "text": "Yes"},
+                "deny": {"type": "plain_text", "text": "No"},
+            },
+        }
+        icon_button = IconButtonElement(**input)
+        self.assertIsNotNone(icon_button.confirm)
+        self.assertDictEqual(input, icon_button.to_dict())
 
 
 # -------------------------------------------------
@@ -1039,7 +1103,7 @@ class OverflowMenuElementTests(unittest.TestCase):
                 },
                 {
                     "text": {"type": "plain_text", "text": "*this is plain_text text*"},
-                    # https://api.slack.com/reference/block-kit/composition-objects#option
+                    # https://docs.slack.dev/reference/block-kit/composition-objects/option-object
                     "url": "https://www.example.com",
                 },
             ],

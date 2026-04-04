@@ -1,0 +1,5 @@
+# Database drivers for CI testing
+
+# PostgreSQL drivers
+psycopg2-binary>=2.9,<3
+asyncpg>=0.27,<1

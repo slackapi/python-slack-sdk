@@ -111,7 +111,7 @@ class DialogTextField(DialogTextComponent):
     """
     Text elements are single-line plain text fields.
 
-    https://api.slack.com/dialogs#text_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#text_elements
     """
 
     type = "text"
@@ -125,7 +125,7 @@ class DialogTextArea(DialogTextComponent):
     answer from users. The element UI provides a remaining character count to the
     max_length you have set or the default, 3000.
 
-    https://api.slack.com/dialogs#textarea_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#textarea_elements
     """
 
     type = "textarea"
@@ -199,7 +199,7 @@ class DialogStaticSelector(AbstractDialogSelector):
     single item from a list. True to web roots, this selection is displayed as a
     dropdown menu.
 
-    https://api.slack.com/dialogs#select_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
     """
 
     data_source = "static"
@@ -224,7 +224,7 @@ class DialogStaticSelector(AbstractDialogSelector):
         A select element may contain up to 100 selections, provided as a list of
         Option or OptionGroup objects
 
-        https://api.slack.com/dialogs#attributes_select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -277,7 +277,7 @@ class DialogUserSelector(AbstractDialogSelector):
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn't need access to a related OAuth scope.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_users
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -313,7 +313,7 @@ class DialogChannelSelector(AbstractDialogSelector):
         You can also provide a select menu with a list of channels. Specify your
         data_source as channels to limit only to public channels
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -350,7 +350,7 @@ class DialogConversationSelector(AbstractDialogSelector):
         private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -395,7 +395,7 @@ class DialogExternalSelector(AbstractDialogSelector):
         A list of options can be loaded from an external URL and used in your dialog
         menus.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_external
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -522,7 +522,7 @@ class DialogBuilder(JsonObject):
         """
         Text elements are single-line plain text fields.
 
-        https://api.slack.com/dialogs#attributes_text_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -577,7 +577,7 @@ class DialogBuilder(JsonObject):
         character count to the max_length you have set or the default,
         3000.
 
-        https://api.slack.com/dialogs#attributes_textarea_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_textarea_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -630,7 +630,7 @@ class DialogBuilder(JsonObject):
         A select element may contain up to 100 selections, provided as a list of
         Option or OptionGroup objects
 
-        https://api.slack.com/dialogs#attributes_select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -673,7 +673,7 @@ class DialogBuilder(JsonObject):
         A list of options can be loaded from an external URL and used in your dialog
         menus.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_external
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -716,7 +716,7 @@ class DialogBuilder(JsonObject):
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn't need access to a related OAuth scope.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_users
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -751,7 +751,7 @@ class DialogBuilder(JsonObject):
         You can also provide a select menu with a list of channels. Specify your
         data_source as channels to limit only to public channels
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -787,7 +787,7 @@ class DialogBuilder(JsonObject):
         private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
-        https://api.slack.com/dialogs#dynamic_select_elements_channels_conversations
+        https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
         Args:
             name: Name of form element. Required. No more than 300 characters.
@@ -858,7 +858,7 @@ class ActionStaticSelector(AbstractActionSelector):
     single item from a list. True to web roots, this selection is displayed as a
     dropdown menu.
 
-    https://api.slack.com/dialogs#select_elements
+    https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
     """
 
     data_source = "static"
@@ -877,7 +877,7 @@ class ActionStaticSelector(AbstractActionSelector):
         Help users make clear, concise decisions by providing a menu of options
         within messages.
 
-        https://api.slack.com/docs/message-menus
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/
 
         Args:
             name: Name this specific action. The name will be returned to your

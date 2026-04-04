@@ -1,3 +1,4 @@
+import os
 import unittest
 from tests.helpers import async_test
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
@@ -5,13 +6,20 @@ from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.installation_store.sqlalchemy import AsyncSQLAlchemyInstallationStore
 
+database_url = os.environ.get("ASYNC_TEST_DATABASE_URL", "sqlite+aiosqlite:///:memory:")
+
+
+def setUpModule():
+    """Emit database configuration for CI visibility across builds."""
+    print(f"\n[InstallationStore/AsyncSQLAlchemy] Database: {database_url}")
+
 
 class TestAsyncSQLAlchemy(unittest.TestCase):
     engine: AsyncEngine
 
     @async_test
     async def setUp(self):
-        self.engine = create_async_engine("sqlite+aiosqlite:///:memory:")
+        self.engine = create_async_engine(database_url)
         self.store = AsyncSQLAlchemyInstallationStore(client_id="111.222", engine=self.engine)
         async with self.engine.begin() as conn:
             await conn.run_sync(self.store.metadata.create_all)
@@ -296,3 +304,27 @@ class TestAsyncSQLAlchemy(unittest.TestCase):
         self.assertIsNone(installation)
         installation = await store.async_find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(installation)
+
+    @async_test
+    async def test_timezone_aware_datetime_compatibility(self):
+        installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxb-111",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+        )
+
+        # First save
+        await self.store.async_save(installation)
+        found = await self.store.async_find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(found)
+        self.assertEqual(found.app_id, "A111")
+
+        # Second save (update) - tests WHERE clause with installed_at comparison
+        await self.store.async_save(installation)
+        found = await self.store.async_find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNotNone(found)

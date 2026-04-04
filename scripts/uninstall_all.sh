@@ -6,5 +6,6 @@ pip uninstall -y slack-sdk
 PACKAGES=$(pip freeze | grep -v "^-e" | sed 's/@.*//' | sed 's/\=\=.*//')
 # uninstall packages without exiting on a failure 
 for package in $PACKAGES; do
-  pip uninstall -y $package
+  pip uninstall -y $package &
 done
+wait

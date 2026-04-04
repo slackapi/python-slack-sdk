@@ -633,7 +633,7 @@ el.replaceWith(d);
         header. The signature is created by combining the signing secret with the
         body of the request we&#39;re sending using a standard HMAC-SHA256 keyed hash.
 
-        https://api.slack.com/docs/verifying-requests-from-slack#how_to_make_a_request_signature_in_4_easy_steps__an_overview
+        https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview
 
         Args:
             signing_secret: Your application&#39;s signing secret, available in the
@@ -690,7 +690,7 @@ def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, 
     header. The signature is created by combining the signing secret with the
     body of the request we&#39;re sending using a standard HMAC-SHA256 keyed hash.
 
-    https://api.slack.com/docs/verifying-requests-from-slack#how_to_make_a_request_signature_in_4_easy_steps__an_overview
+    https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview
 
     Args:
         signing_secret: Your application&#39;s signing secret, available in the
@@ -720,7 +720,7 @@ signing secret.</p>
 <p>On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
 header. The signature is created by combining the signing secret with the
 body of the request we're sending using a standard HMAC-SHA256 keyed hash.</p>
-<p><a href="https://api.slack.com/docs/verifying-requests-from-slack#how_to_make_a_request_signature_in_4_easy_steps__an_overview">https://api.slack.com/docs/verifying-requests-from-slack#how_to_make_a_request_signature_in_4_easy_steps__an_overview</a></p>
+<p><a href="https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview">https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview</a></p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>signing_secret</code></strong></dt>

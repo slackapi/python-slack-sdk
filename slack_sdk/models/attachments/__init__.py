@@ -19,8 +19,8 @@ from slack_sdk.models.blocks import (
 
 class Action(JsonObject):
     """Action in attachments
-    https://api.slack.com/messaging/composing/layouts#attachments
-    https://api.slack.com/legacy/interactive-message-field-guide#message_action_fields
+    https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts
+    https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields
     """
 
     attributes = {"name", "text", "url"}
@@ -66,7 +66,7 @@ class ActionButton(Action):
     ):
         """Simple button for use inside attachments
 
-        https://api.slack.com/legacy/message-buttons
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-message-buttons/
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -108,7 +108,7 @@ class ActionLinkButton(Action):
     def __init__(self, *, text: str, url: str):
         """A simple interactive button that just opens a URL
 
-        https://api.slack.com/messaging/composing/layouts#attachments
+        https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts
 
         Args:
           text: text to display on the button, eg 'Click Me!"
@@ -150,7 +150,7 @@ class ActionUserSelector(AbstractActionSelector):
     def __init__(self, name: str, text: str, selected_user: Optional[Option] = None):
         """Automatically populate the selector with a list of users in the workspace.
 
-        https://api.slack.com/legacy/message-menus#allow_users_to_select_from_a_list_of_members
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_team_members
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -172,7 +172,7 @@ class ActionChannelSelector(AbstractActionSelector):
         Automatically populate the selector with a list of public channels in the
         workspace.
 
-        https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_workspace_s_channels
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_channels
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -194,7 +194,7 @@ class ActionConversationSelector(AbstractActionSelector):
         Automatically populate the selector with a list of conversations they have in
         the workspace.
 
-        https://api.slack.com/legacy/message-menus#let_users_choose_one_of_their_conversations
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_conversations
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -226,7 +226,7 @@ class ActionExternalSelector(AbstractActionSelector):
         """
         Populate a message select menu from your own application dynamically.
 
-        https://api.slack.com/legacy/message-menus#populate_message_menus_dynamically
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_dynamic
 
         Args:
             name: Name this specific action. The name will be returned to your
@@ -312,7 +312,7 @@ class Attachment(JsonObject):
         A supplemental object that will display after the rest of the message.
         Considered legacy - recommended replacement is to use message blocks instead.
 
-        https://api.slack.com/reference/messaging/attachments#fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
 
         Args:
             text: The main body text of the attachment. It can be formatted as
@@ -444,7 +444,7 @@ class BlockAttachment(Attachment):
         A bridge between legacy attachments and Block Kit formatting - pass a list of
         Block objects directly to this attachment.
 
-        https://api.slack.com/reference/messaging/attachments#fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
 
         Args:
             blocks: a sequence of Block objects
@@ -501,8 +501,8 @@ class InteractiveAttachment(Attachment):
         An Attachment, but designed to contain interactive Actions
         Considered legacy - recommended replacement is to use message blocks instead.
 
-        https://api.slack.com/legacy/interactive-message-field-guide#attachment_fields
-        https://api.slack.com/reference/messaging/attachments#fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#attachment_fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
 
         Args:
             actions: A collection of Action objects to include in the attachment.
