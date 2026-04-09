@@ -1,4 +1,4 @@
-"""websocket-client bassd Socket Mode client
+"""websocket-client based Socket Mode client
 
 * https://docs.slack.dev/apis/events-api/using-socket-mode/
 * https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
@@ -229,6 +229,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
+        self.current_session_runner.shutdown()
         self.current_app_monitor.shutdown()
         self.message_processor.shutdown()
         self.message_workers.shutdown()
