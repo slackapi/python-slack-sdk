@@ -2,13 +2,10 @@ import logging
 import ssl
 import unittest
 from threading import Lock
-from unittest.mock import patch, MagicMock, create_autospec
+from unittest.mock import MagicMock, patch
 
+from slack_sdk.socket_mode.builtin.internals import _parse_handshake_response
 from slack_sdk.socket_mode.client import BaseSocketModeClient
-from slack_sdk.socket_mode.builtin.internals import (
-    _parse_handshake_response,
-    _fetch_messages,
-)
 
 
 class TestSocketModeClient(unittest.TestCase):
@@ -17,7 +14,9 @@ class TestSocketModeClient(unittest.TestCase):
     def test_connect_to_new_endpoint_does_not_release_lock_on_acquisition_timeout(self):
         client = BaseSocketModeClient.__new__(BaseSocketModeClient)
         client.logger = self.logger
-        client.connect_operation_lock = create_autospec(Lock(), acquire=MagicMock(return_value=False))
+        lock_mock = MagicMock(spec=Lock)
+        lock_mock.acquire.return_value = False
+        client.connect_operation_lock = lock_mock
 
         client.connect_to_new_endpoint()
 
