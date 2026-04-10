@@ -145,7 +145,7 @@ def _parse_handshake_response(sock: ssl.SSLSocket) -> Tuple[Optional[int], dict,
             if len(elements) > 2:
                 status = int(elements[1])
         else:
-            elements = line.split(":")
+            elements = line.split(":", 1)
             if len(elements) == 2:
                 headers[elements[0].strip().lower()] = elements[1].strip()
         if line is None or len(line.strip()) == 0:
@@ -337,7 +337,7 @@ def _fetch_messages(
             )
         else:
             # This pattern is unexpected but set data with the expected length anyway
-            _append_message(current_header, current_data[:current_data_length])  # type: ignore[call-arg, arg-type]
+            _append_message(messages, current_header, current_data[:current_data_length])
             return messages
 
     # work in progress with the current_header/current_data
