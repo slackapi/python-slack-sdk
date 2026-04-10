@@ -14,7 +14,7 @@ class TestSocketModeClient(unittest.TestCase):
     def test_connect_to_new_endpoint_does_not_release_lock_on_acquisition_timeout(self):
         client = BaseSocketModeClient.__new__(BaseSocketModeClient)
         client.logger = self.logger
-        lock_mock = MagicMock(spec=Lock)
+        lock_mock = MagicMock(spec=Lock())
         lock_mock.acquire.return_value = False
         client.connect_operation_lock = lock_mock
 
