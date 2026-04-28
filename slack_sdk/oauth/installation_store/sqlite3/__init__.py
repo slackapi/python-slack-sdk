@@ -48,8 +48,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
 
     def create_tables(self):
         with sqlite3.connect(database=self.database) as conn:
-            conn.execute(
-                """
+            conn.execute("""
             create table slack_installations (
                 id integer primary key autoincrement,
                 client_id text not null,
@@ -78,10 +77,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 token_type text,
                 installed_at datetime not null default current_timestamp
             );
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
             create index slack_installations_idx on slack_installations (
                 client_id,
                 enterprise_id,
@@ -89,10 +86,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 user_id,
                 installed_at
             );
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
             create table slack_bots (
                 id integer primary key autoincrement,
                 client_id text not null,
@@ -110,18 +105,15 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 is_enterprise_install boolean not null default 0,
                 installed_at datetime not null default current_timestamp
             );
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
             create index slack_bots_idx on slack_bots (
                 client_id,
                 enterprise_id,
                 team_id,
                 installed_at
             );
-            """
-            )
+            """)
             self.logger.debug(f"Tables have been created (database: {self.database})")
             conn.commit()
 
