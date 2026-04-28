@@ -45,13 +45,15 @@ class SQLite3OAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
 
     def create_tables(self):
         with sqlite3.connect(database=self.database) as conn:
-            conn.execute("""
+            conn.execute(
+                """
             create table oauth_states (
                 id integer primary key autoincrement,
                 state text not null,
                 expire_at datetime not null
             );
-            """)
+            """
+            )
             self.logger.debug(f"Tables have been created (database: {self.database})")
             conn.commit()
 
