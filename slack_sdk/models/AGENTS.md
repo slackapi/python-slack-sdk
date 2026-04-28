@@ -1,5 +1,7 @@
 # AGENTS.md — Block Kit Models
 
+The `slack_sdk/models/` package provides Python classes for building [Block Kit](https://api.slack.com/block-kit) UI layouts. Each class serializes to/from the JSON payloads that the Slack API expects, with helper methods for parsing nested composition objects.
+
 ## Adding a New Block Kit Type
 
 Block Kit models live in `slack_sdk/models/blocks/` across three files:
@@ -44,10 +46,6 @@ Choose the base class that matches the type you're adding.
            show_unknown_key_warning(self, others)
            self.text = TextObject.parse(text, default_type=PlainTextObject.type)
            self.optional_field = optional_field
-
-       @JsonValidator("text must be provided")
-       def _validate_text(self):
-           return self.text is not None
    ```
 
    Key conventions:
@@ -56,7 +54,6 @@ Choose the base class that matches the type you're adding.
    - Call `super().__init__()` with `type=self.type`
    - Call `show_unknown_key_warning(self, others)` to log unexpected kwargs
    - Use `TextObject.parse()`, `ConfirmObject.parse()`, and `BlockElement.parse()` for nested composition objects
-   - Use `@EnumValidator` for fields restricted to a set of values
 
 2. **Register for deserialization:**
    - **Elements:** Automatic — `BlockElement.parse()` discovers subclasses at runtime via `__subclasses__()`. No manual step needed.
@@ -66,7 +63,5 @@ Choose the base class that matches the type you're adding.
 
 4. **Add tests** in `tests/slack_sdk/models/test_blocks.py`. Cover:
    - Round-trip: `input_dict == MyNewBlock(**input_dict).to_dict()`
-   - Validation: required fields raise `SlackObjectFormationError` when missing
-   - Constraints: max lengths, enum values, format patterns
 
 5. **Validate:** `./scripts/run_validation.sh`
