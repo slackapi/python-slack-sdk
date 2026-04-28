@@ -281,6 +281,10 @@ Defined in `.github/workflows/ci-build.yml`, runs on push to `main`, all PRs, an
 3. Add tests mirroring the module structure
 4. Validate: `./scripts/run_validation.sh`
 
+### Adding a New Block Kit Type
+
+See [`slack_sdk/models/AGENTS.md`](slack_sdk/models/AGENTS.md) for detailed steps on defining, registering, exporting, and testing new Block Kit blocks, elements, and composition objects.
+
 ### Fixing a Bug
 
 1. Write a test that reproduces the bug
