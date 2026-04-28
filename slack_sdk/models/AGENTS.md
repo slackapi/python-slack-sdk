@@ -56,7 +56,6 @@ Choose the base class that matches the type you're adding.
    - Call `super().__init__()` with `type=self.type`
    - Call `show_unknown_key_warning(self, others)` to log unexpected kwargs
    - Use `TextObject.parse()`, `ConfirmObject.parse()`, and `BlockElement.parse()` for nested composition objects
-   - Add `@JsonValidator` decorators for constraints (required fields, max lengths, enum values, date formats)
    - Use `@EnumValidator` for fields restricted to a set of values
 
 2. **Register for deserialization:**
