@@ -938,7 +938,7 @@ class CardBlock(Block):
         self.title = TextObject.parse(title, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
         self.subtitle = TextObject.parse(subtitle, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
         self.body = TextObject.parse(body, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
-        self.actions = BlockElement.parse_all(actions) if actions else None  # type: ignore[arg-type]
+        self.actions = BlockElement.parse_all(actions) if actions else None
 
     @JsonValidator("At least one of hero_image, title, actions, or body is required")
     def _validate_content(self):
@@ -986,7 +986,7 @@ class AlertBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.text = TextObject.parse(text)  # type: ignore[arg-type]
+        self.text = TextObject.parse(text)
         self.level = level
 
     @JsonValidator("text attribute must be specified")
