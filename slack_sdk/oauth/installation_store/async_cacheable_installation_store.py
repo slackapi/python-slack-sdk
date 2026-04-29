@@ -98,7 +98,8 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
             team_id=team_id,
         )
         key = f"{enterprise_id or ''}-{team_id or ''}"
-        self.cached_bots.pop(key)
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
 
     async def async_delete_installation(
         self,
