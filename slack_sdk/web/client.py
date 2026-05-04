@@ -2967,6 +2967,9 @@ class WebClient(BaseClient):
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
         task_display_mode: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> ChatStream:
         """Stream markdown text into a conversation.
@@ -2995,6 +2998,9 @@ class WebClient(BaseClient):
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
               with text and "plan" displays all tasks together.
+            icon_emoji: Emoji to use as the icon for this message. Overrides icon_url.
+            icon_url: Image URL to use as the icon for this message.
+            username: The bot's username to display.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -3021,6 +3027,9 @@ class WebClient(BaseClient):
             recipient_team_id=recipient_team_id,
             recipient_user_id=recipient_user_id,
             task_display_mode=task_display_mode,
+            icon_emoji=icon_emoji,
+            icon_url=icon_url,
+            username=username,
             buffer_size=buffer_size,
             **kwargs,
         )
