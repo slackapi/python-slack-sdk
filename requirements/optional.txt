@@ -3,7 +3,9 @@
 aiodns>1.0
 # We recommend using 3.7.1+ for RTMClient
 # https://github.com/slackapi/python-slack-sdk/issues/912
-aiohttp>=3.13.5,<4
+aiohttp>=3.7.3,<3.9; python_version == "3.7"
+aiohttp>=3.7.3,<3.11; python_version == "3.8"
+aiohttp>=3.13.5,<4; python_version >= "3.9"
 # used only under slack_sdk/*_store
 boto3<=2
 # InstallationStore/OAuthStateStore
