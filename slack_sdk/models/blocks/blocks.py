@@ -886,6 +886,46 @@ class PlanBlock(Block):
         self.tasks = tasks
 
 
+class AlertBlock(Block):
+    type = "alert"
+    valid_levels = {"default", "info", "warning", "error", "success"}
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"text", "level"})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        level: Optional[str] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays alerts, warnings, and informational messages.
+        https://docs.slack.dev/reference/block-kit/blocks/alert-block
+
+        Args:
+            text (required): The alert message, using plain_text or mrkdwn formatting.
+            level: One of "default", "info", "warning", "error", or "success".
+                Will be "default" if omitted.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)
+        self.level = level
+
+    @JsonValidator("text attribute must be specified")
+    def _validate_text(self):
+        return self.text is not None
+
+    @JsonValidator("level must be a valid value (default, info, warning, error, success)")
+    def _validate_level(self):
+        return self.level is None or self.level in self.valid_levels
+
+
 class CardBlock(Block):
     type = "card"
     title_max_length = 150
@@ -909,32 +949,31 @@ class CardBlock(Block):
         self,
         *,
         block_id: Optional[str] = None,
-        hero_image: Optional[Union[dict, ImageElement]] = None,
-        icon: Optional[Union[dict, ImageElement]] = None,
+        hero_image: Optional[str] = None,
+        icon: Optional[str] = None,
         title: Optional[Union[str, dict, TextObject]] = None,
         subtitle: Optional[Union[str, dict, TextObject]] = None,
         body: Optional[Union[str, dict, TextObject]] = None,
         actions: Optional[Sequence[Union[dict, BlockElement]]] = None,
         **others: dict,
     ):
-        """Displays content in a card."""
+        """Displays content in a card.
         https://docs.slack.dev/reference/block-kit/blocks/card-block
 
         Args:
-            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
-                Maximum length for this field is 255 characters.
-            hero_image: A top banner image for the card. An image element with type, image_url, and alt_text.
-            icon: A small icon next to the title/subtitle. An image element with type, image_url, and alt_text.
-            title: The title of the card. Supports mrkdwn text. Maximum length is 150 characters.
-            subtitle: The subtitle of the card. Supports mrkdwn text. Maximum length is 150 characters.
-            body: The body text of the card. Supports mrkdwn text. Maximum length is 200 characters.
-            actions: An array of button elements displayed at the bottom of the card.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+            hero_image: Link to the top image used on the card.
+            icon: Link to the small image used next to the card's title and subtitle.
+            title: Title of the card. 150 characters max.
+            subtitle: Subtitle of the card. 150 characters max.
+            body: Content of the card. 200 characters max.
+            actions: Action buttons shown at the bottom of the card.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.hero_image = BlockElement.parse(hero_image)  # type: ignore[arg-type]
-        self.icon = BlockElement.parse(icon)  # type: ignore[arg-type]
+        self.hero_image = hero_image
+        self.icon = icon
         self.title = TextObject.parse(title, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
         self.subtitle = TextObject.parse(subtitle, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
         self.body = TextObject.parse(body, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
@@ -957,47 +996,6 @@ class CardBlock(Block):
         return self.body is None or self.body.text is None or len(self.body.text) <= self.body_max_length
 
 
-class AlertBlock(Block):
-    type = "alert"
-    valid_levels = {"default", "info", "warning", "error", "success"}
-
-    @property
-    def attributes(self) -> Set[str]:  # type: ignore[override]
-        return super().attributes.union({"text", "level"})
-
-    def __init__(
-        self,
-        *,
-        text: Union[str, dict, TextObject],
-        level: Optional[str] = None,
-        block_id: Optional[str] = None,
-        **others: dict,
-    ):
-        """A prominent notice block for displaying warnings, status updates, or other important information.
-        https://docs.slack.dev/reference/block-kit/blocks/alert-block
-
-        Args:
-            text (required): The alert message content. Supports plain_text or mrkdwn.
-            level: The severity level of the alert. One of "default", "info", "warning", "error", "success".
-                Defaults to "default".
-            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
-                Maximum length for this field is 255 characters.
-        """
-        super().__init__(type=self.type, block_id=block_id)
-        show_unknown_key_warning(self, others)
-
-        self.text = TextObject.parse(text)
-        self.level = level
-
-    @JsonValidator("text attribute must be specified")
-    def _validate_text(self):
-        return self.text is not None
-
-    @JsonValidator("level must be a valid value (default, info, warning, error, success)")
-    def _validate_level(self):
-        return self.level is None or self.level in self.valid_levels
-
-
 class CarouselBlock(Block):
     type = "carousel"
     elements_max_length = 10
@@ -1009,17 +1007,16 @@ class CarouselBlock(Block):
     def __init__(
         self,
         *,
-        elements: Sequence[Union[dict, "CardBlock"]],
+        elements: Sequence[Union[dict, CardBlock]],
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        """A horizontally scrollable collection of card blocks.
+        """Displays related card blocks in a horizontally-scrolling container.
         https://docs.slack.dev/reference/block-kit/blocks/carousel-block
 
         Args:
-            elements (required): An array of card block objects. Minimum 1, maximum 10 cards.
-            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
-                Maximum length for this field is 255 characters.
+            elements (required): A list of cards. Minimum 1, maximum 10 cards.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
