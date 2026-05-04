@@ -2092,13 +2092,24 @@ class LegacyWebClient(LegacyBaseClient):
         thread_ts: str,
         status: str,
         loading_messages: Optional[List[str]] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the status for an AI assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         """
         kwargs.update(
-            {"channel_id": channel_id, "thread_ts": thread_ts, "status": status, "loading_messages": loading_messages}
+            {
+                "channel_id": channel_id,
+                "thread_ts": thread_ts,
+                "status": status,
+                "loading_messages": loading_messages,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
         )
         kwargs = _remove_none_values(kwargs)
         return self.api_call("assistant.threads.setStatus", json=kwargs)
@@ -2904,6 +2915,9 @@ class LegacyWebClient(LegacyBaseClient):
         recipient_user_id: Optional[str] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         task_display_mode: Optional[str] = None,  # timeline, plan
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a new streaming conversation.
@@ -2918,6 +2932,9 @@ class LegacyWebClient(LegacyBaseClient):
                 "recipient_user_id": recipient_user_id,
                 "chunks": chunks,
                 "task_display_mode": task_display_mode,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
             }
         )
         _parse_web_class_objects(kwargs)
