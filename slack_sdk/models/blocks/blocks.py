@@ -917,7 +917,7 @@ class CardBlock(Block):
         actions: Optional[Sequence[Union[dict, BlockElement]]] = None,
         **others: dict,
     ):
-        """A rich display block for presenting structured content such as recommendations, results, or work items.
+        """Displays content in a card."""
         https://docs.slack.dev/reference/block-kit/blocks/card-block
 
         Args:
