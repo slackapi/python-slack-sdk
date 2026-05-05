@@ -4,9 +4,12 @@ from typing import List
 from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
     ActionsBlock,
+    AlertBlock,
     Block,
     ButtonElement,
     CallBlock,
+    CardBlock,
+    CarouselBlock,
     ContextActionsBlock,
     ContextBlock,
     DividerBlock,
@@ -1551,3 +1554,153 @@ class TableBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(expected, block.to_dict())
+
+
+class CardBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "card",
+            "icon": "https://picsum.photos/36/36",
+            "title": {"type": "mrkdwn", "text": "Lumon Industries", "verbatim": False},
+            "subtitle": {"type": "mrkdwn", "text": "Committed to work-life balance", "verbatim": False},
+            "hero_image": "https://picsum.photos/400/300",
+            "body": {"type": "mrkdwn", "text": "Please enjoy each card equally.", "verbatim": False},
+            "actions": [
+                {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "Action Button", "emoji": False},
+                    "action_id": "button_action",
+                }
+            ],
+        }
+        self.assertDictEqual(input, CardBlock(**input).to_dict())
+
+    def test_parse(self):
+        input = {
+            "type": "card",
+            "title": {"type": "mrkdwn", "text": "Title"},
+            "body": {"type": "mrkdwn", "text": "Body text"},
+        }
+        parsed = Block.parse(input)
+        self.assertIsNotNone(parsed)
+        self.assertDictEqual(input, parsed.to_dict())
+
+    def test_minimal_with_title(self):
+        input = {
+            "type": "card",
+            "title": {"type": "mrkdwn", "text": "Just a title"},
+        }
+        self.assertDictEqual(input, CardBlock(**input).to_dict())
+
+    def test_minimal_with_body(self):
+        input = {
+            "type": "card",
+            "body": {"type": "mrkdwn", "text": "Just body text"},
+        }
+        self.assertDictEqual(input, CardBlock(**input).to_dict())
+
+    def test_validation_at_least_one_field(self):
+        with self.assertRaises(SlackObjectFormationError):
+            CardBlock().validate_json()
+
+    def test_title_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            CardBlock(title={"type": "mrkdwn", "text": "a" * 151}).validate_json()
+
+    def test_subtitle_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            CardBlock(
+                title={"type": "mrkdwn", "text": "Title"},
+                subtitle={"type": "mrkdwn", "text": "a" * 151},
+            ).validate_json()
+
+    def test_body_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            CardBlock(body={"type": "mrkdwn", "text": "a" * 201}).validate_json()
+
+
+class AlertBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "alert",
+            "text": {"type": "mrkdwn", "text": "The work is mysterious and important.", "verbatim": False},
+            "level": "info",
+        }
+        self.assertDictEqual(input, AlertBlock(**input).to_dict())
+
+    def test_parse(self):
+        input = {
+            "type": "alert",
+            "text": {"type": "mrkdwn", "text": "Notice"},
+            "level": "warning",
+        }
+        parsed = Block.parse(input)
+        self.assertIsNotNone(parsed)
+        self.assertDictEqual(input, parsed.to_dict())
+
+    def test_minimal(self):
+        input = {
+            "type": "alert",
+            "text": {"type": "plain_text", "text": "Simple alert"},
+        }
+        self.assertDictEqual(input, AlertBlock(**input).to_dict())
+
+    def test_all_levels(self):
+        for level in ["default", "info", "warning", "error", "success"]:
+            input = {
+                "type": "alert",
+                "text": {"type": "plain_text", "text": "Test"},
+                "level": level,
+            }
+            AlertBlock(**input).validate_json()
+
+    def test_invalid_level(self):
+        with self.assertRaises(SlackObjectFormationError):
+            AlertBlock(text={"type": "plain_text", "text": "Test"}, level="critical").validate_json()
+
+    def test_missing_text(self):
+        with self.assertRaises(SlackObjectFormationError):
+            AlertBlock(text="").validate_json()
+
+
+class CarouselBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "carousel",
+            "elements": [
+                {
+                    "type": "card",
+                    "title": {"type": "mrkdwn", "text": "Card 1"},
+                },
+                {
+                    "type": "card",
+                    "title": {"type": "mrkdwn", "text": "Card 2"},
+                    "body": {"type": "mrkdwn", "text": "Some body text"},
+                },
+            ],
+        }
+        self.assertDictEqual(input, CarouselBlock(**input).to_dict())
+
+    def test_parse(self):
+        input = {
+            "type": "carousel",
+            "elements": [
+                {"type": "card", "title": {"type": "mrkdwn", "text": "Card 1"}},
+            ],
+        }
+        parsed = Block.parse(input)
+        self.assertIsNotNone(parsed)
+        self.assertDictEqual(input, parsed.to_dict())
+
+    def test_single_card(self):
+        input = {
+            "type": "carousel",
+            "elements": [
+                {"type": "card", "title": {"type": "mrkdwn", "text": "Only card"}},
+            ],
+        }
+        self.assertDictEqual(input, CarouselBlock(**input).to_dict())
+
+    def test_empty_elements_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            CarouselBlock(elements=[]).validate_json()
