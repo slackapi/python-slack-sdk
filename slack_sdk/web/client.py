@@ -2081,13 +2081,24 @@ class WebClient(BaseClient):
         thread_ts: str,
         status: str,
         loading_messages: Optional[List[str]] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Set the status for an AI assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         """
         kwargs.update(
-            {"channel_id": channel_id, "thread_ts": thread_ts, "status": status, "loading_messages": loading_messages}
+            {
+                "channel_id": channel_id,
+                "thread_ts": thread_ts,
+                "status": status,
+                "loading_messages": loading_messages,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
         )
         kwargs = _remove_none_values(kwargs)
         return self.api_call("assistant.threads.setStatus", json=kwargs)
@@ -2893,6 +2904,9 @@ class WebClient(BaseClient):
         recipient_user_id: Optional[str] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         task_display_mode: Optional[str] = None,  # timeline, plan
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Starts a new streaming conversation.
@@ -2907,6 +2921,9 @@ class WebClient(BaseClient):
                 "recipient_user_id": recipient_user_id,
                 "chunks": chunks,
                 "task_display_mode": task_display_mode,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2950,6 +2967,9 @@ class WebClient(BaseClient):
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
         task_display_mode: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> ChatStream:
         """Stream markdown text into a conversation.
@@ -2978,6 +2998,9 @@ class WebClient(BaseClient):
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
               with text and "plan" displays all tasks together.
+            icon_emoji: Emoji to use as the icon for this message. Overrides icon_url.
+            icon_url: Image URL to use as the icon for this message.
+            username: The bot's username to display.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -3004,6 +3027,9 @@ class WebClient(BaseClient):
             recipient_team_id=recipient_team_id,
             recipient_user_id=recipient_user_id,
             task_display_mode=task_display_mode,
+            icon_emoji=icon_emoji,
+            icon_url=icon_url,
+            username=username,
             buffer_size=buffer_size,
             **kwargs,
         )
