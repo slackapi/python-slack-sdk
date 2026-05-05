@@ -1,7 +1,8 @@
 import unittest
 
+from slack_sdk.models.blocks import PlainTextObject, SectionBlock
 from slack_sdk.models.blocks.block_elements import UrlSourceElement
-from slack_sdk.models.messages.chunk import MarkdownTextChunk, PlanUpdateChunk, TaskUpdateChunk
+from slack_sdk.models.messages.chunk import BlocksChunk, Chunk, MarkdownTextChunk, PlanUpdateChunk, TaskUpdateChunk
 
 
 class MarkdownTextChunkTests(unittest.TestCase):
@@ -89,3 +90,46 @@ class TaskUpdateChunkTests(unittest.TestCase):
                 ],
             },
         )
+
+
+class BlocksChunkTests(unittest.TestCase):
+    def test_json_with_dicts(self):
+        self.assertDictEqual(
+            BlocksChunk(
+                blocks=[
+                    {"type": "section", "text": {"type": "plain_text", "text": "Hello"}},
+                ]
+            ).to_dict(),
+            {
+                "type": "blocks",
+                "blocks": [
+                    {"type": "section", "text": {"type": "plain_text", "text": "Hello"}},
+                ],
+            },
+        )
+
+    def test_json_with_block_objects(self):
+        self.assertDictEqual(
+            BlocksChunk(
+                blocks=[
+                    SectionBlock(text=PlainTextObject(text="Hello")),
+                ]
+            ).to_dict(),
+            {
+                "type": "blocks",
+                "blocks": [
+                    {"type": "section", "text": {"type": "plain_text", "text": "Hello"}},
+                ],
+            },
+        )
+
+    def test_parse(self):
+        chunk = Chunk.parse(
+            {
+                "type": "blocks",
+                "blocks": [{"type": "section", "text": {"type": "plain_text", "text": "Hello"}}],
+            }
+        )
+        self.assertIsInstance(chunk, BlocksChunk)
+        self.assertEqual(chunk.type, "blocks")
+        self.assertEqual(len(chunk.blocks), 1)
