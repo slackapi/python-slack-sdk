@@ -3,6 +3,7 @@ from typing import Dict, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject
+from slack_sdk.models.blocks import Block
 from slack_sdk.models.blocks.block_elements import UrlSourceElement
 
 
@@ -32,7 +33,9 @@ class Chunk(JsonObject):
         else:
             if "type" in chunk:
                 type = chunk["type"]
-                if type == MarkdownTextChunk.type:
+                if type == BlocksChunk.type:
+                    return BlocksChunk(**chunk)
+                elif type == MarkdownTextChunk.type:
                     return MarkdownTextChunk(**chunk)
                 elif type == PlanUpdateChunk.type:
                     return PlanUpdateChunk(**chunk)
@@ -132,3 +135,26 @@ class TaskUpdateChunk(Chunk):
         self.details = details
         self.output = output
         self.sources = sources
+
+
+class BlocksChunk(Chunk):
+    type = "blocks"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"blocks"})
+
+    def __init__(
+        self,
+        *,
+        blocks: Sequence[Union[Dict, Block]],
+        **others: Dict,
+    ):
+        """Used for passing an array of blocks within a streaming message.
+
+        https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
+        """
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.blocks = blocks
