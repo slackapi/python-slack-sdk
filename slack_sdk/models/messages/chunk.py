@@ -33,14 +33,14 @@ class Chunk(JsonObject):
         else:
             if "type" in chunk:
                 type = chunk["type"]
-                if type == MarkdownTextChunk.type:
+                if type == BlocksChunk.type:
+                    return BlocksChunk(**chunk)
+                elif type == MarkdownTextChunk.type:
                     return MarkdownTextChunk(**chunk)
                 elif type == PlanUpdateChunk.type:
                     return PlanUpdateChunk(**chunk)
                 elif type == TaskUpdateChunk.type:
                     return TaskUpdateChunk(**chunk)
-                elif type == BlocksChunk.type:
-                    return BlocksChunk(**chunk)
                 else:
                     cls.logger.warning(f"Unknown chunk detected and skipped ({chunk})")
                     return None
