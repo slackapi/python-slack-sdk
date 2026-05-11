@@ -9,6 +9,7 @@ psutil>=6.0.0,<8
 cryptography<46; implementation_name == "pypy" and python_version == "3.10"
 #  used only under slack_sdk/*_store
 boto3<=2
+google-cloud-storage>=2.7.0,<3
 # For AWS tests
 moto>=4.0.13,<6
 # For AsyncSQLAlchemy tests
