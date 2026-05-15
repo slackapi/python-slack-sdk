@@ -4036,8 +4036,8 @@ class AsyncWebClient(AsyncBaseClient):
         content: Optional[Union[str, bytes]] = None,
         title: Optional[str] = None,
         alt_txt: Optional[str] = None,
-        snippet_type: Optional[str] = None,
         highlight_type: Optional[str] = None,
+        snippet_type: Optional[str] = None,
         # To upload multiple files at a time
         file_uploads: Optional[List[Dict[str, Any]]] = None,
         channel: Optional[str] = None,
@@ -4081,8 +4081,8 @@ class AsyncWebClient(AsyncBaseClient):
                     "content": content,
                     "title": title,
                     "alt_txt": alt_txt,
-                    "snippet_type": snippet_type,
                     "highlight_type": highlight_type,
+                    "snippet_type": snippet_type,
                 }
             )
             files.append(f)
