@@ -378,8 +378,8 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
         "length": len(data),
         "title": title,
         "alt_txt": upload_file.get("alt_txt"),
-        "snippet_type": upload_file.get("snippet_type"),
         "highlight_type": upload_file.get("highlight_type"),
+        "snippet_type": upload_file.get("snippet_type"),
     }
 
 
