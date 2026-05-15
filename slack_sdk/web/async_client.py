@@ -4119,14 +4119,8 @@ class AsyncWebClient(AsyncBaseClient):
                 raise e.SlackRequestError(message)
 
         # step3: files.completeUploadExternal with all the sets of (file_id + title)
-        complete_files = []
-        for f in files:
-            file_entry: Dict[str, str] = {"id": f["file_id"], "title": f["title"]}
-            if f.get("highlight_type") is not None:
-                file_entry["highlight_type"] = f["highlight_type"]
-            complete_files.append(file_entry)
         completion = await self.files_completeUploadExternal(
-            files=complete_files,
+            files=[{"id": f["file_id"], "title": f["title"], "highlight_type": f.get("highlight_type")} for f in files],
             channel_id=channel,
             channels=channels,
             initial_comment=initial_comment,
@@ -4162,7 +4156,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def files_completeUploadExternal(
         self,
         *,
-        files: List[Dict[str, str]],
+        files: List[Dict[str, Optional[str]]],
         channel_id: Optional[str] = None,
         channels: Optional[List[str]] = None,
         initial_comment: Optional[str] = None,
