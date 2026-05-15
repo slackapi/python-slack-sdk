@@ -3962,6 +3962,7 @@ class LegacyWebClient(LegacyBaseClient):
         title: Optional[str] = None,
         alt_txt: Optional[str] = None,
         snippet_type: Optional[str] = None,
+        highlight_type: Optional[str] = None,
         # To upload multiple files at a time
         file_uploads: Optional[List[Dict[str, Any]]] = None,
         channel: Optional[str] = None,
@@ -4006,6 +4007,7 @@ class LegacyWebClient(LegacyBaseClient):
                     "title": title,
                     "alt_txt": alt_txt,
                     "snippet_type": snippet_type,
+                    "highlight_type": highlight_type,
                 }
             )
             files.append(f)
@@ -4043,7 +4045,7 @@ class LegacyWebClient(LegacyBaseClient):
 
         # step3: files.completeUploadExternal with all the sets of (file_id + title)
         completion = self.files_completeUploadExternal(
-            files=[{"id": f["file_id"], "title": f["title"]} for f in files],
+            files=[{"id": f["file_id"], "title": f["title"], "highlight_type": f.get("highlight_type")} for f in files],
             channel_id=channel,
             channels=channels,
             initial_comment=initial_comment,

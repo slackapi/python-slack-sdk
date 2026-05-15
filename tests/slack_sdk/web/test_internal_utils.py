@@ -133,6 +133,13 @@ class TestInternalUtils(unittest.TestCase):
         file_io_item = _to_v2_file_upload_item({"file": file_io, "filename": "foo.txt"})
         assert file_io_item.get("filename") == "foo.txt"
 
+    def test_to_v2_file_upload_item_passes_through_highlight_type(self):
+        item = _to_v2_file_upload_item({"content": "test", "filename": "image.png", "highlight_type": "png"})
+        assert item.get("highlight_type") == "png"
+
+        item_without = _to_v2_file_upload_item({"content": "test", "filename": "image.png"})
+        assert item_without.get("highlight_type") is None
+
     def test_to_v2_file_upload_item_can_accept_file_as_path(self):
         filepath = "tests/slack_sdk/web/test_internal_utils.py"
         upload_item_str = _to_v2_file_upload_item({"file": filepath})
