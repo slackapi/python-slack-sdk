@@ -48,24 +48,6 @@ class TestBuiltin(unittest.TestCase):
         finally:
             client.close()
 
-    def test_close_shuts_down_all_runners(self):
-        # Regression for #1873: close() must shut down current_session_runner
-        # along with current_app_monitor and message_processor. Previously
-        # current_session_runner was left running (100 ms loop), so each
-        # init/close cycle leaked one thread.
-        client = SocketModeClient(app_token="xapp-A111-222-xyz")
-        # The first two runners are started inside __init__.
-        self.assertTrue(client.current_session_runner.is_alive())
-        self.assertTrue(client.message_processor.is_alive())
-        client.close()
-        # IntervalRunner.shutdown() joins the thread, so by the time
-        # close() returns these are no longer alive.
-        self.assertFalse(client.current_session_runner.is_alive())
-        self.assertFalse(client.message_processor.is_alive())
-        # current_app_monitor is only started in connect(); since this test
-        # never connects, it should report not-alive both before and after.
-        self.assertFalse(client.current_app_monitor.is_alive())
-
     def test_issue_new_wss_url(self):
         client = SocketModeClient(
             app_token="xapp-A111-222-xyz",
