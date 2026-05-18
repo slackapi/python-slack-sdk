@@ -91,15 +91,13 @@ el.replaceWith(d);
 
     def create_tables(self):
         with sqlite3.connect(database=self.database) as conn:
-            conn.execute(
-                &#34;&#34;&#34;
+            conn.execute(&#34;&#34;&#34;
             create table oauth_states (
                 id integer primary key autoincrement,
                 state text not null,
                 expire_at datetime not null
             );
-            &#34;&#34;&#34;
-            )
+            &#34;&#34;&#34;)
             self.logger.debug(f&#34;Tables have been created (database: {self.database})&#34;)
             conn.commit()
 
@@ -247,15 +245,13 @@ def logger(self) -&gt; Logger:
 </summary>
 <pre><code class="python">def create_tables(self):
     with sqlite3.connect(database=self.database) as conn:
-        conn.execute(
-            &#34;&#34;&#34;
+        conn.execute(&#34;&#34;&#34;
         create table oauth_states (
             id integer primary key autoincrement,
             state text not null,
             expire_at datetime not null
         );
-        &#34;&#34;&#34;
-        )
+        &#34;&#34;&#34;)
         self.logger.debug(f&#34;Tables have been created (database: {self.database})&#34;)
         conn.commit()</code></pre>
 </details>

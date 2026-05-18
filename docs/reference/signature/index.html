@@ -101,7 +101,7 @@ el.replaceWith(d);
     def is_valid_request(
         self,
         body: Union[str, bytes],
-        headers: Dict[str, str],
+        headers: Mapping[str, str],
     ) -&gt; bool:
         &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
         if headers is None:
@@ -109,15 +109,15 @@ el.replaceWith(d);
         normalized_headers = {k.lower(): v for k, v in headers.items()}
         return self.is_valid(
             body=body,
-            timestamp=normalized_headers.get(&#34;x-slack-request-timestamp&#34;, None),  # type: ignore[arg-type]
-            signature=normalized_headers.get(&#34;x-slack-signature&#34;, None),  # type: ignore[arg-type]
+            timestamp=normalized_headers.get(&#34;x-slack-request-timestamp&#34;, None),
+            signature=normalized_headers.get(&#34;x-slack-signature&#34;, None),
         )
 
     def is_valid(
         self,
         body: Union[str, bytes],
-        timestamp: str,
-        signature: str,
+        timestamp: Optional[str],
+        signature: Optional[str],
     ) -&gt; bool:
         &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
         if timestamp is None or signature is None:
@@ -179,7 +179,7 @@ whether requests from us are authentic.
 <div class="desc"><p>Generates a signature</p></div>
 </dd>
 <dt id="slack_sdk.signature.SignatureVerifier.is_valid"><code class="name flex">
-<span>def <span class="ident">is_valid</span></span>(<span>self, body: str | bytes, timestamp: str, signature: str) ‑> bool</span>
+<span>def <span class="ident">is_valid</span></span>(<span>self, body: str | bytes, timestamp: str | None, signature: str | None) ‑> bool</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -189,8 +189,8 @@ whether requests from us are authentic.
 <pre><code class="python">def is_valid(
     self,
     body: Union[str, bytes],
-    timestamp: str,
-    signature: str,
+    timestamp: Optional[str],
+    signature: Optional[str],
 ) -&gt; bool:
     &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
     if timestamp is None or signature is None:
@@ -217,7 +217,7 @@ whether requests from us are authentic.
 <pre><code class="python">def is_valid_request(
     self,
     body: Union[str, bytes],
-    headers: Dict[str, str],
+    headers: Mapping[str, str],
 ) -&gt; bool:
     &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
     if headers is None:
@@ -225,8 +225,8 @@ whether requests from us are authentic.
     normalized_headers = {k.lower(): v for k, v in headers.items()}
     return self.is_valid(
         body=body,
-        timestamp=normalized_headers.get(&#34;x-slack-request-timestamp&#34;, None),  # type: ignore[arg-type]
-        signature=normalized_headers.get(&#34;x-slack-signature&#34;, None),  # type: ignore[arg-type]
+        timestamp=normalized_headers.get(&#34;x-slack-request-timestamp&#34;, None),
+        signature=normalized_headers.get(&#34;x-slack-signature&#34;, None),
     )</code></pre>
 </details>
 <div class="desc"><p>Verifies if the given signature is valid</p></div>

@@ -146,7 +146,8 @@ el.replaceWith(d);
             team_id=team_id,
         )
         key = f&#34;{enterprise_id or &#39;&#39;}-{team_id or &#39;&#39;}&#34;
-        self.cached_bots.pop(key)
+        if key in self.cached_bots:
+            self.cached_bots.pop(key)
 
     async def async_delete_installation(
         self,
