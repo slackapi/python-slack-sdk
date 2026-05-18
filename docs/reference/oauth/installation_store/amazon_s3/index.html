@@ -147,7 +147,7 @@ el.replaceWith(d);
 
     def save_bot(self, bot: Bot):
         if bot.bot_token is None:
-            self.logger.debug(&#34;Skipped saving a new row because of the absense of bot token in it&#34;)
+            self.logger.debug(&#34;Skipped saving a new row because of the absence of bot token in it&#34;)
             return
 
         none = &#34;none&#34;
@@ -314,7 +314,7 @@ el.replaceWith(d);
                         Key=content.get(&#34;Key&#34;),
                     )
                 except Exception as e:
-                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    message = f&#34;Failed to delete bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
                     raise SlackClientConfigurationError(message)
 
     async def async_delete_installation(
@@ -357,7 +357,7 @@ el.replaceWith(d);
                     )
                     deleted_keys.append(key)
                 except Exception as e:
-                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    message = f&#34;Failed to delete installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
                     raise SlackClientConfigurationError(message)
 
                 try:
@@ -369,7 +369,7 @@ el.replaceWith(d);
                         )
                         deleted_keys.append(no_user_id_key)
                 except Exception as e:
-                    message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                    message = f&#34;Failed to delete installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
                     raise SlackClientConfigurationError(message)
 
         # Check the remaining installation data
@@ -388,7 +388,7 @@ el.replaceWith(d);
                     Key=content.get(&#34;Key&#34;),
                 )
             except Exception as e:
-                message = f&#34;Failed to find bot installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
+                message = f&#34;Failed to delete installation data for enterprise: {e_id}, team: {t_id}: {e}&#34;
                 raise SlackClientConfigurationError(message)</code></pre>
 </details>
 <div class="desc"><p>The installation store interface.</p>

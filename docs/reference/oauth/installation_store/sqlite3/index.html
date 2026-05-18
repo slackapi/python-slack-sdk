@@ -91,8 +91,7 @@ el.replaceWith(d);
 
     def create_tables(self):
         with sqlite3.connect(database=self.database) as conn:
-            conn.execute(
-                &#34;&#34;&#34;
+            conn.execute(&#34;&#34;&#34;
             create table slack_installations (
                 id integer primary key autoincrement,
                 client_id text not null,
@@ -121,10 +120,8 @@ el.replaceWith(d);
                 token_type text,
                 installed_at datetime not null default current_timestamp
             );
-            &#34;&#34;&#34;
-            )
-            conn.execute(
-                &#34;&#34;&#34;
+            &#34;&#34;&#34;)
+            conn.execute(&#34;&#34;&#34;
             create index slack_installations_idx on slack_installations (
                 client_id,
                 enterprise_id,
@@ -132,10 +129,8 @@ el.replaceWith(d);
                 user_id,
                 installed_at
             );
-            &#34;&#34;&#34;
-            )
-            conn.execute(
-                &#34;&#34;&#34;
+            &#34;&#34;&#34;)
+            conn.execute(&#34;&#34;&#34;
             create table slack_bots (
                 id integer primary key autoincrement,
                 client_id text not null,
@@ -153,18 +148,15 @@ el.replaceWith(d);
                 is_enterprise_install boolean not null default 0,
                 installed_at datetime not null default current_timestamp
             );
-            &#34;&#34;&#34;
-            )
-            conn.execute(
-                &#34;&#34;&#34;
+            &#34;&#34;&#34;)
+            conn.execute(&#34;&#34;&#34;
             create index slack_bots_idx on slack_bots (
                 client_id,
                 enterprise_id,
                 team_id,
                 installed_at
             );
-            &#34;&#34;&#34;
-            )
+            &#34;&#34;&#34;)
             self.logger.debug(f&#34;Tables have been created (database: {self.database})&#34;)
             conn.commit()
 
@@ -268,7 +260,7 @@ el.replaceWith(d);
 
     def save_bot(self, bot: Bot):
         if bot.bot_token is None:
-            self.logger.debug(&#34;Skipped saving a new row because of the absense of bot token in it&#34;)
+            self.logger.debug(&#34;Skipped saving a new row because of the absence of bot token in it&#34;)
             return
 
         with self.connect() as conn:
@@ -725,8 +717,7 @@ def logger(self) -&gt; Logger:
 </summary>
 <pre><code class="python">def create_tables(self):
     with sqlite3.connect(database=self.database) as conn:
-        conn.execute(
-            &#34;&#34;&#34;
+        conn.execute(&#34;&#34;&#34;
         create table slack_installations (
             id integer primary key autoincrement,
             client_id text not null,
@@ -755,10 +746,8 @@ def logger(self) -&gt; Logger:
             token_type text,
             installed_at datetime not null default current_timestamp
         );
-        &#34;&#34;&#34;
-        )
-        conn.execute(
-            &#34;&#34;&#34;
+        &#34;&#34;&#34;)
+        conn.execute(&#34;&#34;&#34;
         create index slack_installations_idx on slack_installations (
             client_id,
             enterprise_id,
@@ -766,10 +755,8 @@ def logger(self) -&gt; Logger:
             user_id,
             installed_at
         );
-        &#34;&#34;&#34;
-        )
-        conn.execute(
-            &#34;&#34;&#34;
+        &#34;&#34;&#34;)
+        conn.execute(&#34;&#34;&#34;
         create table slack_bots (
             id integer primary key autoincrement,
             client_id text not null,
@@ -787,18 +774,15 @@ def logger(self) -&gt; Logger:
             is_enterprise_install boolean not null default 0,
             installed_at datetime not null default current_timestamp
         );
-        &#34;&#34;&#34;
-        )
-        conn.execute(
-            &#34;&#34;&#34;
+        &#34;&#34;&#34;)
+        conn.execute(&#34;&#34;&#34;
         create index slack_bots_idx on slack_bots (
             client_id,
             enterprise_id,
             team_id,
             installed_at
         );
-        &#34;&#34;&#34;
-        )
+        &#34;&#34;&#34;)
         self.logger.debug(f&#34;Tables have been created (database: {self.database})&#34;)
         conn.commit()</code></pre>
 </details>
