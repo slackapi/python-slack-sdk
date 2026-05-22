@@ -155,6 +155,114 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </li>
 </ul>
 </dd>
+<dt id="slack_sdk.models.blocks.blocks.AlertBlock"><code class="flex name class">
+<span>class <span class="ident">AlertBlock</span></span>
+<span>(</span><span>*,<br>text: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>,<br>level: str | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AlertBlock(Block):
+    type = &#34;alert&#34;
+    valid_levels = {&#34;default&#34;, &#34;info&#34;, &#34;warning&#34;, &#34;error&#34;, &#34;success&#34;}
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;text&#34;, &#34;level&#34;})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        level: Optional[str] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays alerts, warnings, and informational messages.
+        https://docs.slack.dev/reference/block-kit/blocks/alert-block
+
+        Args:
+            text (required): The alert message, using plain_text or mrkdwn formatting.
+            level: One of &#34;default&#34;, &#34;info&#34;, &#34;warning&#34;, &#34;error&#34;, or &#34;success&#34;.
+                Will be &#34;default&#34; if omitted.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)
+        self.level = level
+
+    @JsonValidator(&#34;text attribute must be specified&#34;)
+    def _validate_text(self):
+        return self.text is not None
+
+    @JsonValidator(&#34;level must be a valid value (default, info, warning, error, success)&#34;)
+    def _validate_level(self):
+        return self.level is None or self.level in self.valid_levels</code></pre>
+</details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
+<p>Displays alerts, warnings, and informational messages.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/alert-block">https://docs.slack.dev/reference/block-kit/blocks/alert-block</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
+<dd>The alert message, using plain_text or mrkdwn formatting.</dd>
+<dt><strong><code>level</code></strong></dt>
+<dd>One of "default", "info", "warning", "error", or "success".
+Will be "default" if omitted.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A unique identifier for a block. If not specified, a block_id will be generated.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.AlertBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.AlertBlock.valid_levels"><code class="name">var <span class="ident">valid_levels</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.AlertBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return super().attributes.union({&#34;text&#34;, &#34;level&#34;})</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.block_id_max_length" href="#slack_sdk.models.blocks.blocks.Block.block_id_max_length">block_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 <dt id="slack_sdk.models.blocks.blocks.Block"><code class="flex name class">
 <span>class <span class="ident">Block</span></span>
 <span>(</span><span>*,<br>type: str | None = None,<br>subtype: str | None = None,<br>block_id: str | None = None)</span>
@@ -242,6 +350,12 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                     return TaskCardBlock(**block)
                 elif type == PlanBlock.type:
                     return PlanBlock(**block)
+                elif type == CardBlock.type:
+                    return CardBlock(**block)
+                elif type == AlertBlock.type:
+                    return AlertBlock(**block)
+                elif type == CarouselBlock.type:
+                    return CarouselBlock(**block)
                 else:
                     cls.logger.warning(f&#34;Unknown block detected and skipped ({block})&#34;)
                     return None
@@ -264,7 +378,10 @@ to create visually rich and compellingly interactive messages.
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.blocks.blocks.ActionsBlock" href="#slack_sdk.models.blocks.blocks.ActionsBlock">ActionsBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.AlertBlock" href="#slack_sdk.models.blocks.blocks.AlertBlock">AlertBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.CallBlock" href="#slack_sdk.models.blocks.blocks.CallBlock">CallBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.CardBlock" href="#slack_sdk.models.blocks.blocks.CardBlock">CardBlock</a></li>
+<li><a title="slack_sdk.models.blocks.blocks.CarouselBlock" href="#slack_sdk.models.blocks.blocks.CarouselBlock">CarouselBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.ContextActionsBlock" href="#slack_sdk.models.blocks.blocks.ContextActionsBlock">ContextActionsBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.ContextBlock" href="#slack_sdk.models.blocks.blocks.ContextBlock">ContextBlock</a></li>
 <li><a title="slack_sdk.models.blocks.blocks.DividerBlock" href="#slack_sdk.models.blocks.blocks.DividerBlock">DividerBlock</a></li>
@@ -298,13 +415,13 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block: dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -400,6 +517,269 @@ to create visually rich and compellingly interactive messages.
 <pre><code class="python">@property
 def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     return super().attributes.union({&#34;call_id&#34;, &#34;api_decoration_available&#34;, &#34;call&#34;})</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.block_id_max_length" href="#slack_sdk.models.blocks.blocks.Block.block_id_max_length">block_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.CardBlock"><code class="flex name class">
+<span>class <span class="ident">CardBlock</span></span>
+<span>(</span><span>*,<br>block_id: str | None = None,<br>hero_image: str | None = None,<br>icon: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>subtitle: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>body: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>actions: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>] | None = None,<br>**others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CardBlock(Block):
+    type = &#34;card&#34;
+    title_max_length = 150
+    subtitle_max_length = 150
+    body_max_length = 200
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                &#34;hero_image&#34;,
+                &#34;icon&#34;,
+                &#34;title&#34;,
+                &#34;subtitle&#34;,
+                &#34;body&#34;,
+                &#34;actions&#34;,
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        hero_image: Optional[str] = None,
+        icon: Optional[str] = None,
+        title: Optional[Union[str, dict, TextObject]] = None,
+        subtitle: Optional[Union[str, dict, TextObject]] = None,
+        body: Optional[Union[str, dict, TextObject]] = None,
+        actions: Optional[Sequence[Union[dict, BlockElement]]] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays content in a card.
+        https://docs.slack.dev/reference/block-kit/blocks/card-block
+
+        Args:
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+            hero_image: Link to the top image used on the card.
+            icon: Link to the small image used next to the card&#39;s title and subtitle.
+            title: Title of the card. 150 characters max.
+            subtitle: Subtitle of the card. 150 characters max.
+            body: Content of the card. 200 characters max.
+            actions: Action buttons shown at the bottom of the card.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.hero_image = hero_image
+        self.icon = icon
+        self.title = TextObject.parse(title, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.subtitle = TextObject.parse(subtitle, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.body = TextObject.parse(body, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.actions = BlockElement.parse_all(actions) if actions else None
+
+    @JsonValidator(&#34;At least one of hero_image, title, actions, or body is required&#34;)
+    def _validate_content(self):
+        return self.hero_image is not None or self.title is not None or self.actions is not None or self.body is not None
+
+    @JsonValidator(f&#34;title attribute cannot exceed {title_max_length} characters&#34;)
+    def _validate_title_length(self):
+        return self.title is None or self.title.text is None or len(self.title.text) &lt;= self.title_max_length
+
+    @JsonValidator(f&#34;subtitle attribute cannot exceed {subtitle_max_length} characters&#34;)
+    def _validate_subtitle_length(self):
+        return self.subtitle is None or self.subtitle.text is None or len(self.subtitle.text) &lt;= self.subtitle_max_length
+
+    @JsonValidator(f&#34;body attribute cannot exceed {body_max_length} characters&#34;)
+    def _validate_body_length(self):
+        return self.body is None or self.body.text is None or len(self.body.text) &lt;= self.body_max_length</code></pre>
+</details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
+<p>Displays content in a card.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/card-block">https://docs.slack.dev/reference/block-kit/blocks/card-block</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A unique identifier for a block. If not specified, a block_id will be generated.</dd>
+<dt><strong><code>hero_image</code></strong></dt>
+<dd>Link to the top image used on the card.</dd>
+<dt><strong><code>icon</code></strong></dt>
+<dd>Link to the small image used next to the card's title and subtitle.</dd>
+<dt><strong><code>title</code></strong></dt>
+<dd>Title of the card. 150 characters max.</dd>
+<dt><strong><code>subtitle</code></strong></dt>
+<dd>Subtitle of the card. 150 characters max.</dd>
+<dt><strong><code>body</code></strong></dt>
+<dd>Content of the card. 200 characters max.</dd>
+<dt><strong><code>actions</code></strong></dt>
+<dd>Action buttons shown at the bottom of the card.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.CardBlock.body_max_length"><code class="name">var <span class="ident">body_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.CardBlock.subtitle_max_length"><code class="name">var <span class="ident">subtitle_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.CardBlock.title_max_length"><code class="name">var <span class="ident">title_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.CardBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.CardBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return super().attributes.union(
+        {
+            &#34;hero_image&#34;,
+            &#34;icon&#34;,
+            &#34;title&#34;,
+            &#34;subtitle&#34;,
+            &#34;body&#34;,
+            &#34;actions&#34;,
+        }
+    )</code></pre>
+</details>
+<div class="desc"><p>Build an unordered collection of unique elements.</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.block_id_max_length" href="#slack_sdk.models.blocks.blocks.Block.block_id_max_length">block_id_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.CarouselBlock"><code class="flex name class">
+<span>class <span class="ident">CarouselBlock</span></span>
+<span>(</span><span>*,<br>elements: Sequence[dict | <a title="slack_sdk.models.blocks.blocks.CardBlock" href="#slack_sdk.models.blocks.blocks.CardBlock">CardBlock</a>],<br>block_id: str | None = None,<br>**others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CarouselBlock(Block):
+    type = &#34;carousel&#34;
+    elements_max_length = 10
+
+    @property
+    def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+        return super().attributes.union({&#34;elements&#34;})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, CardBlock]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Displays related card blocks in a horizontally-scrolling container.
+        https://docs.slack.dev/reference/block-kit/blocks/carousel-block
+
+        Args:
+            elements (required): A list of cards. Minimum 1, maximum 10 cards.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        &#34;&#34;&#34;
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = Block.parse_all(elements)
+
+    @JsonValidator(&#34;elements attribute must contain at least 1 card&#34;)
+    def _validate_elements_present(self):
+        return self.elements is not None and len(self.elements) &gt;= 1
+
+    @JsonValidator(f&#34;elements attribute cannot exceed {elements_max_length} cards&#34;)
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) &lt;= self.elements_max_length</code></pre>
+</details>
+<div class="desc"><p>Blocks are a series of components that can be combined
+to create visually rich and compellingly interactive messages.
+<a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
+<p>Displays related card blocks in a horizontally-scrolling container.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/carousel-block">https://docs.slack.dev/reference/block-kit/blocks/carousel-block</a></p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
+<dd>A list of cards. Minimum 1, maximum 10 cards.</dd>
+<dt><strong><code>block_id</code></strong></dt>
+<dd>A unique identifier for a block. If not specified, a block_id will be generated.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></li>
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.CarouselBlock.elements_max_length"><code class="name">var <span class="ident">elements_max_length</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.models.blocks.blocks.CarouselBlock.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.blocks.CarouselBlock.attributes"><code class="name">prop <span class="ident">attributes</span> : Set[str]</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def attributes(self) -&gt; Set[str]:  # type: ignore[override]
+    return super().attributes.union({&#34;elements&#34;})</code></pre>
 </details>
 <div class="desc"><p>Build an unordered collection of unique elements.</p></div>
 </dd>
@@ -1601,7 +1981,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
                 else:
                     field_objects.append(PlainTextObject(**d))  # type: ignore[arg-type]
             else:
-                self.logger.warning(f&#34;Unsupported field detected and skipped {f}&#34;)
+                self.logger.warning(f&#34;Unsupported field detected and skipped: {f}&#34;)
         self.fields = field_objects
         self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
         self.expand = expand
@@ -2182,6 +2562,14 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </ul>
 </li>
 <li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.AlertBlock" href="#slack_sdk.models.blocks.blocks.AlertBlock">AlertBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.AlertBlock.attributes" href="#slack_sdk.models.blocks.blocks.AlertBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.AlertBlock.type" href="#slack_sdk.models.blocks.blocks.AlertBlock.type">type</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.AlertBlock.valid_levels" href="#slack_sdk.models.blocks.blocks.AlertBlock.valid_levels">valid_levels</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a></code></h4>
 <ul class="two-column">
 <li><code><a title="slack_sdk.models.blocks.blocks.Block.attributes" href="#slack_sdk.models.blocks.blocks.Block.attributes">attributes</a></code></li>
@@ -2197,6 +2585,24 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.blocks.CallBlock.attributes" href="#slack_sdk.models.blocks.blocks.CallBlock.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.CallBlock.type" href="#slack_sdk.models.blocks.blocks.CallBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.CardBlock" href="#slack_sdk.models.blocks.blocks.CardBlock">CardBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.CardBlock.attributes" href="#slack_sdk.models.blocks.blocks.CardBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.CardBlock.body_max_length" href="#slack_sdk.models.blocks.blocks.CardBlock.body_max_length">body_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.CardBlock.subtitle_max_length" href="#slack_sdk.models.blocks.blocks.CardBlock.subtitle_max_length">subtitle_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.CardBlock.title_max_length" href="#slack_sdk.models.blocks.blocks.CardBlock.title_max_length">title_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.CardBlock.type" href="#slack_sdk.models.blocks.blocks.CardBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.blocks.CarouselBlock" href="#slack_sdk.models.blocks.blocks.CarouselBlock">CarouselBlock</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.blocks.CarouselBlock.attributes" href="#slack_sdk.models.blocks.blocks.CarouselBlock.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.CarouselBlock.elements_max_length" href="#slack_sdk.models.blocks.blocks.CarouselBlock.elements_max_length">elements_max_length</a></code></li>
+<li><code><a title="slack_sdk.models.blocks.blocks.CarouselBlock.type" href="#slack_sdk.models.blocks.blocks.CarouselBlock.type">type</a></code></li>
 </ul>
 </li>
 <li>

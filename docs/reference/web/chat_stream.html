@@ -48,7 +48,7 @@ el.replaceWith(d);
 <dl>
 <dt id="slack_sdk.web.chat_stream.ChatStream"><code class="flex name class">
 <span>class <span class="ident">ChatStream</span></span>
-<span>(</span><span>client: WebClient,<br>*,<br>channel: str,<br>logger: logging.Logger,<br>thread_ts: str,<br>buffer_size: int,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>task_display_mode: str | None = None,<br>**kwargs)</span>
+<span>(</span><span>client: WebClient,<br>*,<br>channel: str,<br>logger: logging.Logger,<br>thread_ts: str,<br>buffer_size: int,<br>recipient_team_id: str | None = None,<br>recipient_user_id: str | None = None,<br>task_display_mode: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>username: str | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -73,6 +73,9 @@ el.replaceWith(d);
         recipient_team_id: Optional[str] = None,
         recipient_user_id: Optional[str] = None,
         task_display_mode: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ):
         &#34;&#34;&#34;Initialize a new ChatStream instance.
@@ -90,6 +93,9 @@ el.replaceWith(d);
             recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
             task_display_mode: Specifies how tasks are displayed in the message. A &#34;timeline&#34; displays individual tasks
               with text and &#34;plan&#34; displays all tasks together.
+            icon_emoji: Emoji to use as the icon for this message. Overrides icon_url.
+            icon_url: Image URL to use as the icon for this message.
+            username: The bot&#39;s username to display.
             buffer_size: The length of markdown_text to buffer in-memory before calling a method. Increasing this value
               decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.
             **kwargs: Additional arguments passed to the underlying API calls.
@@ -103,6 +109,9 @@ el.replaceWith(d);
             &#34;recipient_team_id&#34;: recipient_team_id,
             &#34;recipient_user_id&#34;: recipient_user_id,
             &#34;task_display_mode&#34;: task_display_mode,
+            &#34;icon_emoji&#34;: icon_emoji,
+            &#34;icon_url&#34;: icon_url,
+            &#34;username&#34;: username,
             **kwargs,
         }
         self._buffer = &#34;&#34;
@@ -288,6 +297,12 @@ streaming to channels.</dd>
 <dt><strong><code>task_display_mode</code></strong></dt>
 <dd>Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
 with text and "plan" displays all tasks together.</dd>
+<dt><strong><code>icon_emoji</code></strong></dt>
+<dd>Emoji to use as the icon for this message. Overrides icon_url.</dd>
+<dt><strong><code>icon_url</code></strong></dt>
+<dd>Image URL to use as the icon for this message.</dd>
+<dt><strong><code>username</code></strong></dt>
+<dd>The bot's username to display.</dd>
 <dt><strong><code>buffer_size</code></strong></dt>
 <dd>The length of markdown_text to buffer in-memory before calling a method. Increasing this value
 decreases the number of method calls made for the same amount of text, which is useful to avoid rate limits.</dd>

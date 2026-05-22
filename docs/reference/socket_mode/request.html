@@ -103,7 +103,7 @@ el.replaceWith(d);
         return None
 
     def to_dict(self) -&gt; dict:
-        d = {&#34;envelope_id&#34;: self.envelope_id}
+        d = {&#34;type&#34;: self.type, &#34;envelope_id&#34;: self.envelope_id}
         if self.payload is not None:
             d[&#34;payload&#34;] = self.payload  # type: ignore[assignment]
         return d</code></pre>
@@ -156,7 +156,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def to_dict(self) -&gt; dict:
-    d = {&#34;envelope_id&#34;: self.envelope_id}
+    d = {&#34;type&#34;: self.type, &#34;envelope_id&#34;: self.envelope_id}
     if self.payload is not None:
         d[&#34;payload&#34;] = self.payload  # type: ignore[assignment]
     return d</code></pre>
