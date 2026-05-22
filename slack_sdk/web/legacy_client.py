@@ -2092,13 +2092,24 @@ class LegacyWebClient(LegacyBaseClient):
         thread_ts: str,
         status: str,
         loading_messages: Optional[List[str]] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the status for an AI assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         """
         kwargs.update(
-            {"channel_id": channel_id, "thread_ts": thread_ts, "status": status, "loading_messages": loading_messages}
+            {
+                "channel_id": channel_id,
+                "thread_ts": thread_ts,
+                "status": status,
+                "loading_messages": loading_messages,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
         )
         kwargs = _remove_none_values(kwargs)
         return self.api_call("assistant.threads.setStatus", json=kwargs)
@@ -2904,6 +2915,9 @@ class LegacyWebClient(LegacyBaseClient):
         recipient_user_id: Optional[str] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         task_display_mode: Optional[str] = None,  # timeline, plan
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a new streaming conversation.
@@ -2918,6 +2932,9 @@ class LegacyWebClient(LegacyBaseClient):
                 "recipient_user_id": recipient_user_id,
                 "chunks": chunks,
                 "task_display_mode": task_display_mode,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -3944,6 +3961,7 @@ class LegacyWebClient(LegacyBaseClient):
         content: Optional[Union[str, bytes]] = None,
         title: Optional[str] = None,
         alt_txt: Optional[str] = None,
+        highlight_type: Optional[str] = None,
         snippet_type: Optional[str] = None,
         # To upload multiple files at a time
         file_uploads: Optional[List[Dict[str, Any]]] = None,
@@ -3988,6 +4006,7 @@ class LegacyWebClient(LegacyBaseClient):
                     "content": content,
                     "title": title,
                     "alt_txt": alt_txt,
+                    "highlight_type": highlight_type,
                     "snippet_type": snippet_type,
                 }
             )
@@ -4026,7 +4045,7 @@ class LegacyWebClient(LegacyBaseClient):
 
         # step3: files.completeUploadExternal with all the sets of (file_id + title)
         completion = self.files_completeUploadExternal(
-            files=[{"id": f["file_id"], "title": f["title"]} for f in files],
+            files=[{"id": f["file_id"], "title": f["title"], "highlight_type": f.get("highlight_type")} for f in files],
             channel_id=channel,
             channels=channels,
             initial_comment=initial_comment,
@@ -4062,7 +4081,7 @@ class LegacyWebClient(LegacyBaseClient):
     def files_completeUploadExternal(
         self,
         *,
-        files: List[Dict[str, str]],
+        files: List[Dict[str, Optional[str]]],
         channel_id: Optional[str] = None,
         channels: Optional[List[str]] = None,
         initial_comment: Optional[str] = None,

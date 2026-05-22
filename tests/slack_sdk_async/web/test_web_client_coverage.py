@@ -441,6 +441,19 @@ class TestWebClientCoverage(unittest.TestCase):
                     status="is typing...",
                     loading_states=["Thinking...", "Writing..."],
                 )
+                method(
+                    channel_id="D111",
+                    thread_ts="111.222",
+                    status="counting...",
+                    username="Abacus",
+                    icon_emoji="abacus",
+                )
+                await async_method(
+                    channel_id="D111",
+                    thread_ts="111.222",
+                    status="dreaming...",
+                    icon_url="https://example.com/clouds-square.png",
+                )
             elif method_name == "assistant_threads_setTitle":
                 self.api_methods_to_call.remove(method(channel_id="D111", thread_ts="111.222", title="New chat")["method"])
                 await async_method(channel_id="D111", thread_ts="111.222", title="New chat")
@@ -587,6 +600,21 @@ class TestWebClientCoverage(unittest.TestCase):
                 await async_method(channel="C123", thread_ts="123.123")
                 method(channel="C123", thread_ts="123.123", recipient_team_id="T123", recipient_user_id="U123")
                 await async_method(channel="C123", thread_ts="123.123", recipient_team_id="T123", recipient_user_id="U123")
+                method(
+                    channel="C123",
+                    thread_ts="123.123",
+                    recipient_team_id="T123",
+                    recipient_user_id="U123",
+                    username="Abacus",
+                    icon_emoji="abacus",
+                )
+                await async_method(
+                    channel="C123",
+                    thread_ts="123.123",
+                    recipient_team_id="T123",
+                    recipient_user_id="U123",
+                    icon_url="https://example.com/clouds-square.png",
+                )
             elif method_name == "chat_stopStream":
                 self.api_methods_to_call.remove(
                     method(channel="C123", ts="123.123", blocks=[{"type": "markdown", "text": "**twelve**"}])["method"]

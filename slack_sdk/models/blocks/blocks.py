@@ -102,6 +102,12 @@ class Block(JsonObject):
                     return TaskCardBlock(**block)
                 elif type == PlanBlock.type:
                     return PlanBlock(**block)
+                elif type == CardBlock.type:
+                    return CardBlock(**block)
+                elif type == AlertBlock.type:
+                    return AlertBlock(**block)
+                elif type == CarouselBlock.type:
+                    return CarouselBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -878,3 +884,149 @@ class PlanBlock(Block):
 
         self.title = title
         self.tasks = tasks
+
+
+class AlertBlock(Block):
+    type = "alert"
+    valid_levels = {"default", "info", "warning", "error", "success"}
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"text", "level"})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        level: Optional[str] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays alerts, warnings, and informational messages.
+        https://docs.slack.dev/reference/block-kit/blocks/alert-block
+
+        Args:
+            text (required): The alert message, using plain_text or mrkdwn formatting.
+            level: One of "default", "info", "warning", "error", or "success".
+                Will be "default" if omitted.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)
+        self.level = level
+
+    @JsonValidator("text attribute must be specified")
+    def _validate_text(self):
+        return self.text is not None
+
+    @JsonValidator("level must be a valid value (default, info, warning, error, success)")
+    def _validate_level(self):
+        return self.level is None or self.level in self.valid_levels
+
+
+class CardBlock(Block):
+    type = "card"
+    title_max_length = 150
+    subtitle_max_length = 150
+    body_max_length = 200
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "hero_image",
+                "icon",
+                "title",
+                "subtitle",
+                "body",
+                "actions",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        hero_image: Optional[str] = None,
+        icon: Optional[str] = None,
+        title: Optional[Union[str, dict, TextObject]] = None,
+        subtitle: Optional[Union[str, dict, TextObject]] = None,
+        body: Optional[Union[str, dict, TextObject]] = None,
+        actions: Optional[Sequence[Union[dict, BlockElement]]] = None,
+        **others: dict,
+    ):
+        """Displays content in a card.
+        https://docs.slack.dev/reference/block-kit/blocks/card-block
+
+        Args:
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+            hero_image: Link to the top image used on the card.
+            icon: Link to the small image used next to the card's title and subtitle.
+            title: Title of the card. 150 characters max.
+            subtitle: Subtitle of the card. 150 characters max.
+            body: Content of the card. 200 characters max.
+            actions: Action buttons shown at the bottom of the card.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.hero_image = hero_image
+        self.icon = icon
+        self.title = TextObject.parse(title, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.subtitle = TextObject.parse(subtitle, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.body = TextObject.parse(body, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.actions = BlockElement.parse_all(actions) if actions else None
+
+    @JsonValidator("At least one of hero_image, title, actions, or body is required")
+    def _validate_content(self):
+        return self.hero_image is not None or self.title is not None or self.actions is not None or self.body is not None
+
+    @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
+    def _validate_title_length(self):
+        return self.title is None or self.title.text is None or len(self.title.text) <= self.title_max_length
+
+    @JsonValidator(f"subtitle attribute cannot exceed {subtitle_max_length} characters")
+    def _validate_subtitle_length(self):
+        return self.subtitle is None or self.subtitle.text is None or len(self.subtitle.text) <= self.subtitle_max_length
+
+    @JsonValidator(f"body attribute cannot exceed {body_max_length} characters")
+    def _validate_body_length(self):
+        return self.body is None or self.body.text is None or len(self.body.text) <= self.body_max_length
+
+
+class CarouselBlock(Block):
+    type = "carousel"
+    elements_max_length = 10
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"elements"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, CardBlock]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays related card blocks in a horizontally-scrolling container.
+        https://docs.slack.dev/reference/block-kit/blocks/carousel-block
+
+        Args:
+            elements (required): A list of cards. Minimum 1, maximum 10 cards.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = Block.parse_all(elements)
+
+    @JsonValidator("elements attribute must contain at least 1 card")
+    def _validate_elements_present(self):
+        return self.elements is not None and len(self.elements) >= 1
+
+    @JsonValidator(f"elements attribute cannot exceed {elements_max_length} cards")
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) <= self.elements_max_length

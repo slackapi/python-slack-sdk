@@ -242,6 +242,26 @@ class TestChatStream(unittest.TestCase):
                 '[{"text": "\\n", "type": "markdown_text"}, {"text": ":space_invader:", "type": "markdown_text"}]',
             )
 
+    def test_streams_with_authorship_args(self):
+        streamer = self.client.chat_stream(
+            channel="C0123456789",
+            thread_ts="123.000",
+            username="Abacus",
+            icon_emoji="abacus",
+        )
+        self.assertEqual(streamer._stream_args["username"], "Abacus")
+        self.assertEqual(streamer._stream_args["icon_emoji"], "abacus")
+        self.assertIsNone(streamer._stream_args["icon_url"])
+
+        streamer.append(markdown_text="counting...")
+        streamer.stop()
+
+        if hasattr(self.thread.server, "chat_stream_requests"):
+            start_request = self.thread.server.chat_stream_requests.get("/chat.startStream", {})
+            self.assertEqual(start_request.get("username"), "Abacus")
+            self.assertEqual(start_request.get("icon_emoji"), "abacus")
+            self.assertNotIn("icon_url", start_request)
+
     def test_streams_errors_when_appending_to_an_unstarted_stream(self):
         streamer = self.client.chat_stream(
             channel="C0123456789",
