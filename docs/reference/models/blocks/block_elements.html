@@ -3392,7 +3392,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 
         @property
         def attributes(self) -&gt; Set[str]:  # type: ignore[override]
-            return super().attributes.union({&#34;timestamp&#34;, &#34;format&#34;, &#34;url&#34;, &#34;fallback&#34;})
+            return super().attributes.union({&#34;timestamp&#34;, &#34;format&#34;, &#34;url&#34;, &#34;fallback&#34;, &#34;style&#34;})
 
         def __init__(
             self,
@@ -3401,6 +3401,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             format: str,
             url: Optional[str] = None,
             fallback: Optional[str] = None,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
@@ -3409,40 +3410,45 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             self.format = format
             self.url = url
             self.fallback = fallback
+            self.style = style
 
     class Broadcast(RichTextElement):
         type = &#34;broadcast&#34;
 
         @property
         def attributes(self) -&gt; Set[str]:  # type: ignore[override]
-            return super().attributes.union({&#34;range&#34;})
+            return super().attributes.union({&#34;range&#34;, &#34;style&#34;})
 
         def __init__(
             self,
             *,
             range: str,  # channel, here, ..
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.range = range
+            self.style = style
 
     class Color(RichTextElement):
         type = &#34;color&#34;
 
         @property
         def attributes(self) -&gt; Set[str]:  # type: ignore[override]
-            return super().attributes.union({&#34;value&#34;})
+            return super().attributes.union({&#34;value&#34;, &#34;style&#34;})
 
         def __init__(
             self,
             *,
             value: str,
+            style: Optional[Union[dict, &#34;RichTextElementParts.TextStyle&#34;]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
-            self.value = value</code></pre>
+            self.value = value
+            self.style = style</code></pre>
 </details>
 <div class="desc"></div>
 <h3>Class variables</h3>

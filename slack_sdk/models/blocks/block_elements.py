@@ -2234,7 +2234,7 @@ class RichTextElementParts:
 
         @property
         def attributes(self) -> Set[str]:  # type: ignore[override]
-            return super().attributes.union({"timestamp", "format", "url", "fallback"})
+            return super().attributes.union({"timestamp", "format", "url", "fallback", "style"})
 
         def __init__(
             self,
@@ -2243,6 +2243,7 @@ class RichTextElementParts:
             format: str,
             url: Optional[str] = None,
             fallback: Optional[str] = None,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
@@ -2251,37 +2252,42 @@ class RichTextElementParts:
             self.format = format
             self.url = url
             self.fallback = fallback
+            self.style = style
 
     class Broadcast(RichTextElement):
         type = "broadcast"
 
         @property
         def attributes(self) -> Set[str]:  # type: ignore[override]
-            return super().attributes.union({"range"})
+            return super().attributes.union({"range", "style"})
 
         def __init__(
             self,
             *,
             range: str,  # channel, here, ..
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.range = range
+            self.style = style
 
     class Color(RichTextElement):
         type = "color"
 
         @property
         def attributes(self) -> Set[str]:  # type: ignore[override]
-            return super().attributes.union({"value"})
+            return super().attributes.union({"value", "style"})
 
         def __init__(
             self,
             *,
             value: str,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.value = value
+            self.style = style
