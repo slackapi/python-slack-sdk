@@ -42,6 +42,7 @@ classifiers = [
 
 [project.urls]
 Documentation = "https://docs.slack.dev/tools/python-slack-sdk/"
+Source = "https://github.com/slackapi/python-slack-sdk"
 
 [tool.setuptools.packages.find]
 include = ["slack*", "slack_sdk*"]
