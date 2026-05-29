@@ -6,7 +6,7 @@ Accessing Slack API methods requires an OAuth token — read more about [install
 
 Each of these [API methods](/reference/methods) is fully documented on our developer site at [docs.slack.dev](/).
 
-## Sending a message {#sending-messages}
+## Sending a message {/* #sending-messages */}
 
 One of the primary uses of Slack is posting messages to a channel using the channel ID, or as a DM to another person using their user ID. This method will handle either a channel ID or a user ID passed to the `channel` parameter.
 
@@ -53,7 +53,7 @@ response = client.chat_postEphemeral(
 
 See the [`chat.postEphemeral`](/reference/methods/chat.postEphemeral) API method for more details.
 
-### Sending streaming messages {#sending-streaming-messages}
+### Sending streaming messages {/* #sending-streaming-messages */}
 
 You can have your app's messages stream in to replicate conventional AI chatbot behavior. This is done through three Web API methods:
 
@@ -64,7 +64,7 @@ You can have your app's messages stream in to replicate conventional AI chatbot 
 
 You can streamline calling these methods by using the [`chat_stream()`](#chat_stream) helper.
 
-#### Starting the message stream {#starting-stream}
+#### Starting the message stream {/* #starting-stream */}
 
 First you need to begin the message stream:
 
@@ -87,7 +87,7 @@ def handle_message(message, client):
     stream_ts = stream_response["ts"]
 ```
 
-#### Appending content to the message stream {#appending-stream}
+#### Appending content to the message stream {/* #appending-stream */}
 
 With the stream started, you can then append text to it in chunks to convey a streaming effect.
 
@@ -106,7 +106,7 @@ The structure of the text coming in will depend on your source. The following co
             continue
 ```
 
-#### Stopping the message stream {#stopping-stream}
+#### Stopping the message stream {/* #stopping-stream */}
 
 Your app can then end the stream with the `chat_stopStream` method:
 
@@ -158,7 +158,7 @@ def handle_message(message, client):
 
 See [Formatting messages with Block Kit](#block-kit) below for more details on using Block Kit with messages.
 
-#### Using the `chat_stream()` helper {#chat_stream}
+#### Using the `chat_stream()` helper {/* #chat_stream */}
 
 The Python Slack SDK provides a [`chat_stream()`](https://docs.slack.dev/tools/python-slack-sdk/reference/web/client.html#slack_sdk.web.client.WebClient.chat_stream) helper utility to streamline calling these methods. Here's an excerpt from our [Assistant template app](https://github.com/slack-samples/bolt-python-assistant-template):
 
@@ -182,7 +182,7 @@ feedback_block = create_feedback_block()
 streamer.stop(blocks=feedback_block)
 ```
 
-## Formatting messages with Block Kit {#block-kit}
+## Formatting messages with Block Kit {/* #block-kit */}
 
 Messages posted from apps can contain more than just text; they can also include full user interfaces composed of blocks using [Block Kit](/block-kit).
 
@@ -232,7 +232,7 @@ client.chat_postMessage(
 
 :::
 
-## Threading messages {#threading-messages}
+## Threading messages {/* #threading-messages */}
 
 Threaded messages are a way of grouping messages together to provide greater context. You can reply to a thread or start a new threaded conversation by simply passing the original message's `ts` ID in the `thread_ts` attribute when posting a message. If you're replying to a threaded message, you'll pass the `thread_ts` ID of the message you're replying to.
 
@@ -264,7 +264,7 @@ When appearing in the channel, it won't contain any attachments or message butto
 
 Refer to the [threading messages](/messaging#threading) page for more information.
 
-## Updating a message {#updating-messages}
+## Updating a message {/* #updating-messages */}
 
 Let's say you have a bot that posts the status of a request. When that request changes, you'll want to update the message to reflect it's state.
 
@@ -278,7 +278,7 @@ response = client.chat_update(
 
 See the [`chat.update`](/reference/methods/chat.update) API method for formatting options and some special considerations when calling this with a bot user.
 
-## Deleting a message {#deleting-messages}
+## Deleting a message {/* #deleting-messages */}
 
 Sometimes you need to delete things.
 
@@ -292,13 +292,13 @@ response = client.chat_delete(
 See the [`chat.delete`](/reference/methods/chat.delete) API method for more
 details.
 
-## Conversations {#conversations}
+## Conversations {/* #conversations */}
 
 The Slack Conversations API provides your app with a unified interface to work with all the channel-like things encountered in Slack: public channels, private channels, direct messages, group direct messages, and shared channels.
 
 Refer to [using the Conversations API](/apis/web-api/using-the-conversations-api) for more information.
 
-### Direct messages {#direct-messages}
+### Direct messages {/* #direct-messages */}
 
 The `conversations.open` API method opens either a 1:1 direct message with a single user or a multi-person direct message, depending on the number of users supplied to the `users` parameter. (For public or private channels, use the `conversations.create` API method.)
 
@@ -316,7 +316,7 @@ response = client.conversations_open(users=["W123456789", "U987654321"])
 
 See the [`conversations.open`](/reference/methods/conversations.open) API method for additional details.
 
-### Creating channels {#creating-channels}
+### Creating channels {/* #creating-channels */}
 
 Creates a new channel, either public or private. The `name` parameter is required and may contain numbers, letters, hyphens, or underscores, and must contain fewer than 80 characters. To make the channel private, set the optional `is_private` parameter to `True`.
 
@@ -337,7 +337,7 @@ response = client.conversations_archive(channel=channel_id)
 
 See the [`conversations.create`](/reference/methods/conversations.create) API method for additional details.
 
-### Getting conversation information {#getting-conversation-info}
+### Getting conversation information {/* #getting-conversation-info */}
 
 To retrieve a set of metadata about a channel (public, private, DM, or multi-party DM), use the `conversations.info` API method. The `channel` parameter is required and must be a valid channel ID. The optional `include_locale` boolean parameter will return locale data, which may be useful if you wish to return localized responses. The `include_num_members` boolean parameter will return the number of people in a channel.
 
@@ -354,7 +354,7 @@ response = client.conversations_info(
 
 See the [`conversations.info`](/reference/methods/conversations.info) API method for more details.
 
-### Listing conversations {#listing-conversations}
+### Listing conversations {/* #listing-conversations */}
 
 To get a list of all the conversations in a workspace, use the `conversations.list` API method. By default, only public conversations are returned. Use the `types` parameter specify which types of conversations you're interested in. Note that `types` is a string of comma-separated values.
 
@@ -387,7 +387,7 @@ response = client.conversations_list(exclude_archived=True)
 
 See the [`conversations.list`](/reference/methods/conversations.list) API method for more details.
 
-### Getting members of a conversation {#getting-conversation-members}
+### Getting members of a conversation {/* #getting-conversation-members */}
 
 To get a list of members for a conversation, use the `conversations.members` API method with the required `channel` parameter.
 
@@ -402,7 +402,7 @@ user_ids = response["members"]
 
 See the [`conversations.members`](/reference/methods/conversations.members) API method for more details.
 
-### Joining a conversation {#joining-conversations}
+### Joining a conversation {/* #joining-conversations */}
 
 Channels are the social hub of most Slack teams. Here's how you hop into one:
 
@@ -414,7 +414,7 @@ If you are already in the channel, the response is slightly different. The `alre
 
 See the [`conversations.join`](/reference/methods/conversations.join) API method for more details.
 
-### Leaving a conversation {#leaving-conversations}
+### Leaving a conversation {/* #leaving-conversations */}
 
 To leave a conversation, use the `conversations.leave` API method with the required `channel` parameter containing the ID of the channel to leave.
 
@@ -428,7 +428,7 @@ response = client.conversations_leave(channel="C27182818")
 
 See the [`conversations.leave`](/reference/methods/conversations.leave) API method for more details.
 
-## Opening a modal {#opening-modals}
+## Opening a modal {/* #opening-modals */}
 
 Modals allow you to collect data from users and display dynamic information in a focused surface. Modals use the same blocks that compose messages, with the addition of an `input` block.
 
@@ -504,14 +504,14 @@ if __name__ == "__main__":
     app.run("localhost", 3000)
 ```
 
-See the [`views.open`](/reference/methods/views.open) API method more details and additional parameters.
+See the [`views.open`](/reference/methods/views.open) API method for more details and additional parameters.
 
 To run the above example, the following [Slack app configurations](https://api.slack.com/apps) are required:
 
 * Enable **Interactivity** with a valid Request URL: `https://{your-public-domain}/slack/events`
 * Add a global shortcut with the callback ID: `open-modal-shortcut`
 
-## Updating and pushing modals {#updating-pushing-modals}
+## Updating and pushing modals {/* #updating-pushing-modals */}
 
 In response to `view_submission` requests, you can tell Slack to update the current modal view by having `"response_action": update` and an updated view. There are also other `response_action` types, such as `errors` and `push`. Refer to the [modals](/surfaces/modals) page for more details.
 
@@ -594,7 +594,7 @@ See the [`views.update`](/reference/methods/views.update) API method for more de
 
 If you want to push a new view onto the modal instead of updating an existing view, see the [`views.push`](/reference/methods/views.push) API method.
 
-## Emoji reactions {#emoji}
+## Emoji reactions {/* #emoji */}
 
 You can quickly respond to any message on Slack with an emoji reaction. Reactions can be used for any purpose: voting, checking off to-do items, showing excitement, or just for fun.
 
@@ -620,7 +620,7 @@ response = client.reactions_remove(
 
 See the [`reactions.add`](/reference/methods/reactions.add) and [`reactions.remove`](/reference/methods/reactions.remove) API methods for more details.
 
-## Uploading files {#upload-files}
+## Uploading files {/* #upload-files */}
 
 You can upload files to Slack and share them with people in channels. Note that your app's bot user needs to be in the channel (otherwise, you will get either `not_in_channel` or `channel_not_found` error code).
 
@@ -647,7 +647,7 @@ response = client.files_upload_v2(
 
 See the [`files.upload`](/reference/methods/files.upload) API method for more details.
 
-## Adding a remote file {#adding-remote-files}
+## Adding a remote file {/* #adding-remote-files */}
 
 You can add a file information that is stored in an external storage rather than in Slack.
 
@@ -662,7 +662,7 @@ response = client.files_remote_add(
 
 See the [files.remote.add](/reference/methods/files.remote.add) API method for more details.
 
-## Calling API methods {#calling-API-methods}
+## Calling API methods {/* #calling-API-methods */}
 
 This library covers all the public endpoints as the methods in `WebClient`. That said, you may see a bit of a delay with the library release. When you're in a hurry, you can directly use the `api_call` method as below.
 
@@ -678,7 +678,7 @@ response = client.api_call(
 assert response["message"]["text"] == "Hello world!"
 ```
 
-## AsyncWebClient {#asyncwebclient}
+## AsyncWebClient {/* #asyncwebclient */}
 
 The Web API client is available in asynchronous programming using the standard [asyncio](https://docs.python.org/3/library/asyncio.html) library. You use `AsyncWebClient` instead. `AsyncWebClient` internally relies on the [AIOHTTP](https://docs.aiohttp.org/en/stable/) library, but it is an optional dependency. To use this class, run `pip install aiohttp` beforehand.
 
@@ -710,7 +710,7 @@ async def post_message():
 asyncio.run(post_message())
 ```
 
-## RetryHandler {#retryhandler}
+## RetryHandler {/* #retryhandler */}
 
 With the default settings, only `ConnectionErrorRetryHandler` with its default configuration (=only one retry in the manner of [exponential backoff and jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., connection reset by peer).
 
@@ -762,9 +762,9 @@ client = WebClient(
 )
 ```
 
-For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.
+For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those modules are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.
 
-## Rate limits {#rate-limits}
+## Rate limits {/* #rate-limits */}
 
 When posting messages to a channel, Slack allows apps to send no more than one message per channel per second. We allow bursts over that limit for short periods; however, if your app continues to exceed the limit over a longer period of time, it will be rate limited. Different API methods have other limits — be sure to check the [rate limits](/apis/web-api/rate-limits) and test that your app has a graceful fallback if it should hit those limits.
 

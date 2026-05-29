@@ -2,11 +2,11 @@
 sidebar_label: Migrating from slackclient
 ---
 
-# Migrating from v2.x to v3.x {#migrating}
+# Migrating from v2.x to v3.x {/* #migrating */}
 
 You may still view the legacy `slackclient` v2 [documentation](/tools/python-slack-sdk/legacy/). However, the **slackclient** project is in maintenance mode and this **slack_sdk** project is the successor.
 
-## From `slackclient` 2.x {#fromv2}
+## From `slackclient` 2.x {/* #fromv2 */}
 
 There are a few changes introduced in v3.0:
 
@@ -53,11 +53,11 @@ If you use some modules that require `aiohttp`, your `requirements.txt` needs to
 
 The new `slack_sdk.web.WebClient` doesn't rely on `aiohttp` internally at all. The class provides only the synchronous way to call Web APIs. If you need a v2 compatible one, you can use `LegacyWebClient`. Apart from the name, there is no breaking change in the class.
 
-If you're using `run_async=True` option, we highly recommend switching to `AsyncWebClient`. `AsyncWebClient` is a straight-forward async HTTP client. You can expect the class properly works in the nature of `async/await` provided by the standard `asyncio` library.
+If you're using `run_async=True` option, we highly recommend switching to `AsyncWebClient`. `AsyncWebClient` is a straightforward async HTTP client. You can expect the class properly works in the nature of `async/await` provided by the standard `asyncio` library.
 
 ---
 
-## Migration from v1.x to v2.x {#fromv1}
+## Migration from v1.x to v2.x {/* #fromv1 */}
 
 If you're migrating from v1.x of `slackclient` to v2.x, here's what you need to change to ensure your app continues working after updating.
 
@@ -67,7 +67,7 @@ If you don't wish to upgrade yet, be sure to pin your module for the Python `sla
 
 :::
 
-### Minimum Python versions {#minimum-versions}
+### Minimum Python versions {/* #minimum-versions */}
 
 `slackclient` v2.x requires Python 3.7 (or higher).
 
@@ -78,7 +78,7 @@ Client v1 support:
 - We are no longer addressing bug or security fixes.
 - Github branching: The `master` branch is used for v2 code. The `v1` branch is used for v1 code.
 
-### Import changes {#import-changes}
+### Import changes {/* #import-changes */}
 
  The goal of this project is to provide a set of tools that ease the creation of Python Slack apps. To better align with this goal, we’re renaming the main module to `slack`. From `slack`, developers can import various tools. 
 
@@ -90,7 +90,7 @@ Client v1 support:
 from slack import WebClient
 ```
 
-### RTM API changes {#RTM-changes}
+### RTM API changes {/* #RTM-changes */}
 
 An RTMClient allows apps to communicate with the Slack platform's Legacy RTM API. This client allows you to link callbacks to their corresponding events. When an event occurs, this client executes your callback while passing along any information it receives.
 
@@ -168,11 +168,11 @@ def get_team_data(**payload):
 
 RTM usage has been completely redesigned.
 
-For new projects, we recommend using [Events API](/apis/events-api). This package `slackclient` v2 doesn't have any supports for Events API but you can try https://github.com/slackapi/python-slack-events-api that works as an enhancement of Flask web framework.
+For new projects, we recommend using [Events API](/apis/events-api). This package `slackclient` v2 doesn't have any support for Events API but you can try https://github.com/slackapi/python-slack-events-api that works as an enhancement of Flask web framework.
 
-In the near future, we'll be providing better supports for Events API in the official SDK.
+In the near future, we'll be providing better support for Events API in the official SDK.
 
-### Web Client API changes {#web-client-changes}
+### Web Client API changes {/* #web-client-changes */}
 
 **Token refresh removed**: 
 
@@ -219,6 +219,6 @@ The WebClient provides built-in methods for the Slack Web API. These methods act
 - Token type validation: This gives you better error messaging when you're attempting to consume an API method your token doesn't have access to.
 - Constructs requests using Slack preferred HTTP methods and content-types.
 
-### Error handling changes {#error-handling-changes}
+### Error handling changes {/* #error-handling-changes */}
 
 In version 1.x, a failed API call would return the error payload to you and expect you to handle the error. In version 2.x, a failed API call will throw an exception. To handle this in your code, you will have to wrap API calls with a `try except` block.

@@ -4,19 +4,19 @@ This page explains how to handle the Slack OAuth flow. If you're looking for a m
 
 Refer to the [Python document for this module](https://docs.slack.dev/tools/python-slack-sdk/reference) for more details.
 
-## App installation flow {#app-installation}
+## App installation flow {/* #app-installation */}
 
 OAuth allows a user in any Slack workspace to install your app. At the end of the OAuth flow, your app gains an access token. Refer to the [installing with OAuth](/authentication/installing-with-oauth) guide for details.
 
 The Python Slack SDK provides the necessary modules for building the OAuth flow.
 
-### Starting an OAuth flow {#oauth-flow}
+### Starting an OAuth flow {/* #oauth-flow */}
 
 The first step of the OAuth flow is to redirect a Slack user to [authorize](https://slack.com/oauth/v2/authorize) with a valid `state` parameter. To implement this process, you can use the following modules.
 
-Module                |    What its for                           |   Default Implementation
+Module                |    What it's for                           |   Default Implementation
 ----------------------|-----------------------------------------|-------------------------
-`InstallationStore`   |    Persist installation data and lookup it by IDs. |  `FileInstallationStore`                                         
+`InstallationStore`   |    Persist installation data and look it up by IDs. |  `FileInstallationStore`                                         
 `OAuthStateStore`      |   Issue and consume `state` parameter value on the server-side. | `FileOAuthStateStore`           
 `AuthorizeUrlGenerator` |  Build https://slack.com/oauth/v2/authorize with sufficient query parameters    |  (same)
                                                                   
@@ -31,7 +31,7 @@ from slack_sdk.oauth.state_store import FileOAuthStateStore
 
 # Issue and consume state parameter value on the server-side.
 state_store = FileOAuthStateStore(expiration_seconds=300, base_dir="./data")
-# Persist installation data and lookup it by IDs.
+# Persist installation data and look it up by IDs.
 installation_store = FileInstallationStore(base_dir="./data")
 
 # Build https://slack.com/oauth/v2/authorize with sufficient query parameters
@@ -56,7 +56,7 @@ def oauth_start():
 
 When accessing `https://(your domain)/slack/install`, you will see an \"Add to Slack\" button on the page. You can start the app's installation flow by clicking the button.
 
-### Handling a callback request from Slack {#handling-callback-requests}
+### Handling a callback request from Slack {/* #handling-callback-requests */}
 
 If all is well, a user goes through the Slack app installation UI and accepts all the scopes your app requests. After that happens, Slack redirects the user back to your specified Redirect URL.
 
@@ -128,7 +128,7 @@ def oauth_callback():
     return make_response(f"Something is wrong with the installation (error: {html.escape(error)})", 400)
 ```
 
-## Token lookup {#token-lookup}
+## Token lookup {/* #token-lookup */}
 
 Now that your Flask app can choose the right access token for incoming event requests, let's add the Slack event handler endpoint. You can use the same `InstallationStore` in the Slack event handler.
 
@@ -219,7 +219,7 @@ def slack_app():
     return make_response("", 404)
 ```
 
-## Sign in with Slack {#siws}
+## Sign in with Slack {/* #siws */}
 
 [Sign in with Slack](/authentication/sign-in-with-slack) helps users log into your service using their Slack profile. The platform feature was upgraded to be compatible with the standard [OpenID Connect](https://openid.net/connect/) specification. With slack-sdk v3.9+, implementing the OAuth flow is much easier.
 

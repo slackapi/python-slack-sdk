@@ -8,7 +8,7 @@ You'll need a valid token in order to use the Audit Logs API. In addition, the S
 
 ---
 
-## AuditLogsClient {#auditlogsclient}
+## AuditLogsClient {/* #auditlogsclient */}
 
 An OAuth token with [the admin scope](/reference/scopes/admin) is required to access this API.
 
@@ -34,9 +34,9 @@ api_response = client.schemas()
 api_response = client.actions()
 ```
 
-## AsyncAuditLogsClient {#asyncauditlogsclient}
+## AsyncAuditLogsClient {/* #asyncauditlogsclient */}
 
-If you are keen to use asyncio for Audit Logs API calls, we offer AsyncAuditLogsClient for it. This client relies on aiohttp library.
+If you are keen to use asyncio for Audit Logs API calls, we offer AsyncAuditLogsClient for it. This client relies on the aiohttp library.
 
 ``` python
 from slack_sdk.audit_logs.async_client import AsyncAuditLogsClient
@@ -48,7 +48,7 @@ api_response.typed_body  # slack_sdk.audit_logs.v1.LogsResponse
 
 ---
 
-## RetryHandler {#retryhandler}
+## RetryHandler {/* #retryhandler */}
 
 With the default settings, only `ConnectionErrorRetryHandler` with its default configuration (=only one retry in the manner of [exponential backoff and jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., connection reset by peer).
 
@@ -67,7 +67,7 @@ rate_limit_handler = RateLimitErrorRetryHandler(max_retry_count=1)
 client.retry_handlers.append(rate_limit_handler)
 ```
 
-You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_retry`). Check out the source code for the ones that are built in to learn how to properly implement them.
+You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry.RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_attempt`). Check out the source code for the ones that are built in to learn how to properly implement them.
 
 ``` python
 import socket
@@ -100,4 +100,4 @@ client = AuditLogsClient(
 )
 ```
 
-For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.
+For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those modules are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.

@@ -6,7 +6,7 @@ The v3 SDK provides additional features such as Socket Mode, OAuth flow, SCIM AP
 
 :::
 
-## Access tokens {#handling-tokens}
+## Access tokens {/* #handling-tokens */}
 
 **Always keep your access tokens safe.**
 
@@ -33,13 +33,13 @@ SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 
 Refer to our [best practices for security](/security) page for more information.
 
-## Installing on a single workspace {#single-workspace}
+## Installing on a single workspace {/* #single-workspace */}
 
 If you're building an application for a single Slack workspace, there's no need to build out the entire OAuth flow. Once you've set up your features, click the **Install App to Team** button on the **Install App** page. If you add new permission scopes or Slack app features after an app has been installed, you must reinstall the app to your workspace for the changes to take effect.
 
 Refer to the [quickstart](/quickstart) guide for more details.
 
-## Installing on multiple workspaces {#multi-workspace}
+## Installing on multiple workspaces {/* #multi-workspace */}
 
 If you intend for an app to be installed on multiple Slack workspaces, you will need to handle this installation via the industry-standard OAuth protocol. Read more about [installing with OAuth](/authentication/installing-with-oauth).
 
@@ -59,7 +59,7 @@ oauth_scope = os.environ["SLACK_SCOPES"]
 app = Flask(__name__)
 ```
 
-### The OAuth initiation link {#oauth-link}
+### The OAuth initiation link {/* #oauth-link */}
 
 To begin the OAuth flow that will install your app on a workspace, you'll need to provide the user with a link to the Slack OAuth page. This can be a simple link to `https://slack.com/oauth/v2/authorize` with the
 `scope` and `client_id` query parameters.
@@ -75,7 +75,7 @@ def pre_install():
     'Add to Slack</a>'
 ```
 
-### The OAuth completion page {#oauth-completion}
+### The OAuth completion page {/* #oauth-completion */}
 
 Once the user has agreed to the permissions you've requested, Slack will redirect the user to your auth completion page, which includes a `code` query string parameter. You'll use the `code` parameter to call the [`oauth.v2.access`](/reference/methods/oauth.v2.access) API method that will grant you the token.
 

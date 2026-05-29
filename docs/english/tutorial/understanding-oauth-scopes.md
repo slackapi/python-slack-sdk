@@ -5,13 +5,13 @@ In this tutorial, we'll:
 * explore Slack app permissions and distribution using OAuth, and along the way, learn how to identify which scopes apps need and how to use OAuth to request them.
 * build an app that sends a direct message to users joining a specific channel. Once installed in a workspace, it will create a new channel named **#the-welcome-channel** if it doesn’t already exist. The channel will be used to thank users for joining the channel. We'll also share code snippets from the app, but the full source code is available on [GitHub](https://github.com/stevengill/slack-python-oauth-example). The code and implementation of OAuth is general enough that you should be able to follow along, even if Python isn't your preferred language.
 
-## Prerequisites {#prerequisites}
+## Prerequisites {/* #prerequisites */}
 
 Before we get started, ensure you have a development workspace with permissions to install apps. If you don’t have one set up, go ahead and [create one](https://slack.com/create). You also need to [create a new app](https://api.slack.com/apps/new) if you haven’t already. 
 
 Let’s get started!
 
-## Determining scopes {#determine-scopes}
+## Determining scopes {/* #determine-scopes */}
 
 Scopes are used to grant your app permission to perform functions in Slack, such as calling Web API methods and receiving Events API events. As a user goes through your app's installation flow, they'll need to permit access to the scopes your app is requesting.
 
@@ -71,7 +71,7 @@ Our final list of scopes required are:
 * `channels:manage`
 * `chat:write`
 
-## Setting up OAuth and requesting scopes {#setup}
+## Setting up OAuth and requesting scopes {/* #setup */}
 
 If you want users to be able to install your app on additional workspaces or from the [Slack Marketplace](/slack-marketplace/slack-marketplace-review-guide), you'll need to implement an OAuth flow.
 
@@ -155,7 +155,7 @@ We'll be following the general flow of OAuth with Slack, which is covered in the
     return "Auth complete!"
     ```
 
-## Next steps {#next}
+## Next steps {/* #next */}
 
 At this point, you should feel more comfortable learning what scopes your app needs and using OAuth to request those scopes. A few resources you can check out next include:
 

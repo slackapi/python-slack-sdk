@@ -2,7 +2,7 @@
 
 Socket Mode is a method of connecting your app to the Slack APIs using WebSockets instead of HTTP. You can use `slack_sdk.socket_mode.SocketModeClient` for managing [Socket Mode](/apis/events-api/using-socket-mode) connections and performing interactions with Slack.
 
-## Using Socket Mode {#socket-mode}
+## Using Socket Mode {/* #socket-mode */}
 
 Let's start with enabling Socket Mode. Visit [app page](http://api.slack.com/apps), choose the app you're working on, and go to **Settings** on the left pane. There are a few things to do on this page.
 
@@ -104,7 +104,7 @@ Event().wait()
 
 ---
 
-## Supported libraries {#supported-libraries}
+## Supported libraries {/* #supported-libraries */}
 
 This SDK offers its own WebSocket client covering only required features for Socket Mode. In addition, `SocketModeClient` is implemented with a few 3rd party open source libraries. If you prefer any of the following, you can use it over the built-in one.
 
@@ -131,7 +131,7 @@ You can pass a few additional arguments that are specific to the library. Apart 
 
 ---
 
-## Asyncio-based libraries {#asyncio-libraries}
+## Asyncio-based libraries {/* #asyncio-libraries */}
 
 To use the asyncio-based ones such as aiohttp, your app needs to be compatible with asyncio's async/await programming model. The `SocketModeClient` only works with `AsyncWebClient` and async listeners.
 
