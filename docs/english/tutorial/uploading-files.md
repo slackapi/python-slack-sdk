@@ -115,7 +115,7 @@ At this point, while no files have been uploaded yet, you can call the `files.li
 
 ```python
 >>> files = client.files_list(user=bot_user_id)
-DEBUG:slack_sdk.web.base_client:Sending a request - url: https://www.slack.com/api/files.list, query_params: {}, body_params: {'user': 'U02PY3HA48G'}, files: {}, json_body: None, headers: {}
+DEBUG:slack_sdk.web.base_client:Sending a request - url: https://slack.com/api/files.list, query_params: {}, body_params: {'user': 'U02PY3HA48G'}, files: {}, json_body: None, headers: {}
 DEBUG:slack_sdk.web.base_client:Received the following response - status: 200, headers: {}, body: {"ok":true,"files":[],"paging":{"count":100,"total":0,"page":1,"pages":0}}
 ```
 

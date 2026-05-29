@@ -113,10 +113,10 @@ from slack_sdk.http_retry.builtin_handlers import RateLimitErrorRetryHandler
 rate_limit_handler = RateLimitErrorRetryHandler(max_retry_count=1)
 
 # Enable rate limited error retries as well
-client.retry_handlers.append(rate_limit_handler)
+webhook.retry_handlers.append(rate_limit_handler)
 ```
 
-You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_retry`). Check out the source code for the ones that are built in to learn how to properly implement them.
+You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry.RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_attempt`). Check out the source code for the ones that are built in to learn how to properly implement them.
 
 ``` python
 import socket

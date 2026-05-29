@@ -76,9 +76,8 @@ def oauth_callback():
             client = WebClient()  # no prepared token needed for this
             # Complete the installation by calling oauth.v2.access API method
             oauth_response = client.oauth_v2_access(
-                client_id=client_id,
+                client_id=os.environ["SLACK_CLIENT_ID"],
                 client_secret=client_secret,
-                redirect_uri=redirect_uri,
                 code=request.args["code"]
             )
             installed_enterprise = oauth_response.get("enterprise") or {}

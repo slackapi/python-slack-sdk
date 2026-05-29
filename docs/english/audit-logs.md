@@ -36,7 +36,7 @@ api_response = client.actions()
 
 ## AsyncAuditLogsClient {#asyncauditlogsclient}
 
-If you are keen to use asyncio for SCIM API calls, we offer AsyncSCIMClient for it. This client relies on aiohttp library.
+If you are keen to use asyncio for Audit Logs API calls, we offer AsyncAuditLogsClient for it. This client relies on aiohttp library.
 
 ``` python
 from slack_sdk.audit_logs.async_client import AsyncAuditLogsClient

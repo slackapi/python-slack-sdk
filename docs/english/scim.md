@@ -6,7 +6,7 @@ Refer to [using the Slack SCIM API](/admins/scim-api) for more details.
 
 View the [Python document for this module](https://docs.slack.dev/tools/python-slack-sdk/reference).
 
-## SCIMClient {#scimclient}
+## `SCIMClient` {#scimclient}
 
 An OAuth token with [the admin scope](/reference/scopes/admin) is required to access the SCIM API. To fetch provisioned user data, you can use the `search_users` method in the client.
 
@@ -19,7 +19,7 @@ client = SCIMClient(token=os.environ["SLACK_ORG_ADMIN_USER_TOKEN"])
 response = client.search_users(
     start_index=1,
     count=100,
-    filter="""filter=userName Eq "Carly"""",
+    filter='userName Eq "Carly"',
 )
 response.users  # List[User]
 ```

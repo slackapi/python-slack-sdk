@@ -118,7 +118,7 @@ This SDK offers its own WebSocket client covering only required features for Soc
 To use the [`websocket_client`](https://pypi.org/project/websocket_client/) based-one, add the[`websocket_client`](https://pypi.org/project/websocket_client/) dependency and change the import as below.
 
 ``` python
-# Note that the pockage is different
+# Note that the package is different
 from slack_sdk.socket_mode.websocket_client import SocketModeClient
 
 client = SocketModeClient(

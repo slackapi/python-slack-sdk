@@ -35,7 +35,7 @@ The biggest reason for the renaming is the feature coverage in v3 and newer. The
 
 Most imports can be simply replaced by `find your_app -name '*.py' | xargs sed -i '' 's/from slack /from slack_sdk /g'` or similar. If you use `slack.web.classes.*`, the conversion is not so simple that we recommend manually replacing imports for those.
 
-That said, all existing code can be migrated to v3 without any code changes. If you don't have time for it, you can use the `slack` package with deprecation warnings saying `UserWarning: slack package is deprecated. Please use slack_sdk.web/webhook/rtm package instead. For more info, go to https://tools slack.dev/python-slack-sdk/v3-migration/` for a while.
+That said, all existing code can be migrated to v3 without any code changes. If you don't have time for it, you can use the `slack` package with deprecation warnings saying `UserWarning: slack package is deprecated. Please use slack_sdk.web/webhook/rtm package instead. For more info, go to https://docs.slack.dev/tools/python-slack-sdk/v3-migration/` for a while.
 
 ------------------------------------------------------------------------
 

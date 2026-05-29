@@ -446,7 +446,7 @@ def slack_app():
 
     if "payload" in request.form:
         payload = json.loads(request.form["payload"])
-        if payload["type"] == "shortcut" and payload["callback_id"] == "test-shortcut":
+        if payload["type"] == "shortcut" and payload["callback_id"] == "open-modal-shortcut":
             # Open a new modal by a global shortcut
             try:
                 api_response = client.views_open(
@@ -506,10 +506,7 @@ if __name__ == "__main__":
 
 See the [`views.open`](/reference/methods/views.open) API method more details and additional parameters.
 
-Also, to run the above example, the following [Slack app
-configurations](https://api.slack.com/apps) are required.
-
-To run the above example, the following [app configurations](https://api.slack.com/apps) are required:
+To run the above example, the following [Slack app configurations](https://api.slack.com/apps) are required:
 
 * Enable **Interactivity** with a valid Request URL: `https://{your-public-domain}/slack/events`
 * Add a global shortcut with the callback ID: `open-modal-shortcut`
@@ -683,7 +680,7 @@ assert response["message"]["text"] == "Hello world!"
 
 ## AsyncWebClient {#asyncwebclient}
 
-The webhook client is available in asynchronous programming using the standard [asyncio](https://docs.python.org/3/library/asyncio.html) library. You use `AsyncWebhookClient` instead. `AsyncWebhookClient` internally relies on the [AIOHTTP](https://docs.aiohttp.org/en/stable/) library, but it is an optional dependency. To use this class, run `pip install aiohttp` beforehand.
+The Web API client is available in asynchronous programming using the standard [asyncio](https://docs.python.org/3/library/asyncio.html) library. You use `AsyncWebClient` instead. `AsyncWebClient` internally relies on the [AIOHTTP](https://docs.aiohttp.org/en/stable/) library, but it is an optional dependency. To use this class, run `pip install aiohttp` beforehand.
 
 ``` python
 import asyncio
@@ -732,7 +729,7 @@ rate_limit_handler = RateLimitErrorRetryHandler(max_retry_count=1)
 client.retry_handlers.append(rate_limit_handler)
 ```
 
-You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_retry`). Check out the source code for the ones that are built in to learn how to properly implement them.
+You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry.RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_attempt`). Check out the source code for the ones that are built in to learn how to properly implement them.
 
 ``` python
 import socket
