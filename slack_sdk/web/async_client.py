@@ -4036,6 +4036,7 @@ class AsyncWebClient(AsyncBaseClient):
         content: Optional[Union[str, bytes]] = None,
         title: Optional[str] = None,
         alt_txt: Optional[str] = None,
+        highlight_type: Optional[str] = None,
         snippet_type: Optional[str] = None,
         # To upload multiple files at a time
         file_uploads: Optional[List[Dict[str, Any]]] = None,
@@ -4080,6 +4081,7 @@ class AsyncWebClient(AsyncBaseClient):
                     "content": content,
                     "title": title,
                     "alt_txt": alt_txt,
+                    "highlight_type": highlight_type,
                     "snippet_type": snippet_type,
                 }
             )
@@ -4118,7 +4120,7 @@ class AsyncWebClient(AsyncBaseClient):
 
         # step3: files.completeUploadExternal with all the sets of (file_id + title)
         completion = await self.files_completeUploadExternal(
-            files=[{"id": f["file_id"], "title": f["title"]} for f in files],
+            files=[{"id": f["file_id"], "title": f["title"], "highlight_type": f.get("highlight_type")} for f in files],
             channel_id=channel,
             channels=channels,
             initial_comment=initial_comment,
@@ -4154,7 +4156,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def files_completeUploadExternal(
         self,
         *,
-        files: List[Dict[str, str]],
+        files: List[Dict[str, Optional[str]]],
         channel_id: Optional[str] = None,
         channels: Optional[List[str]] = None,
         initial_comment: Optional[str] = None,
