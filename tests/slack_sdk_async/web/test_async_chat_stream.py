@@ -245,6 +245,23 @@ class TestAsyncChatStream(unittest.TestCase):
             )
 
     @async_test
+    async def test_ts_property_is_none_before_flush_and_set_after(self):
+        streamer = await self.client.chat_stream(
+            buffer_size=5,
+            channel="C0123456789",
+            thread_ts="123.000",
+            recipient_team_id="T0123456789",
+            recipient_user_id="U0123456789",
+        )
+        self.assertIsNone(streamer.ts)
+
+        await streamer.append(markdown_text="hello!")
+        self.assertEqual(streamer.ts, "123.123")
+
+        await streamer.stop()
+        self.assertEqual(streamer.ts, "123.123")
+
+    @async_test
     async def test_streams_errors_when_appending_to_an_unstarted_stream(self):
         streamer = await self.client.chat_stream(
             channel="C0123456789",
