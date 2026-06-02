@@ -262,6 +262,22 @@ class TestChatStream(unittest.TestCase):
             self.assertEqual(start_request.get("icon_emoji"), "abacus")
             self.assertNotIn("icon_url", start_request)
 
+    def test_ts_property_is_none_before_flush_and_set_after(self):
+        streamer = self.client.chat_stream(
+            buffer_size=5,
+            channel="C0123456789",
+            thread_ts="123.000",
+            recipient_team_id="T0123456789",
+            recipient_user_id="U0123456789",
+        )
+        self.assertIsNone(streamer.ts)
+
+        streamer.append(markdown_text="hello!")
+        self.assertEqual(streamer.ts, "123.123")
+
+        streamer.stop()
+        self.assertEqual(streamer.ts, "123.123")
+
     def test_streams_errors_when_appending_to_an_unstarted_stream(self):
         streamer = self.client.chat_stream(
             channel="C0123456789",

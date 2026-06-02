@@ -86,6 +86,15 @@ class AsyncChatStream:
         self._stream_ts: Optional[str] = None
         self._buffer_size = buffer_size
 
+    @property
+    def ts(self) -> Optional[str]:
+        """The message timestamp of the stream.
+
+        Returns None until the first flush (when chat.startStream is called).
+        Can be used with chat.update as a fallback if the stream expires server-side.
+        """
+        return self._stream_ts
+
     async def append(
         self,
         *,
