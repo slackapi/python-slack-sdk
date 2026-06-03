@@ -12,7 +12,7 @@ cryptography<46; implementation_name == "pypy" and python_version == "3.10"
 #  used only under slack_sdk/*_store
 boto3<=2
 # For AWS tests
-moto>=4.0.13,<6
+moto>=4.2.14,<6
 # For AsyncSQLAlchemy tests
 greenlet<=4
 aiosqlite<=1
