@@ -97,3 +97,23 @@ class TestSignatureVerifier(unittest.TestCase):
         self.assertFalse(verifier.is_valid(None, self.timestamp, None))
         self.assertFalse(verifier.is_valid(self.body, None, None))
         self.assertFalse(verifier.is_valid(None, None, None))
+
+    def test_invalid_signing_secret(self):
+        with self.assertRaises(ValueError):
+            SignatureVerifier("")
+        with self.assertRaises(ValueError):
+            SignatureVerifier("   ")
+        with self.assertRaises(ValueError):
+            SignatureVerifier(None)
+        with self.assertRaises(ValueError):
+            SignatureVerifier(123)
+        with self.assertRaises(ValueError):
+            SignatureVerifier(b"secret")
+
+    def test_invalid_signing_secret_reassignment(self):
+        verifier = SignatureVerifier(self.signing_secret)
+        with self.assertRaises(ValueError):
+            verifier.signing_secret = ""
+        with self.assertRaises(ValueError):
+            verifier.signing_secret = None
+        self.assertEqual(verifier.signing_secret, self.signing_secret)
