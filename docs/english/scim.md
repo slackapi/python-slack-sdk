@@ -6,7 +6,7 @@ Refer to [using the Slack SCIM API](/admins/scim-api) for more details.
 
 View the [Python document for this module](https://docs.slack.dev/tools/python-slack-sdk/reference).
 
-## SCIMClient {#scimclient}
+## `SCIMClient` {/* #scimclient */}
 
 An OAuth token with [the admin scope](/reference/scopes/admin) is required to access the SCIM API. To fetch provisioned user data, you can use the `search_users` method in the client.
 
@@ -19,7 +19,7 @@ client = SCIMClient(token=os.environ["SLACK_ORG_ADMIN_USER_TOKEN"])
 response = client.search_users(
     start_index=1,
     count=100,
-    filter="""filter=userName Eq "Carly"""",
+    filter='userName Eq "Carly"',
 )
 response.users  # List[User]
 ```
@@ -72,7 +72,7 @@ update_result = client.update_user(user=user_to_update)
 delete_result = client.delete_user(user_to_update.id)
 ```
 
-## AsyncSCIMClient {#asyncscimclient}
+## AsyncSCIMClient {/* #asyncscimclient */}
 
 If you are keen to use asyncio for SCIM API calls, we offer `AsyncSCIMClient`. This client relies on the aiohttp library.
 
@@ -92,7 +92,7 @@ asyncio.run(main())
 
 ------------------------------------------------------------------------
 
-## RetryHandler {#retryhandler}
+## RetryHandler {/* #retryhandler */}
 
 With the default settings, only `ConnectionErrorRetryHandler` with its default configuration (=only one retry in the manner of [exponential backoff and jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., connection reset by peer).
 
@@ -111,7 +111,7 @@ rate_limit_handler = RateLimitErrorRetryHandler(max_retry_count=1)
 client.retry_handlers.append(rate_limit_handler)
 ```
 
-You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_retry`). Check out the source code for the ones that are built in to learn how to properly implement them.
+You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry.RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_attempt`). Check out the source code for the ones that are built in to learn how to properly implement them.
 
 ``` python
 import socket
@@ -144,4 +144,4 @@ client = SCIMClient(
 )
 ```
 
-For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.
+For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those modules are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.

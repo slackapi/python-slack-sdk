@@ -2,11 +2,11 @@
 
 This tutorial details how to use the [`slack-sdk` package for Python](https://pypi.org/project/slack-sdk/) to upload files to a channel in Slack with some code samples. In addition to looking at how to upload files, we'll also cover listing and deleting files via the Web API using the Python SDK.
 
-## Creating an app {#create-app}
+## Creating an app {/* #create-app */}
 
 First, create a [Slack app](https://api.slack.com/apps/new).
 
-## Configuring your app's settings with an app manifest {#configuration}
+## Configuring your app's settings with an app manifest {/* #configuration */}
 
 Creating your app using this method will include all the required settings for this tutorial, and you won't be bogged down with too many details - all you'll need to do is decide where this app will live. If you're curious about the inner workings of how this button works, refer to [App Manifests](/app-manifests) for more information.
 
@@ -30,7 +30,7 @@ oauth_config:
       - files:write
 ```
 
-## Installing your app in a workspace {#installing}
+## Installing your app in a workspace {/* #installing */}
 
 Once you've created your app, you'll see an **Install to Workspace** button. Click it to install your app in your workspace.
 
@@ -52,9 +52,9 @@ export SLACK_BOT_TOKEN=<your token>
 
 With this, all your Slack app configuration is done. Let's start coding.
 
-## Using Python to upload a file {#upload-file-with-python}
+## Using Python to upload a file {/* #upload-file-with-python */}
 
-### Creating a new project {#create-new-project}
+### Creating a new project {/* #create-new-project */}
 
 First, ensure you're using Python version 3.7 or above. While the current standard is for the `python3` and `pip3` commands to use Python 3.7 or above, it's best to ensure your runtime is always using the latest version of Python. [pyenv](https://github.com/pyenv/pyenv) is a handy tool that can do this for you. 
 
@@ -68,7 +68,7 @@ pip install -U pip
 pip install -r requirements.txt
 ```
 
-### Uploading a file {#upload-file}
+### Uploading a file {/* #upload-file */}
 
 While it's possible to enter the following into the Python shell, we've gathered some code samples and wrote it in script form.
 
@@ -115,7 +115,7 @@ At this point, while no files have been uploaded yet, you can call the `files.li
 
 ```python
 >>> files = client.files_list(user=bot_user_id)
-DEBUG:slack_sdk.web.base_client:Sending a request - url: https://www.slack.com/api/files.list, query_params: {}, body_params: {'user': 'U02PY3HA48G'}, files: {}, json_body: None, headers: {}
+DEBUG:slack_sdk.web.base_client:Sending a request - url: https://slack.com/api/files.list, query_params: {}, body_params: {'user': 'U02PY3HA48G'}, files: {}, json_body: None, headers: {}
 DEBUG:slack_sdk.web.base_client:Received the following response - status: 200, headers: {}, body: {"ok":true,"files":[],"paging":{"count":100,"total":0,"page":1,"pages":0}}
 ```
 
@@ -154,7 +154,7 @@ DEBUG:slack_sdk.web.base_client:Received the following response - status: 200, h
 
 Back in Slack, you'll notice that nothing has happened. How curious...
 
-### Sharing a file within a channel {#sharing}
+### Sharing a file within a channel {/* #sharing */}
 
 At this point, we have indeed uploaded a file to Slack, but only the bot user is able to view it.
 
@@ -180,7 +180,7 @@ By doing this, you'll be able to see the file within Slack.
 
 ![Upload file](upload-files-first-upload.png)
 
-### Specifying a channel when uploading a file {#specifying-channel}
+### Specifying a channel when uploading a file {/* #specifying-channel */}
 
 While this exercise was very informative, having to do these two steps every time we upload a file is a bit cumbersome. Instead, we can specify the `channel` parameter to the function. This is the more common way of uploading a file from an app.
 
@@ -198,7 +198,7 @@ By running the above code, you'll share the same file without having to send a m
 
 ![Share file with message](upload-files-with-channel.png)
 
-### Uploading local files {#upload-local-files}
+### Uploading local files {/* #upload-local-files */}
 
 If you have an image file lying around, feel free to use that but for simplicity's sake. We'll continue using a text file here. You can create a local file by using the following command:
 
@@ -221,7 +221,7 @@ Again, we'll see that the file has been uploaded to Slack and shared within the 
 
 ![File uploaded](upload-files-local-file.png)
 
-## Deleting a file {#deleting}
+## Deleting a file {/* #deleting */}
 
 Next, we'll cover how to delete a file.
 
@@ -254,7 +254,7 @@ Once we run this, the `files` array should be empty. The count for files found w
 
 ![Delete a file](upload-files-delete.png)
 
-## Next steps {#next}
+## Next steps {/* #next */}
 
 This tutorial summarized how to use the Slack API to upload files and share them within a channel, using the Python SDK. The same principles apply to other languages as well, so if Python isn't your fancy, feel free to try out our other SDKs:
 

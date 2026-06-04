@@ -1,6 +1,6 @@
 # Webhook client
 
-## Incoming webhooks {#incoming-webhooks}
+## Incoming webhooks {/* #incoming-webhooks */}
 
 You can use `slack_sdk.webhook.WebhookClient` for [incoming webhooks](/messaging/sending-messages-using-incoming-webhooks) and message responses using [`response_url`](/interactivity/handling-user-interaction#message_responses) in payloads.
 
@@ -38,7 +38,7 @@ response = webhook.send(
 
 ## The `response_url`
 
-User actions in channels generates a [`response_url`](/interactivity/handling-user-interaction#message_responses) and includes the URL in its payload. You can use `WebhookClient` to send a message via the `response_url`.
+User actions in channels generate a [`response_url`](/interactivity/handling-user-interaction#message_responses) and include the URL in the payload. You can use `WebhookClient` to send a message via the `response_url`.
 
 ``` python
 import os
@@ -76,7 +76,7 @@ def slack_app():
     return make_response("", 404)
 ```
 
-## AsyncWebhookClient {#asyncwebhookclient}
+## AsyncWebhookClient {/* #asyncwebhookclient */}
 
 The webhook client is available in asynchronous programming using the standard [asyncio](https://docs.python.org/3/library/asyncio.html) library. You use `AsyncWebhookClient` instead. `AsyncWebhookClient` internally relies on the [AIOHTTP](https://docs.aiohttp.org/en/stable/) library, but it is an optional dependency. To use this class, run `pip install aiohttp` beforehand.
 
@@ -97,7 +97,7 @@ async def send_message_via_webhook(url: str):
 asyncio.run(send_message_via_webhook(url))
 ```
 
-## RetryHandler {#retryhandler}
+## RetryHandler {/* #retryhandler */}
 
 With the default settings, only `ConnectionErrorRetryHandler` with its default configuration (=only one retry in the manner of [exponential backoff and jitter](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/)) is enabled. The retry handler retries if an API client encounters a connectivity-related failure (e.g., connection reset by peer).
 
@@ -113,10 +113,10 @@ from slack_sdk.http_retry.builtin_handlers import RateLimitErrorRetryHandler
 rate_limit_handler = RateLimitErrorRetryHandler(max_retry_count=1)
 
 # Enable rate limited error retries as well
-client.retry_handlers.append(rate_limit_handler)
+webhook.retry_handlers.append(rate_limit_handler)
 ```
 
-You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_retry`). Check out the source code for the ones that are built in to learn how to properly implement them.
+You can also create one on your own by defining a new class that inherits `slack_sdk.http_retry.RetryHandler` (`AsyncRetryHandler` for asyncio apps) and implements required methods (internals of `can_retry` / `prepare_for_next_attempt`). Check out the source code for the ones that are built in to learn how to properly implement them.
 
 ``` python
 import socket
@@ -149,4 +149,4 @@ webhook = WebhookClient(
 )
 ```
 
-For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those methods are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.
+For asyncio apps, `Async` prefixed corresponding modules are available. All the methods in those modules are async/await compatible. Check [the source code](https://github.com/slackapi/python-slack-sdk/blob/main/slack_sdk/http_retry/async_handler.py) for more details.

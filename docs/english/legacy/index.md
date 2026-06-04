@@ -12,7 +12,7 @@ Slack APIs allow anyone to build full featured integrations that extend and expa
 
 To make it easier for Python programmers to build Slack applications, we've provided this open source SDK that will help you get started building Python apps as quickly as possible. The current version is built for Python 3.7 and higher.
 
-## Slack platform basics {#platform-basics}
+## Slack platform basics {/* #platform-basics */}
 
 If you're new to the Slack platform, we have a general purpose [quickstart guide](/quickstart) that isn't specific to any language or framework. Its a great place to learn all about the concepts that go into building a great Slack app.
 
@@ -20,7 +20,7 @@ Before you get started building on the Slack platform, you need to set up [your 
 
 The app configuration page is also where you'll acquire the OAuth token you'll use to call Slack API methods. Treat this token with care, just like you would a password, because it has access to your workspace and can potentially read and write data to and from it.
 
-## Installation {#installation}
+## Installation {/* #installation */}
 
 We recommend using [PyPI](https://pypi.python.org/pypi) to install as follows:
 

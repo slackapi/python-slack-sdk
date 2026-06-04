@@ -19,7 +19,7 @@ You can hook `pyenv` into your shell automatically by running `pyenv init` and f
 
 Install necessary Python runtimes for development/testing. It is not necessary
 to install all the various Python versions we test in [continuous integration on
-GitHub Actions](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/tests.yml),
+GitHub Actions](https://github.com/slackapi/python-slack-sdk/blob/main/.github/workflows/ci-build.yml),
 but make sure you are running at least one version that we execute our tests in
 locally so that you can run the tests yourself.
 
