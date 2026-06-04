@@ -4,7 +4,8 @@ aiohttp<3.11; python_version == "3.8"  # used for a WebSocket server mock
 aiohttp<4; python_version >= "3.9"  # used for a WebSocket server mock
 pytest>=7.0.1,<9
 pytest-asyncio<2  # for async
-pytest-cov>=7.1.0,<8
+pytest-cov>=4,<7.1.0; python_version < "3.9"
+pytest-cov>=7.1.0,<8; python_version >= "3.9"
 click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
 psutil>=6.0.0,<8
 # cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only
