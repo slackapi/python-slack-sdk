@@ -29,6 +29,18 @@ class SignatureVerifier:
         self.signing_secret = signing_secret
         self.clock = clock
 
+    @property
+    def signing_secret(self) -> str:
+        return self._signing_secret
+
+    @signing_secret.setter
+    def signing_secret(self, value: str) -> None:
+        if not isinstance(value, str):
+            raise ValueError("signing_secret must be a string")
+        if not value.strip():
+            raise ValueError("signing_secret must not be empty.")
+        self._signing_secret = value
+
     def is_valid_request(
         self,
         body: Union[str, bytes],
