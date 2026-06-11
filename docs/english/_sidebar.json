@@ -46,21 +46,5 @@
 		"type": "link",
 		"label": "Reference",
 		"href": "https://docs.slack.dev/tools/python-slack-sdk/reference/index.html"
-	},
-	{ "type": "html", "value": "<hr>" },
-	{
-		"type": "link",
-		"label": "Release notes",
-		"href": "https://github.com/slackapi/python-slack-sdk/releases"
-	},
-	{
-		"type": "link",
-		"label": "Code on GitHub",
-		"href": "https://github.com/SlackAPI/python-slack-sdk"
-	},
-	{
-		"type": "link",
-		"label": "Contributors Guide",
-		"href": "https://github.com/SlackAPI/python-slack-sdk/blob/main/.github/contributing.md"
 	}
 ]
