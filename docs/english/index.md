@@ -29,12 +29,12 @@ If you get stuck, we're here to help. The following are the best ways to get ass
 * [Issue Tracker](http://github.com/slackapi/python-slack-sdk/issues) for questions, bug reports, feature requests, and general discussion related to the Python Slack SDK. Try searching for an existing issue before creating a new one.
 * [Email](mailto:support@slack.com) our developer support team: `support@slack.com`.
 
+## Release notes
+
+Check out the [Python Slack SDK release notes](https://github.com/slackapi/python-slack-sdk/releases) for all the latest happenings.
+
 ## Contributing {/* #contributing */}
 
 These docs live within the [Python Slack SDK](https://github.com/slackapi/python-slack-sdk) repository and are open source.
 
 We welcome contributions from everyone! Please check out our [Contributor's Guide](https://github.com/slackapi/python-slack-sdk/blob/main/.github/contributing.md) for how to contribute in a helpful and collaborative way.
-
-## Release notes
-
-Check out the [Python Slack SDK release notes](https://github.com/slackapi/python-slack-sdk/releases) for all the latest happenings.
