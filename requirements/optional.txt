@@ -16,3 +16,5 @@ SQLAlchemy>=2.0.49,<3
 # websockets 9 is not compatible with Python 3.10
 websockets>=9.1,<16
 websocket-client>=1,<2
+# SSL certificate bundle for certificate verification issues
+certifi
