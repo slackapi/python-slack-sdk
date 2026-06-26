@@ -108,6 +108,8 @@ class Block(JsonObject):
                     return AlertBlock(**block)
                 elif type == CarouselBlock.type:
                     return CarouselBlock(**block)
+                elif type == DataTableBlock.type:
+                    return DataTableBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -1030,3 +1032,63 @@ class CarouselBlock(Block):
     @JsonValidator(f"elements attribute cannot exceed {elements_max_length} cards")
     def _validate_elements_length(self):
         return self.elements is None or len(self.elements) <= self.elements_max_length
+
+
+class DataTableBlock(Block):
+    type = "data_table"
+    rows_max_length = 101
+    columns_max_length = 20
+    page_size_min = 1
+    page_size_max = 100
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"rows", "caption", "page_size", "row_header_column_index"})
+
+    def __init__(
+        self,
+        *,
+        rows: Sequence[Sequence[Dict[str, Any]]],
+        caption: str,
+        page_size: Optional[int] = None,
+        row_header_column_index: Optional[int] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays structured, paginated data in a table with a required caption.
+        https://docs.slack.dev/reference/block-kit/blocks/data-table-block
+
+        Args:
+            rows (required): An array consisting of table rows. Minimum 2 rows (header plus one data row)
+                and maximum 101 rows (header plus 100 data rows). All rows must have an identical column
+                count, with a maximum of 20 columns. Each cell has a type of raw_text, raw_number, or
+                rich_text. The total character limit across all cells is 10,000.
+            caption (required): A caption for the table; used as the value for the HTML caption element.
+            page_size: The number of rows to show per page. Min 1, Max 100. Defaults to 5 if omitted.
+            row_header_column_index: The 0-based index of the column that uniquely identifies each row
+                (the row header). Defaults to 0 if omitted.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source
+                of the action. Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.rows = rows
+        self.caption = caption
+        self.page_size = page_size
+        self.row_header_column_index = row_header_column_index
+
+    @JsonValidator("rows attribute must be specified")
+    def _validate_rows(self):
+        return self.rows is not None and len(self.rows) > 0
+
+    @JsonValidator("caption attribute must be specified")
+    def _validate_caption(self):
+        return self.caption is not None
+
+    @JsonValidator(f"page_size must be between {page_size_min} and {page_size_max}")
+    def _validate_page_size(self):
+        return self.page_size is None or self.page_size_min <= self.page_size <= self.page_size_max
