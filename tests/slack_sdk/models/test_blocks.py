@@ -12,6 +12,8 @@ from slack_sdk.models.blocks import (
     CarouselBlock,
     ContextActionsBlock,
     ContextBlock,
+    DataTableBlock,
+    DataVisualizationBlock,
     DividerBlock,
     FileBlock,
     HeaderBlock,
@@ -1554,6 +1556,182 @@ class TableBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(expected, block.to_dict())
+
+
+class DataTableBlockTests(unittest.TestCase):
+    def test_document(self):
+        """Test basic data table block from Slack documentation example"""
+        input = {
+            "type": "data_table",
+            "caption": "Quarterly sales by region",
+            "rows": [
+                [{"type": "raw_text", "text": "Region"}, {"type": "raw_text", "text": "Sales"}],
+                [{"type": "raw_text", "text": "West"}, {"type": "raw_number", "value": 120, "text": "120"}],
+                [{"type": "raw_text", "text": "East"}, {"type": "raw_number", "value": 95, "text": "95"}],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_all_fields(self):
+        """Test data table block with every optional field set"""
+        input = {
+            "type": "data_table",
+            "block_id": "data-table-123",
+            "caption": "User directory",
+            "page_size": 25,
+            "row_header_column_index": 1,
+            "rows": [
+                [{"type": "raw_text", "text": "ID"}, {"type": "raw_text", "text": "Name"}],
+                [{"type": "raw_number", "value": 1, "text": "1"}, {"type": "raw_text", "text": "Alice"}],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_rich_text(self):
+        """Test data table block with rich_text cells"""
+        input = {
+            "type": "data_table",
+            "caption": "Links",
+            "rows": [
+                [{"type": "raw_text", "text": "Site"}],
+                [
+                    {
+                        "type": "rich_text",
+                        "elements": [
+                            {
+                                "type": "rich_text_section",
+                                "elements": [{"text": "Slack", "type": "link", "url": "https://slack.com"}],
+                            }
+                        ],
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_rows_validation(self):
+        """Test that empty rows fail validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="empty", rows=[]).to_dict()
+
+    def test_caption_required(self):
+        """Test that DataTableBlock requires a caption argument"""
+        with self.assertRaises(TypeError):
+            DataTableBlock(rows=[[{"type": "raw_text", "text": "A"}]])
+
+    def test_page_size_validation(self):
+        """Test that page_size outside the allowed range fails validation"""
+        rows = [[{"type": "raw_text", "text": "A"}], [{"type": "raw_text", "text": "B"}]]
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="too small", rows=rows, page_size=0).to_dict()
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="too big", rows=rows, page_size=101).to_dict()
+        # A valid page_size should pass
+        DataTableBlock(caption="ok", rows=rows, page_size=50).to_dict()
+
+
+class DataVisualizationBlockTests(unittest.TestCase):
+    def test_document(self):
+        """Test basic pie chart data visualization block from Slack documentation example"""
+        input = {
+            "type": "data_visualization",
+            "title": "Quarterly sales by region",
+            "chart": {
+                "type": "pie",
+                "segments": [
+                    {"label": "West", "value": 120},
+                    {"label": "East", "value": 95},
+                    {"label": "North", "value": 60},
+                ],
+            },
+        }
+        self.assertDictEqual(input, DataVisualizationBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_bar_chart_with_block_id(self):
+        """Test a bar chart with series, axis_config, and a block_id"""
+        input = {
+            "type": "data_visualization",
+            "block_id": "data-viz-123",
+            "title": "Revenue vs cost",
+            "chart": {
+                "type": "bar",
+                "series": [
+                    {
+                        "name": "Revenue",
+                        "data": [
+                            {"label": "Q1", "value": 100},
+                            {"label": "Q2", "value": 150},
+                        ],
+                    },
+                    {
+                        "name": "Cost",
+                        "data": [
+                            {"label": "Q1", "value": 80},
+                            {"label": "Q2", "value": 90},
+                        ],
+                    },
+                ],
+                "axis_config": {
+                    "categories": ["Q1", "Q2"],
+                    "x_label": "Quarter",
+                    "y_label": "USD (thousands)",
+                },
+            },
+        }
+        self.assertDictEqual(input, DataVisualizationBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_line_chart(self):
+        """Test a line chart, which permits negative values"""
+        input = {
+            "type": "data_visualization",
+            "title": "Net change",
+            "chart": {
+                "type": "line",
+                "series": [
+                    {
+                        "name": "Change",
+                        "data": [
+                            {"label": "Jan", "value": -10},
+                            {"label": "Feb", "value": 5},
+                        ],
+                    },
+                ],
+                "axis_config": {"categories": ["Jan", "Feb"]},
+            },
+        }
+        self.assertDictEqual(input, DataVisualizationBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_title_required(self):
+        """Test that DataVisualizationBlock requires a title argument"""
+        with self.assertRaises(TypeError):
+            DataVisualizationBlock(chart={"type": "pie", "segments": [{"label": "A", "value": 1}]})
+
+    def test_chart_required(self):
+        """Test that DataVisualizationBlock requires a chart argument"""
+        with self.assertRaises(TypeError):
+            DataVisualizationBlock(title="No chart")
+
+    def test_title_length_validation(self):
+        """Test that a title longer than 50 characters fails validation"""
+        chart = {"type": "pie", "segments": [{"label": "A", "value": 1}]}
+        with self.assertRaises(SlackObjectFormationError):
+            DataVisualizationBlock(title="a" * 51, chart=chart).to_dict()
+        # Exactly 50 characters should pass
+        DataVisualizationBlock(title="a" * 50, chart=chart).to_dict()
+
+    def test_chart_type_validation(self):
+        """Test that an unsupported chart type fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            DataVisualizationBlock(
+                title="Bad chart",
+                chart={"type": "scatter", "segments": [{"label": "A", "value": 1}]},
+            ).to_dict()
 
 
 class CardBlockTests(unittest.TestCase):
