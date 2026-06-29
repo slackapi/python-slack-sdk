@@ -2132,7 +2132,7 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         channel_id: str,
-        thread_ts: str,
+        thread_ts: Optional[str] = None,
         title: Optional[str] = None,
         prompts: List[Dict[str, str]],
         **kwargs,
@@ -2140,7 +2140,9 @@ class LegacyWebClient(LegacyBaseClient):
         """Set suggested prompts for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "prompts": prompts})
+        kwargs.update({"channel_id": channel_id, "prompts": prompts})
+        if thread_ts is not None:
+            kwargs.update({"thread_ts": thread_ts})
         if title is not None:
             kwargs.update({"title": title})
         return self.api_call("assistant.threads.setSuggestedPrompts", json=kwargs)
