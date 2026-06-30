@@ -98,6 +98,18 @@ el.replaceWith(d);
         self.signing_secret = signing_secret
         self.clock = clock
 
+    @property
+    def signing_secret(self) -&gt; str:
+        return self._signing_secret
+
+    @signing_secret.setter
+    def signing_secret(self, value: str) -&gt; None:
+        if not isinstance(value, str):
+            raise ValueError(&#34;signing_secret must be a string&#34;)
+        if not value.strip():
+            raise ValueError(&#34;signing_secret must not be empty.&#34;)
+        self._signing_secret = value
+
     def is_valid_request(
         self,
         body: Union[str, bytes],
@@ -151,6 +163,21 @@ el.replaceWith(d);
 With the help of signing secrets, your app can more confidently verify
 whether requests from us are authentic.
 <a href="https://docs.slack.dev/authentication/verifying-requests-from-slack/">https://docs.slack.dev/authentication/verifying-requests-from-slack/</a></p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.signature.SignatureVerifier.signing_secret"><code class="name">prop <span class="ident">signing_secret</span> : str</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def signing_secret(self) -&gt; str:
+    return self._signing_secret</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.signature.SignatureVerifier.generate_signature"><code class="name flex">
@@ -260,6 +287,7 @@ whether requests from us are authentic.
 <li><code><a title="slack_sdk.signature.SignatureVerifier.generate_signature" href="#slack_sdk.signature.SignatureVerifier.generate_signature">generate_signature</a></code></li>
 <li><code><a title="slack_sdk.signature.SignatureVerifier.is_valid" href="#slack_sdk.signature.SignatureVerifier.is_valid">is_valid</a></code></li>
 <li><code><a title="slack_sdk.signature.SignatureVerifier.is_valid_request" href="#slack_sdk.signature.SignatureVerifier.is_valid_request">is_valid_request</a></code></li>
+<li><code><a title="slack_sdk.signature.SignatureVerifier.signing_secret" href="#slack_sdk.signature.SignatureVerifier.signing_secret">signing_secret</a></code></li>
 </ul>
 </li>
 </ul>
