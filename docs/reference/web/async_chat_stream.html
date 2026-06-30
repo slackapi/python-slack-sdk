@@ -119,6 +119,15 @@ el.replaceWith(d);
         self._stream_ts: Optional[str] = None
         self._buffer_size = buffer_size
 
+    @property
+    def ts(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The message timestamp of the stream.
+
+        Returns None until the first flush (when chat.startStream is called).
+        Can be used with chat.update as a fallback if the stream expires server-side.
+        &#34;&#34;&#34;
+        return self._stream_ts
+
     async def append(
         self,
         *,
@@ -309,6 +318,28 @@ decreases the number of method calls made for the same amount of text, which is 
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.web.async_chat_stream.AsyncChatStream.ts"><code class="name">prop <span class="ident">ts</span> : str | None</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def ts(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The message timestamp of the stream.
+
+    Returns None until the first flush (when chat.startStream is called).
+    Can be used with chat.update as a fallback if the stream expires server-side.
+    &#34;&#34;&#34;
+    return self._stream_ts</code></pre>
+</details>
+<div class="desc"><p>The message timestamp of the stream.</p>
+<p>Returns None until the first flush (when chat.startStream is called).
+Can be used with chat.update as a fallback if the stream expires server-side.</p></div>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.web.async_chat_stream.AsyncChatStream.append"><code class="name flex">
@@ -543,6 +574,7 @@ streamer.stop()
 <ul class="">
 <li><code><a title="slack_sdk.web.async_chat_stream.AsyncChatStream.append" href="#slack_sdk.web.async_chat_stream.AsyncChatStream.append">append</a></code></li>
 <li><code><a title="slack_sdk.web.async_chat_stream.AsyncChatStream.stop" href="#slack_sdk.web.async_chat_stream.AsyncChatStream.stop">stop</a></code></li>
+<li><code><a title="slack_sdk.web.async_chat_stream.AsyncChatStream.ts" href="#slack_sdk.web.async_chat_stream.AsyncChatStream.ts">ts</a></code></li>
 </ul>
 </li>
 </ul>

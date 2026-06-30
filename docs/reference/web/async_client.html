@@ -2151,7 +2151,7 @@ el.replaceWith(d);
         self,
         *,
         channel_id: str,
-        thread_ts: str,
+        thread_ts: Optional[str] = None,
         title: Optional[str] = None,
         prompts: List[Dict[str, str]],
         **kwargs,
@@ -2159,7 +2159,9 @@ el.replaceWith(d);
         &#34;&#34;&#34;Set suggested prompts for the given assistant thread.
         https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
         &#34;&#34;&#34;
-        kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;prompts&#34;: prompts})
+        kwargs.update({&#34;channel_id&#34;: channel_id, &#34;prompts&#34;: prompts})
+        if thread_ts is not None:
+            kwargs.update({&#34;thread_ts&#34;: thread_ts})
         if title is not None:
             kwargs.update({&#34;title&#34;: title})
         return await self.api_call(&#34;assistant.threads.setSuggestedPrompts&#34;, json=kwargs)
@@ -9313,7 +9315,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://docs.slack.dev/reference/methods/assistant.threads.setStatus">https://docs.slack.dev/reference/methods/assistant.threads.setStatus</a></p></div>
 </dd>
 <dt id="slack_sdk.web.async_client.AsyncWebClient.assistant_threads_setSuggestedPrompts"><code class="name flex">
-<span>async def <span class="ident">assistant_threads_setSuggestedPrompts</span></span>(<span>self,<br>*,<br>channel_id: str,<br>thread_ts: str,<br>title: str | None = None,<br>prompts: List[Dict[str, str]],<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
+<span>async def <span class="ident">assistant_threads_setSuggestedPrompts</span></span>(<span>self,<br>*,<br>channel_id: str,<br>thread_ts: str | None = None,<br>title: str | None = None,<br>prompts: List[Dict[str, str]],<br>**kwargs) ‑> <a title="slack_sdk.web.async_slack_response.AsyncSlackResponse" href="async_slack_response.html#slack_sdk.web.async_slack_response.AsyncSlackResponse">AsyncSlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -9324,7 +9326,7 @@ Each authorization represents an app installation that the event is visible to.
     self,
     *,
     channel_id: str,
-    thread_ts: str,
+    thread_ts: Optional[str] = None,
     title: Optional[str] = None,
     prompts: List[Dict[str, str]],
     **kwargs,
@@ -9332,7 +9334,9 @@ Each authorization represents an app installation that the event is visible to.
     &#34;&#34;&#34;Set suggested prompts for the given assistant thread.
     https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
     &#34;&#34;&#34;
-    kwargs.update({&#34;channel_id&#34;: channel_id, &#34;thread_ts&#34;: thread_ts, &#34;prompts&#34;: prompts})
+    kwargs.update({&#34;channel_id&#34;: channel_id, &#34;prompts&#34;: prompts})
+    if thread_ts is not None:
+        kwargs.update({&#34;thread_ts&#34;: thread_ts})
     if title is not None:
         kwargs.update({&#34;title&#34;: title})
     return await self.api_call(&#34;assistant.threads.setSuggestedPrompts&#34;, json=kwargs)</code></pre>
