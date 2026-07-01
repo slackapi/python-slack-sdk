@@ -1,6 +1,6 @@
 # pip install -r requirements/optional.txt
 # async modules depend on aiohttp
-aiodns>1.0
+aiodns>=4.0.4
 # We recommend using 3.7.1+ for RTMClient
 # https://github.com/slackapi/python-slack-sdk/issues/912
 aiohttp>=3.7.3,<3.9; python_version == "3.7"
