@@ -2,7 +2,7 @@
 aiohttp<3.9; python_version == "3.7"  # used for a WebSocket server mock
 aiohttp<3.11; python_version == "3.8"  # used for a WebSocket server mock
 aiohttp<4; python_version >= "3.9"  # used for a WebSocket server mock
-pytest>=7.0.1,<9
+pytest>=9.1.1,<10
 pytest-asyncio<2  # for async
 pytest-cov>=4,<7.1.0; python_version < "3.9"
 pytest-cov>=7.1.0,<8; python_version >= "3.9"
