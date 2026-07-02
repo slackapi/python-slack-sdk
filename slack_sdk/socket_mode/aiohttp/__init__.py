@@ -246,7 +246,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                                 self.logger.debug(
                                     f"Received message "
                                     f"(type: {message_type}, "
-                                    f"data: {message_data}, "
+                                    f"data: {repr(message_data)}, "
                                     f"extra: {message.extra}, "
                                     f"session: {session_id})"
                                 )

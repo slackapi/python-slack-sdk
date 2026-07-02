@@ -66,7 +66,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
                 d = copy.copy(block_element)
                 t = d.pop("type")
                 for subclass in cls._get_sub_block_elements():
-                    if t == subclass.type:
+                    if t == getattr(subclass, "type", None):
                         return subclass(**d)
                 if t == PlainTextObject.type:
                     return PlainTextObject(**d)
