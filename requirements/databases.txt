@@ -1,5 +1,5 @@
 # Database drivers for CI testing
 
 # PostgreSQL drivers
-psycopg2-binary>=2.9,<3
+psycopg2-binary>=2.9.12,<3
 asyncpg>=0.31.0,<1
