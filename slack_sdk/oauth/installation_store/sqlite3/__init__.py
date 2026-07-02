@@ -486,7 +486,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         installed_at=row[23],
                     )
 
-                    if user_id is not None:
+                    has_user_installation = user_id is not None and installation is not None
+                    no_bot_token_installation = installation is not None and installation.bot_token is None
+                    should_find_bot_installation = has_user_installation or no_bot_token_installation
+                    if should_find_bot_installation:
                         # Retrieve the latest bot token, just in case
                         # See also: https://github.com/slackapi/bolt-python/issues/664
                         cur = conn.execute(
@@ -514,12 +517,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             [self.client_id, enterprise_id or "", team_id],
                         )
                         row = cur.fetchone()
-                        installation.bot_token = row[0]
-                        installation.bot_id = row[1]
-                        installation.bot_user_id = row[2]
-                        installation.bot_scopes = row[3]
-                        installation.bot_refresh_token = row[4]
-                        installation.bot_token_expires_at = row[5]
+                        if row is not None:
+                            installation.bot_token = row[0]
+                            installation.bot_id = row[1]
+                            installation.bot_user_id = row[2]
+                            installation.bot_scopes = row[3]
+                            installation.bot_refresh_token = row[4]
+                            installation.bot_token_expires_at = row[5]
 
                     return installation
                 return None
