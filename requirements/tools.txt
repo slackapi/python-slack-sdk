@@ -1,4 +1,4 @@
-mypy<=1.19.1;
+mypy<=2.1.0;
 # while flake8 5.x have issues with Python 3.12, flake8 6.x requires Python >= 3.8.1,
 # so 5.x should be kept in order to stay compatible with Python 3.7/3.8
 flake8>=7.3.0,<8
