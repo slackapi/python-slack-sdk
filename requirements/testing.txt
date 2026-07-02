@@ -7,7 +7,7 @@ pytest-asyncio<2  # for async
 pytest-cov>=4,<7.1.0; python_version < "3.9"
 pytest-cov>=7.1.0,<8; python_version >= "3.9"
 click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
-psutil>=6.0.0,<8
+psutil>=7.2.2,<8
 # cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only
 cryptography<46; implementation_name == "pypy" and python_version == "3.10"
 #  used only under slack_sdk/*_store
