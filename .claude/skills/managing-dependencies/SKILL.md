@@ -19,7 +19,7 @@ The convention resolves this without dropping old-Python support. Pin each inter
 
 ## File-layout convention
 
-Each file lists **one dependency per section**: Name of the dependency, an optional rationale note (why a version is pinned or split), then the requirement line(s), separated from the next section by a blank line. This makes every pin self-documenting.
+Each file lists **one dependency per section**: Name of the dependency, an optional rationale note (starting with `Note:`, explaining why a version is pinned or split), then the requirement line(s), separated from the next section by a blank line. This makes every pin self-documenting.
 
 ```
 # pytest
@@ -54,7 +54,8 @@ If the bump lands in a latest-Python-only file, take it as-is. No markers, no ce
 When a dependency's floor rises to a release that requires a newer Python, **do not** just take the bump, and **do not** drop old-Python support to make CI pass. Instead, split the requirement into `python_version`-marked lines that **partition the whole matrix**. Every interpreter matches exactly one line. Old interpreters keep the last compatible release (with an explicit ceiling), and the newest line is open-ended so future Pythons stay covered.
 
 ```
-# Test runner; pytest 9 requires Python >=3.10
+# pytest
+# Note: pytest 9 requires Python >=3.10; cap older interpreters below it.
 pytest>=7.0.1,<9; python_version < "3.10"
 pytest>=9.1.1,<10; python_version >= "3.10"
 ```
@@ -95,6 +96,8 @@ Cross-check the PyPI value against that log so you are never guessing. (If inste
 **Different old Pythons need different ceilings.** When several old interpreters each cap at a different release, emit one line per divergent interpreter with `== "X.Y"`, then a final open-ended line. This is the `aiohttp` pattern already in `testing.txt` / `optional.txt`:
 
 ```
+# aiohttp
+# Note: aiohttp's minimum Python rose in stages; cap each old interpreter at its last compatible release.
 aiohttp>=3.7.3,<3.9; python_version == "3.7"
 aiohttp>=3.7.3,<3.11; python_version == "3.8"
 aiohttp>=3.13.5,<4; python_version >= "3.9"
@@ -103,7 +106,8 @@ aiohttp>=3.13.5,<4; python_version >= "3.9"
 **Only PyPy breaks.** Sometimes a bump drops PyPy _wheels_ while CPython at the same version is fine (the failing jobs are `pypy*`, not `3.7`/`3.8`/`3.9`). A `python_version` split would wrongly downgrade CPython too. Gate on the implementation instead, as in the `cryptography` pattern in `testing.txt`. Note the exact marker name and casing: **`implementation_name == "pypy"`** (lowercase `pypy`), not `platform_python_implementation`. A single gated line is enough. You do **not** need a second negated line for the other interpreters, because an unmarked line already applies everywhere the marked one is skipped.
 
 ```
-# cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only
+# cryptography
+# Note: cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only.
 cryptography<46; implementation_name == "pypy" and python_version == "3.10"
 ```
 
