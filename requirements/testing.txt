@@ -7,7 +7,7 @@ aiohttp<3.11; python_version == "3.8"
 aiohttp<4; python_version >= "3.9"
 
 # pytest
-pytest>=7.0.1,<9
+pytest>=9.1.1,<10
 
 # pytest-asyncio
 # Note: for async.
