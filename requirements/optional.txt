@@ -4,7 +4,7 @@
 
 # aiodns
 # Note: async modules depend on aiohttp
-aiodns>1.0
+aiodns>=4.0.4
 
 # aiohttp
 # We recommend using 3.7.1+ for RTMClient
