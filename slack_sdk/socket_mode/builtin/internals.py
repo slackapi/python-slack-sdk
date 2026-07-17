@@ -161,6 +161,7 @@ def _generate_sec_websocket_key() -> str:
 
 def _validate_sec_websocket_accept(sec_websocket_key: str, headers: dict) -> bool:
     v = (sec_websocket_key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").encode("utf-8")
+    # RFC 6455 section 1.3: Sec-WebSocket-Accept must use SHA-1 over the challenge key.
     expected = encodebytes(hashlib.sha1(v).digest()).decode("utf-8").strip()
     actual = headers.get("sec-websocket-accept", "").strip()
     return compare_digest(expected, actual)
@@ -306,10 +307,12 @@ def _fetch_messages(
 
         current_data = bytes()
         if current_header.masked > 0:
-            for i in range(data_to_append):  # type: ignore[call-overload]
+            # bytes is immutable; RFC 6455 masking XORs octets (use bytearray).
+            mutable_payload = bytearray(data_to_append)
+            for i in range(len(mutable_payload)):
                 mask = current_mask_key[i % 4]  # type: ignore[index]
-                data_to_append[i] ^= mask  # type: ignore[index]
-            current_data += data_to_append
+                mutable_payload[i] ^= mask
+            current_data += bytes(mutable_payload)
         else:
             current_data += data_to_append
         if len(current_data) == current_data_length:
