@@ -1,6 +1,6 @@
 import base64
 import hashlib
-import hmac as _hmac
+import hmac
 import json
 import logging
 import time
@@ -39,7 +39,7 @@ class StatelessOAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
 
     def _sign(self, message: str) -> str:
         return self._b64url_encode(
-            _hmac.new(
+            hmac.new(
                 self.signing_secret.encode("utf-8"),
                 message.encode("utf-8"),
                 hashlib.sha256,
@@ -47,8 +47,10 @@ class StatelessOAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
         )
 
     def issue(self, *args, **kwargs) -> str:
-        header = self._b64url_encode(json.dumps({"alg": "HS256", "typ": "JWT"}).encode())
-        payload = self._b64url_encode(json.dumps({"exp": int(time.time()) + self.expiration_seconds}).encode())
+        header = self._b64url_encode(json.dumps({"alg": "HS256", "typ": "JWT"}, separators=(",", ":")).encode())
+        payload = self._b64url_encode(
+            json.dumps({"exp": int(time.time()) + self.expiration_seconds}, separators=(",", ":")).encode()
+        )
         signature = self._sign(f"{header}.{payload}")
         return f"{header}.{payload}.{signature}"
 
@@ -59,7 +61,7 @@ class StatelessOAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
                 return False
             header, payload, signature = parts
             expected_signature = self._sign(f"{header}.{payload}")
-            if not _hmac.compare_digest(signature, expected_signature):
+            if not hmac.compare_digest(signature, expected_signature):
                 self.logger.warning("Invalid JWT signature for state parameter")
                 return False
             claims = json.loads(self._b64url_decode(payload))
