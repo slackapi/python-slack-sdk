@@ -225,6 +225,8 @@ class SocketModeClient(BaseSocketModeClient):
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
+        if self.current_session_runner.is_alive():
+            self.current_session_runner.shutdown()
         if self.current_app_monitor.is_alive():
             self.current_app_monitor.shutdown()
         if self.message_processor.is_alive():
