@@ -310,3 +310,5 @@ The SDK has **zero required runtime dependencies** for the core sync Web API cli
 - `aiodns` — faster DNS resolution for async
 
 Version constraints for optional and dev dependencies are pinned in the `requirements/` directory.
+
+Before adding, bumping, pinning, or reviewing any dependency in `requirements/*.txt`, whether a Dependabot PR or a manual edit, follow the `managing-dependencies` skill in `.claude/skills/`. It defines the layout and `python_version` marker conventions that keep one set of pins working across the full Python matrix.

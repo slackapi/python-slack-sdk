@@ -1,19 +1,46 @@
 # pip install -r requirements/testing.txt
-aiohttp<3.9; python_version == "3.7"  # used for a WebSocket server mock
-aiohttp<3.11; python_version == "3.8"  # used for a WebSocket server mock
-aiohttp<4; python_version >= "3.9"  # used for a WebSocket server mock
+
+# aiohttp
+# Note: Used for a WebSocket server mock.
+aiohttp<3.9; python_version == "3.7"
+aiohttp<3.11; python_version == "3.8"
+aiohttp<4; python_version >= "3.9"
+
+# pytest
 pytest>=7.0.1,<9
-pytest-asyncio<2  # for async
+
+# pytest-asyncio
+# Note: for async.
+pytest-asyncio<2
+
+# pytest-cov
+# Note: pytest-cov 7.1+ requires Python >=3.9; cap older interpreters below it.
 pytest-cov>=4,<7.1.0; python_version < "3.9"
 pytest-cov>=7.1.0,<8; python_version >= "3.9"
-click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
+
+# click
+# Note: black is affected by https://github.com/pallets/click/issues/2225; pin click to 8.0.4.
+click==8.0.4
+
+# psutil
 psutil>=7.2.2,<8
-# cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only
+
+# cryptography
+# Note: cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only.
 cryptography<46; implementation_name == "pypy" and python_version == "3.10"
-#  used only under slack_sdk/*_store
+
+# boto3
+# Note: used only under slack_sdk/*_store.
 boto3<=2
-# For AWS tests
+
+# moto
+# Note: for AWS tests.
 moto>=4.2.14,<6
-# For AsyncSQLAlchemy tests
+
+# greenlet
+# Note: for AsyncSQLAlchemy tests.
 greenlet<=4
+
+# aiosqlite
+# Note: for AsyncSQLAlchemy tests.
 aiosqlite<=1
