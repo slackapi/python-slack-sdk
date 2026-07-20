@@ -3,8 +3,11 @@
 # metadata via [tool.setuptools.dynamic] in pyproject.toml.
 
 # aiodns
-# Note: async modules depend on aiohttp
-aiodns>1.0
+# Note: async modules depend on aiohttp.
+# Note: aiodns's minimum Python rose in stages (>=3.9 at 3.3.0, >=3.10 at 4.0.0); cap each old interpreter at its last compatible release.
+aiodns>1.0,<3.3; python_version < "3.9"
+aiodns>1.0,<4; python_version == "3.9"
+aiodns>=4.0.4; python_version >= "3.10"
 
 # aiohttp
 # We recommend using 3.7.1+ for RTMClient
