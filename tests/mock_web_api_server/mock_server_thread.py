@@ -1,6 +1,6 @@
 from asyncio import Queue
 import asyncio
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import threading
 from typing import Type, Union
 from unittest import TestCase
@@ -10,14 +10,14 @@ class MockServerThread(threading.Thread):
     def __init__(
         self, queue: Union[Queue, asyncio.Queue], test: TestCase, handler: Type[SimpleHTTPRequestHandler], port: int = 8888
     ):
-        threading.Thread.__init__(self)
+        threading.Thread.__init__(self, daemon=True)
         self.handler = handler
         self.test = test
         self.queue = queue
         self.port = port
 
     def run(self):
-        self.server = HTTPServer(("localhost", self.port), self.handler)
+        self.server = ThreadingHTTPServer(("localhost", self.port), self.handler)
         self.server.queue = self.queue
         self.test.server_url = f"http://localhost:{str(self.port)}"
         self.test.host, self.test.port = self.server.socket.getsockname()
@@ -33,9 +33,9 @@ class MockServerThread(threading.Thread):
         with self.server.queue.mutex:
             del self.server.queue
         self.server.shutdown()
-        self.join()
+        self.join(timeout=5)
 
     def stop_unsafe(self):
         del self.server.queue
         self.server.shutdown()
-        self.join()
+        self.join(timeout=5)

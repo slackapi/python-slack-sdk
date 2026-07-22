@@ -2,7 +2,7 @@ import json
 import logging
 import threading
 from http import HTTPStatus
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from typing import Type
 from unittest import TestCase
 
@@ -63,14 +63,16 @@ class MockHandler(SimpleHTTPRequestHandler):
 
 
 class MockServerThread(threading.Thread):
+    port = 8888
+
     def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
-        threading.Thread.__init__(self)
+        threading.Thread.__init__(self, daemon=True)
         self.handler = handler
         self.test = test
 
     def run(self):
-        self.server = HTTPServer(("localhost", 8888), self.handler)
-        self.test.server_url = "http://localhost:8888"
+        self.server = ThreadingHTTPServer(("localhost", self.port), self.handler)
+        self.test.server_url = f"http://localhost:{self.port}"
         self.test.host, self.test.port = self.server.socket.getsockname()
         self.test.server_started.set()  # threading.Event()
 
@@ -82,14 +84,17 @@ class MockServerThread(threading.Thread):
 
     def stop(self):
         self.server.shutdown()
-        self.join()
+        self.join(timeout=5)
 
 
 def setup_mock_web_api_server(test: TestCase):
     test.server_started = threading.Event()
     test.thread = MockServerThread(test)
     test.thread.start()
-    test.server_started.wait()
+    if not test.server_started.wait(timeout=5):
+        raise RuntimeError(
+            f"Mock web API server failed to start on port {test.thread.port} within 5s (port already in use?)"
+        )
 
 
 def cleanup_mock_web_api_server(test: TestCase):
