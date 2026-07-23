@@ -36,8 +36,10 @@ class TestInteractionsWebsockets(unittest.TestCase):
         start_socket_mode_server(self, 3001)
 
     def tearDown(self):
-        cleanup_mock_web_api_server_async(self)
-        stop_socket_mode_server(self)
+        try:
+            cleanup_mock_web_api_server_async(self)
+        finally:
+            stop_socket_mode_server(self)
 
     @async_test
     async def test_interactions(self):

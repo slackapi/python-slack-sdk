@@ -2,9 +2,10 @@ import json
 import logging
 import threading
 from http import HTTPStatus
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-from typing import Type
+from http.server import SimpleHTTPRequestHandler
 from unittest import TestCase
+
+from tests.mock_web_api_server.mock_server_thread import MockServerThread
 
 
 class MockHandler(SimpleHTTPRequestHandler):
@@ -62,34 +63,9 @@ class MockHandler(SimpleHTTPRequestHandler):
         self._handle()
 
 
-class MockServerThread(threading.Thread):
-    port = 8888
-
-    def __init__(self, test: TestCase, handler: Type[SimpleHTTPRequestHandler] = MockHandler):
-        threading.Thread.__init__(self, daemon=True)
-        self.handler = handler
-        self.test = test
-
-    def run(self):
-        self.server = ThreadingHTTPServer(("localhost", self.port), self.handler)
-        self.test.server_url = f"http://localhost:{self.port}"
-        self.test.host, self.test.port = self.server.socket.getsockname()
-        self.test.server_started.set()  # threading.Event()
-
-        self.test = None
-        try:
-            self.server.serve_forever(0.05)
-        finally:
-            self.server.server_close()
-
-    def stop(self):
-        self.server.shutdown()
-        self.join(timeout=5)
-
-
 def setup_mock_web_api_server(test: TestCase):
     test.server_started = threading.Event()
-    test.thread = MockServerThread(test)
+    test.thread = MockServerThread(test=test, handler=MockHandler)
     test.thread.start()
     if not test.server_started.wait(timeout=5):
         raise RuntimeError(
