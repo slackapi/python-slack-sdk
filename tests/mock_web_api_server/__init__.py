@@ -15,7 +15,10 @@ def setup_mock_web_api_server(test: TestCase, handler: Type[SimpleHTTPRequestHan
     test.received_requests = ReceivedRequests(Queue())
     test.thread = MockServerThread(queue=test.received_requests.queue, test=test, handler=handler, port=port)
     test.thread.start()
-    test.server_started.wait()
+    if not test.server_started.wait(timeout=5):
+        raise RuntimeError(
+            f"Mock web API server failed to start on port {test.thread.port} within 5s (port already in use?)"
+        )
 
 
 def cleanup_mock_web_api_server(test: TestCase):
@@ -56,11 +59,14 @@ def setup_mock_web_api_server_async(test: TestCase, handler: Type[SimpleHTTPRequ
     test.received_requests = ReceivedRequests(asyncio.Queue())
     test.thread = MockServerThread(queue=test.received_requests.queue, test=test, handler=handler, port=port)
     test.thread.start()
-    test.server_started.wait()
+    if not test.server_started.wait(timeout=5):
+        raise RuntimeError(
+            f"Mock web API server failed to start on port {test.thread.port} within 5s (port already in use?)"
+        )
 
 
 def cleanup_mock_web_api_server_async(test: TestCase):
-    test.thread.stop_unsafe()
+    test.thread.stop()
     test.thread = None
 
 

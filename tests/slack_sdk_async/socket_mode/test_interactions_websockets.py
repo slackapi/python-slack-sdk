@@ -17,6 +17,7 @@ from tests.slack_sdk.socket_mode.mock_socket_mode_server import (
     start_socket_mode_server,
     socket_mode_envelopes,
     socket_mode_hello_message,
+    stop_socket_mode_server,
 )
 from tests.slack_sdk.socket_mode.mock_web_api_handler import MockHandler
 from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
@@ -35,7 +36,10 @@ class TestInteractionsWebsockets(unittest.TestCase):
         start_socket_mode_server(self, 3001)
 
     def tearDown(self):
-        cleanup_mock_web_api_server_async(self)
+        try:
+            cleanup_mock_web_api_server_async(self)
+        finally:
+            stop_socket_mode_server(self)
 
     @async_test
     async def test_interactions(self):
