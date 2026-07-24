@@ -108,6 +108,10 @@ class Block(JsonObject):
                     return AlertBlock(**block)
                 elif type == CarouselBlock.type:
                     return CarouselBlock(**block)
+                elif type == DataTableBlock.type:
+                    return DataTableBlock(**block)
+                elif type == DataVisualizationBlock.type:
+                    return DataVisualizationBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -1030,3 +1034,126 @@ class CarouselBlock(Block):
     @JsonValidator(f"elements attribute cannot exceed {elements_max_length} cards")
     def _validate_elements_length(self):
         return self.elements is None or len(self.elements) <= self.elements_max_length
+
+
+class DataTableBlock(Block):
+    type = "data_table"
+    rows_max_length = 101
+    columns_max_length = 20
+    page_size_min = 1
+    page_size_max = 100
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"rows", "caption", "page_size", "row_header_column_index"})
+
+    def __init__(
+        self,
+        *,
+        rows: Sequence[Sequence[Dict[str, Any]]],
+        caption: str,
+        page_size: Optional[int] = None,
+        row_header_column_index: Optional[int] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays structured, paginated data in a table with a required caption.
+        https://docs.slack.dev/reference/block-kit/blocks/data-table-block
+
+        Args:
+            rows (required): An array consisting of table rows. Minimum 2 rows (header plus one data row)
+                and maximum 101 rows (header plus 100 data rows). All rows must have an identical column
+                count, with a maximum of 20 columns. Each cell has a type of raw_text, raw_number, or
+                rich_text. The total character limit across all cells is 10,000.
+            caption (required): A caption for the table; used as the value for the HTML caption element.
+            page_size: The number of rows to show per page. Min 1, Max 100. Defaults to 5 if omitted.
+            row_header_column_index: The 0-based index of the column that uniquely identifies each row
+                (the row header). Defaults to 0 if omitted.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source
+                of the action. Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.rows = rows
+        self.caption = caption
+        self.page_size = page_size
+        self.row_header_column_index = row_header_column_index
+
+    @JsonValidator("rows attribute must be specified")
+    def _validate_rows(self):
+        return self.rows is not None and len(self.rows) > 0
+
+    @JsonValidator("caption attribute must be specified")
+    def _validate_caption(self):
+        return self.caption is not None
+
+    @JsonValidator(f"page_size must be between {page_size_min} and {page_size_max}")
+    def _validate_page_size(self):
+        return self.page_size is None or self.page_size_min <= self.page_size <= self.page_size_max
+
+
+class DataVisualizationBlock(Block):
+    type = "data_visualization"
+    title_max_length = 50
+    valid_chart_types = {"pie", "bar", "area", "line"}
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"title", "chart"})
+
+    def __init__(
+        self,
+        *,
+        title: str,
+        chart: Dict[str, Any],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays data as a chart, such as a pie, bar, area, or line chart.
+        https://docs.slack.dev/reference/block-kit/blocks/data-visualization-block
+
+        Args:
+            title (required): The title of the chart, in plain text. Maximum 50 characters.
+            chart (required): An object describing the chart to render. The chart's "type" must be
+                one of "pie", "bar", "area", or "line".
+                A "pie" chart provides "segments" (1-6), where each segment has a "label" (max 20
+                characters) and a positive "value".
+                A "bar", "area", or "line" chart provides "series" (1-6) and an "axis_config". Each
+                series has a unique "name" (max 20 characters) and "data" (1-20 points), where each
+                data point has a "label" (max 20 characters, matching an axis category) and a "value".
+                The "axis_config" defines the "categories" (each max 20 characters) that set the
+                x-axis order, and optionally "x_label" and "y_label" (each max 50 characters).
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source
+                of the action. Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.title = title
+        self.chart = chart
+
+    @JsonValidator("title attribute must be specified")
+    def _validate_title(self):
+        return self.title is not None
+
+    @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
+    def _validate_title_length(self):
+        return self.title is None or len(self.title) <= self.title_max_length
+
+    @JsonValidator("chart attribute must be specified")
+    def _validate_chart(self):
+        return self.chart is not None and len(self.chart) > 0
+
+    @JsonValidator("chart type must be a valid value (pie, bar, area, line)")
+    def _validate_chart_type(self):
+        if not self.chart:
+            return True
+        chart_type = self.chart.get("type")
+        return chart_type is None or chart_type in self.valid_chart_types
