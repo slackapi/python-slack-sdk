@@ -7,4 +7,4 @@ mypy<=2.1.0
 flake8>=7.3.0,<8
 
 # black
-black==24.3.0
+black==26.3.1
