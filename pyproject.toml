@@ -70,6 +70,8 @@ filterwarnings = [
 	"ignore:slack.* package is deprecated. Please use slack_sdk.* package instead.*:UserWarning",
 ]
 asyncio_mode = "auto"
+timeout = 180
+timeout_method = "thread"
 
 
 [tool.mypy]
