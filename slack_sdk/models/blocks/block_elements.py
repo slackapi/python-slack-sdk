@@ -1442,6 +1442,8 @@ class RichTextInputElement(InputInteractiveElement):
             {
                 "initial_value",
                 "dispatch_action_config",
+                "min_lines",
+                "max_lines",
             }
         )
 
@@ -1454,6 +1456,8 @@ class RichTextInputElement(InputInteractiveElement):
         initial_value: Optional[Union[Dict[str, Any], "RichTextBlock"]] = None,  # type: ignore[name-defined] # noqa: F821
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
+        min_lines: Optional[int] = None,
+        max_lines: Optional[int] = None,
         **others: dict,
     ):
         super().__init__(
@@ -1466,6 +1470,8 @@ class RichTextInputElement(InputInteractiveElement):
 
         self.initial_value = initial_value
         self.dispatch_action_config = dispatch_action_config
+        self.min_lines = min_lines
+        self.max_lines = max_lines
 
 
 # -------------------------------------------------
