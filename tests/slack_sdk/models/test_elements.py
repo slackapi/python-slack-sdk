@@ -1173,6 +1173,31 @@ class RichTextInputElementTests(unittest.TestCase):
             },
         )
 
+    def test_min_lines(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_input",
+            "min_lines": 5,
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
+
+    def test_max_lines(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_input",
+            "max_lines": 16,
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
+
+    def test_min_and_max_lines(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_input",
+            "min_lines": 3,
+            "max_lines": 20,
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
+
 
 class PlainTextInputElementTests(unittest.TestCase):
     def test_document_1(self):
