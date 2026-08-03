@@ -25,7 +25,7 @@ boto3<=2
 # InstallationStore/OAuthStateStore
 # Since v3.20, we no longer support SQLAlchemy 1.3 or older.
 # If you need to use a legacy version, please add our v3.19.5 code to your project.
-SQLAlchemy>=2.0.49,<3
+SQLAlchemy>=2.0.51,<3
 
 # websockets
 # Note: websockets 9 is not compatible with Python 3.10; floor at 9.1.
