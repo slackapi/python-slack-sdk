@@ -26,7 +26,7 @@ pytest-cov>=7.1.0,<8; python_version >= "3.9"
 
 # click
 # Note: black is affected by https://github.com/pallets/click/issues/2225; pin click to 8.0.4.
-click==8.0.4
+click==8.4.2
 
 # psutil
 psutil>=7.2.2,<8
