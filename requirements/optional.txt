@@ -29,7 +29,7 @@ SQLAlchemy>=2.0.51,<3
 
 # websockets
 # Note: websockets 9 is not compatible with Python 3.10; floor at 9.1.
-websockets>=9.1,<16
+websockets>=16.1.1,<17
 
 # websocket-client
 websocket-client>=1,<2
