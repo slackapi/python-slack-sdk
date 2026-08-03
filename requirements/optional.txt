@@ -28,8 +28,10 @@ boto3<=2
 SQLAlchemy>=2.0.51,<3
 
 # websockets
-# Note: websockets 9 is not compatible with Python 3.10; floor at 9.1.
-websockets>=9.1,<16
+websockets>=9.1,<12; python_version == "3.7"
+websockets>=9.1,<14; python_version == "3.8"
+websockets>=9.1,<16; python_version == "3.9"
+websockets>=16.1.1,<17; python_version >= "3.10"
 
 # websocket-client
 websocket-client>=1,<2
