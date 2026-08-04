@@ -1560,10 +1560,14 @@ class CardBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
             "type": "card",
-            "icon": "https://picsum.photos/36/36",
+            "icon": {"type": "image", "image_url": "https://picsum.photos/36/36", "alt_text": "Icon"},
             "title": {"type": "mrkdwn", "text": "Lumon Industries", "verbatim": False},
             "subtitle": {"type": "mrkdwn", "text": "Committed to work-life balance", "verbatim": False},
-            "hero_image": "https://picsum.photos/400/300",
+            "hero_image": {
+                "type": "image",
+                "image_url": "https://picsum.photos/400/300",
+                "alt_text": "Sample hero image",
+            },
             "body": {"type": "mrkdwn", "text": "Please enjoy each card equally.", "verbatim": False},
             "actions": [
                 {
