@@ -191,6 +191,84 @@ class RawTextObject(TextObject):
         return len(self.text) >= 1
 
 
+class ColumnSettings(JsonObject):
+    """Column settings for TableBlock columns."""
+
+    @property
+    def attributes(self) -> Set[str]:
+        return {"align", "is_wrapped"}
+
+    def __init__(
+        self,
+        *,
+        align: Optional[str] = None,
+        is_wrapped: Optional[bool] = None,
+        **others: dict,
+    ):
+        """Settings for a single column in a table block.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            align: The alignment for items in this column. Can be "left", "center", or "right".
+                Defaults to "left" if not defined.
+            is_wrapped: Whether the contents of this column should be wrapped or not.
+                Defaults to false if not defined.
+        """
+        show_unknown_key_warning(self, others)
+        self.align = align
+        self.is_wrapped = is_wrapped
+
+    @classmethod
+    def parse(cls, settings: Optional[Union[Dict[str, Any], "ColumnSettings"]]) -> Optional["ColumnSettings"]:
+        if settings is None:
+            return None
+        if isinstance(settings, ColumnSettings):
+            return settings
+        if isinstance(settings, dict):
+            return ColumnSettings(**settings)
+        return None
+
+
+class RichTextCell(JsonObject):
+    """A rich_text typed cell for use in TableBlock rows."""
+
+    type = "rich_text"
+
+    @property
+    def attributes(self) -> Set[str]:
+        return {"type", "elements"}
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[Dict[str, Any], Any]],
+        **others: dict,
+    ):
+        """A rich text cell used in table block rows.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            elements (required): An array of rich text element objects
+                (rich_text_section, rich_text_list, rich_text_quote, rich_text_preformatted).
+        """
+        show_unknown_key_warning(self, others)
+        self.type = self.__class__.type
+        from slack_sdk.models.blocks.block_elements import BlockElement
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @classmethod
+    def parse(cls, cell: Optional[Union[Dict[str, Any], "RichTextCell"]]) -> Optional["RichTextCell"]:
+        if cell is None:
+            return None
+        if isinstance(cell, RichTextCell):
+            return cell
+        if isinstance(cell, dict):
+            d = {k: v for k, v in cell.items() if k != "type"}
+            return RichTextCell(**d)
+        return None
+
+
 class Option(JsonObject):
     """Option object used in dialogs, legacy message actions (interactivity in attachments),
     and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
