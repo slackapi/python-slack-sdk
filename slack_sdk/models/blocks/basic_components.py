@@ -227,46 +227,6 @@ class ColumnSettings(JsonObject):
         return None
 
 
-class RawNumberCell(JsonObject):
-    """A raw_number typed cell for use in TableBlock rows."""
-
-    type = "raw_number"
-
-    @property
-    def attributes(self) -> Set[str]:
-        return {"type", "value", "text"}
-
-    def __init__(
-        self,
-        *,
-        value: Union[int, float],
-        text: Optional[str] = None,
-        **others: dict,
-    ):
-        """A raw number cell used in table block rows.
-        https://docs.slack.dev/reference/block-kit/blocks/table-block
-
-        Args:
-            value (required): The numeric value of the cell.
-            text: The display text for the cell. If not provided, the value is used.
-        """
-        show_unknown_key_warning(self, others)
-        self.type = self.__class__.type
-        self.value = value
-        self.text = text
-
-    @classmethod
-    def parse(cls, cell: Optional[Union[Dict[str, Any], "RawNumberCell"]]) -> Optional["RawNumberCell"]:
-        if cell is None:
-            return None
-        if isinstance(cell, RawNumberCell):
-            return cell
-        if isinstance(cell, dict):
-            d = {k: v for k, v in cell.items() if k != "type"}
-            return RawNumberCell(**d)
-        return None
-
-
 class RichTextCell(JsonObject):
     """A rich_text typed cell for use in TableBlock rows."""
 

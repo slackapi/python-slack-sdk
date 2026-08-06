@@ -11,7 +11,6 @@ from .basic_components import (
     ColumnSettings,
     MarkdownTextObject,
     PlainTextObject,
-    RawNumberCell,
     RawTextObject,
     RichTextCell,
     SlackFile,
@@ -765,7 +764,7 @@ class TableBlock(Block):
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RawNumberCell", "RichTextCell"]]],
+        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RichTextCell"]]],
         column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], "ColumnSettings"]]]] = None,
         block_id: Optional[str] = None,
         **others: dict,

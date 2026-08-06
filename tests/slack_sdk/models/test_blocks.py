@@ -26,7 +26,6 @@ from slack_sdk.models.blocks import (
     OverflowMenuElement,
     PlainTextObject,
     PlanBlock,
-    RawNumberCell,
     RawTextObject,
     RichTextBlock,
     RichTextCell,
@@ -1523,29 +1522,6 @@ class TableBlockTests(unittest.TestCase):
                         "type": "rich_text",
                         "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}],
                     },
-                ],
-            ],
-        }
-        self.assertDictEqual(expected, block.to_dict())
-
-    def test_with_raw_number_cell_objects(self):
-        """Test table using typed RawNumberCell objects"""
-        block = TableBlock(
-            rows=[
-                [RawTextObject(text="Item"), RawNumberCell(value=42, text="42")],
-                [RawTextObject(text="Price"), RawNumberCell(value=9.99)],
-            ],
-        )
-        expected = {
-            "type": "table",
-            "rows": [
-                [
-                    {"type": "raw_text", "text": "Item"},
-                    {"type": "raw_number", "value": 42, "text": "42"},
-                ],
-                [
-                    {"type": "raw_text", "text": "Price"},
-                    {"type": "raw_number", "value": 9.99},
                 ],
             ],
         }
