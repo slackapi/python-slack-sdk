@@ -36,3 +36,5 @@ websockets>=16.1.1,<17; python_version >= "3.10"
 
 # websocket-client
 websocket-client>=1,<2
+# SSL certificate bundle for certificate verification issues
+certifi
