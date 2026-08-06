@@ -957,8 +957,8 @@ class CardBlock(Block):
         self,
         *,
         block_id: Optional[str] = None,
-        hero_image: Optional[str] = None,
-        icon: Optional[str] = None,
+        hero_image: Optional[Union[dict, ImageElement]] = None,
+        icon: Optional[Union[dict, ImageElement]] = None,
         title: Optional[Union[str, dict, TextObject]] = None,
         subtitle: Optional[Union[str, dict, TextObject]] = None,
         body: Optional[Union[str, dict, TextObject]] = None,
@@ -970,8 +970,10 @@ class CardBlock(Block):
 
         Args:
             block_id: A unique identifier for a block. If not specified, a block_id will be generated.
-            hero_image: Link to the top image used on the card.
-            icon: Link to the small image used next to the card's title and subtitle.
+            hero_image: Link to the top image used on the card. Max length 3000 characters.
+                The alt_text property has a max length of 2000 characters.
+            icon: Link to the small image used next to the card's title and subtitle. Max length
+                3000 characters. The alt_text property has a max length of 2000 characters.
             title: Title of the card. 150 characters max.
             subtitle: Subtitle of the card. 150 characters max.
             body: Content of the card. 200 characters max.

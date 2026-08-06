@@ -41,7 +41,7 @@ from slack_sdk.models.blocks import (
     VideoBlock,
 )
 from slack_sdk.models.blocks.basic_components import FeedbackButtonObject, SlackFile
-from slack_sdk.models.blocks.block_elements import FeedbackButtonsElement, IconButtonElement
+from slack_sdk.models.blocks.block_elements import FeedbackButtonsElement, IconButtonElement, ImageElement
 
 from . import STRING_3001_CHARS
 
@@ -1625,10 +1625,14 @@ class CardBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
             "type": "card",
-            "icon": "https://picsum.photos/36/36",
+            "icon": {"type": "image", "image_url": "https://picsum.photos/36/36", "alt_text": "Icon"},
             "title": {"type": "mrkdwn", "text": "Lumon Industries", "verbatim": False},
             "subtitle": {"type": "mrkdwn", "text": "Committed to work-life balance", "verbatim": False},
-            "hero_image": "https://picsum.photos/400/300",
+            "hero_image": {
+                "type": "image",
+                "image_url": "https://picsum.photos/400/300",
+                "alt_text": "Sample hero image",
+            },
             "body": {"type": "mrkdwn", "text": "Please enjoy each card equally.", "verbatim": False},
             "actions": [
                 {
@@ -1639,6 +1643,24 @@ class CardBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(input, CardBlock(**input).to_dict())
+
+    def test_image_element_icon_and_hero_image(self):
+        block = CardBlock(
+            icon=ImageElement(image_url="https://picsum.photos/36/36", alt_text="Icon"),
+            hero_image=ImageElement(image_url="https://picsum.photos/400/300", alt_text="Sample hero image"),
+            title=MarkdownTextObject(text="Lumon Industries"),
+        )
+        expected = {
+            "type": "card",
+            "icon": {"type": "image", "image_url": "https://picsum.photos/36/36", "alt_text": "Icon"},
+            "hero_image": {
+                "type": "image",
+                "image_url": "https://picsum.photos/400/300",
+                "alt_text": "Sample hero image",
+            },
+            "title": {"type": "mrkdwn", "text": "Lumon Industries"},
+        }
+        self.assertDictEqual(expected, block.to_dict())
 
     def test_parse(self):
         input = {
