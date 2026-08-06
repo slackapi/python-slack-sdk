@@ -10,6 +10,7 @@ from slack_sdk.models.blocks import (
     CallBlock,
     CardBlock,
     CarouselBlock,
+    ColumnSettings,
     ContextActionsBlock,
     ContextBlock,
     DividerBlock,
@@ -25,8 +26,10 @@ from slack_sdk.models.blocks import (
     OverflowMenuElement,
     PlainTextObject,
     PlanBlock,
+    RawNumberCell,
     RawTextObject,
     RichTextBlock,
+    RichTextCell,
     RichTextElementParts,
     RichTextListElement,
     RichTextPreformattedElement,
@@ -1461,6 +1464,92 @@ class TableBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(input, TableBlock(**input).to_dict())
+
+    def test_with_column_settings_objects(self):
+        """Test table using typed ColumnSettings objects"""
+        block = TableBlock(
+            rows=[[{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}]],
+            column_settings=[ColumnSettings(align="right", is_wrapped=True), ColumnSettings(align="left")],
+        )
+        expected = {
+            "type": "table",
+            "column_settings": [{"align": "right", "is_wrapped": True}, {"align": "left"}],
+            "rows": [[{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}]],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_with_rich_text_cell_objects(self):
+        """Test table using typed RichTextCell objects"""
+        cell = RichTextCell(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "Hello"}]}])
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Header"), cell],
+            ],
+        )
+        expected = {
+            "type": "table",
+            "rows": [
+                [
+                    {"type": "raw_text", "text": "Header"},
+                    {
+                        "type": "rich_text",
+                        "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "Hello"}]}],
+                    },
+                ]
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_mixed_typed_and_dict_cells(self):
+        """Test table accepts a mix of typed objects and plain dicts"""
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Col A"), RawTextObject(text="Col B")],
+                [
+                    {"type": "raw_text", "text": "Data"},
+                    RichTextCell(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}]),
+                ],
+            ],
+            column_settings=[ColumnSettings(align="left"), {"align": "right"}],
+        )
+        expected = {
+            "type": "table",
+            "column_settings": [{"align": "left"}, {"align": "right"}],
+            "rows": [
+                [{"type": "raw_text", "text": "Col A"}, {"type": "raw_text", "text": "Col B"}],
+                [
+                    {"type": "raw_text", "text": "Data"},
+                    {
+                        "type": "rich_text",
+                        "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}],
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_with_raw_number_cell_objects(self):
+        """Test table using typed RawNumberCell objects"""
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Item"), RawNumberCell(value=42, text="42")],
+                [RawTextObject(text="Price"), RawNumberCell(value=9.99)],
+            ],
+        )
+        expected = {
+            "type": "table",
+            "rows": [
+                [
+                    {"type": "raw_text", "text": "Item"},
+                    {"type": "raw_number", "value": 42, "text": "42"},
+                ],
+                [
+                    {"type": "raw_text", "text": "Price"},
+                    {"type": "raw_number", "value": 9.99},
+                ],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
 
     def test_column_settings_variations(self):
         """Test various column_settings configurations"""

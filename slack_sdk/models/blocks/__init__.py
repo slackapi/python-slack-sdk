@@ -9,6 +9,7 @@ To learn more about Block Kit, please check the following resources and tools:
 
 from .basic_components import (
     ButtonStyles,
+    ColumnSettings,
     ConfirmObject,
     DynamicSelectElementTypes,
     FeedbackButtonObject,
@@ -16,7 +17,9 @@ from .basic_components import (
     Option,
     OptionGroup,
     PlainTextObject,
+    RawNumberCell,
     RawTextObject,
+    RichTextCell,
     TextObject,
 )
 from .block_elements import (
@@ -84,6 +87,7 @@ from .blocks import (
 
 __all__ = [
     "ButtonStyles",
+    "ColumnSettings",
     "ConfirmObject",
     "DynamicSelectElementTypes",
     "FeedbackButtonObject",
@@ -91,7 +95,9 @@ __all__ = [
     "Option",
     "OptionGroup",
     "PlainTextObject",
+    "RawNumberCell",
     "RawTextObject",
+    "RichTextCell",
     "TextObject",
     "BlockElement",
     "ButtonElement",
