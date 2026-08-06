@@ -209,8 +209,10 @@ class ColumnSettings(JsonObject):
         https://docs.slack.dev/reference/block-kit/blocks/table-block
 
         Args:
-            align: Alignment of the column content. One of "left", "center", or "right".
-            is_wrapped: Whether the column content should be wrapped.
+            align: The alignment for items in this column. Can be "left", "center", or "right".
+                Defaults to "left" if not defined.
+            is_wrapped: Whether the contents of this column should be wrapped or not.
+                Defaults to false if not defined.
         """
         show_unknown_key_warning(self, others)
         self.align = align
