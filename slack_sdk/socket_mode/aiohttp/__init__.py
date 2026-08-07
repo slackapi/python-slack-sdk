@@ -349,7 +349,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # a new monitor and a new message receiver are also created.
         # If a new session is created but we failed to create the new
         # monitor or the new message, we should try it.
-        while True:
+        while not self.closed:
             try:
                 old_session: Optional[ClientWebSocketResponse] = (
                     None if self.current_session is None else self.current_session
@@ -369,18 +369,28 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 except Exception as e:
                     self.logger.exception(f"Failed to close the old session : {e}")
 
+                if self.closed:
+                    break
+
                 if self.wss_uri is None:
                     # If the underlying WSS URL does not exist,
                     # acquiring a new active WSS URL from the server-side first
                     self.wss_uri = await self.issue_new_wss_url()
 
-                self.current_session = await self.aiohttp_client_session.ws_connect(
+                if self.closed:
+                    break
+
+                new_session = await self.aiohttp_client_session.ws_connect(
                     self.wss_uri,
                     autoping=False,
                     heartbeat=self.ping_interval,
                     proxy=self.proxy,
                     ssl=self.web_client.ssl if self.web_client.ssl is not None else True,
                 )
+                if self.closed:
+                    await new_session.close()
+                    break
+                self.current_session = new_session
                 session_id: str = await self.session_id()
                 self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
                 self.stale = False
@@ -405,6 +415,8 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     self.logger.debug(f"A new receive_messages() executor has been recreated for {session_id}")
                 break
             except Exception as e:
+                if self.closed:
+                    break
                 self.logger.exception(f"Failed to connect (error: {e}); Retrying...")
                 await asyncio.sleep(self.ping_interval)
 
@@ -447,12 +459,17 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         self.closed = True
         self.auto_reconnect_enabled = False
         await self.disconnect()
-        if self.message_processor is not None:
-            self.message_processor.cancel()
-        if self.current_session_monitor is not None:
-            self.current_session_monitor.cancel()
-        if self.message_receiver is not None:
-            self.message_receiver.cancel()
+
+        current_task = asyncio.current_task()
+        owned_tasks = []
+        for task in (self.message_processor, self.current_session_monitor, self.message_receiver):
+            if task is not None and task is not current_task and task not in owned_tasks:
+                if not task.done():
+                    task.cancel()
+                owned_tasks.append(task)
+        if owned_tasks:
+            await asyncio.gather(*owned_tasks, return_exceptions=True)
+
         if self.aiohttp_client_session is not None:
             await self.aiohttp_client_session.close()
 
