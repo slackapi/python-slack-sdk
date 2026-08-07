@@ -12,6 +12,7 @@ from slack_sdk.models.blocks import (
     CarouselBlock,
     ContextActionsBlock,
     ContextBlock,
+    DataTableBlock,
     DividerBlock,
     FileBlock,
     HeaderBlock,
@@ -1554,6 +1555,81 @@ class TableBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(expected, block.to_dict())
+
+
+class DataTableBlockTests(unittest.TestCase):
+    def test_document(self):
+        """Test basic data table block from Slack documentation example"""
+        input = {
+            "type": "data_table",
+            "caption": "Quarterly sales by region",
+            "rows": [
+                [{"type": "raw_text", "text": "Region"}, {"type": "raw_text", "text": "Sales"}],
+                [{"type": "raw_text", "text": "West"}, {"type": "raw_number", "value": 120, "text": "120"}],
+                [{"type": "raw_text", "text": "East"}, {"type": "raw_number", "value": 95, "text": "95"}],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_all_fields(self):
+        """Test data table block with every optional field set"""
+        input = {
+            "type": "data_table",
+            "block_id": "data-table-123",
+            "caption": "User directory",
+            "page_size": 25,
+            "row_header_column_index": 1,
+            "rows": [
+                [{"type": "raw_text", "text": "ID"}, {"type": "raw_text", "text": "Name"}],
+                [{"type": "raw_number", "value": 1, "text": "1"}, {"type": "raw_text", "text": "Alice"}],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_rich_text(self):
+        """Test data table block with rich_text cells"""
+        input = {
+            "type": "data_table",
+            "caption": "Links",
+            "rows": [
+                [{"type": "raw_text", "text": "Site"}],
+                [
+                    {
+                        "type": "rich_text",
+                        "elements": [
+                            {
+                                "type": "rich_text_section",
+                                "elements": [{"text": "Slack", "type": "link", "url": "https://slack.com"}],
+                            }
+                        ],
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_rows_validation(self):
+        """Test that empty rows fail validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="empty", rows=[]).to_dict()
+
+    def test_caption_required(self):
+        """Test that DataTableBlock requires a caption argument"""
+        with self.assertRaises(TypeError):
+            DataTableBlock(rows=[[{"type": "raw_text", "text": "A"}]])
+
+    def test_page_size_validation(self):
+        """Test that page_size outside the allowed range fails validation"""
+        rows = [[{"type": "raw_text", "text": "A"}], [{"type": "raw_text", "text": "B"}]]
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="too small", rows=rows, page_size=0).to_dict()
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="too big", rows=rows, page_size=101).to_dict()
+        # A valid page_size should pass
+        DataTableBlock(caption="ok", rows=rows, page_size=50).to_dict()
 
 
 class CardBlockTests(unittest.TestCase):
