@@ -1692,6 +1692,19 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"channel_ids": channel_ids})
         return await self.api_call("admin.users.assign", params=kwargs)
 
+    async def admin_users_getExpiration(
+        self,
+        *,
+        user_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Fetch an expiration timestamp for a guest.
+        https://docs.slack.dev/reference/methods/admin.users.getExpiration
+        """
+        kwargs.update({"user_id": user_id, "target_team": target_team})
+        return await self.api_call("admin.users.getExpiration", params=kwargs)
+
     async def admin_users_invite(
         self,
         *,
