@@ -219,7 +219,9 @@ class TableBlockColumnSettings(JsonObject):
         self.is_wrapped = is_wrapped
 
     @classmethod
-    def parse(cls, settings: Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]) -> Optional["TableBlockColumnSettings"]:
+    def parse(
+        cls, settings: Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]
+    ) -> Optional["TableBlockColumnSettings"]:
         if settings is None:
             return None
         if isinstance(settings, TableBlockColumnSettings):
