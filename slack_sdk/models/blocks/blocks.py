@@ -8,12 +8,11 @@ from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 
 from ...errors import SlackObjectFormationError
 from .basic_components import (
-    ColumnSettings,
     MarkdownTextObject,
     PlainTextObject,
     RawTextObject,
-    RichTextCell,
     SlackFile,
+    TableBlockColumnSettings,
     TextObject,
 )
 from .block_elements import (
@@ -764,8 +763,8 @@ class TableBlock(Block):
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RichTextCell"]]],
-        column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], "ColumnSettings"]]]] = None,
+        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RichTextBlock"]]],
+        column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):

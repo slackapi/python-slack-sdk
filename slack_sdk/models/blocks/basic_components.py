@@ -191,7 +191,7 @@ class RawTextObject(TextObject):
         return len(self.text) >= 1
 
 
-class ColumnSettings(JsonObject):
+class TableBlockColumnSettings(JsonObject):
     """Column settings for TableBlock columns."""
 
     @property
@@ -219,53 +219,13 @@ class ColumnSettings(JsonObject):
         self.is_wrapped = is_wrapped
 
     @classmethod
-    def parse(cls, settings: Optional[Union[Dict[str, Any], "ColumnSettings"]]) -> Optional["ColumnSettings"]:
+    def parse(cls, settings: Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]) -> Optional["TableBlockColumnSettings"]:
         if settings is None:
             return None
-        if isinstance(settings, ColumnSettings):
+        if isinstance(settings, TableBlockColumnSettings):
             return settings
         if isinstance(settings, dict):
-            return ColumnSettings(**settings)
-        return None
-
-
-class RichTextCell(JsonObject):
-    """A rich_text typed cell for use in TableBlock rows."""
-
-    type = "rich_text"
-
-    @property
-    def attributes(self) -> Set[str]:
-        return {"type", "elements"}
-
-    def __init__(
-        self,
-        *,
-        elements: Sequence[Union[Dict[str, Any], Any]],
-        **others: dict,
-    ):
-        """A rich text cell used in table block rows.
-        https://docs.slack.dev/reference/block-kit/blocks/table-block
-
-        Args:
-            elements (required): An array of rich text element objects
-                (rich_text_section, rich_text_list, rich_text_quote, rich_text_preformatted).
-        """
-        show_unknown_key_warning(self, others)
-        self.type = self.__class__.type
-        from slack_sdk.models.blocks.block_elements import BlockElement
-
-        self.elements = BlockElement.parse_all(elements)
-
-    @classmethod
-    def parse(cls, cell: Optional[Union[Dict[str, Any], "RichTextCell"]]) -> Optional["RichTextCell"]:
-        if cell is None:
-            return None
-        if isinstance(cell, RichTextCell):
-            return cell
-        if isinstance(cell, dict):
-            d = {k: v for k, v in cell.items() if k != "type"}
-            return RichTextCell(**d)
+            return TableBlockColumnSettings(**settings)
         return None
 
 

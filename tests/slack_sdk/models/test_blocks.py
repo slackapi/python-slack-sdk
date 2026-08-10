@@ -10,7 +10,6 @@ from slack_sdk.models.blocks import (
     CallBlock,
     CardBlock,
     CarouselBlock,
-    ColumnSettings,
     ContextActionsBlock,
     ContextBlock,
     DividerBlock,
@@ -28,7 +27,6 @@ from slack_sdk.models.blocks import (
     PlanBlock,
     RawTextObject,
     RichTextBlock,
-    RichTextCell,
     RichTextElementParts,
     RichTextListElement,
     RichTextPreformattedElement,
@@ -37,6 +35,7 @@ from slack_sdk.models.blocks import (
     SectionBlock,
     StaticSelectElement,
     TableBlock,
+    TableBlockColumnSettings,
     TaskCardBlock,
     VideoBlock,
 )
@@ -1465,10 +1464,13 @@ class TableBlockTests(unittest.TestCase):
         self.assertDictEqual(input, TableBlock(**input).to_dict())
 
     def test_with_column_settings_objects(self):
-        """Test table using typed ColumnSettings objects"""
+        """Test table using typed TableBlockColumnSettings objects"""
         block = TableBlock(
             rows=[[{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}]],
-            column_settings=[ColumnSettings(align="right", is_wrapped=True), ColumnSettings(align="left")],
+            column_settings=[
+                TableBlockColumnSettings(align="right", is_wrapped=True),
+                TableBlockColumnSettings(align="left"),
+            ],
         )
         expected = {
             "type": "table",
@@ -1478,8 +1480,8 @@ class TableBlockTests(unittest.TestCase):
         self.assertDictEqual(expected, block.to_dict())
 
     def test_with_rich_text_cell_objects(self):
-        """Test table using typed RichTextCell objects"""
-        cell = RichTextCell(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "Hello"}]}])
+        """Test table using typed RichTextBlock objects"""
+        cell = RichTextBlock(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "Hello"}]}])
         block = TableBlock(
             rows=[
                 [RawTextObject(text="Header"), cell],
@@ -1506,10 +1508,10 @@ class TableBlockTests(unittest.TestCase):
                 [RawTextObject(text="Col A"), RawTextObject(text="Col B")],
                 [
                     {"type": "raw_text", "text": "Data"},
-                    RichTextCell(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}]),
+                    RichTextBlock(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}]),
                 ],
             ],
-            column_settings=[ColumnSettings(align="left"), {"align": "right"}],
+            column_settings=[TableBlockColumnSettings(align="left"), {"align": "right"}],
         )
         expected = {
             "type": "table",
