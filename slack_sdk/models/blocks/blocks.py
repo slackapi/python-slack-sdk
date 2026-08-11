@@ -7,7 +7,14 @@ from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 
 from ...errors import SlackObjectFormationError
-from .basic_components import MarkdownTextObject, PlainTextObject, SlackFile, TextObject
+from .basic_components import (
+    MarkdownTextObject,
+    PlainTextObject,
+    RawTextObject,
+    SlackFile,
+    TableBlockColumnSettings,
+    TextObject,
+)
 from .block_elements import (
     BlockElement,
     FeedbackButtonsElement,
@@ -756,8 +763,8 @@ class TableBlock(Block):
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Dict[str, Any]]],
-        column_settings: Optional[Sequence[Optional[Dict[str, Any]]]] = None,
+        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RichTextBlock"]]],
+        column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
