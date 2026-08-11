@@ -40,7 +40,7 @@ from slack_sdk.models.blocks import (
     VideoBlock,
 )
 from slack_sdk.models.blocks.basic_components import FeedbackButtonObject, SlackFile
-from slack_sdk.models.blocks.block_elements import FeedbackButtonsElement, IconButtonElement, ImageElement
+from slack_sdk.models.blocks.block_elements import FeedbackButtonsElement, IconButtonElement
 
 from . import STRING_3001_CHARS
 
