@@ -35,6 +35,7 @@ from slack_sdk.models.blocks import (
     SectionBlock,
     StaticSelectElement,
     TableBlock,
+    TableBlockColumnSettings,
     TaskCardBlock,
     VideoBlock,
 )
@@ -1462,6 +1463,74 @@ class TableBlockTests(unittest.TestCase):
         }
         self.assertDictEqual(input, TableBlock(**input).to_dict())
 
+    def test_with_column_settings_objects(self):
+        """Test table using typed TableBlockColumnSettings objects"""
+        block = TableBlock(
+            rows=[[{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}]],
+            column_settings=[
+                TableBlockColumnSettings(align="right", is_wrapped=True),
+                TableBlockColumnSettings(align="left"),
+            ],
+        )
+        expected = {
+            "type": "table",
+            "column_settings": [{"align": "right", "is_wrapped": True}, {"align": "left"}],
+            "rows": [[{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}]],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_with_rich_text_cell_objects(self):
+        """Test table using typed RichTextBlock objects"""
+        cell = RichTextBlock(
+            elements=[RichTextSectionElement(elements=[RichTextElementParts.Text(text="Hello")])]
+        )
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Header"), cell],
+            ],
+        )
+        expected = {
+            "type": "table",
+            "rows": [
+                [
+                    {"type": "raw_text", "text": "Header"},
+                    {
+                        "type": "rich_text",
+                        "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "Hello"}]}],
+                    },
+                ]
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_mixed_typed_and_dict_cells(self):
+        """Test table accepts a mix of typed objects and plain dicts"""
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Col A"), RawTextObject(text="Col B")],
+                [
+                    {"type": "raw_text", "text": "Data"},
+                    RichTextBlock(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}]),
+                ],
+            ],
+            column_settings=[TableBlockColumnSettings(align="left"), {"align": "right"}],
+        )
+        expected = {
+            "type": "table",
+            "column_settings": [{"align": "left"}, {"align": "right"}],
+            "rows": [
+                [{"type": "raw_text", "text": "Col A"}, {"type": "raw_text", "text": "Col B"}],
+                [
+                    {"type": "raw_text", "text": "Data"},
+                    {
+                        "type": "rich_text",
+                        "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}],
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
     def test_column_settings_variations(self):
         """Test various column_settings configurations"""
         # Left align
@@ -1560,10 +1629,14 @@ class CardBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
             "type": "card",
-            "icon": "https://picsum.photos/36/36",
+            "icon": {"type": "image", "image_url": "https://picsum.photos/36/36", "alt_text": "Icon"},
             "title": {"type": "mrkdwn", "text": "Lumon Industries", "verbatim": False},
             "subtitle": {"type": "mrkdwn", "text": "Committed to work-life balance", "verbatim": False},
-            "hero_image": "https://picsum.photos/400/300",
+            "hero_image": {
+                "type": "image",
+                "image_url": "https://picsum.photos/400/300",
+                "alt_text": "Sample hero image",
+            },
             "body": {"type": "mrkdwn", "text": "Please enjoy each card equally.", "verbatim": False},
             "actions": [
                 {
@@ -1574,6 +1647,24 @@ class CardBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(input, CardBlock(**input).to_dict())
+
+    def test_image_element_icon_and_hero_image(self):
+        block = CardBlock(
+            icon=ImageElement(image_url="https://picsum.photos/36/36", alt_text="Icon"),
+            hero_image=ImageElement(image_url="https://picsum.photos/400/300", alt_text="Sample hero image"),
+            title=MarkdownTextObject(text="Lumon Industries"),
+        )
+        expected = {
+            "type": "card",
+            "icon": {"type": "image", "image_url": "https://picsum.photos/36/36", "alt_text": "Icon"},
+            "hero_image": {
+                "type": "image",
+                "image_url": "https://picsum.photos/400/300",
+                "alt_text": "Sample hero image",
+            },
+            "title": {"type": "mrkdwn", "text": "Lumon Industries"},
+        }
+        self.assertDictEqual(expected, block.to_dict())
 
     def test_parse(self):
         input = {

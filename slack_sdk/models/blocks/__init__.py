@@ -17,6 +17,7 @@ from .basic_components import (
     OptionGroup,
     PlainTextObject,
     RawTextObject,
+    TableBlockColumnSettings,
     TextObject,
 )
 from .block_elements import (
@@ -92,6 +93,7 @@ __all__ = [
     "OptionGroup",
     "PlainTextObject",
     "RawTextObject",
+    "TableBlockColumnSettings",
     "TextObject",
     "BlockElement",
     "ButtonElement",

@@ -191,6 +191,46 @@ class RawTextObject(TextObject):
         return len(self.text) >= 1
 
 
+class TableBlockColumnSettings(JsonObject):
+    """Column settings for TableBlock columns."""
+
+    @property
+    def attributes(self) -> Set[str]:
+        return {"align", "is_wrapped"}
+
+    def __init__(
+        self,
+        *,
+        align: Optional[str] = None,
+        is_wrapped: Optional[bool] = None,
+        **others: dict,
+    ):
+        """Settings for a single column in a table block.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            align: The alignment for items in this column. Can be "left", "center", or "right".
+                Defaults to "left" if not defined.
+            is_wrapped: Whether the contents of this column should be wrapped or not.
+                Defaults to false if not defined.
+        """
+        show_unknown_key_warning(self, others)
+        self.align = align
+        self.is_wrapped = is_wrapped
+
+    @classmethod
+    def parse(
+        cls, settings: Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]
+    ) -> Optional["TableBlockColumnSettings"]:
+        if settings is None:
+            return None
+        if isinstance(settings, TableBlockColumnSettings):
+            return settings
+        if isinstance(settings, dict):
+            return TableBlockColumnSettings(**settings)
+        return None
+
+
 class Option(JsonObject):
     """Option object used in dialogs, legacy message actions (interactivity in attachments),
     and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
