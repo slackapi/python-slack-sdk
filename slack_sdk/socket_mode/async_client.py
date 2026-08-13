@@ -73,16 +73,14 @@ class AsyncBaseSocketModeClient:
         session_id = await self.session_id()
         acquired = False
         try:
-            # asyncio.Lock.acquire() takes no arguments, so the sync client's
-            # acquire(blocking=True, timeout=5) is spelled with wait_for here.
             try:
-                await asyncio.wait_for(self.connect_operation_lock.acquire(), timeout=5)
-                acquired = True
+                acquired = await asyncio.wait_for(self.connect_operation_lock.acquire(), timeout=5)
             except asyncio.TimeoutError:
                 acquired = False
             if self.trace_enabled:
                 self.logger.debug(
-                    f"For reconnection, the connect_operation_lock was acquired: {acquired} (session: {session_id})"
+                    f"Attempted to acquire the connect_operation_lock for reconnection "
+                    f"(acquired={acquired}, session={session_id})"
                 )
             if force or (acquired and not await self.is_connected()):
                 self.wss_uri = await self.issue_new_wss_url()
