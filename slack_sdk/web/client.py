@@ -1923,6 +1923,58 @@ class WebClient(BaseClient):
             kwargs.update({"workflow_ids": workflow_ids})
         return self.api_call("admin.workflows.unpublish", params=kwargs)
 
+    def agents_sessions_rename(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Rename an agent session.
+        https://docs.slack.dev/reference/methods/agents.sessions.rename
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "title": title,
+                "thread_ts": thread_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.sessions.rename", json=kwargs)
+
+    def agents_sessions_setStatus(
+        self,
+        *,
+        channel_id: str,
+        status: str,
+        thread_ts: Optional[str] = None,
+        title: Optional[str] = None,
+        initiator_user_id: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Set an agent session's lifecycle status, creating the session if needed.
+        https://docs.slack.dev/reference/methods/agents.sessions.setStatus
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "status": status,
+                "thread_ts": thread_ts,
+                "title": title,
+                "initiator_user_id": initiator_user_id,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.sessions.setStatus", json=kwargs)
+
     def api_test(
         self,
         *,
