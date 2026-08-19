@@ -2155,6 +2155,204 @@ class WebClient(BaseClient):
         kwargs = _remove_none_values(kwargs)
         return self.api_call("agents.sessions.setStatus", json=kwargs)
 
+    def codeChannels_archive(
+        self,
+        *,
+        channel_id: str,
+        summary_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Archives a code channel, optionally recording a summary message on the channel.
+        https://docs.slack.dev/reference/methods/codeChannels.archive
+        """
+        kwargs.update({"channel_id": channel_id, "summary_message_ts": summary_message_ts})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.archive", json=kwargs)
+
+    def codeChannels_create(
+        self,
+        *,
+        name: str,
+        team_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        is_private: Optional[bool] = None,
+        origin_channel_id: Optional[str] = None,
+        origin_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Creates a dedicated code channel for an agent session.
+        https://docs.slack.dev/reference/methods/codeChannels.create
+        """
+        kwargs.update(
+            {
+                "name": name,
+                "team_id": team_id,
+                "session_id": session_id,
+                "is_private": is_private,
+                "origin_channel_id": origin_channel_id,
+                "origin_message_ts": origin_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.create", json=kwargs)
+
+    def codeChannels_getCanvas(
+        self,
+        *,
+        channel_id: str,
+        canvas_id: str,
+        content_format: Optional[str] = None,
+        include_resolved: Optional[bool] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Fetches a canvas attached to a code channel — full content plus comment threads — in a single round-trip.
+        https://docs.slack.dev/reference/methods/codeChannels.getCanvas
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "canvas_id": canvas_id,
+                "content_format": content_format,
+                "include_resolved": include_resolved,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.getCanvas", json=kwargs)
+
+    def codeChannels_listViews(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists the views currently attached to a code channel.
+        https://docs.slack.dev/reference/methods/codeChannels.listViews
+        """
+        kwargs.update({"channel_id": channel_id})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.listViews", json=kwargs)
+
+    def codeChannels_removeView(
+        self,
+        *,
+        channel_id: str,
+        view_key: Optional[str] = None,
+        view_id: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Removes a view from a code channel (provide exactly one of view_key or view_id).
+        https://docs.slack.dev/reference/methods/codeChannels.removeView
+        """
+        kwargs.update({"channel_id": channel_id, "view_key": view_key, "view_id": view_id})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.removeView", json=kwargs)
+
+    def codeChannels_rename(
+        self,
+        *,
+        channel_id: str,
+        name: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Renames a code channel.
+        https://docs.slack.dev/reference/methods/codeChannels.rename
+        """
+        kwargs.update({"channel_id": channel_id, "name": name})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.rename", json=kwargs)
+
+    def codeChannels_setCanvasContent(
+        self,
+        *,
+        channel_id: str,
+        canvas_id: str,
+        content: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Replaces the full markdown content of a canvas attached to a code channel, preserving the
+        comment threads on the sections your agent didn't change.
+        https://docs.slack.dev/reference/methods/codeChannels.setCanvasContent
+        """
+        kwargs.update({"channel_id": channel_id, "canvas_id": canvas_id, "content": content})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.setCanvasContent", json=kwargs)
+
+    def codeChannels_setCommands(
+        self,
+        *,
+        channel_id: str,
+        commands: List[Dict[str, Any]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Registers the set of slash commands your agent offers in a code channel.
+        https://docs.slack.dev/reference/methods/codeChannels.setCommands
+        """
+        kwargs.update({"channel_id": channel_id, "commands": commands})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.setCommands", json=kwargs)
+
+    def codeChannels_setProperties(
+        self,
+        *,
+        channel_id: str,
+        code_channel: Optional[Dict[str, Any]] = None,
+        agent_resource: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Sets properties on a code channel: context bar items and external resource details.
+        https://docs.slack.dev/reference/methods/codeChannels.setProperties
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "code_channel": code_channel,
+                "agent_resource": agent_resource,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.setProperties", json=kwargs)
+
+    def codeChannels_setView(
+        self,
+        *,
+        channel_id: str,
+        type: Optional[str] = None,
+        view_key: Optional[str] = None,
+        content: Optional[str] = None,
+        blocks: Optional[List[Dict[str, Any]]] = None,
+        canvas_id: Optional[str] = None,
+        access_level: Optional[str] = None,
+        base_branch: Optional[str] = None,
+        head_branch: Optional[str] = None,
+        name: Optional[str] = None,
+        label: Optional[str] = None,
+        csp: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Creates or updates a view in a code channel. Views can render HTML, diffs, Block Kit, or
+        canvases as tabs alongside the conversation.
+        https://docs.slack.dev/reference/methods/codeChannels.setView
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "type": type,
+                "view_key": view_key,
+                "content": content,
+                "blocks": blocks,
+                "canvas_id": canvas_id,
+                "access_level": access_level,
+                "base_branch": base_branch,
+                "head_branch": head_branch,
+                "name": name,
+                "label": label,
+                "csp": csp,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("codeChannels.setView", json=kwargs)
+        return self.api_call("codeChannels.setView", json=kwargs)
+
     def assistant_threads_setTitle(
         self,
         *,
