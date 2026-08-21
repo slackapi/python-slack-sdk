@@ -2993,6 +2993,7 @@ class WebClient(BaseClient):
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        session_status: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Stops a streaming conversation.
@@ -3006,6 +3007,7 @@ class WebClient(BaseClient):
                 "blocks": blocks,
                 "metadata": metadata,
                 "chunks": chunks,
+                "session_status": session_status,
             }
         )
         _parse_web_class_objects(kwargs)
