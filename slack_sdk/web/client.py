@@ -2222,6 +2222,22 @@ class WebClient(BaseClient):
         kwargs.update({"cursor": cursor, "limit": limit, "include_icon": include_icon})
         return self.api_call("auth.teams.list", params=kwargs)
 
+    def blocks_validate(
+        self,
+        *,
+        blocks: Optional[str] = None,
+        message: Optional[str] = None,
+        view: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Validates an array of blocks, or a message or view payload.
+        Provide exactly one of ``blocks``, ``message``, or ``view``, each a JSON-encoded string.
+        No token or scopes are required.
+        https://docs.slack.dev/reference/methods/blocks.validate
+        """
+        kwargs.update({"blocks": blocks, "message": message, "view": view})
+        return self.api_call("blocks.validate", params=kwargs)
+
     def bookmarks_add(
         self,
         *,

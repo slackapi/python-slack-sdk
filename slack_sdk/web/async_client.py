@@ -2232,6 +2232,22 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"cursor": cursor, "limit": limit, "include_icon": include_icon})
         return await self.api_call("auth.teams.list", params=kwargs)
 
+    async def blocks_validate(
+        self,
+        *,
+        blocks: Optional[str] = None,
+        message: Optional[str] = None,
+        view: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Validates an array of blocks, or a message or view payload.
+        Provide exactly one of ``blocks``, ``message``, or ``view``, each a JSON-encoded string.
+        No token or scopes are required.
+        https://docs.slack.dev/reference/methods/blocks.validate
+        """
+        kwargs.update({"blocks": blocks, "message": message, "view": view})
+        return await self.api_call("blocks.validate", params=kwargs)
+
     async def bookmarks_add(
         self,
         *,
