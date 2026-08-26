@@ -2244,14 +2244,19 @@ class AsyncWebClient(AsyncBaseClient):
         Provide exactly one of ``blocks``, ``message``, or ``view``.
         https://docs.slack.dev/reference/methods/blocks.validate
         """
-        kwargs.update({"blocks": blocks, "message": message})
-        if isinstance(view, View):
-            kwargs.update({"view": view.to_dict()})
-        else:
-            kwargs.update({"view": view})
-        _parse_web_class_objects(kwargs)
-        kwargs = _remove_none_values(kwargs)
-        return await self.api_call("blocks.validate", json=kwargs)
+        if blocks is not None:
+            if isinstance(blocks, str):
+                kwargs.update({"blocks": blocks})
+            else:
+                kwargs.update({"blocks": json.dumps([b.to_dict() if isinstance(b, Block) else b for b in blocks])})
+        if message is not None:
+            kwargs.update({"message": message if isinstance(message, str) else json.dumps(message)})
+        if view is not None:
+            if isinstance(view, View):
+                kwargs.update({"view": json.dumps(view.to_dict())})
+            else:
+                kwargs.update({"view": view if isinstance(view, str) else json.dumps(view)})
+        return await self.api_call("blocks.validate", params=kwargs)
 
     async def bookmarks_add(
         self,
