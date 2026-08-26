@@ -2232,7 +2232,6 @@ class WebClient(BaseClient):
     ) -> SlackResponse:
         """Validates an array of blocks, or a message or view payload.
         Provide exactly one of ``blocks``, ``message``, or ``view``.
-        No token or scopes are required.
         https://docs.slack.dev/reference/methods/blocks.validate
         """
         kwargs.update({"blocks": blocks, "message": message})
