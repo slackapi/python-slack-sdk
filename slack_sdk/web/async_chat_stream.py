@@ -170,7 +170,7 @@ class AsyncChatStream:
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
               post to Slack is accessible to any app or user who is a member of that workspace.
-            session_status: The status of the agent session associated with this stream.
+            session_status: The session status to set after stopping the stream.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
