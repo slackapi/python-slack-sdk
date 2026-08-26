@@ -2252,7 +2252,6 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"view": view})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        # NOTE: intentionally using json over params for blocks/message/view payloads
         return await self.api_call("blocks.validate", json=kwargs)
 
     async def bookmarks_add(
