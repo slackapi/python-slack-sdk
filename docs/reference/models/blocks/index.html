@@ -119,8 +119,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A block that is used to hold interactive elements.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/actions-block">https://docs.slack.dev/reference/block-kit/blocks/actions-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of interactive element objects - buttons, select menus, overflow menus,
 or date pickers. There is a maximum of 25 elements in each action block.</dd>
@@ -230,8 +231,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays alerts, warnings, and informational messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/alert-block">https://docs.slack.dev/reference/block-kit/blocks/alert-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The alert message, using plain_text or mrkdwn formatting.</dd>
 <dt><strong><code>level</code></strong></dt>
@@ -437,13 +439,13 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: dict | ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block: dict | <a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.Block" href="#slack_sdk.models.blocks.Block">Block</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -523,7 +525,7 @@ def subtype(self) -&gt; Optional[str]:
                 d = copy.copy(block_element)
                 t = d.pop(&#34;type&#34;)
                 for subclass in cls._get_sub_block_elements():
-                    if t == subclass.type:
+                    if t == getattr(subclass, &#34;type&#34;, None):
                         return subclass(**d)
                 if t == PlainTextObject.type:
                     return PlainTextObject(**d)
@@ -575,13 +577,13 @@ def subtype(self) -&gt; Optional[str]:
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.BlockElement.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block_element: dict | ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>')) ‑> <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block_element: dict | <a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>) ‑> <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.BlockElement.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a>') | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]) ‑> List[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>block_elements: Sequence[dict | <a title="slack_sdk.models.blocks.BlockElement" href="#slack_sdk.models.blocks.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]) ‑> List[<a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a> | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -709,8 +711,9 @@ def subtype(self) -&gt; Optional[str]:
 <p>An interactive element that inserts a button. The button can be a trigger for
 anything from opening a simple link to starting a complex workflow.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/button-element/">https://docs.slack.dev/reference/block-kit/block-elements/button-element/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>A text object that defines the button's text.
 Can only be of type: plain_text.
@@ -869,7 +872,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.CardBlock"><code class="flex name class">
 <span>class <span class="ident">CardBlock</span></span>
-<span>(</span><span>*,<br>block_id: str | None = None,<br>hero_image: str | None = None,<br>icon: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>subtitle: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>body: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>actions: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>] | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>block_id: str | None = None,<br>hero_image: dict | <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a> | None = None,<br>icon: dict | <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a> | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>subtitle: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>body: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>actions: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>] | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -899,8 +902,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         self,
         *,
         block_id: Optional[str] = None,
-        hero_image: Optional[str] = None,
-        icon: Optional[str] = None,
+        hero_image: Optional[Union[dict, ImageElement]] = None,
+        icon: Optional[Union[dict, ImageElement]] = None,
         title: Optional[Union[str, dict, TextObject]] = None,
         subtitle: Optional[Union[str, dict, TextObject]] = None,
         body: Optional[Union[str, dict, TextObject]] = None,
@@ -912,8 +915,10 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 
         Args:
             block_id: A unique identifier for a block. If not specified, a block_id will be generated.
-            hero_image: Link to the top image used on the card.
-            icon: Link to the small image used next to the card&#39;s title and subtitle.
+            hero_image: Link to the top image used on the card. Max length 3000 characters.
+                The alt_text property has a max length of 2000 characters.
+            icon: Link to the small image used next to the card&#39;s title and subtitle. Max length
+                3000 characters. The alt_text property has a max length of 2000 characters.
             title: Title of the card. 150 characters max.
             subtitle: Subtitle of the card. 150 characters max.
             body: Content of the card. 200 characters max.
@@ -950,14 +955,17 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays content in a card.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/card-block">https://docs.slack.dev/reference/block-kit/blocks/card-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A unique identifier for a block. If not specified, a block_id will be generated.</dd>
 <dt><strong><code>hero_image</code></strong></dt>
-<dd>Link to the top image used on the card.</dd>
+<dd>Link to the top image used on the card. Max length 3000 characters.
+The alt_text property has a max length of 2000 characters.</dd>
 <dt><strong><code>icon</code></strong></dt>
-<dd>Link to the small image used next to the card's title and subtitle.</dd>
+<dd>Link to the small image used next to the card's title and subtitle. Max length
+3000 characters. The alt_text property has a max length of 2000 characters.</dd>
 <dt><strong><code>title</code></strong></dt>
 <dd>Title of the card. 150 characters max.</dd>
 <dt><strong><code>subtitle</code></strong></dt>
@@ -1078,8 +1086,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays related card blocks in a horizontally-scrolling container.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/carousel-block">https://docs.slack.dev/reference/block-kit/blocks/carousel-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>A list of cards. Minimum 1, maximum 10 cards.</dd>
 <dt><strong><code>block_id</code></strong></dt>
@@ -1195,8 +1204,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>This multi-select menu will populate its options with a list of public channels visible
 to the current user in the active workspace.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select">https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -1328,8 +1338,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>This select menu will populate its options with a list of public channels
 visible to the current user in the active workspace.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#channels_select">https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#channels_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -1453,8 +1464,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>A checkbox group that allows a user to choose multiple items from a list of possible options.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element/">https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when the checkbox group is changed.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -1658,7 +1670,7 @@ offering a confirm and deny button.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.ConfirmObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>confirm: ForwardRef('<a title="slack_sdk.models.blocks.ConfirmObject" href="#slack_sdk.models.blocks.ConfirmObject">ConfirmObject</a>') | Dict[str, Any])</span>
+<span>def <span class="ident">parse</span></span>(<span>confirm: <a title="slack_sdk.models.blocks.ConfirmObject" href="#slack_sdk.models.blocks.ConfirmObject">ConfirmObject</a> | Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1786,8 +1798,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays actions as contextual info, which can include both feedback buttons and icon buttons.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/context-actions-block">https://docs.slack.dev/reference/block-kit/blocks/context-actions-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.</dd>
 <dt><strong><code>block_id</code></strong></dt>
@@ -1889,8 +1902,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays message context, which can include both images and text.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/context-block">https://docs.slack.dev/reference/block-kit/blocks/context-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of image elements and text objects. Maximum number of items is 10.</dd>
 <dt><strong><code>block_id</code></strong></dt>
@@ -1998,8 +2012,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>Provides a way to filter the list of options in a conversations select menu
 or conversations multi-select menu.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object">https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>include</code></strong></dt>
 <dd>Indicates which type of conversations should be included in the list.
 When this field is provided, any conversations that do not match will be excluded.
@@ -2030,7 +2045,7 @@ from conversation lists. Defaults to false.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.ConversationFilter.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>filter: dict | ForwardRef('<a title="slack_sdk.models.blocks.ConversationFilter" href="#slack_sdk.models.blocks.ConversationFilter">ConversationFilter</a>'))</span>
+<span>def <span class="ident">parse</span></span>(<span>filter: dict | <a title="slack_sdk.models.blocks.ConversationFilter" href="#slack_sdk.models.blocks.ConversationFilter">ConversationFilter</a>)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -2127,8 +2142,9 @@ from conversation lists. Defaults to false.</dd>
 <p>This multi-select menu will populate its options with a list of public and private channels,
 DMs, and MPIMs visible to the current user in the active workspace.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element/#conversation_multi_select">https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element/#conversation_multi_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -2288,8 +2304,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>This select menu will populate its options with a list of public and private
 channels, DMs, and MPIMs visible to the current user in the active workspace.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#conversations_select">https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#conversations_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -2437,8 +2454,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>An element which lets users easily select a date from a calendar style UI.
 Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element">https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when a menu option is selected.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -2569,8 +2587,9 @@ date picker will take the form of a dropdown calendar. Both options will have fr
 entry for precise choices. On mobile clients, the time picker and date
 picker will use native UIs.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element/">https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when a time is selected. You can use this
 when you receive an interaction payload to identify the source of the action. Should be unique among
@@ -2667,8 +2686,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A content divider, like an <hr>, to split up different blocks inside of a message.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/divider-block">https://docs.slack.dev/reference/block-kit/blocks/divider-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 You can use this block_id when you receive an interaction payload to identify the source of the action.
@@ -2764,8 +2784,9 @@ If a message is updated, use a new block_id.</dd>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p><a href="https://docs.slack.dev/reference/block-kit/block-elements/email-input-element">https://docs.slack.dev/reference/block-kit/block-elements/email-input-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the input value when the parent modal is submitted.
 You can use this when you receive a view_submission payload to identify the value of the input element.
@@ -2904,8 +2925,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>This select menu will load its options from an external data source, allowing
 for a dynamic list of options.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select">https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -3046,8 +3068,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>This select menu will load its options from an external data source, allowing
 for a dynamic list of options.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select">https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when a menu option is selected.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -3189,8 +3212,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>A feedback button element object for either positive or negative feedback.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields">https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>An object containing some text. Maximum length for this field is 75 characters.</dd>
 <dt><strong><code>accessibility_label</code></strong></dt>
@@ -3222,7 +3246,7 @@ screen readers instead of the button <code>text</code> object.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.FeedbackButtonObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>feedback_button: ForwardRef('<a title="slack_sdk.models.blocks.FeedbackButtonObject" href="#slack_sdk.models.blocks.FeedbackButtonObject">FeedbackButtonObject</a>') | Dict[str, Any])</span>
+<span>def <span class="ident">parse</span></span>(<span>feedback_button: <a title="slack_sdk.models.blocks.FeedbackButtonObject" href="#slack_sdk.models.blocks.FeedbackButtonObject">FeedbackButtonObject</a> | Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3315,8 +3339,9 @@ def value_length(self) -&gt; bool:
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>Buttons to indicate positive or negative feedback.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element">https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for this action.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -3401,8 +3426,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a remote file.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/file-block">https://docs.slack.dev/reference/block-kit/blocks/file-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>external_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>The external unique ID for this file.</dd>
 <dt><strong><code>source</code></strong> :&ensp;<code>required</code></dt>
@@ -3507,8 +3533,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A header is a plain-text block that displays in a larger, bold font.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/header-block">https://docs.slack.dev/reference/block-kit/blocks/header-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -3624,8 +3651,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>An icon button to perform actions.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element">https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong></dt>
 <dd>An identifier for this action.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -3762,8 +3790,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A simple image block, designed to make those cat photos really pop.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/image-block">https://docs.slack.dev/reference/block-kit/blocks/image-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain-text summary of the image. This should not contain any markup.
 Maximum length for this field is 2000 characters.</dd>
@@ -3891,8 +3920,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 context blocks only. If you want a block with only an image in it,
 you're looking for the image block.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/image-element">https://docs.slack.dev/reference/block-kit/block-elements/image-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain-text summary of the image. This should not contain any markup.</dd>
 <dt><strong><code>image_url</code></strong></dt>
@@ -4030,8 +4060,9 @@ to create visually rich and compellingly interactive messages.
 <p>A block that collects information from users - it can hold a plain-text input element,
 a select menu element, a multi-select menu element, or a datepicker.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/input-block">https://docs.slack.dev/reference/block-kit/blocks/input-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>label</code></strong> :&ensp;<code>required</code></dt>
 <dd>A label that appears above an input element in the form of a text object
 that must have type of plain_text. Maximum length for the text in this field is 2000 characters.</dd>
@@ -4385,8 +4416,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 interaction payload and will need to send an acknowledgement response.
 This is a helper class that makes creating links simpler.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/button-element/">https://docs.slack.dev/reference/block-kit/block-elements/button-element/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>A text object that defines the button's text.
 Can only be of type: plain_text.
@@ -4487,8 +4519,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays formatted markdown.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/markdown-block/">https://docs.slack.dev/reference/block-kit/blocks/markdown-block/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -4608,8 +4641,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>A Markdown text object, meaning markdown characters will be parsed as
 formatting information.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The text for the block. This field accepts any of the standard text formatting markup
 when type is mrkdwn.</dd>
@@ -4806,8 +4840,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p><a href="https://docs.slack.dev/reference/block-kit/block-elements/number-input-element/">https://docs.slack.dev/reference/block-kit/block-elements/number-input-element/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the input value when the parent modal is submitted.
 You can use this when you receive a view_submission payload to identify the value of the input element.
@@ -5051,8 +5086,9 @@ SelectElement, OverflowMenuElement) or dialog element
 <a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
 <p>Legacy interactive attachments:
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>label</code></strong></dt>
 <dd>A short, user-facing string to label this option to users.
 Cannot exceed 75 characters.</dd>
@@ -5107,7 +5143,7 @@ def from_single_value(value_and_label: str):
 <div class="desc"><p>Creates a simple Option instance with the same value and label</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.Option.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>options: Sequence[Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.Option" href="#slack_sdk.models.blocks.Option">Option</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None</span>
+<span>def <span class="ident">parse_all</span></span>(<span>options: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.Option" href="#slack_sdk.models.blocks.Option">Option</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.Option" href="basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -5271,8 +5307,9 @@ UI) and a list of Option objects.</p>
 <a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
 <p>Legacy interactive attachments:
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>label</code></strong></dt>
 <dd>Text to display at the top of this group of options.</dd>
 <dt><strong><code>options</code></strong></dt>
@@ -5305,7 +5342,7 @@ UI) and a list of Option objects.</p>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.OptionGroup.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Sequence[Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.OptionGroup" href="#slack_sdk.models.blocks.OptionGroup">OptionGroup</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] | None</span>
+<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.OptionGroup" href="#slack_sdk.models.blocks.OptionGroup">OptionGroup</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -5392,8 +5429,9 @@ menu, or to supply a list of less visually important actions after a row of
 buttons. You can also specify simple URL links as overflow menu options,
 instead of actions.</p>
 <p><a href="https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element">https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when a menu option is selected.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -5526,8 +5564,9 @@ where a user can enter freeform data. It can appear as a single-line
 field or a larger textarea using the multiline flag. Plain-text input
 elements can be used inside of SectionBlocks and ActionsBlocks.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/plain-text-input-element">https://docs.slack.dev/reference/block-kit/block-elements/plain-text-input-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the input value when the parent modal is submitted.
 You can use this when you receive a view_submission payload to identify the value of the input element.
@@ -5651,8 +5690,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>A plain text object, meaning markdown characters will not be parsed as
 formatting information.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The text for the block. This field accepts any of the standard text formatting markup
 when type is mrkdwn.</dd>
@@ -5783,8 +5823,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a collection of related tasks.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/plan-block/">https://docs.slack.dev/reference/block-kit/blocks/plan-block/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -5898,8 +5939,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>A radio button group that allows a user to choose one item from a list of possible options.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element">https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when the radio button group is changed.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -6007,8 +6049,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>A raw text object used in table block cells.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object/">https://docs.slack.dev/reference/block-kit/composition-objects/text-object/</a>
 <a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The text content for the table block cell.</dd>
 </dl></div>
@@ -6129,8 +6172,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A block that is used to hold interactive elements.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/rich-text-block">https://docs.slack.dev/reference/block-kit/blocks/rich-text-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of rich text objects -
 rich_text_section, rich_text_list, rich_text_quote, rich_text_preformatted</dd>
@@ -6529,7 +6573,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.RichTextInputElement"><code class="flex name class">
 <span>class <span class="ident">RichTextInputElement</span></span>
-<span>(</span><span>*,<br>action_id: str | None = None,<br>placeholder: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>initial_value: Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.RichTextBlock" href="#slack_sdk.models.blocks.RichTextBlock">RichTextBlock</a>') | None = None,<br>dispatch_action_config: dict | <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a> | None = None,<br>focus_on_load: bool | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>action_id: str | None = None,<br>placeholder: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>initial_value: Dict[str, Any] | <a title="slack_sdk.models.blocks.RichTextBlock" href="#slack_sdk.models.blocks.RichTextBlock">RichTextBlock</a> | None = None,<br>dispatch_action_config: dict | <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="basic_components.html#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a> | None = None,<br>focus_on_load: bool | None = None,<br>min_lines: int | None = None,<br>max_lines: int | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -6545,6 +6589,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             {
                 &#34;initial_value&#34;,
                 &#34;dispatch_action_config&#34;,
+                &#34;min_lines&#34;,
+                &#34;max_lines&#34;,
             }
         )
 
@@ -6557,6 +6603,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         initial_value: Optional[Union[Dict[str, Any], &#34;RichTextBlock&#34;]] = None,  # type: ignore[name-defined] # noqa: F821
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
+        min_lines: Optional[int] = None,
+        max_lines: Optional[int] = None,
         **others: dict,
     ):
         super().__init__(
@@ -6568,7 +6616,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         show_unknown_key_warning(self, others)
 
         self.initial_value = initial_value
-        self.dispatch_action_config = dispatch_action_config</code></pre>
+        self.dispatch_action_config = dispatch_action_config
+        self.min_lines = min_lines
+        self.max_lines = max_lines</code></pre>
 </details>
 <div class="desc"><p>Block Elements are things that exists inside of your Blocks.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
@@ -6603,6 +6653,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         {
             &#34;initial_value&#34;,
             &#34;dispatch_action_config&#34;,
+            &#34;min_lines&#34;,
+            &#34;max_lines&#34;,
         }
     )</code></pre>
 </details>
@@ -7000,8 +7052,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A section is one of the most flexible blocks available.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/section-block">https://docs.slack.dev/reference/block-kit/blocks/section-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>A string acting as a unique identifier for a block.
 If not specified, one will be generated.
@@ -7161,8 +7214,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>This is the simplest form of select menu, with a static list of options passed in when defining the element.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select">https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when a menu option is selected.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -7332,8 +7386,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>This is the simplest form of select menu, with a static list of options passed in when defining the element.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select">https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -7501,8 +7556,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>This is the simplest form of select menu, with a static list of options passed in when defining the element.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select">https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -7583,7 +7639,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.TableBlock"><code class="flex name class">
 <span>class <span class="ident">TableBlock</span></span>
-<span>(</span><span>*,<br>rows: Sequence[Sequence[Dict[str, Any]]],<br>column_settings: Sequence[Dict[str, Any] | None] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>rows: Sequence[Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.RawTextObject" href="#slack_sdk.models.blocks.RawTextObject">RawTextObject</a> | <a title="slack_sdk.models.blocks.RichTextBlock" href="#slack_sdk.models.blocks.RichTextBlock">RichTextBlock</a>]],<br>column_settings: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.TableBlockColumnSettings" href="#slack_sdk.models.blocks.TableBlockColumnSettings">TableBlockColumnSettings</a> | None] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -7600,8 +7656,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Dict[str, Any]]],
-        column_settings: Optional[Sequence[Optional[Dict[str, Any]]]] = None,
+        rows: Sequence[Sequence[Union[Dict[str, Any], &#34;RawTextObject&#34;, &#34;RichTextBlock&#34;]]],
+        column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], &#34;TableBlockColumnSettings&#34;]]]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
@@ -7638,8 +7694,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays structured information in a table.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>rows</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array consisting of table rows. Maximum 100 rows.
 Each row object is an array with a max of 20 table cells.
@@ -7694,6 +7751,93 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <li><code><a title="slack_sdk.models.blocks.blocks.Block.logger" href="blocks.html#slack_sdk.models.blocks.blocks.Block.logger">logger</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.Block.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.blocks.Block.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.TableBlockColumnSettings"><code class="flex name class">
+<span>class <span class="ident">TableBlockColumnSettings</span></span>
+<span>(</span><span>*, align: str | None = None, is_wrapped: bool | None = None, **others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TableBlockColumnSettings(JsonObject):
+    &#34;&#34;&#34;Column settings for TableBlock columns.&#34;&#34;&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return {&#34;align&#34;, &#34;is_wrapped&#34;}
+
+    def __init__(
+        self,
+        *,
+        align: Optional[str] = None,
+        is_wrapped: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Settings for a single column in a table block.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            align: The alignment for items in this column. Can be &#34;left&#34;, &#34;center&#34;, or &#34;right&#34;.
+                Defaults to &#34;left&#34; if not defined.
+            is_wrapped: Whether the contents of this column should be wrapped or not.
+                Defaults to false if not defined.
+        &#34;&#34;&#34;
+        show_unknown_key_warning(self, others)
+        self.align = align
+        self.is_wrapped = is_wrapped
+
+    @classmethod
+    def parse(
+        cls, settings: Optional[Union[Dict[str, Any], &#34;TableBlockColumnSettings&#34;]]
+    ) -&gt; Optional[&#34;TableBlockColumnSettings&#34;]:
+        if settings is None:
+            return None
+        if isinstance(settings, TableBlockColumnSettings):
+            return settings
+        if isinstance(settings, dict):
+            return TableBlockColumnSettings(**settings)
+        return None</code></pre>
+</details>
+<div class="desc"><p>Column settings for TableBlock columns.</p>
+<p>Settings for a single column in a table block.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>align</code></strong></dt>
+<dd>The alignment for items in this column. Can be "left", "center", or "right".
+Defaults to "left" if not defined.</dd>
+<dt><strong><code>is_wrapped</code></strong></dt>
+<dd>Whether the contents of this column should be wrapped or not.
+Defaults to false if not defined.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.TableBlockColumnSettings.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>settings: Dict[str, Any] | <a title="slack_sdk.models.blocks.TableBlockColumnSettings" href="#slack_sdk.models.blocks.TableBlockColumnSettings">TableBlockColumnSettings</a> | None) ‑> <a title="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings" href="basic_components.html#slack_sdk.models.blocks.basic_components.TableBlockColumnSettings">TableBlockColumnSettings</a> | None</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
 </ul>
 </li>
 </ul>
@@ -7769,8 +7913,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a single task, representing a single action.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/task-card-block/">https://docs.slack.dev/reference/block-kit/blocks/task-card-block/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -7933,7 +8078,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.TextObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>text: str | Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.TextObject" href="#slack_sdk.models.blocks.TextObject">TextObject</a>'),<br>default_type: str = 'mrkdwn') ‑> <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>text: str | Dict[str, Any] | <a title="slack_sdk.models.blocks.TextObject" href="#slack_sdk.models.blocks.TextObject">TextObject</a>,<br>default_type: str = 'mrkdwn') ‑> <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -8038,8 +8183,9 @@ On desktop clients, this time picker will take the form of a dropdown list
 with free-text entry for precise choices.
 On mobile clients, the time picker will use native time picker UIs.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element">https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when a time is selected.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -8170,8 +8316,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>A URL input element, similar to the Plain-text input element,
 creates a single line field where a user can enter URL-encoded data.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/url-input-element">https://docs.slack.dev/reference/block-kit/block-elements/url-input-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the input value when the parent modal is submitted.
 You can use this when you receive a view_submission payload to identify the value of the input element.
@@ -8283,8 +8430,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/">https://docs.slack.dev/reference/block-kit/block-elements/</a></p>
 <p>A URL source element that displays a URL source for referencing within a task card block.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/url-source-element">https://docs.slack.dev/reference/block-kit/block-elements/url-source-element</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>url</code></strong> :&ensp;<code>required</code></dt>
 <dd>The URL type source.</dd>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
@@ -8399,8 +8547,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>This select menu will populate its options with a list of Slack users visible to
 the current user in the active workspace.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select">https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>action_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>An identifier for the action triggered when a menu option is selected.
 You can use this when you receive an interaction payload to identify the source of the action.
@@ -8525,8 +8674,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>This select menu will populate its options with a list of Slack users visible to
 the current user in the active workspace.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select">https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>placeholder</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain_text only text object that defines the placeholder text shown on the menu.
 Maximum length for the text in this field is 150 characters.</dd>
@@ -8701,8 +8851,9 @@ to create visually rich and compellingly interactive messages.
 anywhere you can put blocks! To use the video block within your app,
 you must have the links.embed:write scope.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/video-block">https://docs.slack.dev/reference/block-kit/blocks/video-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -9279,6 +9430,12 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.TableBlock.attributes" href="#slack_sdk.models.blocks.TableBlock.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.blocks.TableBlock.type" href="#slack_sdk.models.blocks.TableBlock.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.TableBlockColumnSettings" href="#slack_sdk.models.blocks.TableBlockColumnSettings">TableBlockColumnSettings</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.TableBlockColumnSettings.parse" href="#slack_sdk.models.blocks.TableBlockColumnSettings.parse">parse</a></code></li>
 </ul>
 </li>
 <li>
