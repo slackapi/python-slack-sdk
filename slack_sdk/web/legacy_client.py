@@ -9,7 +9,6 @@
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 from asyncio import Future
-
 """A Python module for interacting with Slack's Web API."""
 
 import json
@@ -2232,6 +2231,32 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"cursor": cursor, "limit": limit, "include_icon": include_icon})
         return self.api_call("auth.teams.list", params=kwargs)
+
+    def blocks_validate(
+        self,
+        *,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        message: Optional[Union[str, Dict]] = None,
+        view: Optional[Union[str, Dict, View]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Validates an array of blocks, or a message or view payload.
+        Provide exactly one of ``blocks``, ``message``, or ``view``.
+        https://docs.slack.dev/reference/methods/blocks.validate
+        """
+        if blocks is not None:
+            if isinstance(blocks, str):
+                kwargs.update({"blocks": blocks})
+            else:
+                kwargs.update({"blocks": json.dumps([b.to_dict() if isinstance(b, Block) else b for b in blocks])})
+        if message is not None:
+            kwargs.update({"message": message if isinstance(message, str) else json.dumps(message)})
+        if view is not None:
+            if isinstance(view, View):
+                kwargs.update({"view": json.dumps(view.to_dict())})
+            else:
+                kwargs.update({"view": view if isinstance(view, str) else json.dumps(view)})
+        return self.api_call("blocks.validate", params=kwargs)
 
     def bookmarks_add(
         self,
