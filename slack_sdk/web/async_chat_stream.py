@@ -158,6 +158,7 @@ class AsyncChatStream:
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        session_status: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Stop the stream and finalize the message.
@@ -169,6 +170,7 @@ class AsyncChatStream:
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
               post to Slack is accessible to any app or user who is a member of that workspace.
+            session_status: The session status to set after stopping the stream.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -217,6 +219,7 @@ class AsyncChatStream:
             blocks=blocks,
             chunks=flushings,
             metadata=metadata,
+            session_status=session_status,
             **kwargs,
         )
         self._state = "completed"
