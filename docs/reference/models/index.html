@@ -112,8 +112,9 @@ el.replaceWith(d);
 <div class="desc"><p>Given a sequence (or single item), attempt to call the to_dict() method on each
 item and return a plain list. If item is not the expected type, return it
 unmodified, in case it's already a plain dict or some other user created class.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>item_or_items</code></strong></dt>
 <dd>item(s) to go through</dd>
 <dt><strong><code>format_args</code></strong></dt>
@@ -186,8 +187,9 @@ method</dd>
 </details>
 <div class="desc"><p>Decorate a method on a class to mark it as a JSON validator. Validation
 functions should return true if valid, false if not.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>message</code></strong></dt>
 <dd>Message to be attached to the thrown SlackObjectFormationError</dd>
 </dl></div>
@@ -307,6 +309,7 @@ functions should return true if valid, false if not.</p>
 <li><a title="slack_sdk.models.blocks.basic_components.Option" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a></li>
 <li><a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a></li>
 <li><a title="slack_sdk.models.blocks.basic_components.SlackFile" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a></li>
+<li><a title="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.TableBlockColumnSettings">TableBlockColumnSettings</a></li>
 <li><a title="slack_sdk.models.blocks.basic_components.TextObject" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a></li>
 <li><a title="slack_sdk.models.blocks.basic_components.Workflow" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Workflow">Workflow</a></li>
 <li><a title="slack_sdk.models.blocks.basic_components.WorkflowTrigger" href="blocks/basic_components.html#slack_sdk.models.blocks.basic_components.WorkflowTrigger">WorkflowTrigger</a></li>
@@ -461,13 +464,15 @@ present on this object</p></div>
     return self.get_non_null_attributes()</code></pre>
 </details>
 <div class="desc"><p>Extract this object as a JSON-compatible, Slack-API-valid dictionary</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>*args</code></strong></dt>
 <dd>Any specific formatting args (rare; generally not required)</dd>
 </dl>
-<h2 id="raises">Raises</h2>
-<p>SlackObjectFormationError if the object was not valid</p></div>
+<p>Raises
+-----=
+SlackObjectFormationError if the object was not valid</p></div>
 </dd>
 <dt id="slack_sdk.models.JsonObject.validate_json"><code class="name flex">
 <span>def <span class="ident">validate_json</span></span>(<span>self) ‑> None</span>
@@ -487,8 +492,9 @@ present on this object</p></div>
         if callable(method) and hasattr(method, &#34;validator&#34;):
             method()</code></pre>
 </details>
-<div class="desc"><h2 id="raises">Raises</h2>
-<p>SlackObjectFormationError if the object was not valid</p></div>
+<div class="desc"><p>Raises
+-----=
+SlackObjectFormationError if the object was not valid</p></div>
 </dd>
 </dl>
 </dd>
@@ -523,8 +529,9 @@ present on this object</p></div>
 </details>
 <div class="desc"><p>Decorate a method on a class to mark it as a JSON validator. Validation
 functions should return true if valid, false if not.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>message</code></strong></dt>
 <dd>Message to be attached to the thrown SlackObjectFormationError</dd>
 </dl></div>

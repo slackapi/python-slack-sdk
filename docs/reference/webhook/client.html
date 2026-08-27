@@ -310,8 +310,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>API client for Incoming Webhooks and <code>response_url</code></p>
 <p><a href="https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/">https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>url</code></strong></dt>
 <dd>Complete URL to send data (e.g., <code>https://hooks.slack.com/XXX</code>)</dd>
 <dt><strong><code>timeout</code></strong></dt>
@@ -422,8 +423,9 @@ el.replaceWith(d);
     )</code></pre>
 </details>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong></dt>
 <dd>The text message
 (even when having blocks, setting this as well is recommended as it works as fallback)</dd>
@@ -446,8 +448,9 @@ el.replaceWith(d);
 <dt><strong><code>headers</code></strong></dt>
 <dd>Request headers to append only for this request</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Webhook response</p></div>
+<p>Returns
+-----=
+Webhook response</p></div>
 </dd>
 <dt id="slack_sdk.webhook.client.WebhookClient.send_dict"><code class="name flex">
 <span>def <span class="ident">send_dict</span></span>(<span>self, body: Dict[str, Any], headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.webhook.webhook_response.WebhookResponse" href="webhook_response.html#slack_sdk.webhook.webhook_response.WebhookResponse">WebhookResponse</a></span>
@@ -473,16 +476,18 @@ el.replaceWith(d);
     )</code></pre>
 </details>
 <div class="desc"><p>Performs a Slack API request and returns the result.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>body</code></strong></dt>
 <dd>JSON data structure (it's still a dict at this point),
 if you give this argument, body_params and files will be skipped</dd>
 <dt><strong><code>headers</code></strong></dt>
 <dd>Request headers to append only for this request</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Webhook response</p></div>
+<p>Returns
+-----=
+Webhook response</p></div>
 </dd>
 </dl>
 </dd>

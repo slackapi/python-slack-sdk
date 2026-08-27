@@ -279,7 +279,7 @@ el.replaceWith(d);
                                 self.logger.debug(
                                     f&#34;Received message &#34;
                                     f&#34;(type: {message_type}, &#34;
-                                    f&#34;data: {message_data}, &#34;
+                                    f&#34;data: {repr(message_data)}, &#34;
                                     f&#34;extra: {message.extra}, &#34;
                                     f&#34;session: {session_id})&#34;
                                 )
@@ -496,8 +496,9 @@ el.replaceWith(d);
         return &#34;s_&#34; + str(hash(session))</code></pre>
 </details>
 <div class="desc"><p>Socket Mode client</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>app_token</code></strong></dt>
 <dd>App-level token</dd>
 <dt><strong><code>logger</code></strong></dt>
@@ -877,7 +878,7 @@ el.replaceWith(d);
                             self.logger.debug(
                                 f&#34;Received message &#34;
                                 f&#34;(type: {message_type}, &#34;
-                                f&#34;data: {message_data}, &#34;
+                                f&#34;data: {repr(message_data)}, &#34;
                                 f&#34;extra: {message.extra}, &#34;
                                 f&#34;session: {session_id})&#34;
                             )

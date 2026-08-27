@@ -97,8 +97,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A block that is used to hold interactive elements.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/actions-block">https://docs.slack.dev/reference/block-kit/blocks/actions-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of interactive element objects - buttons, select menus, overflow menus,
 or date pickers. There is a maximum of 25 elements in each action block.</dd>
@@ -208,8 +209,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays alerts, warnings, and informational messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/alert-block">https://docs.slack.dev/reference/block-kit/blocks/alert-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The alert message, using plain_text or mrkdwn formatting.</dd>
 <dt><strong><code>level</code></strong></dt>
@@ -415,13 +417,13 @@ to create visually rich and compellingly interactive messages.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>block: dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>block: dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>) ‑> <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.Block.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | ForwardRef('<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
+<span>def <span class="ident">parse_all</span></span>(<span>blocks: Sequence[dict | <a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.blocks.Block" href="#slack_sdk.models.blocks.blocks.Block">Block</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -536,7 +538,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.CardBlock"><code class="flex name class">
 <span>class <span class="ident">CardBlock</span></span>
-<span>(</span><span>*,<br>block_id: str | None = None,<br>hero_image: str | None = None,<br>icon: str | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>subtitle: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>body: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>actions: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>] | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>block_id: str | None = None,<br>hero_image: dict | <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a> | None = None,<br>icon: dict | <a title="slack_sdk.models.blocks.block_elements.ImageElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.ImageElement">ImageElement</a> | None = None,<br>title: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>subtitle: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>body: str | dict | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="basic_components.html#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None = None,<br>actions: Sequence[dict | <a title="slack_sdk.models.blocks.block_elements.BlockElement" href="block_elements.html#slack_sdk.models.blocks.block_elements.BlockElement">BlockElement</a>] | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -566,8 +568,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         self,
         *,
         block_id: Optional[str] = None,
-        hero_image: Optional[str] = None,
-        icon: Optional[str] = None,
+        hero_image: Optional[Union[dict, ImageElement]] = None,
+        icon: Optional[Union[dict, ImageElement]] = None,
         title: Optional[Union[str, dict, TextObject]] = None,
         subtitle: Optional[Union[str, dict, TextObject]] = None,
         body: Optional[Union[str, dict, TextObject]] = None,
@@ -579,8 +581,10 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 
         Args:
             block_id: A unique identifier for a block. If not specified, a block_id will be generated.
-            hero_image: Link to the top image used on the card.
-            icon: Link to the small image used next to the card&#39;s title and subtitle.
+            hero_image: Link to the top image used on the card. Max length 3000 characters.
+                The alt_text property has a max length of 2000 characters.
+            icon: Link to the small image used next to the card&#39;s title and subtitle. Max length
+                3000 characters. The alt_text property has a max length of 2000 characters.
             title: Title of the card. 150 characters max.
             subtitle: Subtitle of the card. 150 characters max.
             body: Content of the card. 200 characters max.
@@ -617,14 +621,17 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays content in a card.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/card-block">https://docs.slack.dev/reference/block-kit/blocks/card-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A unique identifier for a block. If not specified, a block_id will be generated.</dd>
 <dt><strong><code>hero_image</code></strong></dt>
-<dd>Link to the top image used on the card.</dd>
+<dd>Link to the top image used on the card. Max length 3000 characters.
+The alt_text property has a max length of 2000 characters.</dd>
 <dt><strong><code>icon</code></strong></dt>
-<dd>Link to the small image used next to the card's title and subtitle.</dd>
+<dd>Link to the small image used next to the card's title and subtitle. Max length
+3000 characters. The alt_text property has a max length of 2000 characters.</dd>
 <dt><strong><code>title</code></strong></dt>
 <dd>Title of the card. 150 characters max.</dd>
 <dt><strong><code>subtitle</code></strong></dt>
@@ -745,8 +752,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays related card blocks in a horizontally-scrolling container.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/carousel-block">https://docs.slack.dev/reference/block-kit/blocks/carousel-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>A list of cards. Minimum 1, maximum 10 cards.</dd>
 <dt><strong><code>block_id</code></strong></dt>
@@ -849,8 +857,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays actions as contextual info, which can include both feedback buttons and icon buttons.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/context-actions-block">https://docs.slack.dev/reference/block-kit/blocks/context-actions-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.</dd>
 <dt><strong><code>block_id</code></strong></dt>
@@ -952,8 +961,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays message context, which can include both images and text.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/context-block">https://docs.slack.dev/reference/block-kit/blocks/context-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of image elements and text objects. Maximum number of items is 10.</dd>
 <dt><strong><code>block_id</code></strong></dt>
@@ -1043,8 +1053,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A content divider, like an <hr>, to split up different blocks inside of a message.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/divider-block">https://docs.slack.dev/reference/block-kit/blocks/divider-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 You can use this block_id when you receive an interaction payload to identify the source of the action.
@@ -1125,8 +1136,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a remote file.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/file-block">https://docs.slack.dev/reference/block-kit/blocks/file-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>external_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>The external unique ID for this file.</dd>
 <dt><strong><code>source</code></strong> :&ensp;<code>required</code></dt>
@@ -1231,8 +1243,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A header is a plain-text block that displays in a larger, bold font.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/header-block">https://docs.slack.dev/reference/block-kit/blocks/header-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -1373,8 +1386,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A simple image block, designed to make those cat photos really pop.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/image-block">https://docs.slack.dev/reference/block-kit/blocks/image-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>alt_text</code></strong> :&ensp;<code>required</code></dt>
 <dd>A plain-text summary of the image. This should not contain any markup.
 Maximum length for this field is 2000 characters.</dd>
@@ -1527,8 +1541,9 @@ to create visually rich and compellingly interactive messages.
 <p>A block that collects information from users - it can hold a plain-text input element,
 a select menu element, a multi-select menu element, or a datepicker.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/input-block">https://docs.slack.dev/reference/block-kit/blocks/input-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>label</code></strong> :&ensp;<code>required</code></dt>
 <dd>A label that appears above an input element in the form of a text object
 that must have type of plain_text. Maximum length for the text in this field is 2000 characters.</dd>
@@ -1652,8 +1667,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays formatted markdown.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/markdown-block/">https://docs.slack.dev/reference/block-kit/blocks/markdown-block/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -1758,8 +1774,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a collection of related tasks.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/plan-block/">https://docs.slack.dev/reference/block-kit/blocks/plan-block/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -1860,8 +1877,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A block that is used to hold interactive elements.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/rich-text-block">https://docs.slack.dev/reference/block-kit/blocks/rich-text-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>elements</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array of rich text objects -
 rich_text_section, rich_text_list, rich_text_quote, rich_text_preformatted</dd>
@@ -2003,8 +2021,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>A section is one of the most flexible blocks available.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/section-block">https://docs.slack.dev/reference/block-kit/blocks/section-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong> :&ensp;<code>required</code></dt>
 <dd>A string acting as a unique identifier for a block.
 If not specified, one will be generated.
@@ -2080,7 +2099,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </dd>
 <dt id="slack_sdk.models.blocks.blocks.TableBlock"><code class="flex name class">
 <span>class <span class="ident">TableBlock</span></span>
-<span>(</span><span>*,<br>rows: Sequence[Sequence[Dict[str, Any]]],<br>column_settings: Sequence[Dict[str, Any] | None] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
+<span>(</span><span>*,<br>rows: Sequence[Sequence[Dict[str, Any] | RawTextObject | <a title="slack_sdk.models.blocks.blocks.RichTextBlock" href="#slack_sdk.models.blocks.blocks.RichTextBlock">RichTextBlock</a>]],<br>column_settings: Sequence[Dict[str, Any] | TableBlockColumnSettings | None] | None = None,<br>block_id: str | None = None,<br>**others: dict)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -2097,8 +2116,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Dict[str, Any]]],
-        column_settings: Optional[Sequence[Optional[Dict[str, Any]]]] = None,
+        rows: Sequence[Sequence[Union[Dict[str, Any], &#34;RawTextObject&#34;, &#34;RichTextBlock&#34;]]],
+        column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], &#34;TableBlockColumnSettings&#34;]]]] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
@@ -2135,8 +2154,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays structured information in a table.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>rows</code></strong> :&ensp;<code>required</code></dt>
 <dd>An array consisting of table rows. Maximum 100 rows.
 Each row object is an array with a max of 20 table cells.
@@ -2266,8 +2286,9 @@ to create visually rich and compellingly interactive messages.
 <a href="https://docs.slack.dev/reference/block-kit/blocks">https://docs.slack.dev/reference/block-kit/blocks</a></p>
 <p>Displays a single task, representing a single action.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/task-card-block/">https://docs.slack.dev/reference/block-kit/blocks/task-card-block/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.
@@ -2449,8 +2470,9 @@ to create visually rich and compellingly interactive messages.
 anywhere you can put blocks! To use the video block within your app,
 you must have the links.embed:write scope.
 <a href="https://docs.slack.dev/reference/block-kit/blocks/video-block">https://docs.slack.dev/reference/block-kit/blocks/video-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>block_id</code></strong></dt>
 <dd>A string acting as a unique identifier for a block. If not specified, one will be generated.
 Maximum length for this field is 255 characters.

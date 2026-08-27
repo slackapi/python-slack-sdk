@@ -731,8 +731,9 @@ dialog to Slack</p></div>
 </details>
 <div class="desc"><p>Specify a callback ID for this dialog, which your application will then
 receive upon dialog submission</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>callback_id</code></strong></dt>
 <dd>a string identifying this particular dialog</dd>
 </dl></div>
@@ -797,8 +798,9 @@ def callback_id_present(self) -&gt; bool:
 <div class="desc"><p>You can also provide a select menu with a list of channels. Specify your
 data_source as channels to limit only to public channels</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -861,8 +863,9 @@ completing the element. 150 character maximum.</dd>
 private channels, direct messages, MPIMs, and whatever else we consider a
 conversation-like thing.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -951,8 +954,9 @@ a dropdown menu.</p>
 <p>A list of options can be loaded from an external URL and used in your dialog
 menus.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -995,8 +999,9 @@ completing the element. 150 character maximum.</dd>
 </details>
 <div class="desc"><p>Whether this dialog should send a request to your application even if the
 user cancels their interaction. Defaults to False.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>notify</code></strong></dt>
 <dd>Set to True to indicate that your application should receive a
 request even if the user cancels interaction with the dialog.</dd>
@@ -1027,8 +1032,9 @@ request even if the user cancels interaction with the dialog.</dd>
 </details>
 <div class="desc"><p>Pass state into this dialog - dictionaries will be automatically formatted to
 JSON</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>state</code></strong></dt>
 <dd>Extra state information that you need to pass from this dialog
 back to your application on submission</dd>
@@ -1105,8 +1111,9 @@ a dropdown menu.</p>
 <p>A select element may contain up to 100 selections, provided as a list of
 Option or OptionGroup objects</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -1146,8 +1153,9 @@ completing the element. 150 character maximum.</dd>
 </details>
 <div class="desc"><p>The label to use on the 'Submit' button on the dialog. Defaults to 'Submit'
 if not specified.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>label</code></strong></dt>
 <dd>must not exceed 24 characters, and must be a single word (no
 spaces)</dd>
@@ -1250,8 +1258,9 @@ relatively long answer from users. The element UI provides a remaining
 character count to the max_length you have set or the default,
 3000.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_textarea_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_textarea_elements</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -1340,8 +1349,9 @@ subtype.</dd>
 </details>
 <div class="desc"><p>Text elements are single-line plain text fields.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -1388,8 +1398,9 @@ subtype.</dd>
     return self</code></pre>
 </details>
 <div class="desc"><p>Specify a title for this dialog</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>title</code></strong></dt>
 <dd>must not exceed 24 characters</dd>
 </dl></div>
@@ -1472,8 +1483,9 @@ when you are creating a bug tracking app, you want to include a field for an
 assignee. Slack pre-populates the user list in client-side, so your app
 doesn't need access to a related OAuth scope.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -1548,8 +1560,9 @@ completing the element. 150 character maximum.</dd>
 <p>You can also provide a select menu with a list of channels. Specify your
 data_source as channels to limit only to public channels</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -1642,8 +1655,9 @@ completing the element. 150 character maximum.</dd>
 private channels, direct messages, MPIMs, and whatever else we consider a
 conversation-like thing.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -1751,8 +1765,9 @@ a dropdown menu.</p>
 <p>A list of options can be loaded from an external URL and used in your dialog
 menus.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_external</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -1898,8 +1913,9 @@ a dropdown menu.</p>
 <p>A select element may contain up to 100 selections, provided as a list of
 Option or OptionGroup objects</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#attributes_select_elements</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>
@@ -2468,8 +2484,9 @@ when you are creating a bug tracking app, you want to include a field for an
 assignee. Slack pre-populates the user list in client-side, so your app
 doesn't need access to a related OAuth scope.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name of form element. Required. No more than 300 characters.</dd>
 <dt><strong><code>label</code></strong></dt>

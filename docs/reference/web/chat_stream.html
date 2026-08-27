@@ -191,6 +191,7 @@ el.replaceWith(d);
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        session_status: Optional[str] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Stop the stream and finalize the message.
@@ -202,6 +203,7 @@ el.replaceWith(d);
               what will be appended to the message received so far.
             metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
               post to Slack is accessible to any app or user who is a member of that workspace.
+            session_status: The session status to set after stopping the stream.
             **kwargs: Additional arguments passed to the underlying API calls.
 
         Returns:
@@ -250,6 +252,7 @@ el.replaceWith(d);
             blocks=blocks,
             chunks=flushings,
             metadata=metadata,
+            session_status=session_status,
             **kwargs,
         )
         self._state = &#34;completed&#34;
@@ -287,8 +290,9 @@ el.replaceWith(d);
 methods, with automatic buffering and state management.</p>
 <p>Initialize a new ChatStream instance.</p>
 <p>The <strong>init</strong> method creates a unique ChatStream instance that keeps track of one chat stream.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>client</code></strong></dt>
 <dd>The WebClient instance to use for API calls.</dd>
 <dt><strong><code>channel</code></strong></dt>
@@ -409,8 +413,9 @@ Can be used with chat.update as a fallback if the stream expires server-side.</p
 <div class="desc"><p>Append to the stream.</p>
 <p>The "append" method appends to the chat stream being used. This method can be called multiple times. After the stream
 is stopped this method cannot be called.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>chunks</code></strong></dt>
 <dd>An array of streaming chunks. Chunks can be markdown text, plan, or task update chunks.</dd>
 <dt><strong><code>markdown_text</code></strong></dt>
@@ -419,14 +424,17 @@ what will be appended to the message received so far.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>SlackResponse if the buffer was flushed, None if buffering.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+SlackResponse if the buffer was flushed, None if buffering.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackRequestError</code></dt>
 <dd>If the stream is already completed.</dd>
 </dl>
-<h2 id="example">Example</h2>
+<p>Example
+-----=</p>
 <pre><code class="language-python">streamer = client.chat_stream(
     channel=&quot;C0123456789&quot;,
     thread_ts=&quot;1700000001.123456&quot;,
@@ -439,7 +447,7 @@ streamer.stop()
 </code></pre></div>
 </dd>
 <dt id="slack_sdk.web.chat_stream.ChatStream.stop"><code class="name flex">
-<span>def <span class="ident">stop</span></span>(<span>self,<br>*,<br>markdown_text: str | None = None,<br>chunks: Sequence[Dict | <a title="slack_sdk.models.messages.chunk.Chunk" href="../models/messages/chunk.html#slack_sdk.models.messages.chunk.Chunk">Chunk</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">stop</span></span>(<span>self,<br>*,<br>markdown_text: str | None = None,<br>chunks: Sequence[Dict | <a title="slack_sdk.models.messages.chunk.Chunk" href="../models/messages/chunk.html#slack_sdk.models.messages.chunk.Chunk">Chunk</a>] | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>session_status: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -453,6 +461,7 @@ streamer.stop()
     chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
     blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     metadata: Optional[Union[Dict, Metadata]] = None,
+    session_status: Optional[str] = None,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Stop the stream and finalize the message.
@@ -464,6 +473,7 @@ streamer.stop()
           what will be appended to the message received so far.
         metadata: JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
           post to Slack is accessible to any app or user who is a member of that workspace.
+        session_status: The session status to set after stopping the stream.
         **kwargs: Additional arguments passed to the underlying API calls.
 
     Returns:
@@ -512,14 +522,16 @@ streamer.stop()
         blocks=blocks,
         chunks=flushings,
         metadata=metadata,
+        session_status=session_status,
         **kwargs,
     )
     self._state = &#34;completed&#34;
     return response</code></pre>
 </details>
 <div class="desc"><p>Stop the stream and finalize the message.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>blocks</code></strong></dt>
 <dd>A list of blocks that will be rendered at the bottom of the finalized message.</dd>
 <dt><strong><code>chunks</code></strong></dt>
@@ -530,17 +542,22 @@ what will be appended to the message received so far.</dd>
 <dt><strong><code>metadata</code></strong></dt>
 <dd>JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you
 post to Slack is accessible to any app or user who is a member of that workspace.</dd>
+<dt><strong><code>session_status</code></strong></dt>
+<dd>The session status to set after stopping the stream.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>SlackResponse from the chat.stopStream API call.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+SlackResponse from the chat.stopStream API call.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackRequestError</code></dt>
 <dd>If the stream is already completed.</dd>
 </dl>
-<h2 id="example">Example</h2>
+<p>Example
+-----=</p>
 <pre><code class="language-python">streamer = client.chat_stream(
     channel=&quot;C0123456789&quot;,
     thread_ts=&quot;1700000001.123456&quot;,
