@@ -2096,6 +2096,60 @@ class RichTextElementParts:
             }
             return {k: v for k, v in result.items() if v is not None}
 
+    class AttachmentMention(RichTextElement):
+        type = "attachment_mention"
+
+        @property
+        def attributes(self) -> Set[str]:  # type: ignore[override]
+            return super().attributes.union(
+                {
+                    "url",
+                    "text",
+                    "app_id",
+                    "entity_id",
+                    "icon_url",
+                    "channel_id",
+                    "ts",
+                    "full_size_preview_enabled",
+                    "icon_name",
+                    "reference_object_type",
+                    "product_name",
+                    "style",
+                }
+            )
+
+        def __init__(
+            self,
+            *,
+            url: str,
+            text: Optional[str] = None,
+            app_id: Optional[str] = None,
+            entity_id: Optional[str] = None,
+            icon_url: Optional[str] = None,
+            channel_id: Optional[str] = None,
+            ts: Optional[str] = None,
+            full_size_preview_enabled: Optional[bool] = None,
+            icon_name: Optional[str] = None,
+            reference_object_type: Optional[str] = None,
+            product_name: Optional[str] = None,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
+            **others: dict,
+        ):
+            super().__init__(type=self.type)
+            show_unknown_key_warning(self, others)
+            self.url = url
+            self.text = text
+            self.app_id = app_id
+            self.entity_id = entity_id
+            self.icon_url = icon_url
+            self.channel_id = channel_id
+            self.ts = ts
+            self.full_size_preview_enabled = full_size_preview_enabled
+            self.icon_name = icon_name
+            self.reference_object_type = reference_object_type
+            self.product_name = product_name
+            self.style = style
+
     class Text(RichTextElement):
         type = "text"
 
