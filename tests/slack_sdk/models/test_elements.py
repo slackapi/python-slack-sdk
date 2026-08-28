@@ -91,6 +91,40 @@ class InteractiveElementTests(unittest.TestCase):
         self.assertDictEqual(input, InputInteractiveElement(**input).to_dict())
 
 
+# -------------------------------------------------
+# Rich text element parts
+# -------------------------------------------------
+
+
+class AttachmentMentionElementTests(unittest.TestCase):
+    def test_all_fields(self):
+        input = {
+            "type": "attachment_mention",
+            "url": "https://example.com/attachment",
+            "text": "Fallback text",
+            "app_id": "A0123456789",
+            "entity_id": "E0123456789",
+            "icon_url": "https://example.com/icon.png",
+            "channel_id": "C0123456789",
+            "ts": "1234567890.123456",
+            "full_size_preview_enabled": True,
+            "icon_name": "sf-account",
+            "reference_object_type": "record",
+            "product_name": "Salesforce",
+            "style": {"bold": True},
+        }
+        self.assertDictEqual(input, RichTextElementParts.AttachmentMention(**input).to_dict())
+
+    def test_document(self):
+        # Matches the docs reference example field-for-field:
+        # https://docs.slack.dev/reference/block-kit/block-elements/attachment-mention-element
+        input = {
+            "type": "attachment_mention",
+            "url": "https://example.com/attachment",
+        }
+        self.assertDictEqual(input, RichTextElementParts.AttachmentMention(**input).to_dict())
+
+
 class ButtonElementTests(unittest.TestCase):
     def test_document_1(self):
         input = {
@@ -1110,40 +1144,6 @@ class OverflowMenuElementTests(unittest.TestCase):
             "action_id": "overflow",
         }
         self.assertDictEqual(input, OverflowMenuElement(**input).to_dict())
-
-
-# -------------------------------------------------
-# Rich text element parts
-# -------------------------------------------------
-
-
-class AttachmentMentionElementTests(unittest.TestCase):
-    def test_all_fields(self):
-        input = {
-            "type": "attachment_mention",
-            "url": "https://example.com/attachment",
-            "text": "Fallback text",
-            "app_id": "A0123456789",
-            "entity_id": "E0123456789",
-            "icon_url": "https://example.com/icon.png",
-            "channel_id": "C0123456789",
-            "ts": "1234567890.123456",
-            "full_size_preview_enabled": True,
-            "icon_name": "sf-account",
-            "reference_object_type": "record",
-            "product_name": "Salesforce",
-            "style": {"bold": True},
-        }
-        self.assertDictEqual(input, RichTextElementParts.AttachmentMention(**input).to_dict())
-
-    def test_document(self):
-        # Matches the docs reference example field-for-field:
-        # https://docs.slack.dev/reference/block-kit/block-elements/attachment-mention-element
-        input = {
-            "type": "attachment_mention",
-            "url": "https://example.com/attachment",
-        }
-        self.assertDictEqual(input, RichTextElementParts.AttachmentMention(**input).to_dict())
 
 
 # -------------------------------------------------
