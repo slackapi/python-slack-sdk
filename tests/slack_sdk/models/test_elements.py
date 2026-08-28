@@ -91,11 +91,6 @@ class InteractiveElementTests(unittest.TestCase):
         self.assertDictEqual(input, InputInteractiveElement(**input).to_dict())
 
 
-# -------------------------------------------------
-# Rich text element parts
-# -------------------------------------------------
-
-
 class AttachmentMentionElementTests(unittest.TestCase):
     def test_all_fields(self):
         input = {
