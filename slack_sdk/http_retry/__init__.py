@@ -4,6 +4,7 @@ from .handler import RetryHandler
 from .builtin_handlers import (
     ConnectionErrorRetryHandler,
     RateLimitErrorRetryHandler,
+    ServerErrorRetryHandler,
 )
 from .interval_calculator import RetryIntervalCalculator
 from .builtin_interval_calculators import (
@@ -17,6 +18,7 @@ from .state import RetryState
 
 connect_error_retry_handler = ConnectionErrorRetryHandler()
 rate_limit_error_retry_handler = RateLimitErrorRetryHandler()
+server_error_retry_handler = ServerErrorRetryHandler()
 
 
 def default_retry_handlers() -> List[RetryHandler]:
@@ -27,6 +29,7 @@ def all_builtin_retry_handlers() -> List[RetryHandler]:
     return [
         connect_error_retry_handler,
         rate_limit_error_retry_handler,
+        server_error_retry_handler,
     ]
 
 
@@ -34,6 +37,7 @@ __all__ = [
     "RetryHandler",
     "ConnectionErrorRetryHandler",
     "RateLimitErrorRetryHandler",
+    "ServerErrorRetryHandler",
     "RetryIntervalCalculator",
     "FixedValueRetryIntervalCalculator",
     "BackoffRetryIntervalCalculator",
