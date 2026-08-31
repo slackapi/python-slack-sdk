@@ -1097,6 +1097,10 @@ class ContainerBlock(Block):
     def _validate_width(self):
         return self.width is None or self.width in self.valid_widths
 
+    @JsonValidator("has_header_divider cannot be set when is_collapsible is true")
+    def _validate_header_divider_collapsible(self):
+        return not (self.is_collapsible is True and self.has_header_divider is True)
+
 
 class CarouselBlock(Block):
     type = "carousel"

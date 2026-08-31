@@ -1779,7 +1779,7 @@ class ContainerBlockTests(unittest.TestCase):
         self.assertIsNotNone(parsed)
         self.assertDictEqual(input, parsed.to_dict())
 
-    def test_all_properties(self):
+    def test_all_properties_collapsible(self):
         input = {
             "type": "container",
             "title": {"type": "plain_text", "text": "Full Container"},
@@ -1791,8 +1791,22 @@ class ContainerBlockTests(unittest.TestCase):
             "icon": {"type": "image", "image_url": "https://example.com/img.png", "alt_text": "icon"},
             "is_collapsible": True,
             "default_collapsed": True,
-            "has_header_divider": True,
             "block_id": "container-1",
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_all_properties_header_divider(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "Full Container"},
+            "subtitle": {"type": "mrkdwn", "text": "A subtitle"},
+            "child_blocks": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Content"}},
+            ],
+            "width": "wide",
+            "icon": {"type": "image", "image_url": "https://example.com/img.png", "alt_text": "icon"},
+            "has_header_divider": True,
+            "block_id": "container-2",
         }
         self.assertDictEqual(input, ContainerBlock(**input).to_dict())
 
@@ -1858,6 +1872,15 @@ class ContainerBlockTests(unittest.TestCase):
             ContainerBlock(
                 title={"type": "plain_text", "text": "Test"},
                 child_blocks=[],
+            ).validate_json()
+
+    def test_collapsible_with_header_divider(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Test"},
+                child_blocks=[{"type": "divider"}],
+                is_collapsible=True,
+                has_header_divider=True,
             ).validate_json()
 
 
