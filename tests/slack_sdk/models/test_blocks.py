@@ -10,6 +10,7 @@ from slack_sdk.models.blocks import (
     CallBlock,
     CardBlock,
     CarouselBlock,
+    ContainerBlock,
     ContextActionsBlock,
     ContextBlock,
     DividerBlock,
@@ -1752,6 +1753,112 @@ class AlertBlockTests(unittest.TestCase):
     def test_missing_text(self):
         with self.assertRaises(SlackObjectFormationError):
             AlertBlock(text="").validate_json()
+
+
+class ContainerBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "My Container"},
+            "child_blocks": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Hello"}},
+                {"type": "divider"},
+            ],
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_parse(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "Parsed"},
+            "child_blocks": [
+                {"type": "header", "text": {"type": "plain_text", "text": "Header"}},
+            ],
+        }
+        parsed = Block.parse(input)
+        self.assertIsNotNone(parsed)
+        self.assertDictEqual(input, parsed.to_dict())
+
+    def test_all_properties(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "Full Container"},
+            "subtitle": {"type": "mrkdwn", "text": "A subtitle"},
+            "child_blocks": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Content"}},
+            ],
+            "width": "wide",
+            "icon": {"type": "image", "image_url": "https://example.com/img.png", "alt_text": "icon"},
+            "is_collapsible": True,
+            "default_collapsed": True,
+            "has_header_divider": True,
+            "block_id": "container-1",
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_rich_text_title(self):
+        input = {
+            "type": "container",
+            "rich_text_title": {
+                "type": "rich_text",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [{"type": "text", "text": "Rich Title"}],
+                    }
+                ],
+            },
+            "child_blocks": [
+                {"type": "divider"},
+            ],
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_width_values(self):
+        for width in ["narrow", "standard", "wide", "full"]:
+            input = {
+                "type": "container",
+                "title": {"type": "plain_text", "text": "Test"},
+                "child_blocks": [{"type": "divider"}],
+                "width": width,
+            }
+            ContainerBlock(**input).validate_json()
+
+    def test_invalid_width(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Test"},
+                child_blocks=[{"type": "divider"}],
+                width="extra_wide",
+            ).validate_json()
+
+    def test_title_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "a" * 151},
+                child_blocks=[{"type": "divider"}],
+            ).validate_json()
+
+    def test_subtitle_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Title"},
+                subtitle={"type": "mrkdwn", "text": "a" * 151},
+                child_blocks=[{"type": "divider"}],
+            ).validate_json()
+
+    def test_missing_title_and_rich_text_title(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                child_blocks=[{"type": "divider"}],
+            ).validate_json()
+
+    def test_empty_child_blocks(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Test"},
+                child_blocks=[],
+            ).validate_json()
 
 
 class CarouselBlockTests(unittest.TestCase):
