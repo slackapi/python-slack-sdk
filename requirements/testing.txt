@@ -27,7 +27,7 @@ pytest-cov>=7.1.0,<8; python_version >= "3.9"
 # click
 # Note: click 8.2+ requires Python >=3.10; cap older interpreters below it.
 click==8.1.8; python_version < "3.10"
-click==8.4.2; python_version >= "3.10"
+click==8.5.0; python_version >= "3.10"
 
 # psutil
 psutil>=7.2.2,<8
