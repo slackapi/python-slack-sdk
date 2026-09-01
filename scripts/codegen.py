@@ -15,7 +15,7 @@ header = (
     "#\n"
     "#  1) Modify slack_sdk/web/client.py\n"
     "#  2) Run `python scripts/codegen.py`\n"
-    "#  3) Run `black slack_sdk/`\n"
+    "#  3) Run `ruff format slack_sdk/`\n"
     "#\n"
     "# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
     "\n"
