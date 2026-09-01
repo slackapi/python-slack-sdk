@@ -348,7 +348,7 @@ class RTMClient:
 
     def run_all_error_listeners(self, error: Exception):
         self.logger.exception(
-            f"on_error invoked (session id: {self.session_id()}, " f"error: {type(error).__name__}, message: {error})"
+            f"on_error invoked (session id: {self.session_id()}, error: {type(error).__name__}, message: {error})"
         )
         for listener in self.on_error_listeners:
             listener(error)
@@ -357,7 +357,7 @@ class RTMClient:
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"on_close invoked (session id: {self.session_id()})")
         if self.auto_reconnect_enabled:
-            self.logger.info("Received CLOSE event. Going to reconnect... " f"(session id: {self.session_id()})")
+            self.logger.info(f"Received CLOSE event. Going to reconnect... (session id: {self.session_id()})")
             self.connect_to_new_endpoint()
         for listener in self.on_close_listeners:
             listener(code, reason)
@@ -366,14 +366,12 @@ class RTMClient:
         if self.current_session is not None and self.current_session.is_active():
             session_id = self.session_id()
             try:
-                self.logger.info("Starting to receive messages from a new connection" f" (session id: {session_id})")
+                self.logger.info(f"Starting to receive messages from a new connection (session id: {session_id})")
                 self.current_session_state.terminated = False
                 self.current_session.run_until_completion(self.current_session_state)
-                self.logger.info("Stopped receiving messages from a connection" f" (session id: {session_id})")
+                self.logger.info(f"Stopped receiving messages from a connection (session id: {session_id})")
             except Exception as e:
-                self.logger.exception(
-                    "Failed to start or stop the current session" f" (session id: {session_id}, error: {e})"
-                )
+                self.logger.exception(f"Failed to start or stop the current session (session id: {session_id}, error: {e})")
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
@@ -382,7 +380,7 @@ class RTMClient:
 
                 if self.auto_reconnect_enabled and (self.current_session is None or not self.current_session.is_active()):
                     self.logger.info(
-                        "The session seems to be already closed. Going to reconnect... " f"(session id: {self.session_id()})"
+                        f"The session seems to be already closed. Going to reconnect... (session id: {self.session_id()})"
                     )
                     self.connect_to_new_endpoint()
             except Exception as e:

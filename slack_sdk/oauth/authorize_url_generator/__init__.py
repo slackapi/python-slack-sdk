@@ -20,13 +20,7 @@ class AuthorizeUrlGenerator:
     def generate(self, state: str, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         user_scopes = ",".join(self.user_scopes) if self.user_scopes else ""
-        url = (
-            f"{self.authorization_url}?"
-            f"state={state}&"
-            f"client_id={self.client_id}&"
-            f"scope={scopes}&"
-            f"user_scope={user_scopes}"
-        )
+        url = f"{self.authorization_url}?state={state}&client_id={self.client_id}&scope={scopes}&user_scope={user_scopes}"
         if self.redirect_uri is not None:
             url += f"&redirect_uri={self.redirect_uri}"
         if team is not None:
