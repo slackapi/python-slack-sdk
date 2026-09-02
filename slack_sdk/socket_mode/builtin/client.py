@@ -240,7 +240,7 @@ class SocketModeClient(BaseSocketModeClient):
 
     def _on_error(self, error: Exception):
         error_message = (
-            f"on_error invoked (session id: {self.session_id()}, " f"error: {type(error).__name__}, message: {error})"
+            f"on_error invoked (session id: {self.session_id()}, error: {type(error).__name__}, message: {error})"
         )
         if self.trace_enabled:
             self.logger.exception(error_message)
@@ -254,7 +254,7 @@ class SocketModeClient(BaseSocketModeClient):
         if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"on_close invoked (session id: {self.session_id()})")
         if self.auto_reconnect_enabled:
-            self.logger.info("Received CLOSE event. Reconnecting... " f"(session id: {self.session_id()})")
+            self.logger.info(f"Received CLOSE event. Reconnecting... (session id: {self.session_id()})")
             self.connect_to_new_endpoint()
         for listener in self.on_close_listeners:
             listener(code, reason)
@@ -263,12 +263,12 @@ class SocketModeClient(BaseSocketModeClient):
         if self.current_session is not None and self.current_session.is_active():
             session_id = self.session_id()
             try:
-                self.logger.info("Starting to receive messages from a new connection" f" (session id: {session_id})")
+                self.logger.info(f"Starting to receive messages from a new connection (session id: {session_id})")
                 self.current_session_state.terminated = False
                 self.current_session.run_until_completion(self.current_session_state)
-                self.logger.info("Stopped receiving messages from a connection" f" (session id: {session_id})")
+                self.logger.info(f"Stopped receiving messages from a connection (session id: {session_id})")
             except Exception as e:
-                error_message = "Failed to start or stop the current session" f" (session id: {session_id}, error: {e})"
+                error_message = f"Failed to start or stop the current session (session id: {session_id}, error: {e})"
                 if self.trace_enabled:
                     self.logger.exception(error_message)
                 else:
@@ -281,7 +281,7 @@ class SocketModeClient(BaseSocketModeClient):
 
                 if self.auto_reconnect_enabled and (self.current_session is None or not self.current_session.is_active()):
                     self.logger.info(
-                        "The session seems to be already closed. Reconnecting... " f"(session id: {self.session_id()})"
+                        f"The session seems to be already closed. Reconnecting... (session id: {self.session_id()})"
                     )
                     self.connect_to_new_endpoint()
             except Exception as e:

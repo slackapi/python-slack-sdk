@@ -86,6 +86,6 @@ class TestRTMClient(unittest.TestCase):
             slack.RTMClient(token="xoxp-1234", auto_reconnect=False).start()
 
         expected_error = (
-            "The request to the Slack API failed.\n" "The server responded with: {'ok': False, 'error': 'invalid_auth'}"
+            "The request to the Slack API failed.\nThe server responded with: {'ok': False, 'error': 'invalid_auth'}"
         )
         self.assertIn(expected_error, str(context.exception))
