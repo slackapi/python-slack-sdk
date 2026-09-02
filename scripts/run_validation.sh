@@ -17,7 +17,7 @@ echo "Generating code ..." && python scripts/codegen.py --path .
 
 # Run mypy type checking only on the latest supported Python version
 if [[ "$current_py" == "$LATEST_SUPPORTED_PY" ]]; then
-    echo "Running black (code formatter) ..." && ./scripts/format.sh --no-install
+    echo "Running ruff (code formatter) ..." && ./scripts/format.sh --no-install
     echo "Running linting checks ..." && ./scripts/lint.sh --no-install
     echo "Running mypy type checking ..." && ./scripts/run_mypy.sh --no-install
 else

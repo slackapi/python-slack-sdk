@@ -435,9 +435,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 if await self.is_connected():
                     await self.current_session.send_str(message)  # type: ignore[union-attr]
                 else:
-                    self.logger.warning(
-                        f"The current session ({session_id}) is no longer active. " "Failed to send a message"
-                    )
+                    self.logger.warning(f"The current session ({session_id}) is no longer active. Failed to send a message")
                     raise e
             finally:
                 if self.connect_operation_lock.locked() is True:

@@ -55,8 +55,11 @@ optional-dependencies.optional = { file = ["requirements/optional.txt"] }
 [tool.distutils.bdist_wheel]
 universal = true
 
-[tool.black]
+[tool.ruff]
 line-length = 125
+
+[tool.ruff.lint]
+select = ["E", "W", "F"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

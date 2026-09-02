@@ -1481,9 +1481,7 @@ class TableBlockTests(unittest.TestCase):
 
     def test_with_rich_text_cell_objects(self):
         """Test table using typed RichTextBlock objects"""
-        cell = RichTextBlock(
-            elements=[RichTextSectionElement(elements=[RichTextElementParts.Text(text="Hello")])]
-        )
+        cell = RichTextBlock(elements=[RichTextSectionElement(elements=[RichTextElementParts.Text(text="Hello")])])
         block = TableBlock(
             rows=[
                 [RawTextObject(text="Header"), cell],
