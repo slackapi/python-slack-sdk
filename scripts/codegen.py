@@ -101,7 +101,9 @@ with open(f"{args.path}/slack_sdk/web/client.py", "r") as original:
     with open(f"{args.path}/slack_sdk/web/async_client.py", "w") as output:
         output.write(async_source)
 
-    legacy_source = header + "from asyncio import Future\n" + source
+    docstring = '"""A Python module for interacting with Slack\'s Web API."""\n'
+    legacy_source = header + source
+    legacy_source = legacy_source.replace(docstring, docstring + "\nfrom asyncio import Future\n", 1)
     legacy_source = re.sub("-> SlackResponse", "-> Union[Future, SlackResponse]", legacy_source)
     legacy_source = re.sub(
         "from .base_client import BaseClient, SlackResponse",
