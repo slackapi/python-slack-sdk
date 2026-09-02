@@ -1,2 +1,4 @@
 # change black settings
 108955b601e768fd56696be903fc8b471c73ebf7
+# replace flake8 and black with ruff (#1954)
+1a38eb329dd5a1f2ee6b86f5873e7152e0d33d48
