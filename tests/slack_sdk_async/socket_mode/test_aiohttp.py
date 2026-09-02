@@ -32,6 +32,20 @@ class TestAiohttp(unittest.TestCase):
             await client.close()
 
     @async_test
+    async def test_connect_returns_when_closed(self):
+        # Regression test for #1913: connect() must not loop forever once the client is closed.
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            ping_interval=0.01,
+        )
+        client.wss_uri = "ws://localhost:8888/link"
+        await client.close()
+        await asyncio.wait_for(client.connect(), timeout=1.0)
+        self.assertTrue(client.closed)
+
+    @async_test
     async def test_init_with_loop(self):
         client = SocketModeClient(
             app_token="xapp-A111-222-xyz",
