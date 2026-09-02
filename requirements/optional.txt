@@ -35,4 +35,4 @@ websockets>=9.1,<16; python_version == "3.9"
 websockets>=16.1.1,<17; python_version >= "3.10"
 
 # websocket-client
-websocket-client>=1,<2
+websocket-client>=1.9.1,<2
