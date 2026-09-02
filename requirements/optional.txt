@@ -35,4 +35,8 @@ websockets>=9.1,<16; python_version == "3.9"
 websockets>=16.1.1,<17; python_version >= "3.10"
 
 # websocket-client
-websocket-client>=1.9.1,<2
+# Note: websocket-client's minimum Python rose in stages (>=3.8 at 1.6.2, >=3.9 at 1.9.0, >=3.10 at 1.9.1); cap each old interpreter at its last compatible release.
+websocket-client>=1,<1.6.2; python_version == "3.7"
+websocket-client>=1,<1.9.0; python_version == "3.8"
+websocket-client>=1,<1.9.1; python_version == "3.9"
+websocket-client>=1.9.1,<2; python_version >= "3.10"
