@@ -1,7 +1,7 @@
 # pip install -r requirements/tools.txt
 
 # mypy
-mypy<=2.1.0
+mypy<=2.3.1
 
 # ruff
 ruff==0.16.4
