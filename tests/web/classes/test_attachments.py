@@ -193,7 +193,7 @@ class InteractiveAttachmentTests(unittest.TestCase):
         actions = [ActionButton(name="button_1", text="Click me", value="button_value_1")] * 6
 
         with self.assertRaises(SlackObjectFormationError):
-            InteractiveAttachment(text="some text", callback_id="abc123", actions=actions).to_dict(),
+            (InteractiveAttachment(text="some text", callback_id="abc123", actions=actions).to_dict(),)
 
 
 class BlockAttachmentTests(unittest.TestCase):

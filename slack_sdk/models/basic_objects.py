@@ -132,4 +132,4 @@ class JsonValidator:
 
 class EnumValidator(JsonValidator):
     def __init__(self, attribute: str, enum: Iterable[str]):
-        super().__init__(f"{attribute} attribute must be one of the following values: " f"{', '.join(enum)}")
+        super().__init__(f"{attribute} attribute must be one of the following values: {', '.join(enum)}")

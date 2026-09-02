@@ -41,7 +41,14 @@ Choose the base class that matches the type you're adding.
        def attributes(self) -> Set[str]:
            return super().attributes.union({"text", "optional_field"})
 
-       def __init__(self, *, text: Union[str, dict, TextObject], optional_field: Optional[str] = None, block_id: Optional[str] = None, **others: dict):
+       def __init__(
+           self,
+           *,
+           text: Union[str, dict, TextObject],
+           optional_field: Optional[str] = None,
+           block_id: Optional[str] = None,
+           **others: dict,
+       ):
            super().__init__(type=self.type, block_id=block_id)
            show_unknown_key_warning(self, others)
            self.text = TextObject.parse(text, default_type=PlainTextObject.type)

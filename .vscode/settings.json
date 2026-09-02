@@ -1,9 +1,11 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-  "python.linting.pylintEnabled": false,
-  "python.linting.flake8Enabled": true,
   "python.venvPath": "${workspaceFolder}/env",
-  "python.formatting.provider": "black",
   "editor.formatOnSave": true,
-  "python.linting.enabled": true,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit"
+    }
+  }
 }
