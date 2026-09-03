@@ -415,12 +415,7 @@ def _upload_file_via_v2_url(
     # read the response body here
     body: str = resp.read().decode(charset)
     if logger.level <= logging.DEBUG:
-        message = (
-            "Received the following response - "
-            f"status: {resp.status}, "
-            f"headers: {dict(resp.headers)}, "
-            f"body: {body}"
-        )
+        message = f"Received the following response - status: {resp.status}, headers: {dict(resp.headers)}, body: {body}"
         logger.debug(message)
 
     return {"status": resp.status, "headers": resp.headers, "body": body}

@@ -5414,7 +5414,7 @@ UI) and a list of Option objects.</p>
         self.options = options
         self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
 
-    @JsonValidator(f&#34;options attribute must have between {options_min_length} &#34; f&#34;and {options_max_length} items&#34;)
+    @JsonValidator(f&#34;options attribute must have between {options_min_length} and {options_max_length} items&#34;)
     def _validate_options_length(self) -&gt; bool:
         return self.options_min_length &lt;= len(self.options) &lt;= self.options_max_length</code></pre>
 </details>

@@ -385,7 +385,7 @@ el.replaceWith(d);
 
     def run_all_error_listeners(self, error: Exception):
         self.logger.exception(
-            f&#34;on_error invoked (session id: {self.session_id()}, &#34; f&#34;error: {type(error).__name__}, message: {error})&#34;
+            f&#34;on_error invoked (session id: {self.session_id()}, error: {type(error).__name__}, message: {error})&#34;
         )
         for listener in self.on_error_listeners:
             listener(error)
@@ -394,7 +394,7 @@ el.replaceWith(d);
         if self.logger.level &lt;= logging.DEBUG:
             self.logger.debug(f&#34;on_close invoked (session id: {self.session_id()})&#34;)
         if self.auto_reconnect_enabled:
-            self.logger.info(&#34;Received CLOSE event. Going to reconnect... &#34; f&#34;(session id: {self.session_id()})&#34;)
+            self.logger.info(f&#34;Received CLOSE event. Going to reconnect... (session id: {self.session_id()})&#34;)
             self.connect_to_new_endpoint()
         for listener in self.on_close_listeners:
             listener(code, reason)
@@ -403,14 +403,12 @@ el.replaceWith(d);
         if self.current_session is not None and self.current_session.is_active():
             session_id = self.session_id()
             try:
-                self.logger.info(&#34;Starting to receive messages from a new connection&#34; f&#34; (session id: {session_id})&#34;)
+                self.logger.info(f&#34;Starting to receive messages from a new connection (session id: {session_id})&#34;)
                 self.current_session_state.terminated = False
                 self.current_session.run_until_completion(self.current_session_state)
-                self.logger.info(&#34;Stopped receiving messages from a connection&#34; f&#34; (session id: {session_id})&#34;)
+                self.logger.info(f&#34;Stopped receiving messages from a connection (session id: {session_id})&#34;)
             except Exception as e:
-                self.logger.exception(
-                    &#34;Failed to start or stop the current session&#34; f&#34; (session id: {session_id}, error: {e})&#34;
-                )
+                self.logger.exception(f&#34;Failed to start or stop the current session (session id: {session_id}, error: {e})&#34;)
 
     def _monitor_current_session(self):
         if self.current_app_monitor_started:
@@ -419,7 +417,7 @@ el.replaceWith(d);
 
                 if self.auto_reconnect_enabled and (self.current_session is None or not self.current_session.is_active()):
                     self.logger.info(
-                        &#34;The session seems to be already closed. Going to reconnect... &#34; f&#34;(session id: {self.session_id()})&#34;
+                        f&#34;The session seems to be already closed. Going to reconnect... (session id: {self.session_id()})&#34;
                     )
                     self.connect_to_new_endpoint()
             except Exception as e:
@@ -800,7 +798,7 @@ After calling this method, this instance is no longer usable.</p></div>
     if self.logger.level &lt;= logging.DEBUG:
         self.logger.debug(f&#34;on_close invoked (session id: {self.session_id()})&#34;)
     if self.auto_reconnect_enabled:
-        self.logger.info(&#34;Received CLOSE event. Going to reconnect... &#34; f&#34;(session id: {self.session_id()})&#34;)
+        self.logger.info(f&#34;Received CLOSE event. Going to reconnect... (session id: {self.session_id()})&#34;)
         self.connect_to_new_endpoint()
     for listener in self.on_close_listeners:
         listener(code, reason)</code></pre>
@@ -817,7 +815,7 @@ After calling this method, this instance is no longer usable.</p></div>
 </summary>
 <pre><code class="python">def run_all_error_listeners(self, error: Exception):
     self.logger.exception(
-        f&#34;on_error invoked (session id: {self.session_id()}, &#34; f&#34;error: {type(error).__name__}, message: {error})&#34;
+        f&#34;on_error invoked (session id: {self.session_id()}, error: {type(error).__name__}, message: {error})&#34;
     )
     for listener in self.on_error_listeners:
         listener(error)</code></pre>

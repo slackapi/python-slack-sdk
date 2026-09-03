@@ -195,10 +195,7 @@ class LegacySlackResponse(object):
         if self._logger.level <= logging.DEBUG:
             body = self.data if isinstance(self.data, dict) else "(binary)"
             self._logger.debug(
-                "Received the following response - "
-                f"status: {self.status_code}, "
-                f"headers: {dict(self.headers)}, "
-                f"body: {body}"
+                f"Received the following response - status: {self.status_code}, headers: {dict(self.headers)}, body: {body}"
             )
         if self.status_code == 200 and self.data and (isinstance(self.data, bytes) or self.data.get("ok", False)):
             return self

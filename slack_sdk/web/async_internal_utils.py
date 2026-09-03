@@ -168,7 +168,7 @@ async def _request_with_session(
                             response=retry_response,
                         ):
                             if logger.level <= logging.DEBUG:
-                                logger.info(f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {api_url}")
+                                logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,
@@ -194,9 +194,7 @@ async def _request_with_session(
                         error=e,
                     ):
                         if logger.level <= logging.DEBUG:
-                            logger.info(
-                                f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {api_url} - {e}"
-                            )
+                            logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url} - {e}")
                         await handler.prepare_for_next_attempt_async(
                             state=retry_state,
                             request=retry_request,

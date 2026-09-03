@@ -337,7 +337,7 @@ class AsyncAuditLogsClient:
                         ):
                             if self.logger.level <= logging.DEBUG:
                                 self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {url} - {e}"
+                                    f"A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

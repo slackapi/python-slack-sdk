@@ -29,9 +29,7 @@ class TestWebClient(unittest.TestCase):
                 lambda u: not u["deleted"] and "bot_id" not in u,
                 client.users_list(limit=50)["members"],
             )
-        )[
-            0
-        ]["id"]
+        )[0]["id"]
 
         new_call = client.calls_add(
             external_unique_id=str(uuid.uuid4()),

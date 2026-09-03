@@ -27,7 +27,7 @@ class TestRTMClient(unittest.TestCase):
             self.fail("Raising an error here was expected")
         except Exception as e:
             self.assertEqual(
-                "The request to the Slack API failed.\n" "The server responded with: {'ok': False, 'error': 'invalid_auth'}",
+                "The request to the Slack API failed.\nThe server responded with: {'ok': False, 'error': 'invalid_auth'}",
                 str(e),
             )
         finally:
@@ -42,7 +42,7 @@ class TestRTMClient(unittest.TestCase):
             self.fail("Raising an error here was expected")
         except Exception as e:
             self.assertEqual(
-                "The request to the Slack API failed.\n" "The server responded with: {'ok': False, 'error': 'invalid_auth'}",
+                "The request to the Slack API failed.\nThe server responded with: {'ok': False, 'error': 'invalid_auth'}",
                 str(e),
             )
         finally:

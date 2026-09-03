@@ -1916,7 +1916,7 @@ class OverflowMenuElement(InteractiveElement):
         self.options = options
         self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
 
-    @JsonValidator(f"options attribute must have between {options_min_length} " f"and {options_max_length} items")
+    @JsonValidator(f"options attribute must have between {options_min_length} and {options_max_length} items")
     def _validate_options_length(self) -> bool:
         return self.options_min_length <= len(self.options) <= self.options_max_length
 
