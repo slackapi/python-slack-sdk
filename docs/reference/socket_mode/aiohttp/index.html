@@ -382,7 +382,7 @@ el.replaceWith(d);
         # a new monitor and a new message receiver are also created.
         # If a new session is created but we failed to create the new
         # monitor or the new message, we should try it.
-        while True:
+        while not self.closed:
             try:
                 old_session: Optional[ClientWebSocketResponse] = (
                     None if self.current_session is None else self.current_session
@@ -438,6 +438,10 @@ el.replaceWith(d);
                     self.logger.debug(f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;)
                 break
             except Exception as e:
+                if self.closed:
+                    if self.logger.level &lt;= logging.DEBUG:
+                        self.logger.debug(f&#34;Stopped connecting because the client is closed (error: {e})&#34;)
+                    return
                 self.logger.exception(f&#34;Failed to connect (error: {e}); Retrying...&#34;)
                 await asyncio.sleep(self.ping_interval)
 
@@ -468,9 +472,7 @@ el.replaceWith(d);
                 if await self.is_connected():
                     await self.current_session.send_str(message)  # type: ignore[union-attr]
                 else:
-                    self.logger.warning(
-                        f&#34;The current session ({session_id}) is no longer active. &#34; &#34;Failed to send a message&#34;
-                    )
+                    self.logger.warning(f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;)
                     raise e
             finally:
                 if self.connect_operation_lock.locked() is True:
@@ -624,7 +626,7 @@ el.replaceWith(d);
     # a new monitor and a new message receiver are also created.
     # If a new session is created but we failed to create the new
     # monitor or the new message, we should try it.
-    while True:
+    while not self.closed:
         try:
             old_session: Optional[ClientWebSocketResponse] = (
                 None if self.current_session is None else self.current_session
@@ -680,6 +682,10 @@ el.replaceWith(d);
                 self.logger.debug(f&#34;A new receive_messages() executor has been recreated for {session_id}&#34;)
             break
         except Exception as e:
+            if self.closed:
+                if self.logger.level &lt;= logging.DEBUG:
+                    self.logger.debug(f&#34;Stopped connecting because the client is closed (error: {e})&#34;)
+                return
             self.logger.exception(f&#34;Failed to connect (error: {e}); Retrying...&#34;)
             await asyncio.sleep(self.ping_interval)</code></pre>
 </details>
@@ -975,9 +981,7 @@ el.replaceWith(d);
             if await self.is_connected():
                 await self.current_session.send_str(message)  # type: ignore[union-attr]
             else:
-                self.logger.warning(
-                    f&#34;The current session ({session_id}) is no longer active. &#34; &#34;Failed to send a message&#34;
-                )
+                self.logger.warning(f&#34;The current session ({session_id}) is no longer active. Failed to send a message&#34;)
                 raise e
         finally:
             if self.connect_operation_lock.locked() is True:

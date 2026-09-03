@@ -394,7 +394,7 @@ el.replaceWith(d);
                         ):
                             if self.logger.level &lt;= logging.DEBUG:
                                 self.logger.info(
-                                    f&#34;A retry handler found: {type(handler).__name__} &#34; f&#34;for {http_verb} {url} - {e}&#34;
+                                    f&#34;A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}&#34;
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

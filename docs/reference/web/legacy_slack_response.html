@@ -240,10 +240,7 @@ el.replaceWith(d);
         if self._logger.level &lt;= logging.DEBUG:
             body = self.data if isinstance(self.data, dict) else &#34;(binary)&#34;
             self._logger.debug(
-                &#34;Received the following response - &#34;
-                f&#34;status: {self.status_code}, &#34;
-                f&#34;headers: {dict(self.headers)}, &#34;
-                f&#34;body: {body}&#34;
+                f&#34;Received the following response - status: {self.status_code}, headers: {dict(self.headers)}, body: {body}&#34;
             )
         if self.status_code == 200 and self.data and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False)):
             return self
@@ -363,10 +360,7 @@ The value from data or the specified default.</p></div>
     if self._logger.level &lt;= logging.DEBUG:
         body = self.data if isinstance(self.data, dict) else &#34;(binary)&#34;
         self._logger.debug(
-            &#34;Received the following response - &#34;
-            f&#34;status: {self.status_code}, &#34;
-            f&#34;headers: {dict(self.headers)}, &#34;
-            f&#34;body: {body}&#34;
+            f&#34;Received the following response - status: {self.status_code}, headers: {dict(self.headers)}, body: {body}&#34;
         )
     if self.status_code == 200 and self.data and (isinstance(self.data, bytes) or self.data.get(&#34;ok&#34;, False)):
         return self
