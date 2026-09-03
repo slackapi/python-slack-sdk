@@ -588,18 +588,117 @@ class BaseClient:
         proxy: Optional[str],
         ssl: Optional[SSLContext],
     ) -> FileUploadV2Result:
-        """Upload a file using the issued upload URL"""
-        result = _upload_file_via_v2_url(
-            url=url,
-            data=data,
-            logger=logger,
-            timeout=timeout,
-            proxy=proxy,
-            ssl=ssl,
-        )
-        return FileUploadV2Result(
-            status=result.get("status"),  # type: ignore[arg-type]
-            body=result.get("body"),  # type: ignore[arg-type]
+        """Upload a file using the issued upload URL.
+
+        Unlike files.getUploadURLExternal / files.completeUploadExternal, this POST
+        does not go through api_call(). Apply the same retry handlers so transient
+        HTTP errors (e.g. 504 on files.slack.com) can be retried.
+        """
+        retry_request = RetryHttpRequest(method="POST", url=url, headers={}, data=data)
+        retry_state = RetryState()
+        last_error: Optional[Exception] = None
+        last_result: Optional[Dict[str, Any]] = None
+        counter_for_safety = 0
+        while counter_for_safety < 100:
+            counter_for_safety += 1
+            retry_state.next_attempt_requested = False
+            try:
+                result = _upload_file_via_v2_url(
+                    url=url,
+                    data=data,
+                    logger=logger,
+                    timeout=timeout,
+                    proxy=proxy,
+                    ssl=ssl,
+                )
+                last_result = result
+                retry_response = self._retry_response_from_upload_result(result)
+                for handler in self.retry_handlers:
+                    if handler.can_retry(state=retry_state, request=retry_request, response=retry_response):
+                        if logger.level <= logging.DEBUG:
+                            logger.info(f"A retry handler found: {type(handler).__name__} for POST {url}")
+                        handler.prepare_for_next_attempt(state=retry_state, request=retry_request, response=retry_response)
+                        break
+                if retry_state.next_attempt_requested is False:
+                    return FileUploadV2Result(
+                        status=result.get("status"),  # type: ignore[arg-type]
+                        body=result.get("body"),  # type: ignore[arg-type]
+                    )
+            except HTTPError as e:
+                last_error = e
+                response_headers = dict(e.headers.items()) if e.headers is not None else {}
+                charset = "utf-8"
+                if e.headers is not None:
+                    charset = e.headers.get_content_charset() or "utf-8"
+                response_body = e.read().decode(charset)
+                retry_response = RetryHttpResponse(
+                    status_code=e.code,
+                    headers={k: [v] for k, v in response_headers.items()},
+                    data=response_body.encode("utf-8") if response_body is not None else None,
+                )
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=retry_response,
+                        error=e,
+                    ):
+                        if logger.level <= logging.DEBUG:
+                            logger.info(f"A retry handler found: {type(handler).__name__} for POST {url} - {e}")
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=e,
+                        )
+                        break
+                if retry_state.next_attempt_requested is False:
+                    raise e
+            except Exception as err:
+                last_error = err
+                logger.error(f"Failed to upload a file to Slack: {err}")
+                for handler in self.retry_handlers:
+                    if handler.can_retry(
+                        state=retry_state,
+                        request=retry_request,
+                        response=None,
+                        error=err,
+                    ):
+                        if logger.level <= logging.DEBUG:
+                            logger.info(f"A retry handler found: {type(handler).__name__} for POST {url} - {err}")
+                        handler.prepare_for_next_attempt(
+                            state=retry_state,
+                            request=retry_request,
+                            response=None,
+                            error=err,
+                        )
+                        logger.info(f"Going to retry the same request: POST {url}")
+                        break
+                if retry_state.next_attempt_requested is False:
+                    raise err
+
+        if last_result is not None:
+            return FileUploadV2Result(
+                status=last_result.get("status"),  # type: ignore[arg-type]
+                body=last_result.get("body"),  # type: ignore[arg-type]
+            )
+        raise last_error  # type: ignore[misc]
+
+    @staticmethod
+    def _retry_response_from_upload_result(result: Dict[str, Any]) -> RetryHttpResponse:
+        raw_headers = result.get("headers")
+        if raw_headers is None:
+            headers: Dict[str, Any] = {}
+        elif hasattr(raw_headers, "items"):
+            headers = dict(raw_headers.items())
+        else:
+            headers = {}
+        body = result.get("body")
+        body_bytes = body.encode("utf-8") if isinstance(body, str) else body
+        return RetryHttpResponse(
+            status_code=result.get("status") or 0,
+            headers=headers,
+            data=body_bytes,
         )
 
     # =================================================================
