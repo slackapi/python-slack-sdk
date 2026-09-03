@@ -78,7 +78,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class EnumValidator(JsonValidator):
     def __init__(self, attribute: str, enum: Iterable[str]):
-        super().__init__(f&#34;{attribute} attribute must be one of the following values: &#34; f&#34;{&#39;, &#39;.join(enum)}&#34;)</code></pre>
+        super().__init__(f&#34;{attribute} attribute must be one of the following values: {&#39;, &#39;.join(enum)}&#34;)</code></pre>
 </details>
 <div class="desc"><p>Decorate a method on a class to mark it as a JSON validator. Validation
 functions should return true if valid, false if not.</p>

@@ -107,13 +107,7 @@ el.replaceWith(d);
     def generate(self, state: str, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
-        url = (
-            f&#34;{self.authorization_url}?&#34;
-            f&#34;state={state}&amp;&#34;
-            f&#34;client_id={self.client_id}&amp;&#34;
-            f&#34;scope={scopes}&amp;&#34;
-            f&#34;user_scope={user_scopes}&#34;
-        )
+        url = f&#34;{self.authorization_url}?state={state}&amp;client_id={self.client_id}&amp;scope={scopes}&amp;user_scope={user_scopes}&#34;
         if self.redirect_uri is not None:
             url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
         if team is not None:
@@ -134,13 +128,7 @@ el.replaceWith(d);
 <pre><code class="python">def generate(self, state: str, team: Optional[str] = None) -&gt; str:
     scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
     user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
-    url = (
-        f&#34;{self.authorization_url}?&#34;
-        f&#34;state={state}&amp;&#34;
-        f&#34;client_id={self.client_id}&amp;&#34;
-        f&#34;scope={scopes}&amp;&#34;
-        f&#34;user_scope={user_scopes}&#34;
-    )
+    url = f&#34;{self.authorization_url}?state={state}&amp;client_id={self.client_id}&amp;scope={scopes}&amp;user_scope={user_scopes}&#34;
     if self.redirect_uri is not None:
         url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
     if team is not None:
@@ -521,10 +509,10 @@ def logger(self) -&gt; Logger:
         self.expiration_seconds = expiration_seconds
 
     def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-        return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;
+        return f&#34;{self.cookie_name}={state}; Secure; HttpOnly; Path=/; Max-Age={self.expiration_seconds}&#34;
 
     def build_set_cookie_for_deletion(self) -&gt; str:
-        return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
+        return f&#34;{self.cookie_name}=deleted; Secure; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
 
     def is_valid_browser(
         self,
@@ -575,7 +563,7 @@ def logger(self) -&gt; Logger:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_deletion(self) -&gt; str:
-    return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;</code></pre>
+    return f&#34;{self.cookie_name}=deleted; Secure; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -588,7 +576,7 @@ def logger(self) -&gt; Logger:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-    return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;</code></pre>
+    return f&#34;{self.cookie_name}={state}; Secure; HttpOnly; Path=/; Max-Age={self.expiration_seconds}&#34;</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
