@@ -1064,6 +1064,7 @@ class ContainerBlock(Block):
         **others: dict,
     ):
         """A general-purpose wrapper for grouping child blocks together, with a configurable size.
+
         https://docs.slack.dev/reference/block-kit/blocks/container-block
 
         Args:
