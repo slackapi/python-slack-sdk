@@ -37,7 +37,6 @@ class AsyncTokenRotator:
         Returns:
             None if no rotation is necessary for now.
         """
-
         # TODO: make the following two calls in parallel for better performance
 
         # bot

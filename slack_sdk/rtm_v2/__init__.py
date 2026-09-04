@@ -185,7 +185,7 @@ class RTMClient:
         return self.current_session is not None and self.current_session.is_active()
 
     def issue_new_wss_url(self) -> str:
-        """Acquires a new WSS URL using rtm.connect API method"""
+        """Acquires a new WSS URL using rtm.connect API method."""
         try:
             api_response = self.web_client.rtm_connect()
             return api_response["url"]
@@ -211,7 +211,7 @@ class RTMClient:
                 self.logger.info("Connected to a new endpoint...")
 
     def connect(self):
-        """Starts talking to the RTM server through a WebSocket connection"""
+        """Starts talking to the RTM server through a WebSocket connection."""
         if self.bot_id is None:
             self.bot_id = self.web_client.auth_test()["bot_id"]
 
@@ -257,8 +257,8 @@ class RTMClient:
         self.current_session.disconnect()
 
     def close(self) -> None:
-        """
-        Closes this instance and cleans up underlying resources.
+        """Closes this instance and cleans up underlying resources.
+
         After calling this method, this instance is no longer usable.
         """
         self.closed = True

@@ -51,7 +51,7 @@ class AsyncWebhookClient:
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
-        """API client for Incoming Webhooks and `response_url`
+        """API client for Incoming Webhooks and `response_url`.
 
         https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/
 

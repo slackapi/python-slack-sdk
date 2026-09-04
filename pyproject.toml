@@ -59,7 +59,26 @@ universal = true
 line-length = 125
 
 [tool.ruff.lint]
-select = ["E", "W", "F"]
+select = ["E", "W", "F", "D"]
+ignore = [
+	# missing-docstring: do not add docstrings where none exist
+	"D100",
+	"D101",
+	"D102",
+	"D103",
+	"D104",
+	"D105",
+	"D106",
+	"D107",
+	# undocumented-param: 51/54 cases are just **others/**kwargs boilerplate in Block Kit models
+	"D417",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,4 +1,4 @@
-"""Block Kit data model objects
+"""Block Kit data model objects.
 
 To learn more about Block Kit, please check the following resources and tools:
 

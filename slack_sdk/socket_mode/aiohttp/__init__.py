@@ -1,4 +1,4 @@
-"""aiohttp based Socket Mode client
+"""aiohttp based Socket Mode client.
 
 * https://docs.slack.dev/apis/events-api/using-socket-mode/
 * https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
@@ -82,7 +82,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         on_close_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
         loop: Optional[AbstractEventLoop] = None,
     ):
-        """Socket Mode client
+        """Socket Mode client.
 
         Args:
             app_token: App-level token

@@ -102,6 +102,7 @@ class LegacySlackResponse(object):
 
     def __iter__(self):
         """Enables the ability to iterate over the response.
+
         It's required for the iterator protocol.
 
         Note:
@@ -204,8 +205,7 @@ class LegacySlackResponse(object):
 
     @staticmethod
     def _next_cursor_is_present(data):
-        """Determine if the response contains 'next_cursor'
-        and 'next_cursor' is not empty.
+        """Determine if the response contains 'next_cursor' and 'next_cursor' is not empty.
 
         Returns:
             A boolean value.

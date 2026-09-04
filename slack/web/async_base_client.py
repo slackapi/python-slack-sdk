@@ -88,7 +88,6 @@ class AsyncBaseClient:
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         """
-
         api_url = _get_url(self.base_url, api_method)
         headers = headers or {}
         headers.update(self.headers)
@@ -128,6 +127,7 @@ class AsyncBaseClient:
                     'channel': '#random'
                 }
             }
+
         Returns:
             The response parsed into a AsyncSlackResponse object.
         """
@@ -152,6 +152,7 @@ class AsyncBaseClient:
 
     async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, any]:
         """Submit the HTTP request with the running session or a new session.
+
         Returns:
             A dictionary of the response data.
         """

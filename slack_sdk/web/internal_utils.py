@@ -40,8 +40,7 @@ def convert_bool_to_0_or_1(params: Optional[Dict[str, Any]]) -> Optional[Dict[st
 
 
 def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
-    """Construct the user-agent header with the package info,
-    Python version and OS version.
+    """Construct the user-agent header with the package info, Python version and OS version.
 
     Returns:
         The user agent string.
@@ -82,6 +81,7 @@ def _get_headers(
     request_specific_headers: Optional[dict],
 ) -> Dict[str, str]:
     """Constructs the headers need for a request.
+
     Args:
         has_json (bool): Whether or not the request has json.
         has_files (bool): Whether or not the request has files.
@@ -241,8 +241,7 @@ def _update_call_participants(kwargs, users: Union[str, Sequence[Dict[str, str]]
 
 
 def _next_cursor_is_present(data) -> bool:
-    """Determine if the response contains 'next_cursor'
-    and 'next_cursor' is not empty.
+    """Determine if the response contains 'next_cursor' and 'next_cursor' is not empty.
 
     Returns:
         A boolean value.

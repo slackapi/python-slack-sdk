@@ -72,7 +72,8 @@ class AsyncSCIMClient:
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
-        """API client for SCIM API
+        """API client for SCIM API.
+
         See https://docs.slack.dev/admins/scim-api/ for more details
 
         Args:

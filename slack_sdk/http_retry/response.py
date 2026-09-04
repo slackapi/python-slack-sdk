@@ -2,7 +2,7 @@ from typing import Dict, Optional, List, Union, Any
 
 
 class HttpResponse:
-    """HTTP response representation"""
+    """HTTP response representation."""
 
     status_code: int
     headers: Dict[str, Union[List[str], str]]

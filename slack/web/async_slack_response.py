@@ -24,17 +24,17 @@ class AsyncSlackResponse:
     import os
     import slack
 
-    client = slack.AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
+    client = slack.AsyncWebClient(token=os.environ["SLACK_API_TOKEN"])
 
-    response1 = await client.auth_revoke(test='true')
-    assert not response1['revoked']
+    response1 = await client.auth_revoke(test="true")
+    assert not response1["revoked"]
 
     response2 = await client.auth_test()
-    assert response2.get('ok', False)
+    assert response2.get("ok", False)
 
     users = []
     async for page in await client.users_list(limit=2):
-        users = users + page['members']
+        users = users + page["members"]
     ```
 
     Note:
@@ -100,6 +100,7 @@ class AsyncSlackResponse:
 
     def __aiter__(self):
         """Enables the ability to iterate over the response.
+
         It's required async-for the iterator protocol.
 
         Note:

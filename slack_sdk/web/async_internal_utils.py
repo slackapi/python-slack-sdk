@@ -53,6 +53,7 @@ async def _request_with_session(
     retry_handlers: Optional[List[AsyncRetryHandler]] = None,
 ) -> Dict[str, Any]:
     """Submit the HTTP request with the running session or a new session.
+
     Returns:
         A dictionary of the response data.
     """

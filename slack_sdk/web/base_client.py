@@ -147,7 +147,6 @@ class BaseClient:
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         """
-
         api_url = _get_url(self.base_url, api_method)
         headers = headers or {}
         headers.update(self.headers)
@@ -208,7 +207,7 @@ class BaseClient:
         )
 
     def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-        """This method is supposed to be used only for SlackResponse pagination
+        """This method is supposed to be used only for SlackResponse pagination.
 
         You can paginate using Python's for iterator as below:
 
@@ -588,7 +587,7 @@ class BaseClient:
         proxy: Optional[str],
         ssl: Optional[SSLContext],
     ) -> FileUploadV2Result:
-        """Upload a file using the issued upload URL"""
+        """Upload a file using the issued upload URL."""
         result = _upload_file_via_v2_url(
             url=url,
             data=data,
@@ -606,9 +605,9 @@ class BaseClient:
 
     @staticmethod
     def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -> bool:
-        """
-        Slack creates a unique string for your app and shares it with you. Verify
-        requests from Slack with confidence by verifying signatures using your
+        """Slack creates a unique string for your app and shares it with you.
+
+        Verify requests from Slack with confidence by verifying signatures using your
         signing secret.
 
         On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
