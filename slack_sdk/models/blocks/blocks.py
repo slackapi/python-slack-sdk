@@ -113,6 +113,8 @@ class Block(JsonObject):
                     return CardBlock(**block)
                 elif type == AlertBlock.type:
                     return AlertBlock(**block)
+                elif type == ContainerBlock.type:
+                    return ContainerBlock(**block)
                 elif type == CarouselBlock.type:
                     return CarouselBlock(**block)
                 else:
@@ -1021,6 +1023,101 @@ class CardBlock(Block):
     @JsonValidator(f"body attribute cannot exceed {body_max_length} characters")
     def _validate_body_length(self):
         return self.body is None or self.body.text is None or len(self.body.text) <= self.body_max_length
+
+
+class ContainerBlock(Block):
+    type = "container"
+    title_max_length = 150
+    subtitle_max_length = 150
+    child_blocks_max_length = 10
+    valid_widths = {"narrow", "standard", "wide", "full"}
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "title",
+                "rich_text_title",
+                "subtitle",
+                "child_blocks",
+                "width",
+                "icon",
+                "is_collapsible",
+                "default_collapsed",
+                "has_header_divider",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        child_blocks: Sequence[Union[dict, "Block"]],
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
+        rich_text_title: Optional[Union[dict, "RichTextBlock"]] = None,
+        subtitle: Optional[Union[str, dict, TextObject]] = None,
+        width: Optional[str] = None,
+        icon: Optional[Union[dict, ImageElement]] = None,
+        is_collapsible: Optional[bool] = None,
+        default_collapsed: Optional[bool] = None,
+        has_header_divider: Optional[bool] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """A general-purpose wrapper for grouping child blocks together, with a configurable size.
+        https://docs.slack.dev/reference/block-kit/blocks/container-block
+
+        Args:
+            child_blocks (required): An array of blocks. Maximum 10 blocks.
+            title: Plain text title. Maximum 150 characters. One of title or rich_text_title is required.
+            rich_text_title: Rich text title. Takes precedence over title if both are provided.
+            subtitle: Plain text or markdown subtitle. Maximum 150 characters.
+            width: Controls sizing. One of "narrow", "standard", "wide", or "full". Defaults to "standard".
+            icon: An image element displayed alongside the title and subtitle.
+            is_collapsible: Whether the container can be collapsed. Defaults to false.
+            default_collapsed: Whether the container is collapsed by default. Requires is_collapsible to be true.
+            has_header_divider: Whether to show a visible border separating header from content.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type) if title is not None else None
+        self.rich_text_title = rich_text_title
+        self.subtitle = TextObject.parse(subtitle, default_type=PlainTextObject.type) if subtitle is not None else None
+        self.child_blocks = Block.parse_all(child_blocks)
+        self.width = width
+        self.icon = BlockElement.parse(icon) if icon is not None else None
+        self.is_collapsible = is_collapsible
+        self.default_collapsed = default_collapsed
+        self.has_header_divider = has_header_divider
+
+    @JsonValidator("title or rich_text_title attribute must be specified")
+    def _validate_title_or_rich_text_title(self):
+        return self.title is not None or self.rich_text_title is not None
+
+    @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
+    def _validate_title_length(self):
+        return self.title is None or self.title.text is None or len(self.title.text) <= self.title_max_length
+
+    @JsonValidator(f"subtitle attribute cannot exceed {subtitle_max_length} characters")
+    def _validate_subtitle_length(self):
+        return self.subtitle is None or self.subtitle.text is None or len(self.subtitle.text) <= self.subtitle_max_length
+
+    @JsonValidator("child_blocks attribute must be specified")
+    def _validate_child_blocks_present(self):
+        return self.child_blocks is not None and len(self.child_blocks) >= 1
+
+    @JsonValidator(f"child_blocks attribute cannot exceed {child_blocks_max_length} blocks")
+    def _validate_child_blocks_length(self):
+        return self.child_blocks is None or len(self.child_blocks) <= self.child_blocks_max_length
+
+    @JsonValidator("width must be a valid value (narrow, standard, wide, full)")
+    def _validate_width(self):
+        return self.width is None or self.width in self.valid_widths
+
+    @JsonValidator("has_header_divider cannot be set when is_collapsible is true")
+    def _validate_header_divider_collapsible(self):
+        return not (self.is_collapsible is True and self.has_header_divider is True)
 
 
 class CarouselBlock(Block):
