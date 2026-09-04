@@ -250,10 +250,10 @@ class Option(JsonObject):
         url: Optional[str] = None,
         **others: Dict[str, Any],
     ):
-        """An object that represents a single selectable item in a block element (.
+        """An object that represents a single selectable item in a block or dialog element.
 
-        SelectElement, OverflowMenuElement) or dialog element
-        (StaticDialogSelectElement)
+        Usable in a block element (SelectElement, OverflowMenuElement) or a dialog element
+        (StaticDialogSelectElement).
 
         Blocks:
         https://docs.slack.dev/reference/block-kit/composition-objects/option-object
@@ -393,10 +393,9 @@ class OptionGroup(JsonObject):
         options: Sequence[Union[Dict[str, Any], Option]],
         **others: Dict[str, Any],
     ):
-        """
+        """Create a group of Option objects.
 
-        Create a group of Option objects - pass in a label (that will be part of the
-        UI) and a list of Option objects.
+        Pass in a label (that will be part of the UI) and a list of Option objects.
 
         Blocks:
         https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object
