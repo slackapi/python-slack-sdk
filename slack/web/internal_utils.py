@@ -38,8 +38,7 @@ def _update_call_participants(kwargs, users: Union[str, List[Dict[str, str]]]) -
 
 
 def _next_cursor_is_present(data) -> bool:
-    """Determine if the response contains 'next_cursor'
-    and 'next_cursor' is not empty.
+    """Determine if the response contains 'next_cursor' and 'next_cursor' is not empty.
 
     Returns:
         A boolean value.

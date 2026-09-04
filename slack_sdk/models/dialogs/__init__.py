@@ -108,8 +108,7 @@ class DialogTextComponent(JsonObject, metaclass=ABCMeta):
 
 
 class DialogTextField(DialogTextComponent):
-    """
-    Text elements are single-line plain text fields.
+    """Text elements are single-line plain text fields.
 
     https://docs.slack.dev/legacy/legacy-dialogs/#text_elements
     """
@@ -119,9 +118,9 @@ class DialogTextField(DialogTextComponent):
 
 
 class DialogTextArea(DialogTextComponent):
-    """
-    A textarea is a multi-line plain text editing control. You've likely encountered
-    these on the world wide web. Use this element if you want a relatively long
+    """A textarea is a multi-line plain text editing control.
+
+    You've likely encountered these on the world wide web. Use this element if you want a relatively long
     answer from users. The element UI provides a remaining character count to the
     max_length you have set or the default, 3000.
 
@@ -194,9 +193,9 @@ class AbstractDialogSelector(JsonObject, metaclass=ABCMeta):
 
 
 class DialogStaticSelector(AbstractDialogSelector):
-    """
-    Use the select element for multiple choice selections allowing users to pick a
-    single item from a list. True to web roots, this selection is displayed as a
+    """Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+    True to web roots, this selection is displayed as a
     dropdown menu.
 
     https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
@@ -216,9 +215,9 @@ class DialogStaticSelector(AbstractDialogSelector):
         value: Optional[Union[Option, str]] = None,
         placeholder: Optional[str] = None,
     ):
-        """
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        """Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A select element may contain up to 100 selections, provided as a list of
@@ -271,9 +270,9 @@ class DialogUserSelector(AbstractDialogSelector):
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ):
-        """
-        Now you can easily populate a select menu with a list of users. For example,
-        when you are creating a bug tracking app, you want to include a field for an
+        """Now you can easily populate a select menu with a list of users.
+
+        For example, when you are creating a bug tracking app, you want to include a field for an
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn't need access to a related OAuth scope.
 
@@ -309,9 +308,9 @@ class DialogChannelSelector(AbstractDialogSelector):
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ):
-        """
-        You can also provide a select menu with a list of channels. Specify your
-        data_source as channels to limit only to public channels
+        """You can also provide a select menu with a list of channels.
+
+        Specify your data_source as channels to limit only to public channels
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
@@ -345,9 +344,9 @@ class DialogConversationSelector(AbstractDialogSelector):
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ):
-        """
-        You can also provide a select menu with a list of conversations - including
-        private channels, direct messages, MPIMs, and whatever else we consider a
+        """You can also provide a select menu with a list of conversations.
+
+        This includes private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
@@ -387,9 +386,9 @@ class DialogExternalSelector(AbstractDialogSelector):
         optional: Optional[bool] = False,
         placeholder: Optional[str] = None,
     ):
-        """
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        """Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A list of options can be loaded from an external URL and used in your dialog
@@ -435,10 +434,7 @@ class DialogBuilder(JsonObject):
     state_max_length = 3000
 
     def __init__(self):
-        """
-        Create a DialogBuilder to more easily construct the JSON required to submit a
-        dialog to Slack
-        """
+        """Create a DialogBuilder to more easily construct the JSON required to submit a dialog to Slack."""
         self._title = None
         self._callback_id = None
         self._elements = []
@@ -447,8 +443,7 @@ class DialogBuilder(JsonObject):
         self._state = None
 
     def title(self, title: str) -> "DialogBuilder":
-        """
-        Specify a title for this dialog
+        """Specify a title for this dialog.
 
         Args:
           title: must not exceed 24 characters
@@ -457,9 +452,7 @@ class DialogBuilder(JsonObject):
         return self
 
     def state(self, state: Union[dict, str]) -> "DialogBuilder":
-        """
-        Pass state into this dialog - dictionaries will be automatically formatted to
-        JSON
+        """Pass state into this dialog - dictionaries will be automatically formatted to JSON.
 
         Args:
             state: Extra state information that you need to pass from this dialog
@@ -472,9 +465,7 @@ class DialogBuilder(JsonObject):
         return self
 
     def callback_id(self, callback_id: str) -> "DialogBuilder":
-        """
-        Specify a callback ID for this dialog, which your application will then
-        receive upon dialog submission
+        """Specify a callback ID for this dialog, which your application will then receive upon dialog submission.
 
         Args:
           callback_id: a string identifying this particular dialog
@@ -483,9 +474,9 @@ class DialogBuilder(JsonObject):
         return self
 
     def submit_label(self, label: str) -> "DialogBuilder":
-        """
-        The label to use on the 'Submit' button on the dialog. Defaults to 'Submit'
-        if not specified.
+        """The label to use on the 'Submit' button on the dialog.
+
+        Defaults to 'Submit' if not specified.
 
         Args:
             label: must not exceed 24 characters, and must be a single word (no
@@ -495,9 +486,9 @@ class DialogBuilder(JsonObject):
         return self
 
     def notify_on_cancel(self, notify: bool) -> "DialogBuilder":
-        """
-        Whether this dialog should send a request to your application even if the
-        user cancels their interaction. Defaults to False.
+        """Whether this dialog should send a request to your application even if the user cancels their interaction.
+
+        Defaults to False.
 
         Args:
             notify: Set to True to indicate that your application should receive a
@@ -519,8 +510,7 @@ class DialogBuilder(JsonObject):
         max_length: int = 150,
         subtype: Optional[str] = None,
     ) -> "DialogBuilder":
-        """
-        Text elements are single-line plain text fields.
+        """Text elements are single-line plain text fields.
 
         https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements
 
@@ -570,9 +560,9 @@ class DialogBuilder(JsonObject):
         max_length: int = 3000,
         subtype: Optional[str] = None,
     ) -> "DialogBuilder":
-        """
-        A textarea is a multi-line plain text editing control. You've likely
-        encountered these on the world wide web. Use this element if you want a
+        """A textarea is a multi-line plain text editing control.
+
+        You've likely encountered these on the world wide web. Use this element if you want a
         relatively long answer from users. The element UI provides a remaining
         character count to the max_length you have set or the default,
         3000.
@@ -622,9 +612,9 @@ class DialogBuilder(JsonObject):
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -> "DialogBuilder":
-        """
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        """Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A select element may contain up to 100 selections, provided as a list of
@@ -665,9 +655,9 @@ class DialogBuilder(JsonObject):
         placeholder: Optional[str] = None,
         min_query_length: Optional[int] = None,
     ) -> "DialogBuilder":
-        """
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        """Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A list of options can be loaded from an external URL and used in your dialog
@@ -710,9 +700,9 @@ class DialogBuilder(JsonObject):
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -> "DialogBuilder":
-        """
-        Now you can easily populate a select menu with a list of users. For example,
-        when you are creating a bug tracking app, you want to include a field for an
+        """Now you can easily populate a select menu with a list of users.
+
+        For example, when you are creating a bug tracking app, you want to include a field for an
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn't need access to a related OAuth scope.
 
@@ -747,9 +737,9 @@ class DialogBuilder(JsonObject):
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -> "DialogBuilder":
-        """
-        You can also provide a select menu with a list of channels. Specify your
-        data_source as channels to limit only to public channels
+        """You can also provide a select menu with a list of channels.
+
+        Specify your data_source as channels to limit only to public channels
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
@@ -782,9 +772,9 @@ class DialogBuilder(JsonObject):
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -> "DialogBuilder":
-        """
-        You can also provide a select menu with a list of conversations - including
-        private channels, direct messages, MPIMs, and whatever else we consider a
+        """You can also provide a select menu with a list of conversations.
+
+        This includes private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
@@ -853,9 +843,9 @@ class DialogBuilder(JsonObject):
 
 
 class ActionStaticSelector(AbstractActionSelector):
-    """
-    Use the select element for multiple choice selections allowing users to pick a
-    single item from a list. True to web roots, this selection is displayed as a
+    """Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+    True to web roots, this selection is displayed as a
     dropdown menu.
 
     https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
@@ -873,9 +863,7 @@ class ActionStaticSelector(AbstractActionSelector):
         options: Sequence[Union[Option, OptionGroup]],
         selected_option: Optional[Option] = None,
     ):
-        """
-        Help users make clear, concise decisions by providing a menu of options
-        within messages.
+        """Help users make clear, concise decisions by providing a menu of options within messages.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/
 

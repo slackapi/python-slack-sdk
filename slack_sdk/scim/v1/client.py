@@ -1,4 +1,5 @@
 """SCIM API is a set of APIs for provisioning and managing user accounts and groups.
+
 SCIM is used by Single Sign-On (SSO) services and identity providers to manage people across a variety of tools,
 including Slack.
 
@@ -75,7 +76,8 @@ class SCIMClient:
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[RetryHandler]] = None,
     ):
-        """API client for SCIM API
+        """API client for SCIM API.
+
         See https://docs.slack.dev/admins/scim-api/ for more details
 
         Args:

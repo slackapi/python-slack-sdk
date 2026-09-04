@@ -29,6 +29,7 @@ from .basic_components import (
 
 class BlockElement(JsonObject, metaclass=ABCMeta):
     """Block Elements are things that exists inside of your Blocks.
+
     https://docs.slack.dev/reference/block-kit/block-elements/
     """
 
@@ -152,7 +153,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """InteractiveElement that is usable in input blocks
+        """InteractiveElement that is usable in input blocks.
 
         We generally recommend using the concrete subclasses for better supports of available properties.
         """
@@ -204,8 +205,9 @@ class ButtonElement(InteractiveElement):
         accessibility_label: Optional[str] = None,
         **others: dict,
     ):
-        """An interactive element that inserts a button. The button can be a trigger for
-        anything from opening a simple link to starting a complex workflow.
+        """An interactive element that inserts a button.
+
+        The button can be a trigger for anything from opening a simple link to starting a complex workflow.
         https://docs.slack.dev/reference/block-kit/block-elements/button-element/
 
         Args:
@@ -275,8 +277,9 @@ class LinkButtonElement(ButtonElement):
         style: Optional[str] = None,
         **others: dict,
     ):
-        """A simple button that simply opens a given URL. You will still receive an
-        interaction payload and will need to send an acknowledgement response.
+        """A simple button that simply opens a given URL.
+
+        You will still receive an interaction payload and will need to send an acknowledgement response.
         This is a helper class that makes creating links simpler.
         https://docs.slack.dev/reference/block-kit/block-elements/button-element/
 
@@ -333,6 +336,7 @@ class CheckboxesElement(InputInteractiveElement):
         **others: dict,
     ):
         """A checkbox group that allows a user to choose multiple items from a list of possible options.
+
         https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element/
 
         Args:
@@ -382,8 +386,8 @@ class DatePickerElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        An element which lets users easily select a date from a calendar style UI.
+        """An element which lets users easily select a date from a calendar style UI.
+
         Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
         https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element
 
@@ -443,8 +447,8 @@ class TimePickerElement(InputInteractiveElement):
         timezone: Optional[str] = None,
         **others: dict,
     ):
-        """
-        An element which allows selection of a time of day.
+        """An element which allows selection of a time of day.
+
         On desktop clients, this time picker will take the form of a dropdown list
         with free-text entry for precise choices.
         On mobile clients, the time picker will use native time picker UIs.
@@ -504,8 +508,8 @@ class DateTimePickerElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        An element that allows the selection of a time of day formatted as a UNIX timestamp.
+        """An element that allows the selection of a time of day formatted as a UNIX timestamp.
+
         On desktop clients, this time picker will take the form of a dropdown list and the
         date picker will take the form of a dropdown calendar. Both options will have free-text
         entry for precise choices. On mobile clients, the time picker and date
@@ -561,6 +565,7 @@ class FeedbackButtonsElement(InteractiveElement):
         **others: dict,
     ):
         """Buttons to indicate positive or negative feedback.
+
         https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element
 
         Args:
@@ -600,8 +605,9 @@ class ImageElement(BlockElement):
         slack_file: Optional[Union[Dict[str, Any], SlackFile]] = None,
         **others: dict,
     ):
-        """An element to insert an image - this element can be used in section and
-        context blocks only. If you want a block with only an image in it,
+        """An element to insert an image - this element can be used in section and context blocks only.
+
+        If you want a block with only an image in it,
         you're looking for the image block.
         https://docs.slack.dev/reference/block-kit/block-elements/image-element
 
@@ -651,6 +657,7 @@ class IconButtonElement(InteractiveElement):
         **others: dict,
     ):
         """An icon button to perform actions.
+
         https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element
 
         Args:
@@ -707,6 +714,7 @@ class StaticSelectElement(InputInteractiveElement):
         **others: dict,
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
+
         https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select
 
         Args:
@@ -781,8 +789,8 @@ class StaticMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This is the simplest form of select menu, with a static list of options passed in when defining the element.
+        """This is the simplest form of select menu, with a static list of options passed in when defining the element.
+
         https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select
 
         Args:
@@ -861,6 +869,7 @@ class SelectElement(InputInteractiveElement):
         **others: dict,
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
+
         https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select
 
         Args:
@@ -936,9 +945,8 @@ class ExternalDataSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will load its options from an external data source, allowing
-        for a dynamic list of options.
+        """This select menu will load its options from an external data source, allowing for a dynamic list of options.
+
         https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select
 
         Args:
@@ -993,9 +1001,8 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will load its options from an external data source, allowing
-        for a dynamic list of options.
+        """This select menu will load its options from an external data source, allowing for a dynamic list of options.
+
         https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select
 
         Args:
@@ -1055,9 +1062,9 @@ class UserSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of Slack users visible to
-        the current user in the active workspace.
+        """This select menu will populate its options with a list of Slack users.
+
+        The list is limited to users visible to the current user in the active workspace.
         https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select
 
         Args:
@@ -1103,9 +1110,9 @@ class UserMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of Slack users visible to
-        the current user in the active workspace.
+        """This select menu will populate its options with a list of Slack users.
+
+        The list is limited to users visible to the current user in the active workspace.
         https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select
 
         Args:
@@ -1152,8 +1159,8 @@ class ConversationFilter(JsonObject):
         exclude_bot_users: Optional[bool] = None,
         exclude_external_shared_channels: Optional[bool] = None,
     ):
-        """Provides a way to filter the list of options in a conversations select menu
-        or conversations multi-select menu.
+        """Provides a way to filter the list of options in a conversations select menu or conversations multi-select menu.
+
         https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object
 
         Args:
@@ -1210,9 +1217,9 @@ class ConversationSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of public and private
-        channels, DMs, and MPIMs visible to the current user in the active workspace.
+        """This select menu will populate its options with a list of public and private channels, DMs, and MPIMs.
+
+        They are visible to the current user in the active workspace.
         https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#conversations_select
 
         Args:
@@ -1278,9 +1285,9 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This multi-select menu will populate its options with a list of public and private channels,
-        DMs, and MPIMs visible to the current user in the active workspace.
+        """This multi-select menu will populate its options with a list of public and private channels, DMs, and MPIMs.
+
+        These are visible to the current user in the active workspace.
         https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element/#conversation_multi_select
 
         Args:
@@ -1341,9 +1348,9 @@ class ChannelSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of public channels
-        visible to the current user in the active workspace.
+        """This select menu will populate its options with a list of public channels.
+
+        The channels are visible to the current user in the active workspace.
         https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#channels_select
 
         Args:
@@ -1394,9 +1401,9 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This multi-select menu will populate its options with a list of public channels visible
-        to the current user in the active workspace.
+        """This multi-select menu will populate its options with a list of public channels.
+
+        The channels are visible to the current user in the active workspace.
         https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select
 
         Args:
@@ -1507,9 +1514,9 @@ class PlainTextInputElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        A plain-text input, similar to the HTML <input> tag, creates a field
-        where a user can enter freeform data. It can appear as a single-line
+        """A plain-text input, similar to the HTML <input> tag, creates a field where a user can enter freeform data.
+
+        It can appear as a single-line
         field or a larger textarea using the multiline flag. Plain-text input
         elements can be used inside of SectionBlocks and ActionsBlocks.
         https://docs.slack.dev/reference/block-kit/block-elements/plain-text-input-element
@@ -1575,8 +1582,7 @@ class EmailInputElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
-        """
-        https://docs.slack.dev/reference/block-kit/block-elements/email-input-element
+        """https://docs.slack.dev/reference/block-kit/block-elements/email-input-element.
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1630,9 +1636,9 @@ class UrlInputElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
-        """
-        A URL input element, similar to the Plain-text input element,
-        creates a single line field where a user can enter URL-encoded data.
+        """A URL input element, similar to the Plain-text input element.
+
+        It creates a single line field where a user can enter URL-encoded data.
         https://docs.slack.dev/reference/block-kit/block-elements/url-input-element
 
         Args:
@@ -1684,8 +1690,8 @@ class UrlSourceElement(BlockElement):
         text: str,
         **others: Dict,
     ):
-        """
-        A URL source element that displays a URL source for referencing within a task card block.
+        """A URL source element that displays a URL source for referencing within a task card block.
+
         https://docs.slack.dev/reference/block-kit/block-elements/url-source-element
 
         Args:
@@ -1731,8 +1737,7 @@ class NumberInputElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
-        """
-        https://docs.slack.dev/reference/block-kit/block-elements/number-input-element/
+        """https://docs.slack.dev/reference/block-kit/block-elements/number-input-element/.
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1791,8 +1796,7 @@ class FileInputElement(InputInteractiveElement):
         max_files: Optional[int] = None,
         **others: dict,
     ):
-        """
-        https://docs.slack.dev/reference/block-kit/block-elements/file-input-element
+        """https://docs.slack.dev/reference/block-kit/block-elements/file-input-element.
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1838,6 +1842,7 @@ class RadioButtonsElement(InputInteractiveElement):
         **others: dict,
     ):
         """A radio button group that allows a user to choose one item from a list of possible options.
+
         https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element
 
         Args:
@@ -1887,8 +1892,9 @@ class OverflowMenuElement(InteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):
-        """
-        This is like a cross between a button and a select menu - when a user clicks
+        """This is like a cross between a button and a select menu.
+
+        When a user clicks
         on this overflow button, they will be presented with a list of options to
         choose from. Unlike the select menu, there is no typeahead field, and the
         button always appears with an ellipsis ("…") rather than customisable text.
@@ -1943,7 +1949,8 @@ class WorkflowButtonElement(InteractiveElement):
         accessibility_label: Optional[str] = None,
         **others: dict,
     ):
-        """Allows users to run a link trigger with customizable inputs
+        """Allows users to run a link trigger with customizable inputs.
+
         Interactive component - but interactions with workflow button elements will not send block_actions events,
         since these are used to start new workflow runs.
         https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element

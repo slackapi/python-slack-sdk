@@ -32,8 +32,8 @@ from .block_elements import (
 
 
 class Block(JsonObject):
-    """Blocks are a series of components that can be combined
-    to create visually rich and compellingly interactive messages.
+    """Blocks are a series of components that can be combined to create visually rich and compellingly interactive messages.
+
     https://docs.slack.dev/reference/block-kit/blocks
     """
 
@@ -152,6 +152,7 @@ class SectionBlock(Block):
         **others: dict,
     ):
         """A section is one of the most flexible blocks available.
+
         https://docs.slack.dev/reference/block-kit/blocks/section-block
 
         Args:
@@ -220,6 +221,7 @@ class DividerBlock(Block):
         **others: dict,
     ):
         """A content divider, like an <hr>, to split up different blocks inside of a message.
+
         https://docs.slack.dev/reference/block-kit/blocks/divider-block
 
         Args:
@@ -255,6 +257,7 @@ class ImageBlock(Block):
         **others: dict,
     ):
         """A simple image block, designed to make those cat photos really pop.
+
         https://docs.slack.dev/reference/block-kit/blocks/image-block
 
         Args:
@@ -322,6 +325,7 @@ class ActionsBlock(Block):
         **others: dict,
     ):
         """A block that is used to hold interactive elements.
+
         https://docs.slack.dev/reference/block-kit/blocks/actions-block
 
         Args:
@@ -360,6 +364,7 @@ class ContextBlock(Block):
         **others: dict,
     ):
         """Displays message context, which can include both images and text.
+
         https://docs.slack.dev/reference/block-kit/blocks/context-block
 
         Args:
@@ -395,6 +400,7 @@ class ContextActionsBlock(Block):
         **others: dict,
     ):
         """Displays actions as contextual info, which can include both feedback buttons and icon buttons.
+
         https://docs.slack.dev/reference/block-kit/blocks/context-actions-block
 
         Args:
@@ -438,8 +444,9 @@ class InputBlock(Block):
         optional: Optional[bool] = None,
         **others: dict,
     ):
-        """A block that collects information from users - it can hold a plain-text input element,
-        a select menu element, a multi-select menu element, or a datepicker.
+        """A block that collects information from users.
+
+        It can hold a plain-text input element, a select menu element, a multi-select menu element, or a datepicker.
         https://docs.slack.dev/reference/block-kit/blocks/input-block
 
         Args:
@@ -502,6 +509,7 @@ class FileBlock(Block):
         **others: dict,
     ):
         """Displays a remote file.
+
         https://docs.slack.dev/reference/block-kit/blocks/file-block
 
         Args:
@@ -535,7 +543,8 @@ class CallBlock(Block):
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        """Displays a call information
+        """Displays a call information.
+
         https://docs.slack.dev/reference/block-kit/blocks#call
         """
         super().__init__(type=self.type, block_id=block_id)
@@ -562,6 +571,7 @@ class HeaderBlock(Block):
         **others: dict,
     ):
         """A header is a plain-text block that displays in a larger, bold font.
+
         https://docs.slack.dev/reference/block-kit/blocks/header-block
 
         Args:
@@ -602,6 +612,7 @@ class MarkdownBlock(Block):
         **others: dict,
     ):
         """Displays formatted markdown.
+
         https://docs.slack.dev/reference/block-kit/blocks/markdown-block/
 
         Args:
@@ -661,7 +672,8 @@ class VideoBlock(Block):
         author_name: Optional[str] = None,
         **others: dict,
     ):
-        """A video block is designed to embed videos in all app surfaces
+        """A video block is designed to embed videos in all app surfaces.
+
         (e.g. link unfurls, messages, modals, App Home) —
         anywhere you can put blocks! To use the video block within your app,
         you must have the links.embed:write scope.
@@ -737,6 +749,7 @@ class RichTextBlock(Block):
         **others: dict,
     ):
         """A block that is used to hold interactive elements.
+
         https://docs.slack.dev/reference/block-kit/blocks/rich-text-block
 
         Args:
@@ -769,6 +782,7 @@ class TableBlock(Block):
         **others: dict,
     ):
         """Displays structured information in a table.
+
         https://docs.slack.dev/reference/block-kit/blocks/table-block
 
         Args:
@@ -826,6 +840,7 @@ class TaskCardBlock(Block):
         **others: dict,
     ):
         """Displays a single task, representing a single action.
+
         https://docs.slack.dev/reference/block-kit/blocks/task-card-block/
 
         Args:
@@ -876,6 +891,7 @@ class PlanBlock(Block):
         **others: dict,
     ):
         """Displays a collection of related tasks.
+
         https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
         Args:
@@ -910,6 +926,7 @@ class AlertBlock(Block):
         **others: dict,
     ):
         """Displays alerts, warnings, and informational messages.
+
         https://docs.slack.dev/reference/block-kit/blocks/alert-block
 
         Args:
@@ -965,6 +982,7 @@ class CardBlock(Block):
         **others: dict,
     ):
         """Displays content in a card.
+
         https://docs.slack.dev/reference/block-kit/blocks/card-block
 
         Args:
@@ -1021,6 +1039,7 @@ class CarouselBlock(Block):
         **others: dict,
     ):
         """Displays related card blocks in a horizontally-scrolling container.
+
         https://docs.slack.dev/reference/block-kit/blocks/carousel-block
 
         Args:

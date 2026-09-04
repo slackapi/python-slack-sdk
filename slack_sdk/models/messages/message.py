@@ -32,8 +32,7 @@ class Message(JsonObject):
         blocks: Optional[Sequence[Block]] = None,
         markdown: bool = True,
     ):
-        """
-        Create a message.
+        """Create a message.
 
         https://docs.slack.dev/messaging/#message-structure
 

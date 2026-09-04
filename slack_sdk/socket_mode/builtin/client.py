@@ -1,4 +1,4 @@
-"""The built-in Socket Mode client
+"""The built-in Socket Mode client.
 
 * https://docs.slack.dev/apis/events-api/using-socket-mode/
 * https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
@@ -84,7 +84,7 @@ class SocketModeClient(BaseSocketModeClient):
         on_error_listeners: Optional[List[Callable[[Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[int, Optional[str]], None]]] = None,
     ):
-        """Socket Mode client
+        """Socket Mode client.
 
         Args:
             app_token: App-level token

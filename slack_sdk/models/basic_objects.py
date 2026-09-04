@@ -6,7 +6,7 @@ from slack_sdk.errors import SlackObjectFormationError
 
 
 class BaseObject:
-    """The base class for all model objects in this module"""
+    """The base class for all model objects in this module."""
 
     def __str__(self):
         return f"<slack_sdk.{self.__class__.__name__}>"
@@ -22,18 +22,19 @@ EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [
 
 
 class JsonObject(BaseObject, metaclass=ABCMeta):
-    """The base class for JSON serializable class objects"""
+    """The base class for JSON serializable class objects."""
 
     @property
     @abstractmethod
     def attributes(self) -> Set[str]:
-        """Provide a set of attributes of this object that will make up its JSON structure"""
+        """Provide a set of attributes of this object that will make up its JSON structure."""
         return set()
 
     def validate_json(self) -> None:
-        """
+        """Validate this object against its attribute validators.
+
         Raises:
-          SlackObjectFormationError if the object was not valid
+            SlackObjectFormationError: if the object was not valid
         """
         for attribute in (func for func in dir(self) if not func.startswith("__")):
             method = getattr(self, attribute, None)
@@ -44,10 +45,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         return getattr(self, key, None)
 
     def get_non_null_attributes(self) -> dict:
-        """
-        Construct a dictionary out of non-null keys (from attributes property)
-        present on this object
-        """
+        """Construct a dictionary out of non-null keys (from attributes property) present on this object."""
 
         def to_dict_compatible(value: Union[dict, list, object, tuple]) -> Union[dict, list, Any]:
             if isinstance(value, (list, tuple)):
@@ -84,8 +82,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         }
 
     def to_dict(self, *args) -> dict:
-        """
-        Extract this object as a JSON-compatible, Slack-API-valid dictionary
+        """Extract this object as a JSON-compatible, Slack-API-valid dictionary.
 
         Args:
           *args: Any specific formatting args (rare; generally not required)
@@ -111,9 +108,9 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
 
 class JsonValidator:
     def __init__(self, message: str):
-        """
-        Decorate a method on a class to mark it as a JSON validator. Validation
-            functions should return true if valid, false if not.
+        """Decorate a method on a class to mark it as a JSON validator.
+
+        Validation functions should return true if valid, false if not.
 
         Args:
             message: Message to be attached to the thrown SlackObjectFormationError
