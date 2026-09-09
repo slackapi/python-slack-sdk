@@ -1185,8 +1185,7 @@ class DataTableBlock(Block):
         https://docs.slack.dev/reference/block-kit/blocks/data-table-block
 
         Args:
-            rows (required): An array consisting of table rows. Each cell has a type of raw_text,
-                raw_number, or rich_text.
+            rows (required): An array consisting of table rows.
             caption (required): A caption for the table; used as the value for the HTML caption element.
             page_size: Number of rows per page. Min 1, Max 100. Defaults to 5 if omitted.
             row_header_column_index: The 0-based index of the column that uniquely identifies each row
