@@ -196,8 +196,6 @@ class RawNumberObject(JsonObject):
     def __init__(self, *, value: Union[int, float], text: str):
         """Defines an object containing a numeric value.
 
-        https://docs.slack.dev/reference/block-kit/blocks/data-table-block
-
         Args:
             value (required): The numeric value.
             text (required): The text used to display the value. The minimum length is 1 character.
