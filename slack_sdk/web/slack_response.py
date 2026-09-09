@@ -27,17 +27,17 @@ class SlackResponse:
     import os
     import slack
 
-    client = slack.WebClient(token=os.environ['SLACK_API_TOKEN'])
+    client = slack.WebClient(token=os.environ["SLACK_API_TOKEN"])
 
-    response1 = client.auth_revoke(test='true')
-    assert not response1['revoked']
+    response1 = client.auth_revoke(test="true")
+    assert not response1["revoked"]
 
     response2 = client.auth_test()
-    assert response2.get('ok', False)
+    assert response2.get("ok", False)
 
     users = []
     for page in client.users_list(limit=2):
-        users = users + page['members']
+        users = users + page["members"]
     ```
 
     Note:
@@ -103,6 +103,7 @@ class SlackResponse:
 
     def __iter__(self):
         """Enables the ability to iterate over the response.
+
         It's required for the iterator protocol.
 
         Note:

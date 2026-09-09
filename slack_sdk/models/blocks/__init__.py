@@ -1,4 +1,4 @@
-"""Block Kit data model objects
+"""Block Kit data model objects.
 
 To learn more about Block Kit, please check the following resources and tools:
 
@@ -17,6 +17,7 @@ from .basic_components import (
     OptionGroup,
     PlainTextObject,
     RawTextObject,
+    TableBlockColumnSettings,
     TextObject,
 )
 from .block_elements import (
@@ -66,6 +67,7 @@ from .blocks import (
     CallBlock,
     CardBlock,
     CarouselBlock,
+    ContainerBlock,
     ContextActionsBlock,
     ContextBlock,
     DataTableBlock,
@@ -93,6 +95,7 @@ __all__ = [
     "OptionGroup",
     "PlainTextObject",
     "RawTextObject",
+    "TableBlockColumnSettings",
     "TextObject",
     "BlockElement",
     "ButtonElement",
@@ -138,6 +141,7 @@ __all__ = [
     "CallBlock",
     "CardBlock",
     "CarouselBlock",
+    "ContainerBlock",
     "ContextActionsBlock",
     "ContextBlock",
     "DataTableBlock",

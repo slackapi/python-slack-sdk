@@ -21,7 +21,8 @@ class FixedValueRetryIntervalCalculator(RetryIntervalCalculator):
 
 
 class BackoffRetryIntervalCalculator(RetryIntervalCalculator):
-    """Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
+    """Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter.
+
     see also: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
     """
 
@@ -29,7 +30,7 @@ class BackoffRetryIntervalCalculator(RetryIntervalCalculator):
     jitter: Jitter
 
     def __init__(self, backoff_factor: float = 0.5, jitter: Optional[Jitter] = None):
-        """Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
+        """Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter.
 
         Args:
             backoff_factor: The factor for the backoff interval calculation

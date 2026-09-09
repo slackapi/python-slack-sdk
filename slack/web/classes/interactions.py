@@ -5,7 +5,7 @@ from . import BaseObject
 
 
 class IDNamePair(NamedTuple):
-    """Simple type used to help with unpacking event data"""
+    """Simple type used to help with unpacking event data."""
 
     id: str
     name: str
@@ -33,8 +33,7 @@ class MessageInteractiveEvent(InteractiveEvent):
     message: dict
 
     def __init__(self, event: dict):
-        """
-        Convenience class to parse an interactive message payload from the events API
+        """Convenience class to parse an interactive message payload from the events API.
 
         Args:
             event: the raw event dictionary
@@ -64,8 +63,7 @@ class DialogInteractiveEvent(InteractiveEvent):
     state: dict
 
     def __init__(self, event: dict):
-        """
-        Convenience class to parse a dialog interaction payload from the events API
+        """Convenience class to parse a dialog interaction payload from the events API.
 
         Args:
             event: the raw event dictionary
@@ -83,9 +81,7 @@ class DialogInteractiveEvent(InteractiveEvent):
             self.state = {}
 
     def require_any(self, requirements: List[str]) -> dict:
-        """
-        Convenience method to construct the 'errors' response to send directly back to
-        the invoking HTTP request
+        """Convenience method to construct the 'errors' response to send directly back to the invoking HTTP request.
 
         Args:
           requirements: List of required dialog components, by name
@@ -106,8 +102,7 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
     text: str
 
     def __init__(self, event: dict):
-        """
-        Convenience class to parse a slash command payload from the events API
+        """Convenience class to parse a slash command payload from the events API.
 
         Args:
             event: the raw event dictionary
@@ -122,8 +117,7 @@ class SlashCommandInteractiveEvent(InteractiveEvent):
 
     @staticmethod
     def create_reply(message, ephemeral=False) -> dict:
-        """
-        Create a reply suitable to send directly back to the invoking HTTP request
+        """Create a reply suitable to send directly back to the invoking HTTP request.
 
         Args:
           message: Text to send

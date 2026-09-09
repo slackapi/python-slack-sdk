@@ -35,12 +35,12 @@ from slack.web.classes import dialogs
 
 builder = (
     dialogs.DialogBuilder()
-        .title("My Cool Dialog")
-        .callback_id("myCoolDialog")
-        .state({'value': 123, 'key': "something"})
-        .conversation_selector(name="target", label="Choose Target")
-        .text_area(name="message", label="Message", hint="Enter a message", max_length=500)
-        .text_field(name="signature", label="Signature", optional=True, max_length=50)
+    .title("My Cool Dialog")
+    .callback_id("myCoolDialog")
+    .state({"value": 123, "key": "something"})
+    .conversation_selector(name="target", label="Choose Target")
+    .text_area(name="message", label="Message", hint="Enter a message", max_length=500)
+    .text_field(name="signature", label="Signature", optional=True, max_length=50)
 )
 
 client = WebClient(token="abc")

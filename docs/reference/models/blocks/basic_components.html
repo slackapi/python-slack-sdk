@@ -188,7 +188,7 @@ offering a confirm and deny button.
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.ConfirmObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>confirm: ForwardRef('<a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a>') | Dict[str, Any])</span>
+<span>def <span class="ident">parse</span></span>(<span>confirm: <a title="slack_sdk.models.blocks.basic_components.ConfirmObject" href="#slack_sdk.models.blocks.basic_components.ConfirmObject">ConfirmObject</a> | Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -324,7 +324,7 @@ def title_length(self) -&gt; bool:
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.DispatchActionConfig.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>config: ForwardRef('<a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a>') | Dict[str, Any])</span>
+<span>def <span class="ident">parse</span></span>(<span>config: <a title="slack_sdk.models.blocks.basic_components.DispatchActionConfig" href="#slack_sdk.models.blocks.basic_components.DispatchActionConfig">DispatchActionConfig</a> | Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -413,8 +413,9 @@ def title_length(self) -&gt; bool:
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>A feedback button element object for either positive or negative feedback.
 <a href="https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields">https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>An object containing some text. Maximum length for this field is 75 characters.</dd>
 <dt><strong><code>accessibility_label</code></strong></dt>
@@ -446,7 +447,7 @@ screen readers instead of the button <code>text</code> object.</dd>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.FeedbackButtonObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>feedback_button: ForwardRef('<a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject">FeedbackButtonObject</a>') | Dict[str, Any])</span>
+<span>def <span class="ident">parse</span></span>(<span>feedback_button: <a title="slack_sdk.models.blocks.basic_components.FeedbackButtonObject" href="#slack_sdk.models.blocks.basic_components.FeedbackButtonObject">FeedbackButtonObject</a> | Dict[str, Any])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -560,8 +561,9 @@ def value_length(self) -&gt; bool:
 <p>A Markdown text object, meaning markdown characters will be parsed as
 formatting information.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The text for the block. This field accepts any of the standard text formatting markup
 when type is mrkdwn.</dd>
@@ -851,8 +853,9 @@ SelectElement, OverflowMenuElement) or dialog element
 <a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
 <p>Legacy interactive attachments:
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>label</code></strong></dt>
 <dd>A short, user-facing string to label this option to users.
 Cannot exceed 75 characters.</dd>
@@ -907,7 +910,7 @@ def from_single_value(value_and_label: str):
 <div class="desc"><p>Creates a simple Option instance with the same value and label</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.Option.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>options: Sequence[Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None</span>
+<span>def <span class="ident">parse_all</span></span>(<span>options: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1071,8 +1074,9 @@ UI) and a list of Option objects.</p>
 <a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
 <p>Legacy interactive attachments:
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>label</code></strong></dt>
 <dd>Text to display at the top of this group of options.</dd>
 <dt><strong><code>options</code></strong></dt>
@@ -1105,7 +1109,7 @@ UI) and a list of Option objects.</p>
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.OptionGroup.parse_all"><code class="name flex">
-<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Sequence[Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>')] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] | None</span>
+<span>def <span class="ident">parse_all</span></span>(<span>option_groups: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.OptionGroup" href="#slack_sdk.models.blocks.basic_components.OptionGroup">OptionGroup</a>] | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1167,8 +1171,9 @@ UI) and a list of Option objects.</p>
 <p>A plain text object, meaning markdown characters will not be parsed as
 formatting information.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The text for the block. This field accepts any of the standard text formatting markup
 when type is mrkdwn.</dd>
@@ -1294,8 +1299,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <p>A raw text object used in table block cells.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object/">https://docs.slack.dev/reference/block-kit/composition-objects/text-object/</a>
 <a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong> :&ensp;<code>required</code></dt>
 <dd>The text content for the table block cell.</dd>
 </dl></div>
@@ -1412,8 +1418,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <div class="desc"><p>The base class for JSON serializable class objects</p>
 <p>An object containing Slack file information to be used in an image block or image element.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object">https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>id</code></strong></dt>
 <dd>Slack ID of the file.</dd>
 <dt><strong><code>url</code></strong></dt>
@@ -1435,6 +1442,93 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <ul class="hlist">
 <li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
 <ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings"><code class="flex name class">
+<span>class <span class="ident">TableBlockColumnSettings</span></span>
+<span>(</span><span>*, align: str | None = None, is_wrapped: bool | None = None, **others: dict)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TableBlockColumnSettings(JsonObject):
+    &#34;&#34;&#34;Column settings for TableBlock columns.&#34;&#34;&#34;
+
+    @property
+    def attributes(self) -&gt; Set[str]:
+        return {&#34;align&#34;, &#34;is_wrapped&#34;}
+
+    def __init__(
+        self,
+        *,
+        align: Optional[str] = None,
+        is_wrapped: Optional[bool] = None,
+        **others: dict,
+    ):
+        &#34;&#34;&#34;Settings for a single column in a table block.
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            align: The alignment for items in this column. Can be &#34;left&#34;, &#34;center&#34;, or &#34;right&#34;.
+                Defaults to &#34;left&#34; if not defined.
+            is_wrapped: Whether the contents of this column should be wrapped or not.
+                Defaults to false if not defined.
+        &#34;&#34;&#34;
+        show_unknown_key_warning(self, others)
+        self.align = align
+        self.is_wrapped = is_wrapped
+
+    @classmethod
+    def parse(
+        cls, settings: Optional[Union[Dict[str, Any], &#34;TableBlockColumnSettings&#34;]]
+    ) -&gt; Optional[&#34;TableBlockColumnSettings&#34;]:
+        if settings is None:
+            return None
+        if isinstance(settings, TableBlockColumnSettings):
+            return settings
+        if isinstance(settings, dict):
+            return TableBlockColumnSettings(**settings)
+        return None</code></pre>
+</details>
+<div class="desc"><p>Column settings for TableBlock columns.</p>
+<p>Settings for a single column in a table block.
+<a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>align</code></strong></dt>
+<dd>The alignment for items in this column. Can be "left", "center", or "right".
+Defaults to "left" if not defined.</dd>
+<dt><strong><code>is_wrapped</code></strong></dt>
+<dd>Whether the contents of this column should be wrapped or not.
+Defaults to false if not defined.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
+<li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>settings: Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings" href="#slack_sdk.models.blocks.basic_components.TableBlockColumnSettings">TableBlockColumnSettings</a> | None) ‑> <a title="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings" href="#slack_sdk.models.blocks.basic_components.TableBlockColumnSettings">TableBlockColumnSettings</a> | None</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.models.basic_objects.JsonObject.attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.attributes">attributes</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.get_non_null_attributes">get_non_null_attributes</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.to_dict" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.to_dict">to_dict</a></code></li>
 <li><code><a title="slack_sdk.models.basic_objects.JsonObject.validate_json" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject.validate_json">validate_json</a></code></li>
@@ -1536,7 +1630,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <h3>Static methods</h3>
 <dl>
 <dt id="slack_sdk.models.blocks.basic_components.TextObject.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>text: str | Dict[str, Any] | ForwardRef('<a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>'),<br>default_type: str = 'mrkdwn') ‑> <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
+<span>def <span class="ident">parse</span></span>(<span>text: str | Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a>,<br>default_type: str = 'mrkdwn') ‑> <a title="slack_sdk.models.blocks.basic_components.TextObject" href="#slack_sdk.models.blocks.basic_components.TextObject">TextObject</a> | None</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -1770,6 +1864,12 @@ def subtype(self) -&gt; Optional[str]:
 <h4><code><a title="slack_sdk.models.blocks.basic_components.SlackFile" href="#slack_sdk.models.blocks.basic_components.SlackFile">SlackFile</a></code></h4>
 <ul class="">
 <li><code><a title="slack_sdk.models.blocks.basic_components.SlackFile.attributes" href="#slack_sdk.models.blocks.basic_components.SlackFile.attributes">attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings" href="#slack_sdk.models.blocks.basic_components.TableBlockColumnSettings">TableBlockColumnSettings</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.models.blocks.basic_components.TableBlockColumnSettings.parse" href="#slack_sdk.models.blocks.basic_components.TableBlockColumnSettings.parse">parse</a></code></li>
 </ul>
 </li>
 <li>

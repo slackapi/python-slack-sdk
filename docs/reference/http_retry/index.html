@@ -158,8 +158,9 @@ You can pass an array of handlers to customize retry logics in supported API cli
 <div class="desc"><p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
 see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
 <p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>backoff_factor</code></strong></dt>
 <dd>The factor for the backoff interval calculation</dd>
 <dt><strong><code>jitter</code></strong></dt>
@@ -237,8 +238,9 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 </details>
 <div class="desc"><p>RetryHandler that does retries for connectivity issues.</p>
 <p>RetryHandler interface.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>max_retry_count</code></strong></dt>
 <dd>The maximum times to do retries</dd>
 <dt><strong><code>interval_calculator</code></strong></dt>
@@ -285,8 +287,9 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 </details>
 <div class="desc"><p>Retry interval calculator that uses a fixed value.</p>
 <p>Retry interval calculator that uses a fixed value.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>fixed_internal</code></strong></dt>
 <dd>The fixed interval seconds</dd>
 </dl></div>
@@ -489,13 +492,15 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 </details>
 <div class="desc"><p>Recalculate the given duration.
 see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>duration</code></strong></dt>
 <dd>the duration in seconds</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A new duration that the jitter amount is added</p></div>
+<p>Returns
+-----=
+A new duration that the jitter amount is added</p></div>
 </dd>
 </dl>
 </dd>
@@ -549,8 +554,9 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 </details>
 <div class="desc"><p>RetryHandler that does retries for rate limited errors.</p>
 <p>RetryHandler interface.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>max_retry_count</code></strong></dt>
 <dd>The maximum times to do retries</dd>
 <dt><strong><code>interval_calculator</code></strong></dt>
@@ -683,8 +689,9 @@ see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff
 <div class="desc"><p>RetryHandler interface.
 You can pass an array of handlers to customize retry logics in supported API clients.</p>
 <p>RetryHandler interface.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>max_retry_count</code></strong></dt>
 <dd>The maximum times to do retries</dd>
 <dt><strong><code>interval_calculator</code></strong></dt>
@@ -809,13 +816,15 @@ You can pass an array of handlers to customize retry logics in supported API cli
     raise NotImplementedError()</code></pre>
 </details>
 <div class="desc"><p>Calculates an interval duration in seconds.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>current_attempt</code></strong></dt>
 <dd>the number of the current attempt (zero-origin; 0 means no retries are done so far)</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>calculated interval duration in seconds</p></div>
+<p>Returns
+-----=
+calculated interval duration in seconds</p></div>
 </dd>
 </dl>
 </dd>

@@ -3,7 +3,7 @@ from urllib.request import Request
 
 
 class HttpRequest:
-    """HTTP request representation"""
+    """HTTP request representation."""
 
     method: str
     url: str

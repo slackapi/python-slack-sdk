@@ -1,2 +1,7 @@
+# pip install -r requirements/documentation.txt
+
+# docutils
 docutils==0.23
+
+# pdoc3
 pdoc3==0.11.6

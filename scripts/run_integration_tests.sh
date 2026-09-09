@@ -11,7 +11,7 @@ cd ${script_dir}/..
 ./scripts/install.sh
 
 echo "Generating code ..." && python scripts/codegen.py --path .
-echo "Running black (code formatter) ..." && ./scripts/format.sh --no-install
+echo "Running ruff (code formatter) ..." && ./scripts/format.sh --no-install
 
 test_target="${1:-tests/integration_tests/}"
 PYTHONPATH=$PWD:$PYTHONPATH pytest $test_target

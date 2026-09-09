@@ -1,4 +1,4 @@
-"""websocket-client based Socket Mode client
+"""websocket-client based Socket Mode client.
 
 * https://docs.slack.dev/apis/events-api/using-socket-mode/
 * https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
@@ -84,7 +84,7 @@ class SocketModeClient(BaseSocketModeClient):
         on_error_listeners: Optional[List[Callable[[WebSocketApp, Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
     ):
-        """
+        """Socket Mode client implementation built with the websocket-client library.
 
         Args:
             app_token: App-level token

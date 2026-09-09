@@ -66,6 +66,10 @@ el.replaceWith(d);
 <dd>
 <div class="desc"></div>
 </dd>
+<dt><code class="name"><a title="slack_sdk.oauth.state_store.stateless" href="stateless/index.html">slack_sdk.oauth.state_store.stateless</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 </dl>
 </section>
 <section>
@@ -268,6 +272,7 @@ def logger(self) -&gt; Logger:
 <li><a title="slack_sdk.oauth.state_store.file.FileOAuthStateStore" href="file/index.html#slack_sdk.oauth.state_store.file.FileOAuthStateStore">FileOAuthStateStore</a></li>
 <li><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore" href="sqlalchemy/index.html#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore">SQLAlchemyOAuthStateStore</a></li>
 <li><a title="slack_sdk.oauth.state_store.sqlite3.SQLite3OAuthStateStore" href="sqlite3/index.html#slack_sdk.oauth.state_store.sqlite3.SQLite3OAuthStateStore">SQLite3OAuthStateStore</a></li>
+<li><a title="slack_sdk.oauth.state_store.stateless.StatelessOAuthStateStore" href="stateless/index.html#slack_sdk.oauth.state_store.stateless.StatelessOAuthStateStore">StatelessOAuthStateStore</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
@@ -314,6 +319,285 @@ def logger(self) -&gt; Logger:
 </dd>
 </dl>
 </dd>
+<dt id="slack_sdk.oauth.state_store.StatelessOAuthStateStore"><code class="flex name class">
+<span>class <span class="ident">StatelessOAuthStateStore</span></span>
+<span>(</span><span>*,<br>expiration_seconds: int,<br>signing_secret: str,<br>logger: logging.Logger = &lt;Logger slack_sdk.oauth.state_store.stateless (WARNING)&gt;)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StatelessOAuthStateStore(OAuthStateStore, AsyncOAuthStateStore):
+    &#34;&#34;&#34;A stateless OAuth ``state`` store backed by a signed, self-contained token.
+
+    ``issue()`` creates an HMAC-SHA256 signed token in the JWT style. The token
+    carries only an expiration claim. ``consume()`` re-verifies the signature and
+    the expiry. Nothing is stored server-side. No storage backend is required.
+
+    .. warning::
+        This store provides **no one-time-use / anti-replay guarantee**. It returns
+        ``True`` for the same token every time until that token expires. This is
+        inherent to a stateless token. The token can only be invalidated by expiry.
+        It cannot be revoked early unless you add server-side state, and that would
+        defeat the point of being stateless.
+
+        Consequences for integrators:
+
+        - **Keep the token lifetime short.** A token stays valid until it expires.
+          Use a short ``expiration_seconds``. A value of ``300`` (5 minutes) is a
+          good choice and matches the OAuth sample. This limits how long a captured
+          ``state`` can be replayed.
+        - **Make the callback idempotent.** A captured ``state`` can be replayed
+          within its lifetime. Your callback may run more than once for a single
+          authorization. The ``oauth.v2.access`` exchange and the installation
+          persistence must tolerate this. Slack authorization codes are single-use.
+          A sequential replay fails the token exchange. The real exposure is a
+          concurrent duplicate callback.
+        - **CSRF protection is unchanged.** CSRF defense comes from the
+          ``Secure; HttpOnly`` state cookie. ``OAuthStateUtils`` validates that cookie
+          before ``consume()`` runs in the callback. Compared to the stateful stores,
+          this store only gives up anti-replay and defense-in-depth. It does not give
+          up CSRF protection.
+
+    Args:
+        expiration_seconds: Lifetime of an issued ``state`` token in seconds. After
+            this window ``consume()`` returns ``False``. Keep this value short. A
+            value of ``300`` (5 minutes) is a good default. Avoid long lifetimes.
+        signing_secret: Secret used to sign and verify tokens with HMAC. Keep it
+            secret. Keep it the same across every instance that must validate a
+            shared token.
+        logger: Logger for validation warnings.
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        *,
+        expiration_seconds: int,
+        signing_secret: str,
+        logger: Logger = logging.getLogger(__name__),
+    ):
+        self.expiration_seconds = expiration_seconds
+        self.signing_secret = signing_secret
+        self._logger = logger
+
+    @property
+    def logger(self) -&gt; Logger:
+        if self._logger is None:
+            self._logger = logging.getLogger(__name__)
+        return self._logger
+
+    @staticmethod
+    def _b64url_encode(data: bytes) -&gt; str:
+        return base64.urlsafe_b64encode(data).rstrip(b&#34;=&#34;).decode(&#34;utf-8&#34;)
+
+    @staticmethod
+    def _b64url_decode(data: str) -&gt; bytes:
+        padded = data + &#34;=&#34; * (4 - len(data) % 4)
+        return base64.urlsafe_b64decode(padded)
+
+    def _sign(self, message: str) -&gt; str:
+        return self._b64url_encode(
+            hmac.new(
+                self.signing_secret.encode(&#34;utf-8&#34;),
+                message.encode(&#34;utf-8&#34;),
+                hashlib.sha256,
+            ).digest()
+        )
+
+    def issue(self, *args, **kwargs) -&gt; str:
+        header = self._b64url_encode(json.dumps({&#34;alg&#34;: &#34;HS256&#34;, &#34;typ&#34;: &#34;JWT&#34;}, separators=(&#34;,&#34;, &#34;:&#34;)).encode())
+        payload = self._b64url_encode(
+            json.dumps({&#34;exp&#34;: int(time.time()) + self.expiration_seconds}, separators=(&#34;,&#34;, &#34;:&#34;)).encode()
+        )
+        signature = self._sign(f&#34;{header}.{payload}&#34;)
+        return f&#34;{header}.{payload}.{signature}&#34;
+
+    def consume(self, state: str) -&gt; bool:
+        &#34;&#34;&#34;Validate a ``state`` token&#39;s signature and ``expiration`` claim.
+
+        Returns ``True`` for any correctly signed, unexpired token, **every time**.
+        This store keeps no record of consumed tokens. It does not enforce
+        one-time-use. See the class docstring for the anti-replay caveat.
+        &#34;&#34;&#34;
+        try:
+            parts = state.split(&#34;.&#34;)
+            if len(parts) != 3:
+                return False
+            header, payload, signature = parts
+            expected_signature = self._sign(f&#34;{header}.{payload}&#34;)
+            if not hmac.compare_digest(signature, expected_signature):
+                self.logger.warning(&#34;Invalid JWT signature for state parameter&#34;)
+                return False
+            claims = json.loads(self._b64url_decode(payload))
+            exp = claims.get(&#34;exp&#34;)
+            if exp is None or time.time() &gt; exp:
+                self.logger.warning(&#34;Expired or missing exp claim in state JWT&#34;)
+                return False
+            return True
+        except Exception as e:
+            self.logger.warning(f&#34;Failed to validate state JWT: {e}&#34;)
+            return False
+
+    async def async_issue(self, *args, **kwargs) -&gt; str:
+        return self.issue(*args, **kwargs)
+
+    async def async_consume(self, state: str) -&gt; bool:
+        return self.consume(state)</code></pre>
+</details>
+<div class="desc"><p>A stateless OAuth <code>state</code> store backed by a signed, self-contained token.</p>
+<p><code>issue()</code> creates an HMAC-SHA256 signed token in the JWT style. The token
+carries only an expiration claim. <code>consume()</code> re-verifies the signature and
+the expiry. Nothing is stored server-side. No storage backend is required.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This store provides <strong>no one-time-use / anti-replay guarantee</strong>. It returns
+<code>True</code> for the same token every time until that token expires. This is
+inherent to a stateless token. The token can only be invalidated by expiry.
+It cannot be revoked early unless you add server-side state, and that would
+defeat the point of being stateless.</p>
+<p>Consequences for integrators:</p>
+<ul>
+<li><strong>Keep the token lifetime short.</strong> A token stays valid until it expires.
+Use a short <code>expiration_seconds</code>. A value of <code>300</code> (5 minutes) is a
+good choice and matches the OAuth sample. This limits how long a captured
+<code>state</code> can be replayed.</li>
+<li><strong>Make the callback idempotent.</strong> A captured <code>state</code> can be replayed
+within its lifetime. Your callback may run more than once for a single
+authorization. The <code>oauth.v2.access</code> exchange and the installation
+persistence must tolerate this. Slack authorization codes are single-use.
+A sequential replay fails the token exchange. The real exposure is a
+concurrent duplicate callback.</li>
+<li><strong>CSRF protection is unchanged.</strong> CSRF defense comes from the
+<code>Secure; HttpOnly</code> state cookie. <code>OAuthStateUtils</code> validates that cookie
+before <code>consume()</code> runs in the callback. Compared to the stateful stores,
+this store only gives up anti-replay and defense-in-depth. It does not give
+up CSRF protection.</li>
+</ul>
+</div>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>expiration_seconds</code></strong></dt>
+<dd>Lifetime of an issued <code>state</code> token in seconds. After
+this window <code>consume()</code> returns <code>False</code>. Keep this value short. A
+value of <code>300</code> (5 minutes) is a good default. Avoid long lifetimes.</dd>
+<dt><strong><code>signing_secret</code></strong></dt>
+<dd>Secret used to sign and verify tokens with HMAC. Keep it
+secret. Keep it the same across every instance that must validate a
+shared token.</dd>
+<dt><strong><code>logger</code></strong></dt>
+<dd>Logger for validation warnings.</dd>
+</dl></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.oauth.state_store.state_store.OAuthStateStore" href="state_store.html#slack_sdk.oauth.state_store.state_store.OAuthStateStore">OAuthStateStore</a></li>
+<li><a title="slack_sdk.oauth.state_store.async_state_store.AsyncOAuthStateStore" href="async_state_store.html#slack_sdk.oauth.state_store.async_state_store.AsyncOAuthStateStore">AsyncOAuthStateStore</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="slack_sdk.oauth.state_store.StatelessOAuthStateStore.logger"><code class="name">prop <span class="ident">logger</span> : logging.Logger</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def logger(self) -&gt; Logger:
+    if self._logger is None:
+        self._logger = logging.getLogger(__name__)
+    return self._logger</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.oauth.state_store.StatelessOAuthStateStore.async_consume"><code class="name flex">
+<span>async def <span class="ident">async_consume</span></span>(<span>self, state: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def async_consume(self, state: str) -&gt; bool:
+    return self.consume(state)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.state_store.StatelessOAuthStateStore.async_issue"><code class="name flex">
+<span>async def <span class="ident">async_issue</span></span>(<span>self, *args, **kwargs) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def async_issue(self, *args, **kwargs) -&gt; str:
+    return self.issue(*args, **kwargs)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="slack_sdk.oauth.state_store.StatelessOAuthStateStore.consume"><code class="name flex">
+<span>def <span class="ident">consume</span></span>(<span>self, state: str) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def consume(self, state: str) -&gt; bool:
+    &#34;&#34;&#34;Validate a ``state`` token&#39;s signature and ``expiration`` claim.
+
+    Returns ``True`` for any correctly signed, unexpired token, **every time**.
+    This store keeps no record of consumed tokens. It does not enforce
+    one-time-use. See the class docstring for the anti-replay caveat.
+    &#34;&#34;&#34;
+    try:
+        parts = state.split(&#34;.&#34;)
+        if len(parts) != 3:
+            return False
+        header, payload, signature = parts
+        expected_signature = self._sign(f&#34;{header}.{payload}&#34;)
+        if not hmac.compare_digest(signature, expected_signature):
+            self.logger.warning(&#34;Invalid JWT signature for state parameter&#34;)
+            return False
+        claims = json.loads(self._b64url_decode(payload))
+        exp = claims.get(&#34;exp&#34;)
+        if exp is None or time.time() &gt; exp:
+            self.logger.warning(&#34;Expired or missing exp claim in state JWT&#34;)
+            return False
+        return True
+    except Exception as e:
+        self.logger.warning(f&#34;Failed to validate state JWT: {e}&#34;)
+        return False</code></pre>
+</details>
+<div class="desc"><p>Validate a <code>state</code> token's signature and <code>expiration</code> claim.</p>
+<p>Returns <code>True</code> for any correctly signed, unexpired token, <strong>every time</strong>.
+This store keeps no record of consumed tokens. It does not enforce
+one-time-use. See the class docstring for the anti-replay caveat.</p></div>
+</dd>
+<dt id="slack_sdk.oauth.state_store.StatelessOAuthStateStore.issue"><code class="name flex">
+<span>def <span class="ident">issue</span></span>(<span>self, *args, **kwargs) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def issue(self, *args, **kwargs) -&gt; str:
+    header = self._b64url_encode(json.dumps({&#34;alg&#34;: &#34;HS256&#34;, &#34;typ&#34;: &#34;JWT&#34;}, separators=(&#34;,&#34;, &#34;:&#34;)).encode())
+    payload = self._b64url_encode(
+        json.dumps({&#34;exp&#34;: int(time.time()) + self.expiration_seconds}, separators=(&#34;,&#34;, &#34;:&#34;)).encode()
+    )
+    signature = self._sign(f&#34;{header}.{payload}&#34;)
+    return f&#34;{header}.{payload}.{signature}&#34;</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -335,6 +619,7 @@ def logger(self) -&gt; Logger:
 <li><code><a title="slack_sdk.oauth.state_store.sqlalchemy" href="sqlalchemy/index.html">slack_sdk.oauth.state_store.sqlalchemy</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.sqlite3" href="sqlite3/index.html">slack_sdk.oauth.state_store.sqlite3</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.state_store" href="state_store.html">slack_sdk.oauth.state_store.state_store</a></code></li>
+<li><code><a title="slack_sdk.oauth.state_store.stateless" href="stateless/index.html">slack_sdk.oauth.state_store.stateless</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
@@ -355,6 +640,16 @@ def logger(self) -&gt; Logger:
 <li><code><a title="slack_sdk.oauth.state_store.OAuthStateStore.consume" href="#slack_sdk.oauth.state_store.OAuthStateStore.consume">consume</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.OAuthStateStore.issue" href="#slack_sdk.oauth.state_store.OAuthStateStore.issue">issue</a></code></li>
 <li><code><a title="slack_sdk.oauth.state_store.OAuthStateStore.logger" href="#slack_sdk.oauth.state_store.OAuthStateStore.logger">logger</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.oauth.state_store.StatelessOAuthStateStore" href="#slack_sdk.oauth.state_store.StatelessOAuthStateStore">StatelessOAuthStateStore</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.oauth.state_store.StatelessOAuthStateStore.async_consume" href="#slack_sdk.oauth.state_store.StatelessOAuthStateStore.async_consume">async_consume</a></code></li>
+<li><code><a title="slack_sdk.oauth.state_store.StatelessOAuthStateStore.async_issue" href="#slack_sdk.oauth.state_store.StatelessOAuthStateStore.async_issue">async_issue</a></code></li>
+<li><code><a title="slack_sdk.oauth.state_store.StatelessOAuthStateStore.consume" href="#slack_sdk.oauth.state_store.StatelessOAuthStateStore.consume">consume</a></code></li>
+<li><code><a title="slack_sdk.oauth.state_store.StatelessOAuthStateStore.issue" href="#slack_sdk.oauth.state_store.StatelessOAuthStateStore.issue">issue</a></code></li>
+<li><code><a title="slack_sdk.oauth.state_store.StatelessOAuthStateStore.logger" href="#slack_sdk.oauth.state_store.StatelessOAuthStateStore.logger">logger</a></code></li>
 </ul>
 </li>
 </ul>

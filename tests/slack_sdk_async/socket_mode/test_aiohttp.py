@@ -1,5 +1,7 @@
 import asyncio
+import logging
 import unittest
+from unittest.mock import MagicMock
 
 from slack_sdk.socket_mode.aiohttp import SocketModeClient
 from slack_sdk.web.async_client import AsyncWebClient
@@ -30,6 +32,41 @@ class TestAiohttp(unittest.TestCase):
             self.assertIsNotNone(client)
         finally:
             await client.close()
+
+    @async_test
+    async def test_connect_returns_when_closed(self):
+        # Regression test for #1913: connect() must not loop forever once the client is closed.
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            ping_interval=0.01,
+        )
+        client.wss_uri = "ws://localhost:8888/link"
+        await client.close()
+        await asyncio.wait_for(client.connect(), timeout=1.0)
+        self.assertTrue(client.closed)
+
+    @async_test
+    async def test_connect_returns_when_exception_raised_after_close(self):
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            ping_interval=0.01,
+        )
+        client.logger = MagicMock()
+        client.logger.level = logging.DEBUG
+
+        async def close_then_raise(*args, **kwargs):
+            await client.close()
+            raise RuntimeError("Session is closed")
+
+        client.issue_new_wss_url = close_then_raise
+
+        await asyncio.wait_for(client.connect(), timeout=1.0)
+        self.assertTrue(client.closed)
+        client.logger.exception.assert_not_called()
 
     @async_test
     async def test_init_with_loop(self):

@@ -258,15 +258,17 @@ el.replaceWith(d);
         raise SlackTokenRotationError(e)</code></pre>
 </details>
 <div class="desc"><p>Performs bot token rotation if the underlying bot token is expired / expiring.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>bot</code></strong></dt>
 <dd>the current bot installation data</dd>
 <dt><strong><code>minutes_before_expiration</code></strong></dt>
 <dd>the minutes before the token expiration</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>None if no rotation is necessary for now.</p></div>
+<p>Returns
+-----=
+None if no rotation is necessary for now.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.token_rotation.async_rotator.AsyncTokenRotator.perform_token_rotation"><code class="name flex">
 <span>async def <span class="ident">perform_token_rotation</span></span>(<span>self,<br>*,<br>installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>,<br>minutes_before_expiration: int = 120) ‑> <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a> | None</span>
@@ -316,15 +318,17 @@ el.replaceWith(d);
     return rotated_installation</code></pre>
 </details>
 <div class="desc"><p>Performs token rotation if the underlying tokens (bot / user) are expired / expiring.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>installation</code></strong></dt>
 <dd>the current installation data</dd>
 <dt><strong><code>minutes_before_expiration</code></strong></dt>
 <dd>the minutes before the token expiration</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>None if no rotation is necessary for now.</p></div>
+<p>Returns
+-----=
+None if no rotation is necessary for now.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.token_rotation.async_rotator.AsyncTokenRotator.perform_user_token_rotation"><code class="name flex">
 <span>async def <span class="ident">perform_user_token_rotation</span></span>(<span>self,<br>*,<br>installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>,<br>minutes_before_expiration: int = 120) ‑> <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="../installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a> | None</span>
@@ -374,15 +378,17 @@ el.replaceWith(d);
         raise SlackTokenRotationError(e)</code></pre>
 </details>
 <div class="desc"><p>Performs user token rotation if the underlying user token is expired / expiring.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>installation</code></strong></dt>
 <dd>the current installation data</dd>
 <dt><strong><code>minutes_before_expiration</code></strong></dt>
 <dd>the minutes before the token expiration</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>None if no rotation is necessary for now.</p></div>
+<p>Returns
+-----=
+None if no rotation is necessary for now.</p></div>
 </dd>
 </dl>
 </dd>

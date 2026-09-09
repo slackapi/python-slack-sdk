@@ -16,8 +16,7 @@ deprecated_method_prefixes_2024_09 = ["workflows.stepCompleted", "workflows.upda
 
 
 def show_deprecation_warning_if_any(method_name: str):
-    """Prints a warning if the given method is deprecated"""
-
+    """Prints a warning if the given method is deprecated."""
     skip_deprecation = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION")  # for unit tests etc.
     if skip_deprecation:
         return

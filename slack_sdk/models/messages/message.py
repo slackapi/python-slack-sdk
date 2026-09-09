@@ -15,7 +15,7 @@ LOGGER = logging.getLogger(__name__)
 
 skip_warn = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION")  # for unit tests etc.
 if not skip_warn:
-    message = "This class is no longer actively maintained. " "Please use a dict object for building message data instead."
+    message = "This class is no longer actively maintained. Please use a dict object for building message data instead."
     warnings.warn(message)
 
 
@@ -32,8 +32,7 @@ class Message(JsonObject):
         blocks: Optional[Sequence[Block]] = None,
         markdown: bool = True,
     ):
-        """
-        Create a message.
+        """Create a message.
 
         https://docs.slack.dev/messaging/#message-structure
 

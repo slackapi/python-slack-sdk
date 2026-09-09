@@ -112,14 +112,12 @@ class TestInteractionsBuiltin(unittest.TestCase):
 
                     self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
                 finally:
-                    pass
-                    # client.close()
+                    client.close()
                 self.logger.info(f"Passed with buffer size: {buffer_size}")
 
         finally:
             # Restore the default value
             sys.setrecursionlimit(default_recursion_limit)
-            client.close()
 
         self.logger.info(f"Passed with buffer size: {buffer_size_list}")
 

@@ -1,19 +1,53 @@
 # pip install -r requirements/testing.txt
-aiohttp<3.9; python_version == "3.7"  # used for a WebSocket server mock
-aiohttp<3.11; python_version == "3.8"  # used for a WebSocket server mock
-aiohttp<4; python_version >= "3.9"  # used for a WebSocket server mock
-pytest>=7.0.1,<9
-pytest-asyncio<2  # for async
+
+# aiohttp
+# Note: Used for a WebSocket server mock.
+aiohttp<3.9; python_version == "3.7"
+aiohttp<3.11; python_version == "3.8"
+aiohttp<4; python_version >= "3.9"
+
+# pytest
+# Note: pytest 9 requires Python >=3.10; cap older interpreters below it.
+pytest>=7.0.1,<9; python_version < "3.10"
+pytest>=9.1.1,<10; python_version >= "3.10"
+
+# pytest-asyncio
+# Note: for async.
+pytest-asyncio<2
+
+# pytest-timeout
+# Note: per-test timeout so a hung test fails fast with a thread dump instead of stalling CI.
+pytest-timeout>=2.4.0,<3
+
+# pytest-cov
+# Note: pytest-cov 7.1+ requires Python >=3.9; cap older interpreters below it.
 pytest-cov>=4,<7.1.0; python_version < "3.9"
 pytest-cov>=7.1.0,<8; python_version >= "3.9"
-click==8.0.4  # black is affected by https://github.com/pallets/click/issues/2225
-psutil>=6.0.0,<8
-# cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only
+
+# click
+# Note: click 8.2+ requires Python >=3.10; cap older interpreters below it.
+click==8.1.8; python_version < "3.10"
+click==8.5.0; python_version >= "3.10"
+
+# psutil
+psutil>=7.2.2,<8
+
+# cryptography
+# Note: cryptography 46+ dropped PyPy 3.10 wheels; pin to <46 for PyPy 3.10 only.
 cryptography<46; implementation_name == "pypy" and python_version == "3.10"
-#  used only under slack_sdk/*_store
+
+# boto3
+# Note: used only under slack_sdk/*_store.
 boto3<=2
-# For AWS tests
+
+# moto
+# Note: for AWS tests.
 moto>=4.2.14,<6
-# For AsyncSQLAlchemy tests
+
+# greenlet
+# Note: for AsyncSQLAlchemy tests.
 greenlet<=4
+
+# aiosqlite
+# Note: for AsyncSQLAlchemy tests.
 aiosqlite<=1

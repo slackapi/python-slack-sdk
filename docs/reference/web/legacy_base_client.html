@@ -662,8 +662,9 @@ On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
 header. The signature is created by combining the signing secret with the
 body of the request we're sending using a standard HMAC-SHA256 keyed hash.
 <a href="https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview">https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>signing_secret</code></strong></dt>
 <dd>Your application's signing secret, available in the
 Slack API dashboard</dd>
@@ -675,8 +676,9 @@ Slack API dashboard</dd>
 <dd>from the 'X-Slack-Signature' header - the calculated signature
 should match this.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>True if signatures matches</p></div>
+<p>Returns
+-----=
+True if signatures matches</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -811,8 +813,9 @@ Default is 30 seconds.</p></div>
     return self._sync_send(api_url=api_url, req_args=req_args)</code></pre>
 </details>
 <div class="desc"><p>Create a request and execute the API call to Slack.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>api_method</code></strong> :&ensp;<code>str</code></dt>
 <dd>The target Slack API method.
 e.g. 'chat.postMessage'</dd>
@@ -837,14 +840,16 @@ e.g. {'key1': 'value1', 'key2': 'value2'}</dd>
 <dt><strong><code>auth</code></strong> :&ensp;<code>dict</code></dt>
 <dd>A dictionary that consists of client_id and client_secret</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>(SlackResponse)
+<p>Returns
+-----=
+(SlackResponse)
 The server's response to an HTTP request. Data
 from the response can be accessed like a dict.
 If the response included 'next_cursor' it can
 be iterated on to execute subsequent requests.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackApiError</code></dt>
 <dd>The following Slack API call failed:
 'chat.postMessage'.</dd>

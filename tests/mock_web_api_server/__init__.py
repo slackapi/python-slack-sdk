@@ -15,7 +15,10 @@ def setup_mock_web_api_server(test: TestCase, handler: Type[SimpleHTTPRequestHan
     test.received_requests = ReceivedRequests(Queue())
     test.thread = MockServerThread(queue=test.received_requests.queue, test=test, handler=handler, port=port)
     test.thread.start()
-    test.server_started.wait()
+    if not test.server_started.wait(timeout=5):
+        raise RuntimeError(
+            f"Mock web API server failed to start on port {test.thread.port} within 5s (port already in use?)"
+        )
 
 
 def cleanup_mock_web_api_server(test: TestCase):
@@ -29,9 +32,9 @@ def assert_received_request_count(test: TestCase, path: str, min_count: int, tim
     while time.time() - start_time < timeout:
         try:
             received_count = test.received_requests.get(path, 0)
-            assert (
-                received_count == min_count
-            ), f"Expected {min_count} '{path}' {'requests' if min_count > 1 else 'request'}, but got {received_count}!"
+            assert received_count == min_count, (
+                f"Expected {min_count} '{path}' {'requests' if min_count > 1 else 'request'}, but got {received_count}!"
+            )
             return
         except Exception as e:
             error = e
@@ -56,11 +59,14 @@ def setup_mock_web_api_server_async(test: TestCase, handler: Type[SimpleHTTPRequ
     test.received_requests = ReceivedRequests(asyncio.Queue())
     test.thread = MockServerThread(queue=test.received_requests.queue, test=test, handler=handler, port=port)
     test.thread.start()
-    test.server_started.wait()
+    if not test.server_started.wait(timeout=5):
+        raise RuntimeError(
+            f"Mock web API server failed to start on port {test.thread.port} within 5s (port already in use?)"
+        )
 
 
 def cleanup_mock_web_api_server_async(test: TestCase):
-    test.thread.stop_unsafe()
+    test.thread.stop()
     test.thread = None
 
 
@@ -70,9 +76,9 @@ async def assert_received_request_count_async(test: TestCase, path: str, min_cou
     while time.time() - start_time < timeout:
         try:
             received_count = await test.received_requests.get_async(path, 0)
-            assert (
-                received_count == min_count
-            ), f"Expected {min_count} '{path}' {'requests' if min_count > 1 else 'request'}, but got {received_count}!"
+            assert received_count == min_count, (
+                f"Expected {min_count} '{path}' {'requests' if min_count > 1 else 'request'}, but got {received_count}!"
+            )
             return
         except Exception as e:
             error = e

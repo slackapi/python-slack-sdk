@@ -1,4 +1,4 @@
-"""Modules for implementing the Slack OAuth flow
+"""Modules for implementing the Slack OAuth flow.
 
 https://docs.slack.dev/tools/python-slack-sdk/oauth
 """

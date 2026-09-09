@@ -1,4 +1,4 @@
-"""Slack request signature verifier"""
+"""Slack request signature verifier."""
 
 import hashlib
 import hmac
@@ -19,7 +19,7 @@ class Clock:
 
 class SignatureVerifier:
     def __init__(self, signing_secret: str, clock: Clock = Clock()):
-        """Slack request signature verifier
+        """Slack request signature verifier.
 
         Slack signs its requests using a secret that's unique to your app.
         With the help of signing secrets, your app can more confidently verify
@@ -46,7 +46,7 @@ class SignatureVerifier:
         body: Union[str, bytes],
         headers: Mapping[str, str],
     ) -> bool:
-        """Verifies if the given signature is valid"""
+        """Verifies if the given signature is valid."""
         if headers is None:
             return False
         normalized_headers = {k.lower(): v for k, v in headers.items()}
@@ -62,7 +62,7 @@ class SignatureVerifier:
         timestamp: Optional[str],
         signature: Optional[str],
     ) -> bool:
-        """Verifies if the given signature is valid"""
+        """Verifies if the given signature is valid."""
         if timestamp is None or signature is None:
             return False
 
@@ -75,7 +75,7 @@ class SignatureVerifier:
         return hmac.compare_digest(calculated_signature, signature)
 
     def generate_signature(self, *, timestamp: str, body: Union[str, bytes]) -> Optional[str]:
-        """Generates a signature"""
+        """Generates a signature."""
         if timestamp is None:
             return None
         if body is None:

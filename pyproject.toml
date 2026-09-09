@@ -55,8 +55,30 @@ optional-dependencies.optional = { file = ["requirements/optional.txt"] }
 [tool.distutils.bdist_wheel]
 universal = true
 
-[tool.black]
+[tool.ruff]
 line-length = 125
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "D"]
+ignore = [
+	# missing-docstring: do not add docstrings where none exist
+	"D100",
+	"D101",
+	"D102",
+	"D103",
+	"D104",
+	"D105",
+	"D106",
+	"D107",
+	# undocumented-param: 51/54 cases are just **others/**kwargs boilerplate in Block Kit models
+	"D417",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -70,6 +92,8 @@ filterwarnings = [
 	"ignore:slack.* package is deprecated. Please use slack_sdk.* package instead.*:UserWarning",
 ]
 asyncio_mode = "auto"
+timeout = 180
+timeout_method = "thread"
 
 
 [tool.mypy]

@@ -307,8 +307,9 @@ def name_or_url_present(self):
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Simple button for use inside attachments</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-message-buttons/">https://docs.slack.dev/legacy/legacy-messaging/legacy-message-buttons/</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name this specific action. The name will be returned to your
 Action URL along with the message's callback_id when this action is
@@ -435,8 +436,9 @@ def value_length(self):
 <p>Automatically populate the selector with a list of public channels in the
 workspace.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_channels">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_channels</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name this specific action. The name will be returned to your
 Action URL along with the message's callback_id when this action is
@@ -511,8 +513,9 @@ value.</dd>
 <p>Automatically populate the selector with a list of conversations they have in
 the workspace.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_conversations">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_conversations</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name this specific action. The name will be returned to your
 Action URL along with the message's callback_id when this action is
@@ -599,8 +602,9 @@ value.</dd>
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Populate a message select menu from your own application dynamically.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_dynamic">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_dynamic</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name this specific action. The name will be returned to your
 Action URL along with the message's callback_id when this action is
@@ -682,8 +686,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>A simple interactive button that just opens a URL</p>
 <p><a href="https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts">https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong></dt>
 <dd>text to display on the button, eg 'Click Me!"</dd>
 <dt><strong><code>url</code></strong></dt>
@@ -740,8 +745,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields</a></p>
 <p>Automatically populate the selector with a list of users in the workspace.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_team_members">https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_team_members</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>Name this specific action. The name will be returned to your
 Action URL along with the message's callback_id when this action is
@@ -957,8 +963,9 @@ value.</dd>
 <p>A supplemental object that will display after the rest of the message.
 Considered legacy - recommended replacement is to use message blocks instead.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>text</code></strong></dt>
 <dd>The main body text of the attachment. It can be formatted as
 plain text, or with markdown by including it in the markdown_in
@@ -1273,8 +1280,9 @@ def ts_without_footer(self) -&gt; bool:
 <p>A bridge between legacy attachments and Block Kit formatting - pass a list of
 Block objects directly to this attachment.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>blocks</code></strong></dt>
 <dd>a sequence of Block objects</dd>
 <dt><strong><code>color</code></strong></dt>
@@ -1483,8 +1491,9 @@ def fields_attribute_absent(self) -&gt; bool:
 Considered legacy - recommended replacement is to use message blocks instead.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#attachment_fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#attachment_fields</a>
 <a href="https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields">https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>actions</code></strong></dt>
 <dd>A collection of Action objects to include in the attachment.
 Cannot exceed 5 elements.</dd>

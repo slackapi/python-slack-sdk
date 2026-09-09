@@ -1,4 +1,4 @@
-"""aiohttp based Socket Mode client
+"""aiohttp based Socket Mode client.
 
 * https://docs.slack.dev/apis/events-api/using-socket-mode/
 * https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
@@ -82,7 +82,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         on_close_listeners: Optional[List[Callable[[WSMessage], Awaitable[None]]]] = None,
         loop: Optional[AbstractEventLoop] = None,
     ):
-        """Socket Mode client
+        """Socket Mode client.
 
         Args:
             app_token: App-level token
@@ -246,7 +246,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                                 self.logger.debug(
                                     f"Received message "
                                     f"(type: {message_type}, "
-                                    f"data: {message_data}, "
+                                    f"data: {repr(message_data)}, "
                                     f"extra: {message.extra}, "
                                     f"session: {session_id})"
                                 )
@@ -349,7 +349,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # a new monitor and a new message receiver are also created.
         # If a new session is created but we failed to create the new
         # monitor or the new message, we should try it.
-        while True:
+        while not self.closed:
             try:
                 old_session: Optional[ClientWebSocketResponse] = (
                     None if self.current_session is None else self.current_session
@@ -405,6 +405,10 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     self.logger.debug(f"A new receive_messages() executor has been recreated for {session_id}")
                 break
             except Exception as e:
+                if self.closed:
+                    if self.logger.level <= logging.DEBUG:
+                        self.logger.debug(f"Stopped connecting because the client is closed (error: {e})")
+                    return
                 self.logger.exception(f"Failed to connect (error: {e}); Retrying...")
                 await asyncio.sleep(self.ping_interval)
 
@@ -435,9 +439,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 if await self.is_connected():
                     await self.current_session.send_str(message)  # type: ignore[union-attr]
                 else:
-                    self.logger.warning(
-                        f"The current session ({session_id}) is no longer active. " "Failed to send a message"
-                    )
+                    self.logger.warning(f"The current session ({session_id}) is no longer active. Failed to send a message")
                     raise e
             finally:
                 if self.connect_operation_lock.locked() is True:

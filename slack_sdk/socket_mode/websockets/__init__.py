@@ -1,4 +1,4 @@
-"""websockets based Socket Mode client
+"""websockets based Socket Mode client.
 
 * https://docs.slack.dev/apis/events-api/using-socket-mode/
 * https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
@@ -88,7 +88,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         ping_interval: float = 10,
         trace_enabled: bool = False,
     ):
-        """Socket Mode client
+        """Socket Mode client.
 
         Args:
             app_token: App-level token

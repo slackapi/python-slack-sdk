@@ -18,7 +18,8 @@ from slack_sdk.models.blocks import (
 
 
 class Action(JsonObject):
-    """Action in attachments
+    """Action in attachments.
+
     https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts
     https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#message_action_fields
     """
@@ -64,7 +65,7 @@ class ActionButton(Action):
         confirm: Optional[ConfirmObject] = None,
         style: Optional[str] = None,
     ):
-        """Simple button for use inside attachments
+        """Simple button for use inside attachments.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-message-buttons/
 
@@ -106,7 +107,7 @@ class ActionButton(Action):
 
 class ActionLinkButton(Action):
     def __init__(self, *, text: str, url: str):
-        """A simple interactive button that just opens a URL
+        """A simple interactive button that just opens a URL.
 
         https://docs.slack.dev/messaging/formatting-message-text/#rich-layouts
 
@@ -168,9 +169,7 @@ class ActionChannelSelector(AbstractActionSelector):
     data_source = "channels"
 
     def __init__(self, name: str, text: str, selected_channel: Optional[Option] = None):
-        """
-        Automatically populate the selector with a list of public channels in the
-        workspace.
+        """Automatically populate the selector with a list of public channels in the workspace.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_channels
 
@@ -190,9 +189,7 @@ class ActionConversationSelector(AbstractActionSelector):
     data_source = "conversations"
 
     def __init__(self, name: str, text: str, selected_conversation: Optional[Option] = None):
-        """
-        Automatically populate the selector with a list of conversations they have in
-        the workspace.
+        """Automatically populate the selector with a list of conversations they have in the workspace.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_conversations
 
@@ -223,8 +220,7 @@ class ActionExternalSelector(AbstractActionSelector):
         selected_option: Optional[Option] = None,
         min_query_length: Optional[int] = None,
     ):
-        """
-        Populate a message select menu from your own application dynamically.
+        """Populate a message select menu from your own application dynamically.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-adding-menus-to-messages/#menu_dynamic
 
@@ -308,8 +304,8 @@ class Attachment(JsonObject):
         footer_icon: Optional[str] = None,
         ts: Optional[int] = None,
     ):
-        """
-        A supplemental object that will display after the rest of the message.
+        """A supplemental object that will display after the rest of the message.
+
         Considered legacy - recommended replacement is to use message blocks instead.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
@@ -440,9 +436,9 @@ class BlockAttachment(Attachment):
         color: Optional[str] = None,
         fallback: Optional[str] = None,
     ):
-        """
-        A bridge between legacy attachments and Block Kit formatting - pass a list of
-        Block objects directly to this attachment.
+        """A bridge between legacy attachments and Block Kit formatting.
+
+        Pass a list of Block objects directly to this attachment.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-secondary-message-attachments#fields
 
@@ -497,8 +493,8 @@ class InteractiveAttachment(Attachment):
         footer_icon: Optional[str] = None,
         ts: Optional[int] = None,
     ):
-        """
-        An Attachment, but designed to contain interactive Actions
+        """An Attachment, but designed to contain interactive Actions.
+
         Considered legacy - recommended replacement is to use message blocks instead.
 
         https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#attachment_fields
