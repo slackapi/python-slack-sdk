@@ -1361,6 +1361,40 @@ class RichTextBlockTests(unittest.TestCase):
 
 
 # ----------------------------------------------
+# RawNumberObject
+# ----------------------------------------------
+
+
+class RawNumberObjectTests(unittest.TestCase):
+    def test_basic_creation(self):
+        """Test basic RawNumberObject creation"""
+        obj = RawNumberObject(value=120, text="120")
+        expected = {"type": "raw_number", "value": 120, "text": "120"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_float_value(self):
+        """Test RawNumberObject accepts a float value"""
+        obj = RawNumberObject(value=3.14, text="3.14")
+        expected = {"type": "raw_number", "value": 3.14, "text": "3.14"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_text_length_validation_min(self):
+        """Test that empty text fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            RawNumberObject(value=0, text="").to_dict()
+
+    def test_text_length_validation_at_min(self):
+        """Test that text with 1 character passes validation"""
+        obj = RawNumberObject(value=1, text="1")
+        obj.to_dict()  # Should not raise
+
+    def test_attributes(self):
+        """Test that RawNumberObject only has value, text, and type attributes"""
+        obj = RawNumberObject(value=1, text="1")
+        self.assertEqual(obj.attributes, {"value", "text", "type"})
+
+
+# ----------------------------------------------
 # RawTextObject
 # ----------------------------------------------
 
@@ -1400,40 +1434,6 @@ class RawTextObjectTests(unittest.TestCase):
         self.assertEqual(obj.attributes, {"text", "type"})
         # Should not have emoji attribute like PlainTextObject
         self.assertNotIn("emoji", obj.to_dict())
-
-
-# ----------------------------------------------
-# RawNumberObject
-# ----------------------------------------------
-
-
-class RawNumberObjectTests(unittest.TestCase):
-    def test_basic_creation(self):
-        """Test basic RawNumberObject creation"""
-        obj = RawNumberObject(value=120, text="120")
-        expected = {"type": "raw_number", "value": 120, "text": "120"}
-        self.assertDictEqual(expected, obj.to_dict())
-
-    def test_float_value(self):
-        """Test RawNumberObject accepts a float value"""
-        obj = RawNumberObject(value=3.14, text="3.14")
-        expected = {"type": "raw_number", "value": 3.14, "text": "3.14"}
-        self.assertDictEqual(expected, obj.to_dict())
-
-    def test_text_length_validation_min(self):
-        """Test that empty text fails validation"""
-        with self.assertRaises(SlackObjectFormationError):
-            RawNumberObject(value=0, text="").to_dict()
-
-    def test_text_length_validation_at_min(self):
-        """Test that text with 1 character passes validation"""
-        obj = RawNumberObject(value=1, text="1")
-        obj.to_dict()  # Should not raise
-
-    def test_attributes(self):
-        """Test that RawNumberObject only has value, text, and type attributes"""
-        obj = RawNumberObject(value=1, text="1")
-        self.assertEqual(obj.attributes, {"value", "text", "type"})
 
 
 # ----------------------------------------------
@@ -1658,102 +1658,6 @@ class TableBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(expected, block.to_dict())
-
-
-class DataTableBlockTests(unittest.TestCase):
-    def test_document(self):
-        """Test basic data table block from Slack documentation example"""
-        input = {
-            "type": "data_table",
-            "caption": "Quarterly sales by region",
-            "rows": [
-                [{"type": "raw_text", "text": "Region"}, {"type": "raw_text", "text": "Sales"}],
-                [{"type": "raw_text", "text": "West"}, {"type": "raw_number", "value": 120, "text": "120"}],
-                [{"type": "raw_text", "text": "East"}, {"type": "raw_number", "value": 95, "text": "95"}],
-            ],
-        }
-        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
-        self.assertDictEqual(input, Block.parse(input).to_dict())
-
-    def test_all_fields(self):
-        """Test data table block with every optional field set"""
-        input = {
-            "type": "data_table",
-            "block_id": "data-table-123",
-            "caption": "User directory",
-            "page_size": 25,
-            "row_header_column_index": 1,
-            "rows": [
-                [{"type": "raw_text", "text": "ID"}, {"type": "raw_text", "text": "Name"}],
-                [{"type": "raw_number", "value": 1, "text": "1"}, {"type": "raw_text", "text": "Alice"}],
-            ],
-        }
-        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
-        self.assertDictEqual(input, Block.parse(input).to_dict())
-
-    def test_with_rich_text(self):
-        """Test data table block with rich_text cells"""
-        input = {
-            "type": "data_table",
-            "caption": "Links",
-            "rows": [
-                [{"type": "raw_text", "text": "Site"}],
-                [
-                    {
-                        "type": "rich_text",
-                        "elements": [
-                            {
-                                "type": "rich_text_section",
-                                "elements": [{"text": "Slack", "type": "link", "url": "https://slack.com"}],
-                            }
-                        ],
-                    },
-                ],
-            ],
-        }
-        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
-        self.assertDictEqual(input, Block.parse(input).to_dict())
-
-    def test_with_cell_object_helpers(self):
-        """Test data table block built from RawTextObject and RawNumberObject helpers"""
-        block = DataTableBlock(
-            caption="Quarterly sales by region",
-            rows=[
-                [RawTextObject(text="Region").to_dict(), RawTextObject(text="Sales").to_dict()],
-                [RawTextObject(text="West").to_dict(), RawNumberObject(value=120, text="120").to_dict()],
-                [RawTextObject(text="East").to_dict(), RawNumberObject(value=95, text="95").to_dict()],
-            ],
-        )
-        expected = {
-            "type": "data_table",
-            "caption": "Quarterly sales by region",
-            "rows": [
-                [{"type": "raw_text", "text": "Region"}, {"type": "raw_text", "text": "Sales"}],
-                [{"type": "raw_text", "text": "West"}, {"type": "raw_number", "value": 120, "text": "120"}],
-                [{"type": "raw_text", "text": "East"}, {"type": "raw_number", "value": 95, "text": "95"}],
-            ],
-        }
-        self.assertDictEqual(expected, block.to_dict())
-
-    def test_rows_validation(self):
-        """Test that empty rows fail validation"""
-        with self.assertRaises(SlackObjectFormationError):
-            DataTableBlock(caption="empty", rows=[]).to_dict()
-
-    def test_caption_required(self):
-        """Test that DataTableBlock requires a caption argument"""
-        with self.assertRaises(TypeError):
-            DataTableBlock(rows=[[{"type": "raw_text", "text": "A"}]])
-
-    def test_page_size_validation(self):
-        """Test that page_size outside the allowed range fails validation"""
-        rows = [[{"type": "raw_text", "text": "A"}], [{"type": "raw_text", "text": "B"}]]
-        with self.assertRaises(SlackObjectFormationError):
-            DataTableBlock(caption="too small", rows=rows, page_size=0).to_dict()
-        with self.assertRaises(SlackObjectFormationError):
-            DataTableBlock(caption="too big", rows=rows, page_size=101).to_dict()
-        # A valid page_size should pass
-        DataTableBlock(caption="ok", rows=rows, page_size=50).to_dict()
 
 
 class CardBlockTests(unittest.TestCase):
@@ -2055,3 +1959,99 @@ class CarouselBlockTests(unittest.TestCase):
     def test_empty_elements_validation(self):
         with self.assertRaises(SlackObjectFormationError):
             CarouselBlock(elements=[]).validate_json()
+
+
+class DataTableBlockTests(unittest.TestCase):
+    def test_document(self):
+        """Test basic data table block from Slack documentation example"""
+        input = {
+            "type": "data_table",
+            "caption": "Quarterly sales by region",
+            "rows": [
+                [{"type": "raw_text", "text": "Region"}, {"type": "raw_text", "text": "Sales"}],
+                [{"type": "raw_text", "text": "West"}, {"type": "raw_number", "value": 120, "text": "120"}],
+                [{"type": "raw_text", "text": "East"}, {"type": "raw_number", "value": 95, "text": "95"}],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_all_fields(self):
+        """Test data table block with every optional field set"""
+        input = {
+            "type": "data_table",
+            "block_id": "data-table-123",
+            "caption": "User directory",
+            "page_size": 25,
+            "row_header_column_index": 1,
+            "rows": [
+                [{"type": "raw_text", "text": "ID"}, {"type": "raw_text", "text": "Name"}],
+                [{"type": "raw_number", "value": 1, "text": "1"}, {"type": "raw_text", "text": "Alice"}],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_rich_text(self):
+        """Test data table block with rich_text cells"""
+        input = {
+            "type": "data_table",
+            "caption": "Links",
+            "rows": [
+                [{"type": "raw_text", "text": "Site"}],
+                [
+                    {
+                        "type": "rich_text",
+                        "elements": [
+                            {
+                                "type": "rich_text_section",
+                                "elements": [{"text": "Slack", "type": "link", "url": "https://slack.com"}],
+                            }
+                        ],
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_cell_object_helpers(self):
+        """Test data table block built from RawTextObject and RawNumberObject helpers"""
+        block = DataTableBlock(
+            caption="Quarterly sales by region",
+            rows=[
+                [RawTextObject(text="Region").to_dict(), RawTextObject(text="Sales").to_dict()],
+                [RawTextObject(text="West").to_dict(), RawNumberObject(value=120, text="120").to_dict()],
+                [RawTextObject(text="East").to_dict(), RawNumberObject(value=95, text="95").to_dict()],
+            ],
+        )
+        expected = {
+            "type": "data_table",
+            "caption": "Quarterly sales by region",
+            "rows": [
+                [{"type": "raw_text", "text": "Region"}, {"type": "raw_text", "text": "Sales"}],
+                [{"type": "raw_text", "text": "West"}, {"type": "raw_number", "value": 120, "text": "120"}],
+                [{"type": "raw_text", "text": "East"}, {"type": "raw_number", "value": 95, "text": "95"}],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_rows_validation(self):
+        """Test that empty rows fail validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="empty", rows=[]).to_dict()
+
+    def test_caption_required(self):
+        """Test that DataTableBlock requires a caption argument"""
+        with self.assertRaises(TypeError):
+            DataTableBlock(rows=[[{"type": "raw_text", "text": "A"}]])
+
+    def test_page_size_validation(self):
+        """Test that page_size outside the allowed range fails validation"""
+        rows = [[{"type": "raw_text", "text": "A"}], [{"type": "raw_text", "text": "B"}]]
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="too small", rows=rows, page_size=0).to_dict()
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="too big", rows=rows, page_size=101).to_dict()
+        # A valid page_size should pass
+        DataTableBlock(caption="ok", rows=rows, page_size=50).to_dict()
