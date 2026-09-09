@@ -10,6 +10,7 @@ from ...errors import SlackObjectFormationError
 from .basic_components import (
     MarkdownTextObject,
     PlainTextObject,
+    RawNumberObject,
     RawTextObject,
     SlackFile,
     TableBlockColumnSettings,
@@ -778,7 +779,7 @@ class TableBlock(Block):
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RichTextBlock"]]],
+        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RawNumberObject", "RichTextBlock"]]],
         column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]]] = None,
         block_id: Optional[str] = None,
         **others: dict,
@@ -790,7 +791,7 @@ class TableBlock(Block):
         Args:
             rows (required): An array consisting of table rows. Maximum 100 rows.
                 Each row object is an array with a max of 20 table cells.
-                Table cells can have a type of raw_text or rich_text.
+                Table cells can have a type of rich_text, raw_text, or raw_number.
             column_settings: An array describing column behavior. If there are fewer items in the column_settings array
                 than there are columns in the table, then the items in the the column_settings array will describe
                 the same number of columns in the table as there are in the array itself.
