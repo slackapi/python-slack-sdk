@@ -186,6 +186,30 @@ class RawTextObject(TextObject):
         return len(self.text) >= 1
 
 
+class RawNumberObject(JsonObject):
+    """raw_number typed object."""
+
+    type = "raw_number"
+    attributes = {"value", "text", "type"}
+    logger = logging.getLogger(__name__)
+
+    def __init__(self, *, value: Union[int, float], text: str):
+        """Defines an object containing a numeric value.
+
+        https://docs.slack.dev/reference/block-kit/blocks/data-table-block
+
+        Args:
+            value (required): The numeric value.
+            text (required): The text used to display the value. The minimum length is 1 character.
+        """
+        self.value = value
+        self.text = text
+
+    @JsonValidator("text attribute must have at least 1 character")
+    def _validate_text_min_length(self):
+        return len(self.text) >= 1
+
+
 class TableBlockColumnSettings(JsonObject):
     """Column settings for TableBlock columns."""
 

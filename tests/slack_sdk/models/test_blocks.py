@@ -27,6 +27,7 @@ from slack_sdk.models.blocks import (
     OverflowMenuElement,
     PlainTextObject,
     PlanBlock,
+    RawNumberObject,
     RawTextObject,
     RichTextBlock,
     RichTextElementParts,
@@ -1402,6 +1403,40 @@ class RawTextObjectTests(unittest.TestCase):
 
 
 # ----------------------------------------------
+# RawNumberObject
+# ----------------------------------------------
+
+
+class RawNumberObjectTests(unittest.TestCase):
+    def test_basic_creation(self):
+        """Test basic RawNumberObject creation"""
+        obj = RawNumberObject(value=120, text="120")
+        expected = {"type": "raw_number", "value": 120, "text": "120"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_float_value(self):
+        """Test RawNumberObject accepts a float value"""
+        obj = RawNumberObject(value=3.14, text="3.14")
+        expected = {"type": "raw_number", "value": 3.14, "text": "3.14"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_text_length_validation_min(self):
+        """Test that empty text fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            RawNumberObject(value=0, text="").to_dict()
+
+    def test_text_length_validation_at_min(self):
+        """Test that text with 1 character passes validation"""
+        obj = RawNumberObject(value=1, text="1")
+        obj.to_dict()  # Should not raise
+
+    def test_attributes(self):
+        """Test that RawNumberObject only has value, text, and type attributes"""
+        obj = RawNumberObject(value=1, text="1")
+        self.assertEqual(obj.attributes, {"value", "text", "type"})
+
+
+# ----------------------------------------------
 # Table
 # ----------------------------------------------
 
@@ -1678,6 +1713,27 @@ class DataTableBlockTests(unittest.TestCase):
         }
         self.assertDictEqual(input, DataTableBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_cell_object_helpers(self):
+        """Test data table block built from RawTextObject and RawNumberObject helpers"""
+        block = DataTableBlock(
+            caption="Quarterly sales by region",
+            rows=[
+                [RawTextObject(text="Region").to_dict(), RawTextObject(text="Sales").to_dict()],
+                [RawTextObject(text="West").to_dict(), RawNumberObject(value=120, text="120").to_dict()],
+                [RawTextObject(text="East").to_dict(), RawNumberObject(value=95, text="95").to_dict()],
+            ],
+        )
+        expected = {
+            "type": "data_table",
+            "caption": "Quarterly sales by region",
+            "rows": [
+                [{"type": "raw_text", "text": "Region"}, {"type": "raw_text", "text": "Sales"}],
+                [{"type": "raw_text", "text": "West"}, {"type": "raw_number", "value": 120, "text": "120"}],
+                [{"type": "raw_text", "text": "East"}, {"type": "raw_number", "value": 95, "text": "95"}],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
 
     def test_rows_validation(self):
         """Test that empty rows fail validation"""

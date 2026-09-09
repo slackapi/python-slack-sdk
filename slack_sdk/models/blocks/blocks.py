@@ -10,6 +10,7 @@ from ...errors import SlackObjectFormationError
 from .basic_components import (
     MarkdownTextObject,
     PlainTextObject,
+    RawNumberObject,
     RawTextObject,
     SlackFile,
     TableBlockColumnSettings,
@@ -1162,8 +1163,6 @@ class CarouselBlock(Block):
 
 class DataTableBlock(Block):
     type = "data_table"
-    rows_max_length = 101
-    columns_max_length = 20
     page_size_min = 1
     page_size_max = 100
 
@@ -1174,25 +1173,25 @@ class DataTableBlock(Block):
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Dict[str, Any]]],
+        rows: Sequence[Sequence[Union[RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any]]]],
         caption: str,
         page_size: Optional[int] = None,
         row_header_column_index: Optional[int] = None,
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        """Displays structured, paginated data in a table with a required caption.
+        """Displays rich tables that support pagination, sorting, filtering, and interactivity.
+
         https://docs.slack.dev/reference/block-kit/blocks/data-table-block
 
         Args:
-            rows (required): An array consisting of table rows. Minimum 2 rows (header plus one data row)
-                and maximum 101 rows (header plus 100 data rows). All rows must have an identical column
-                count, with a maximum of 20 columns. Each cell has a type of raw_text, raw_number, or
-                rich_text. The total character limit across all cells is 10,000.
+            rows (required): An array consisting of table rows. Each cell has a type of raw_text,
+                raw_number, or rich_text.
             caption (required): A caption for the table; used as the value for the HTML caption element.
-            page_size: The number of rows to show per page. Min 1, Max 100. Defaults to 5 if omitted.
+            page_size: Number of rows per page. Min 1, Max 100. Defaults to 5 if omitted.
             row_header_column_index: The 0-based index of the column that uniquely identifies each row
-                (the row header). Defaults to 0 if omitted.
+                (the row header). This column is treated as the row's primary identifier for screen readers.
+                Defaults to 0 if omitted.
             block_id: A unique identifier for a block. If not specified, a block_id will be generated.
                 You can use this block_id when you receive an interaction payload to identify the source
                 of the action. Maximum length for this field is 255 characters.
