@@ -1,4 +1,9 @@
+import asyncio
+import logging
 import unittest
+from unittest.mock import MagicMock
+
+from websockets.exceptions import WebSocketException
 
 from slack_sdk.socket_mode.websockets import SocketModeClient
 from slack_sdk.web.async_client import AsyncWebClient
@@ -73,3 +78,49 @@ class TestAiohttp(unittest.TestCase):
 
 async def listener(message, raw_message):
     pass
+
+
+class _LockProbeClient(SocketModeClient):
+    """Just enough state for send_message(), with no real connection."""
+
+    def __init__(self):
+        self.connect_operation_lock = asyncio.Lock()
+        self.logger = logging.getLogger(__name__)
+        self.closed = False
+        self.current_session = MagicMock()
+
+    async def is_connected(self) -> bool:
+        return True
+
+    @classmethod
+    def build_session_id(cls, session) -> str:
+        return "test-session"
+
+
+class TestWebsocketsSendMessageLock(unittest.TestCase):
+    @async_test
+    async def test_send_message_leaves_another_tasks_lock_alone(self):
+        client = _LockProbeClient()
+
+        async def send(message):
+            raise WebSocketException("the underlying connection was replaced")
+
+        client.current_session.send = send
+
+        # Stand in for a reconnect holding the lock for the whole call.
+        await client.connect_operation_lock.acquire()
+
+        task = asyncio.ensure_future(client.send_message("hello"))
+        await asyncio.sleep(0.1)
+
+        task.cancel()
+        try:
+            await task
+        except (asyncio.CancelledError, WebSocketException):
+            pass
+
+        self.assertTrue(
+            client.connect_operation_lock.locked(),
+            "send_message() released the connect lock held by another task",
+        )
+        client.connect_operation_lock.release()
