@@ -1360,6 +1360,40 @@ class RichTextBlockTests(unittest.TestCase):
 
 
 # ----------------------------------------------
+# RawNumberObject
+# ----------------------------------------------
+
+
+class RawNumberObjectTests(unittest.TestCase):
+    def test_basic_creation(self):
+        """Test basic RawNumberObject creation"""
+        obj = RawNumberObject(value=42, text="42")
+        expected = {"type": "raw_number", "value": 42, "text": "42"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_float_value(self):
+        """Test RawNumberObject accepts a float value"""
+        obj = RawNumberObject(value=3.14, text="3.14")
+        expected = {"type": "raw_number", "value": 3.14, "text": "3.14"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_text_length_validation_min(self):
+        """Test that empty text fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            RawNumberObject(value=0, text="").to_dict()
+
+    def test_text_length_validation_at_min(self):
+        """Test that text with 1 character passes validation"""
+        obj = RawNumberObject(value=1, text="1")
+        obj.to_dict()  # Should not raise
+
+    def test_attributes(self):
+        """Test that RawNumberObject only has value, text, and type attributes"""
+        obj = RawNumberObject(value=42, text="42")
+        self.assertEqual(obj.attributes, {"value", "text", "type"})
+
+
+# ----------------------------------------------
 # RawTextObject
 # ----------------------------------------------
 
@@ -1399,40 +1433,6 @@ class RawTextObjectTests(unittest.TestCase):
         self.assertEqual(obj.attributes, {"text", "type"})
         # Should not have emoji attribute like PlainTextObject
         self.assertNotIn("emoji", obj.to_dict())
-
-
-# ----------------------------------------------
-# RawNumberObject
-# ----------------------------------------------
-
-
-class RawNumberObjectTests(unittest.TestCase):
-    def test_basic_creation(self):
-        """Test basic RawNumberObject creation"""
-        obj = RawNumberObject(value=42, text="42")
-        expected = {"type": "raw_number", "value": 42, "text": "42"}
-        self.assertDictEqual(expected, obj.to_dict())
-
-    def test_float_value(self):
-        """Test RawNumberObject accepts a float value"""
-        obj = RawNumberObject(value=3.14, text="3.14")
-        expected = {"type": "raw_number", "value": 3.14, "text": "3.14"}
-        self.assertDictEqual(expected, obj.to_dict())
-
-    def test_text_length_validation_min(self):
-        """Test that empty text fails validation"""
-        with self.assertRaises(SlackObjectFormationError):
-            RawNumberObject(value=0, text="").to_dict()
-
-    def test_text_length_validation_at_min(self):
-        """Test that text with 1 character passes validation"""
-        obj = RawNumberObject(value=1, text="1")
-        obj.to_dict()  # Should not raise
-
-    def test_attributes(self):
-        """Test that RawNumberObject only has value, text, and type attributes"""
-        obj = RawNumberObject(value=42, text="42")
-        self.assertEqual(obj.attributes, {"value", "text", "type"})
 
 
 # ----------------------------------------------
