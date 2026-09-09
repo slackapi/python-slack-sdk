@@ -1193,10 +1193,6 @@ class DataTableBlock(Block):
                 (the row header). This column is treated as the row's primary identifier for screen readers.
                 Defaults to 0 if omitted.
             block_id: A unique identifier for a block. If not specified, a block_id will be generated.
-                You can use this block_id when you receive an interaction payload to identify the source
-                of the action. Maximum length for this field is 255 characters.
-                block_id should be unique for each message and each iteration of a message.
-                If a message is updated, use a new block_id.
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
