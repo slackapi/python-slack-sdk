@@ -4,7 +4,7 @@ import json
 import os
 import warnings
 from io import IOBase
-from typing import Any, Dict, List, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
 from slack_sdk.models.messages.chunk import Chunk
@@ -24,6 +24,21 @@ from .internal_utils import (
     _validate_for_legacy_client,
     _warn_if_message_text_content_is_missing,
 )
+
+if TYPE_CHECKING:
+    try:
+        from typing import Literal, TypedDict
+    except ImportError:
+        from typing_extensions import Literal, TypedDict
+
+    class AdminAppsConfigSetDomainRestrictions(TypedDict, total=False):
+        urls: Sequence[str]
+        emails: Sequence[str]
+
+    AdminAppsConfigSetWorkflowAuthStrategy = Literal["builder_choice", "end_user_strategy"]
+else:
+    AdminAppsConfigSetDomainRestrictions = Dict[str, Any]
+    AdminAppsConfigSetWorkflowAuthStrategy = str
 
 
 class WebClient(BaseClient):
@@ -365,8 +380,8 @@ class WebClient(BaseClient):
         self,
         *,
         app_id: str,
-        domain_restrictions: Optional[Dict[str, Any]] = None,
-        workflow_auth_strategy: Optional[str] = None,
+        domain_restrictions: Optional[AdminAppsConfigSetDomainRestrictions] = None,
+        workflow_auth_strategy: Optional[AdminAppsConfigSetWorkflowAuthStrategy] = None,
         **kwargs,
     ) -> SlackResponse:
         """Set the app config for a connector.

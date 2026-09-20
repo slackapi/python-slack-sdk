@@ -127,8 +127,19 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(app_ids=["A111"])["method"])
                 await async_method(app_ids=["A111"])
             elif method_name == "admin_apps_config_set":
-                self.api_methods_to_call.remove(method(app_id="A111")["method"])
-                await async_method(app_id="A111")
+                domain_restrictions = {"urls": ["https://example.com"], "emails": ["admin@example.com"]}
+                self.api_methods_to_call.remove(
+                    method(
+                        app_id="A111",
+                        domain_restrictions=domain_restrictions,
+                        workflow_auth_strategy="builder_choice",
+                    )["method"]
+                )
+                await async_method(
+                    app_id="A111",
+                    domain_restrictions=domain_restrictions,
+                    workflow_auth_strategy="end_user_strategy",
+                )
             elif method_name == "admin_auth_policy_getEntities":
                 self.api_methods_to_call.remove(method(policy_name="policyname")["method"])
                 await async_method(policy_name="policyname")
