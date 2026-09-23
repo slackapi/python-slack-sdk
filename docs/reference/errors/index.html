@@ -97,13 +97,15 @@ being used for a Slack API method that only accepts 'xoxp-</em>' tokens.</p></di
         super(SlackApiError, self).__init__(msg)</code></pre>
 </details>
 <div class="desc"><p>Error raised when Slack does not send the expected response.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>response</code></strong> :&ensp;<code>SlackResponse</code></dt>
 <dd>The SlackResponse object containing all of the data sent back from the API.</dd>
 </dl>
-<h2 id="note">Note</h2>
-<p>The message (str) passed into the exception is used when
+<p>Note
+-----=
+The message (str) passed into the exception is used when
 a user converts the exception to a str.
 i.e. str(SlackApiError("This text will be sent as a string."))</p></div>
 <h3>Ancestors</h3>

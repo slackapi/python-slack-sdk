@@ -614,8 +614,9 @@ el.replaceWith(d);
 link callbacks to their corresponding events. When an event occurs
 this client executes your callback while passing along any
 information it receives.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>token</code></strong> :&ensp;<code>str</code></dt>
 <dd>A string specifying an xoxp or xoxb token.</dd>
 <dt><strong><code>run_async</code></strong> :&ensp;<code>bool</code></dt>
@@ -653,8 +654,9 @@ Default is 30.</dd>
 If None is specified we attempt to use the current loop
 with <code>get_event_loop</code>. Default is None.</dd>
 </dl>
-<h2 id="methods">Methods</h2>
-<p>ping: Sends a ping message over the websocket to Slack.
+<p>Methods
+-----=
+ping: Sends a ping message over the websocket to Slack.
 typing: Sends a typing indicator to the specified channel.
 on: Stores and links callbacks to websocket and Slack events.
 run_on: Decorator that stores and links callbacks to websocket and Slack events.
@@ -683,8 +685,9 @@ slack_token = os.environ[&quot;SLACK_API_TOKEN&quot;]
 rtm_client = RTMClient(token=slack_token)
 rtm_client.start()
 </code></pre>
-<h2 id="note">Note</h2>
-<p>The initial state returned when establishing an RTM connection will
+<p>Note
+-----=
+The initial state returned when establishing an RTM connection will
 be available as the data in payload for the 'open' event. This data is not and
 will not be stored on the RTM Client.</p>
 <p>Any attributes or methods prefixed with _underscores are
@@ -697,8 +700,9 @@ removed at anytime.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p>Stores and links the callback(s) to the event.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>event</code></strong> :&ensp;<code>str</code></dt>
 <dd>A string that specifies a Slack or websocket event.
 e.g. 'channel_joined' or 'open'</dd>
@@ -706,9 +710,8 @@ e.g. 'channel_joined' or 'open'</dd>
 <dd>Any object or a list of objects that can be called.
 e.g. <function say_hello at 0x101234567> or
 [<function say_hello at 0x10123>,<function say_bye at 0x10456>]</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackClientError</code></dt>
 <dd>The specified callback is not callable.</dd>
 <dt><code>SlackClientError</code></dt>
@@ -779,8 +782,9 @@ def run_on(*, event: str):
 <div class="desc"><p>Sends a ping message over the websocket to Slack.</p>
 <p>Not all web browsers support the WebSocket ping spec,
 so the RTM protocol also supports ping/pong messages.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackClientNotConnectedError</code></dt>
 <dd>Websocket connection is closed.</dd>
 </dl></div>
@@ -820,15 +824,17 @@ so the RTM protocol also supports ping/pong messages.</p>
     return asyncio.ensure_future(self._send_json(payload), loop=self._event_loop)</code></pre>
 </details>
 <div class="desc"><p>Sends a message to Slack over the WebSocket connection.</p>
-<h2 id="note">Note</h2>
-<p>The RTM API only supports posting simple messages formatted using
+<p>Note
+-----=
+The RTM API only supports posting simple messages formatted using
 our default message formatting mode. It does not support
 attachments or other message formatting modes. For this reason
 we recommend users send messages via the Web API methods.
 e.g. web_client.chat_postMessage()</p>
 <p>If the message "id" is not specified in the payload, it'll be added.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>payload</code></strong> :&ensp;<code>dict</code></dt>
 <dd>The message to send over the wesocket.</dd>
 </dl>
@@ -838,8 +844,9 @@ e.g. web_client.chat_postMessage()</p>
 "type": "typing",
 "channel": "C024BE91L"
 }</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackClientNotConnectedError</code></dt>
 <dd>Websocket connection is closed.</dd>
 </dl></div>
@@ -887,8 +894,9 @@ on the client.</p>
 <p>If 'auto_reconnect' is specified we
 retrieve a new url and reconnect any time the connection
 is lost unintentionally or an exception is thrown.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackApiError</code></dt>
 <dd>Unable to retrieve RTM URL from Slack.</dd>
 </dl></div>
@@ -946,13 +954,13 @@ coroutine 'ClientWebSocketResponse.close' was never awaited self._ready.clear()<
 <div class="desc"><p>Sends a typing indicator to the specified channel.</p>
 <p>This indicates that this app is currently
 writing a message to send to a channel.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>channel</code></strong> :&ensp;<code>str</code></dt>
 <dd>The channel id. e.g. 'C024BE91L'</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackClientNotConnectedError</code></dt>
 <dd>Websocket connection is closed.</dd>
 </dl></div>

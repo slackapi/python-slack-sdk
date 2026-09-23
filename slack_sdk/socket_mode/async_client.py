@@ -168,8 +168,5 @@ class AsyncBaseSocketModeClient:
         finally:
             if self.logger.level <= logging.DEBUG:
                 self.logger.debug(
-                    f"Message processing completed ("
-                    f"type: {type}, "
-                    f"envelope_id: {envelope_id}, "
-                    f"session: {session_id})"
+                    f"Message processing completed (type: {type}, envelope_id: {envelope_id}, session: {session_id})"
                 )

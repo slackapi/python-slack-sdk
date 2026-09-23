@@ -1953,6 +1953,58 @@ el.replaceWith(d);
             kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
         return self.api_call(&#34;admin.workflows.unpublish&#34;, params=kwargs)
 
+    def agents_sessions_rename(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Rename an agent session.
+        https://docs.slack.dev/reference/methods/agents.sessions.rename
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;title&#34;: title,
+                &#34;thread_ts&#34;: thread_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.sessions.rename&#34;, json=kwargs)
+
+    def agents_sessions_setStatus(
+        self,
+        *,
+        channel_id: str,
+        status: str,
+        thread_ts: Optional[str] = None,
+        title: Optional[str] = None,
+        initiator_user_id: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Set an agent session&#39;s lifecycle status, creating the session if needed.
+        https://docs.slack.dev/reference/methods/agents.sessions.setStatus
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;status&#34;: status,
+                &#34;thread_ts&#34;: thread_ts,
+                &#34;title&#34;: title,
+                &#34;initiator_user_id&#34;: initiator_user_id,
+                &#34;icon_emoji&#34;: icon_emoji,
+                &#34;icon_url&#34;: icon_url,
+                &#34;username&#34;: username,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.sessions.setStatus&#34;, json=kwargs)
+
     def api_test(
         self,
         *,
@@ -2199,6 +2251,32 @@ el.replaceWith(d);
         &#34;&#34;&#34;
         kwargs.update({&#34;cursor&#34;: cursor, &#34;limit&#34;: limit, &#34;include_icon&#34;: include_icon})
         return self.api_call(&#34;auth.teams.list&#34;, params=kwargs)
+
+    def blocks_validate(
+        self,
+        *,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        message: Optional[Union[str, Dict]] = None,
+        view: Optional[Union[str, Dict, View]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Validates an array of blocks, or a message or view payload.
+        Provide exactly one of ``blocks``, ``message``, or ``view``.
+        https://docs.slack.dev/reference/methods/blocks.validate
+        &#34;&#34;&#34;
+        if blocks is not None:
+            if isinstance(blocks, str):
+                kwargs.update({&#34;blocks&#34;: blocks})
+            else:
+                kwargs.update({&#34;blocks&#34;: json.dumps([b.to_dict() if isinstance(b, Block) else b for b in blocks])})
+        if message is not None:
+            kwargs.update({&#34;message&#34;: message if isinstance(message, str) else json.dumps(message)})
+        if view is not None:
+            if isinstance(view, View):
+                kwargs.update({&#34;view&#34;: json.dumps(view.to_dict())})
+            else:
+                kwargs.update({&#34;view&#34;: view if isinstance(view, str) else json.dumps(view)})
+        return self.api_call(&#34;blocks.validate&#34;, params=kwargs)
 
     def bookmarks_add(
         self,
@@ -2971,6 +3049,7 @@ el.replaceWith(d);
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        session_status: Optional[str] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Stops a streaming conversation.
@@ -2984,6 +3063,7 @@ el.replaceWith(d);
                 &#34;blocks&#34;: blocks,
                 &#34;metadata&#34;: metadata,
                 &#34;chunks&#34;: chunks,
+                &#34;session_status&#34;: session_status,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -6040,8 +6120,9 @@ el.replaceWith(d);
 and enacting change in a Slack workspace.</p>
 <p>This client handles constructing and sending HTTP requests to Slack
 as well as parsing any responses received into a <code>SlackResponse</code>.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>token</code></strong> :&ensp;<code>str</code></dt>
 <dd>A string specifying an <code>xoxp-*</code> or <code>xoxb-*</code> token.</dd>
 <dt><strong><code>base_url</code></strong> :&ensp;<code>str</code></dt>
@@ -6063,8 +6144,9 @@ present, they will be loaded into this parameter: <code>HTTPS_PROXY</code>,
 <dt><strong><code>headers</code></strong> :&ensp;<code>dict</code></dt>
 <dd>Additional request headers to attach to all requests.</dd>
 </dl>
-<h2 id="methods">Methods</h2>
-<p><code>api_call</code>: Constructs a request and executes the API call to Slack.</p>
+<p>Methods
+-----=
+<code>api_call</code>: Constructs a request and executes the API call to Slack.</p>
 <p>Example of recommended usage:</p>
 <pre><code class="language-python">    import os
     from slack_sdk import WebClient
@@ -6088,8 +6170,9 @@ present, they will be loaded into this parameter: <code>HTTPS_PROXY</code>,
     assert response[&quot;ok&quot;]
     assert response[&quot;message&quot;][&quot;text&quot;] == &quot;Hello world!&quot;
 </code></pre>
-<h2 id="note">Note</h2>
-<p>Any attributes or methods prefixed with _underscores are
+<p>Note
+-----=
+Any attributes or methods prefixed with _underscores are
 intended to be "private" internal use only. They may be changed or
 removed at anytime.</p></div>
 <h3>Ancestors</h3>
@@ -9023,6 +9106,80 @@ presented as a zipped CSV file.
 <div class="desc"><p>Unpublish workflows within the team or enterprise
 <a href="https://docs.slack.dev/reference/methods/admin.workflows.unpublish">https://docs.slack.dev/reference/methods/admin.workflows.unpublish</a></p></div>
 </dd>
+<dt id="slack_sdk.web.client.WebClient.agents_sessions_rename"><code class="name flex">
+<span>def <span class="ident">agents_sessions_rename</span></span>(<span>self, *, channel_id: str, title: str, thread_ts: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_sessions_rename(
+    self,
+    *,
+    channel_id: str,
+    title: str,
+    thread_ts: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Rename an agent session.
+    https://docs.slack.dev/reference/methods/agents.sessions.rename
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel_id&#34;: channel_id,
+            &#34;title&#34;: title,
+            &#34;thread_ts&#34;: thread_ts,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.sessions.rename&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Rename an agent session.
+<a href="https://docs.slack.dev/reference/methods/agents.sessions.rename">https://docs.slack.dev/reference/methods/agents.sessions.rename</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_sessions_setStatus"><code class="name flex">
+<span>def <span class="ident">agents_sessions_setStatus</span></span>(<span>self,<br>*,<br>channel_id: str,<br>status: str,<br>thread_ts: str | None = None,<br>title: str | None = None,<br>initiator_user_id: str | None = None,<br>icon_emoji: str | None = None,<br>icon_url: str | None = None,<br>username: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_sessions_setStatus(
+    self,
+    *,
+    channel_id: str,
+    status: str,
+    thread_ts: Optional[str] = None,
+    title: Optional[str] = None,
+    initiator_user_id: Optional[str] = None,
+    icon_emoji: Optional[str] = None,
+    icon_url: Optional[str] = None,
+    username: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Set an agent session&#39;s lifecycle status, creating the session if needed.
+    https://docs.slack.dev/reference/methods/agents.sessions.setStatus
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel_id&#34;: channel_id,
+            &#34;status&#34;: status,
+            &#34;thread_ts&#34;: thread_ts,
+            &#34;title&#34;: title,
+            &#34;initiator_user_id&#34;: initiator_user_id,
+            &#34;icon_emoji&#34;: icon_emoji,
+            &#34;icon_url&#34;: icon_url,
+            &#34;username&#34;: username,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.sessions.setStatus&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Set an agent session's lifecycle status, creating the session if needed.
+<a href="https://docs.slack.dev/reference/methods/agents.sessions.setStatus">https://docs.slack.dev/reference/methods/agents.sessions.setStatus</a></p></div>
+</dd>
 <dt id="slack_sdk.web.client.WebClient.api_test"><code class="name flex">
 <span>def <span class="ident">api_test</span></span>(<span>self, *, error: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -9435,6 +9592,44 @@ Each authorization represents an app installation that the event is visible to.
 </details>
 <div class="desc"><p>Checks authentication &amp; identity.
 <a href="https://docs.slack.dev/reference/methods/auth.test">https://docs.slack.dev/reference/methods/auth.test</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.blocks_validate"><code class="name flex">
+<span>def <span class="ident">blocks_validate</span></span>(<span>self,<br>*,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>message: str | Dict | None = None,<br>view: str | Dict | <a title="slack_sdk.models.views.View" href="../models/views/index.html#slack_sdk.models.views.View">View</a> | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def blocks_validate(
+    self,
+    *,
+    blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+    message: Optional[Union[str, Dict]] = None,
+    view: Optional[Union[str, Dict, View]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Validates an array of blocks, or a message or view payload.
+    Provide exactly one of ``blocks``, ``message``, or ``view``.
+    https://docs.slack.dev/reference/methods/blocks.validate
+    &#34;&#34;&#34;
+    if blocks is not None:
+        if isinstance(blocks, str):
+            kwargs.update({&#34;blocks&#34;: blocks})
+        else:
+            kwargs.update({&#34;blocks&#34;: json.dumps([b.to_dict() if isinstance(b, Block) else b for b in blocks])})
+    if message is not None:
+        kwargs.update({&#34;message&#34;: message if isinstance(message, str) else json.dumps(message)})
+    if view is not None:
+        if isinstance(view, View):
+            kwargs.update({&#34;view&#34;: json.dumps(view.to_dict())})
+        else:
+            kwargs.update({&#34;view&#34;: view if isinstance(view, str) else json.dumps(view)})
+    return self.api_call(&#34;blocks.validate&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Validates an array of blocks, or a message or view payload.
+Provide exactly one of <code>blocks</code>, <code>message</code>, or <code>view</code>.
+<a href="https://docs.slack.dev/reference/methods/blocks.validate">https://docs.slack.dev/reference/methods/blocks.validate</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.bookmarks_add"><code class="name flex">
 <span>def <span class="ident">bookmarks_add</span></span>(<span>self,<br>*,<br>channel_id: str,<br>title: str,<br>type: str,<br>emoji: str | None = None,<br>entity_id: str | None = None,<br>link: str | None = None,<br>parent_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
@@ -10638,7 +10833,7 @@ Each authorization represents an app installation that the event is visible to.
 <a href="https://docs.slack.dev/reference/methods/chat.startStream">https://docs.slack.dev/reference/methods/chat.startStream</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.chat_stopStream"><code class="name flex">
-<span>def <span class="ident">chat_stopStream</span></span>(<span>self,<br>*,<br>channel: str,<br>ts: str,<br>markdown_text: str | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>chunks: Sequence[Dict | <a title="slack_sdk.models.messages.chunk.Chunk" href="../models/messages/chunk.html#slack_sdk.models.messages.chunk.Chunk">Chunk</a>] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">chat_stopStream</span></span>(<span>self,<br>*,<br>channel: str,<br>ts: str,<br>markdown_text: str | None = None,<br>blocks: str | Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>metadata: Dict | <a title="slack_sdk.models.metadata.Metadata" href="../models/metadata/index.html#slack_sdk.models.metadata.Metadata">Metadata</a> | None = None,<br>chunks: Sequence[Dict | <a title="slack_sdk.models.messages.chunk.Chunk" href="../models/messages/chunk.html#slack_sdk.models.messages.chunk.Chunk">Chunk</a>] | None = None,<br>session_status: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10654,6 +10849,7 @@ Each authorization represents an app installation that the event is visible to.
     blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
     metadata: Optional[Union[Dict, Metadata]] = None,
     chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+    session_status: Optional[str] = None,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Stops a streaming conversation.
@@ -10667,6 +10863,7 @@ Each authorization represents an app installation that the event is visible to.
             &#34;blocks&#34;: blocks,
             &#34;metadata&#34;: metadata,
             &#34;chunks&#34;: chunks,
+            &#34;session_status&#34;: session_status,
         }
     )
     _parse_web_class_objects(kwargs)
@@ -10772,8 +10969,9 @@ the stream can be stopped with concluding arguments such as "blocks" for gatheri
 <li>chat.stopStream: Stops a streaming conversation.
 <a href="https://docs.slack.dev/reference/methods/chat.stopStream">Reference</a>.</li>
 </ul>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>buffer_size</code></strong></dt>
 <dd>The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
 value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
@@ -10800,9 +10998,11 @@ with text and "plan" displays all tasks together.</dd>
 <dt><strong><code>**kwargs</code></strong></dt>
 <dd>Additional arguments passed to the underlying API calls.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>ChatStream instance for managing the stream</p>
-<h2 id="example">Example</h2>
+<p>Returns
+-----=
+ChatStream instance for managing the stream</p>
+<p>Example
+-----=</p>
 <pre><code class="language-python">streamer = client.chat_stream(
     channel=&quot;C0123456789&quot;,
     thread_ts=&quot;1700000001.123456&quot;,
@@ -15686,6 +15886,8 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.admin_workflows_permissions_lookup" href="#slack_sdk.web.client.WebClient.admin_workflows_permissions_lookup">admin_workflows_permissions_lookup</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_workflows_search" href="#slack_sdk.web.client.WebClient.admin_workflows_search">admin_workflows_search</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_workflows_unpublish" href="#slack_sdk.web.client.WebClient.admin_workflows_unpublish">admin_workflows_unpublish</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_sessions_rename" href="#slack_sdk.web.client.WebClient.agents_sessions_rename">agents_sessions_rename</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_sessions_setStatus" href="#slack_sdk.web.client.WebClient.agents_sessions_setStatus">agents_sessions_setStatus</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.api_test" href="#slack_sdk.web.client.WebClient.api_test">api_test</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.apps_connections_open" href="#slack_sdk.web.client.WebClient.apps_connections_open">apps_connections_open</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.apps_event_authorizations_list" href="#slack_sdk.web.client.WebClient.apps_event_authorizations_list">apps_event_authorizations_list</a></code></li>
@@ -15702,6 +15904,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.auth_revoke" href="#slack_sdk.web.client.WebClient.auth_revoke">auth_revoke</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.auth_teams_list" href="#slack_sdk.web.client.WebClient.auth_teams_list">auth_teams_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.auth_test" href="#slack_sdk.web.client.WebClient.auth_test">auth_test</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.blocks_validate" href="#slack_sdk.web.client.WebClient.blocks_validate">blocks_validate</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.bookmarks_add" href="#slack_sdk.web.client.WebClient.bookmarks_add">bookmarks_add</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.bookmarks_edit" href="#slack_sdk.web.client.WebClient.bookmarks_edit">bookmarks_edit</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.bookmarks_list" href="#slack_sdk.web.client.WebClient.bookmarks_list">bookmarks_list</a></code></li>

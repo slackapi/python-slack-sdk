@@ -1,4 +1,4 @@
-"""Internal module for loading proxy-related env variables"""
+"""Internal module for loading proxy-related env variables."""
 
 import logging
 import os

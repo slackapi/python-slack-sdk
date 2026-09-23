@@ -448,8 +448,9 @@ with proxy support via the <code>HTTPS_PROXY</code>, <code>https_proxy</code>, <
     )</code></pre>
 </details>
 <div class="desc"><p>Create a request and execute the API call to Slack.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>api_method</code></strong> :&ensp;<code>str</code></dt>
 <dd>The target Slack API method.
 e.g. 'chat.postMessage'</dd>
@@ -474,14 +475,16 @@ e.g. {'key1': 'value1', 'key2': 'value2'}</dd>
 <dt><strong><code>auth</code></strong> :&ensp;<code>dict</code></dt>
 <dd>A dictionary that consists of client_id and client_secret</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>(AsyncSlackResponse)
+<p>Returns
+-----=
+(AsyncSlackResponse)
 The server's response to an HTTP request. Data
 from the response can be accessed like a dict.
 If the response included 'next_cursor' it can
 be iterated on to execute subsequent requests.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackApiError</code></dt>
 <dd>The following Slack API call failed:
 'chat.postMessage'.</dd>

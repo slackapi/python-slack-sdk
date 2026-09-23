@@ -6,6 +6,7 @@ class RetryIntervalCalculator:
 
         Args:
             current_attempt: the number of the current attempt (zero-origin; 0 means no retries are done so far)
+
         Returns:
             calculated interval duration in seconds
         """

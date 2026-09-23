@@ -43,9 +43,7 @@ class TestWebClient(unittest.TestCase):
                 self.channel_id = client.conversations_create(
                     name=channel_name,
                     is_private=True,
-                )[
-                    "channel"
-                ]["id"]
+                )["channel"]["id"]
 
     def tearDown(self):
         pass

@@ -85,14 +85,17 @@ el.replaceWith(d);
 SQLAlchemy DateTime columns without timezone=True create naive timestamp columns
 in databases like PostgreSQL. This function strips timezone information from
 timezone-aware datetimes (which are already in UTC) to enable safe comparisons.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>dt</code></strong></dt>
 <dd>A timezone-aware or naive datetime object, or None</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A naive datetime in UTC, or None if input is None</p>
-<h2 id="example">Example</h2>
+<p>Returns
+-----=
+A naive datetime in UTC, or None if input is None</p>
+<p>Example
+-----=</p>
 <pre><code class="language-python-repl">&gt;&gt;&gt; from datetime import datetime, timezone
 &gt;&gt;&gt; aware_dt = datetime(2024, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
 &gt;&gt;&gt; naive_dt = normalize_datetime_for_db(aware_dt)

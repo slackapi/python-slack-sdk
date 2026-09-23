@@ -1,4 +1,5 @@
 """RetryHandler interface.
+
 You can pass an array of handlers to customize retry logics in supported API clients.
 """
 
@@ -19,6 +20,7 @@ default_interval_calculator = BackoffRetryIntervalCalculator()
 # Note that you cannot add aiohttp to this class as the external dependency is optional
 class RetryHandler:
     """RetryHandler interface.
+
     You can pass an array of handlers to customize retry logics in supported API clients.
     """
 

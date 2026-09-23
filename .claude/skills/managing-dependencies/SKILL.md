@@ -19,7 +19,7 @@ The convention resolves this without dropping old-Python support. Pin each inter
 
 ## File-layout convention
 
-Each file lists **one dependency per section**: Name of the dependency, an optional rationale note (starting with `Note:`, explaining why a version is pinned or split), then the requirement line(s), separated from the next section by a blank line. This makes every pin self-documenting.
+Each file lists **one dependency per section**: Name of the dependency, an optional rationale note (starting with `Note:`, explaining why a version is pinned or split), then the requirement line(s), separated from the next section by a blank line. This makes every pin self-documenting. Keep the note to the *why*; do not restate the per-interpreter ceilings or floors that are already readable on the requirement lines below, and omit the note entirely when the split is self-evident (as the `websockets` entry does).
 
 ```
 # pytest

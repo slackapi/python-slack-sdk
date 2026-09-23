@@ -403,8 +403,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>API client for Audit Logs API
 See <a href="https://docs.slack.dev/admins/audit-logs-api/">https://docs.slack.dev/admins/audit-logs-api/</a> for more details</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>token</code></strong></dt>
 <dd>An admin user's token, which starts with <code>xoxp-</code></dd>
 <dt><strong><code>timeout</code></strong></dt>
@@ -501,15 +502,17 @@ See <a href="https://docs.slack.dev/admins/audit-logs-api/">https://docs.slack.d
 <div class="desc"><p>Returns information about the kind of actions that the Audit Logs API
 returns as a list of all actions and a short description of each.
 Authentication not required.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>query_params</code></strong></dt>
 <dd>Set any values if you want to add query params</dd>
 <dt><strong><code>headers</code></strong></dt>
 <dd>Additional request headers</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>API response</p></div>
+<p>Returns
+-----=
+API response</p></div>
 </dd>
 <dt id="slack_sdk.audit_logs.AuditLogsClient.api_call"><code class="name flex">
 <span>def <span class="ident">api_call</span></span>(<span>self,<br>*,<br>http_verb: str = 'GET',<br>path: str,<br>query_params: Dict[str, Any] | None = None,<br>body_params: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
@@ -617,8 +620,9 @@ Authentication required.</p>
 Filters are added as query string parameters and can be combined together.
 Multiple filter parameters are additive (a boolean AND) and are separated
 with an ampersand (&amp;) in the query string. Filtering is entirely optional.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>latest</code></strong></dt>
 <dd>Unix timestamp of the most recent audit event to include (inclusive).</dd>
 <dt><strong><code>oldest</code></strong></dt>
@@ -639,8 +643,9 @@ Data is not available prior to March 2018.</dd>
 <dt><strong><code>headers</code></strong></dt>
 <dd>Additional request headers</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>API response</p></div>
+<p>Returns
+-----=
+API response</p></div>
 </dd>
 <dt id="slack_sdk.audit_logs.AuditLogsClient.schemas"><code class="name flex">
 <span>def <span class="ident">schemas</span></span>(<span>self,<br>*,<br>query_params: Dict[str, Any] | None = None,<br>headers: Dict[str, str] | None = None) ‑> <a title="slack_sdk.audit_logs.v1.response.AuditLogsResponse" href="v1/response.html#slack_sdk.audit_logs.v1.response.AuditLogsResponse">AuditLogsResponse</a></span>
@@ -675,15 +680,17 @@ Data is not available prior to March 2018.</dd>
 <div class="desc"><p>Returns information about the kind of objects which the Audit Logs API
 returns as a list of all objects and a short description.
 Authentication not required.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>query_params</code></strong></dt>
 <dd>Set any values if you want to add query params</dd>
 <dt><strong><code>headers</code></strong></dt>
 <dd>Additional request headers</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>API response</p></div>
+<p>Returns
+-----=
+API response</p></div>
 </dd>
 </dl>
 </dd>

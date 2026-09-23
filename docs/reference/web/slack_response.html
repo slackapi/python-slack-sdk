@@ -242,14 +242,16 @@ el.replaceWith(d);
         raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 <div class="desc"><p>An iterable container of response data.</p>
-<h2 id="attributes">Attributes</h2>
 <dl>
+<dt>Attributes</dt>
+<dt>-----=</dt>
 <dt><strong><code>data</code></strong> :&ensp;<code>dict</code></dt>
 <dd>The json-encoded content of the response. Along
 with the headers and status code information.</dd>
 </dl>
-<h2 id="methods">Methods</h2>
-<p>validate: Check if the response from Slack was successful.
+<p>Methods
+-----=
+validate: Check if the response from Slack was successful.
 get: Retrieves any key from the response data.
 next: Retrieves the next portion of results,
 if 'next_cursor' is present.</p>
@@ -269,8 +271,9 @@ users = []
 for page in client.users_list(limit=2):
     users = users + page['members']
 </code></pre>
-<h2 id="note">Note</h2>
-<p>Some responses return collections of information
+<p>Note
+-----=
+Some responses return collections of information
 like channel and user lists. If they do it's likely
 that you'll only receive a portion of results. This
 object allows you to iterate over the response which
@@ -307,12 +310,14 @@ removed at anytime.</p></div>
     return self.data.get(key, default)</code></pre>
 </details>
 <div class="desc"><p>Retrieves any key from the response data.</p>
-<h2 id="note">Note</h2>
-<p>This is implemented so users can reference the
+<p>Note
+-----=
+This is implemented so users can reference the
 SlackResponse object like a dictionary.
 e.g. response.get("ok", False)</p>
-<h2 id="returns">Returns</h2>
-<p>The value from data or the specified default.</p></div>
+<p>Returns
+-----=
+The value from data or the specified default.</p></div>
 </dd>
 <dt id="slack_sdk.web.slack_response.SlackResponse.validate"><code class="name flex">
 <span>def <span class="ident">validate</span></span>(<span>self)</span>
@@ -338,11 +343,13 @@ e.g. response.get("ok", False)</p>
     raise e.SlackApiError(message=msg, response=self)</code></pre>
 </details>
 <div class="desc"><p>Check if the response from Slack was successful.</p>
-<h2 id="returns">Returns</h2>
-<p>(SlackResponse)
+<p>Returns
+-----=
+(SlackResponse)
 This method returns it's own object. e.g. 'self'</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackApiError</code></dt>
 <dd>The request to the Slack API failed.</dd>
 </dl></div>

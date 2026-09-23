@@ -1,4 +1,4 @@
-"""OAuth state parameter data store
+"""OAuth state parameter data store.
 
 Refer to https://docs.slack.dev/tools/python-slack-sdk/oauth for details.
 """

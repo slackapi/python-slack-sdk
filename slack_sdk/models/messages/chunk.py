@@ -8,8 +8,7 @@ from slack_sdk.models.blocks.block_elements import UrlSourceElement
 
 
 class Chunk(JsonObject):
-    """
-    Chunk for streaming messages.
+    """Chunk for streaming messages.
 
     https://docs.slack.dev/messaging/sending-and-scheduling-messages#text-streaming
     """
