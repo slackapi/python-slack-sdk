@@ -2167,185 +2167,223 @@ class AsyncWebClient(AsyncBaseClient):
 
     async def agents_conversations_archive(
         self,
+        *,
+        channel_id: Optional[str] = None,
+        summary_message_ts: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Archive a code channel. Requires the ``code_channels:manage`` scope.
-
-        Args:
-            channel_id (str, optional): ID of the code channel to archive.
-            summary_message_ts (str, optional): Timestamp of a message in the code channel to
-                share back as a thread reply on the origin message. Requires the channel to have
-                an origin link.
         https://docs.slack.dev/reference/methods/agents.conversations.archive
         """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "summary_message_ts": summary_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.archive", json=kwargs)
 
     async def agents_conversations_create(
         self,
+        *,
+        team_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        name: Optional[str] = None,
+        is_private: Optional[bool] = None,
+        origin_channel_id: Optional[str] = None,
+        origin_message_ts: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create a dedicated code channel for an agent session. Requires the
         ``code_channels:manage`` scope.
-
-        Args:
-            team_id (str, optional): Encoded team id to create the channel in. Required for org
-                tokens when ``origin_channel_id`` is not provided. When omitted, the workspace is
-                derived from context.
-            session_id (str, optional): An opaque identifier for the agent session. When provided,
-                the call is idempotent: if a channel already exists for this ``session_id``, it is
-                returned instead of creating a new one.
-            name (str, optional): A friendly display name for the code channel. Optional when
-                ``origin_channel_id`` and ``origin_message_ts`` are provided — in that case the
-                channel is named from context.
-            is_private (bool, optional): Create a private channel instead of a public one.
-            origin_channel_id (str, optional): The channel ID where the agent session was initiated
-                from. Must be provided together with ``origin_message_ts``. The channel must be
-                accessible.
-            origin_message_ts (str, optional): The message timestamp in the origin channel that
-                started the agent session. Must be provided together with ``origin_channel_id``.
         https://docs.slack.dev/reference/methods/agents.conversations.create
         """
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "session_id": session_id,
+                "name": name,
+                "is_private": is_private,
+                "origin_channel_id": origin_channel_id,
+                "origin_message_ts": origin_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.create", json=kwargs)
 
     async def agents_conversations_getCanvas(
         self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content_format: Optional[str] = None,
+        include_resolved: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Fetch a canvas attached to a code channel. Requires the ``code_channels:manage`` scope.
 
-        Args:
-            channel (str, required): ID of the agent session channel the canvas belongs to. Note
-                this method takes ``channel``, not ``channel_id``.
-            canvas_id (str, required): Encoded ID of the canvas to fetch.
-            content_format (str, optional): Format to render the canvas content in. Defaults to
-                markdown.
-            include_resolved (bool, optional): Whether to include resolved comment threads in the
-                response. Defaults to false.
+        Note this method takes ``channel``, not ``channel_id``.
         https://docs.slack.dev/reference/methods/agents.conversations.getCanvas
         """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content_format": content_format,
+                "include_resolved": include_resolved,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.getCanvas", json=kwargs)
 
     async def agents_conversations_listViews(
         self,
+        *,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """List the views currently attached to a code channel. Requires the
         ``code_channels:manage`` scope.
-
-        Args:
-            channel_id (str, optional): ID of the code channel to list views for.
         https://docs.slack.dev/reference/methods/agents.conversations.listViews
         """
+        kwargs.update({"channel_id": channel_id})
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.listViews", json=kwargs)
 
     async def agents_conversations_removeView(
         self,
+        *,
+        channel_id: Optional[str] = None,
+        view_key: Optional[str] = None,
+        view_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove a view from a code channel. Requires the ``code_channels:manage`` scope.
 
-        Args:
-            channel_id (str, optional): ID of the code channel to remove the view from.
-            view_key (str, optional): Agent-assigned key of the view to remove. Provide exactly one
-                of ``view_key`` or ``view_id``.
-            view_id (str, optional): Encoded channel tab ID of the view to remove. Provide exactly
-                one of ``view_key`` or ``view_id``.
+        Provide exactly one of ``view_key`` or ``view_id``.
         https://docs.slack.dev/reference/methods/agents.conversations.removeView
         """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "view_key": view_key,
+                "view_id": view_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.removeView", json=kwargs)
 
     async def agents_conversations_setCanvasContent(
         self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content: str,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Replace the full markdown content of a plan canvas attached to a code channel. Requires
         the ``code_channels:manage`` scope.
 
-        Args:
-            channel (str, required): ID of the agent session channel the canvas is attached to.
-                Note this method takes ``channel``, not ``channel_id``.
-            canvas_id (str, required): Encoded ID of the canvas whose content to replace.
-            content (str, required): The full new canvas content as markdown. The server diffs this
-                against the current content and applies only the changed sections.
+        Note this method takes ``channel``, not ``channel_id``.
         https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent
         """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content": content,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.setCanvasContent", json=kwargs)
 
     async def agents_conversations_setCommands(
         self,
+        *,
+        commands: Sequence[Dict],
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Register the set of agent-defined slash commands for the calling agent in a code channel.
         Requires the ``code_channels:manage`` scope.
-
-        Args:
-            channel_id (str, optional): ID of the code channel to register commands for.
-            commands (array, required): Full set of commands to register for the calling agent in
-                this channel, replacing that agent's previously registered set. Pass an empty array
-                to clear them.
         https://docs.slack.dev/reference/methods/agents.conversations.setCommands
         """
+        kwargs.update(
+            {
+                "commands": commands,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.setCommands", json=kwargs)
 
     async def agents_conversations_setProperties(
         self,
+        *,
+        channel_id: Optional[str] = None,
+        title: Optional[str] = None,
+        status: Optional[str] = None,
+        code_channel: Optional[Dict] = None,
+        agent_resource: Optional[Dict] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set properties on a code channel. Requires the ``code_channels:manage`` scope.
-
-        Args:
-            channel_id (str, optional): ID of the code channel to update.
-            title (str, optional): New display title for the agent session.
-            status (str, optional): New status for the agent session.
-            code_channel (object, optional): Code channel properties to set. Only provided fields
-                are updated.
-            agent_resource (object, optional): Agent resource properties to set. Only provided
-                fields are updated.
         https://docs.slack.dev/reference/methods/agents.conversations.setProperties
         """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "title": title,
+                "status": status,
+                "code_channel": code_channel,
+                "agent_resource": agent_resource,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.setProperties", json=kwargs)
 
     async def agents_conversations_setView(
         self,
+        *,
+        channel_id: Optional[str] = None,
+        type: Optional[str] = None,
+        view_key: Optional[str] = None,
+        content: Optional[str] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        canvas_id: Optional[str] = None,
+        access_level: Optional[str] = None,
+        agent_content_hash: Optional[str] = None,
+        pr_url: Optional[str] = None,
+        base_branch: Optional[str] = None,
+        head_branch: Optional[str] = None,
+        name: Optional[str] = None,
+        label: Optional[str] = None,
+        csp: Optional[Dict] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create or update a view in a code channel. Requires the ``code_channels:manage`` scope.
-
-        Args:
-            channel_id (str, optional): ID of the code channel to render the view in.
-            type (str, optional): The kind of view to create or update. Defaults to html.
-                Determines which other arguments are required: html and diff require content,
-                block_kit requires blocks, canvas requires canvas_id, pull_request requires pr_url.
-            view_key (str, optional): Agent-assigned stable identity for the view (e.g. the source
-                file path on the agent's machine). Used as the upsert key: calls with the same
-                view_key update the existing view.
-            content (str, optional): View content. For html, a full self-contained HTML document;
-                for diff, raw unified diff text. Capped at 1,000,000 bytes — larger content returns
-                an error.
-            blocks (array, optional): Block Kit blocks to render in the view tab. Required when type
-                is block_kit; ignored otherwise.
-            canvas_id (str, optional): Encoded ID of the canvas to attach as the view. Required when
-                type is canvas; ignored otherwise.
-            access_level (str, optional): For canvas views: access level granted to the channel for
-                the canvas tab. Defaults to write. Use 'comment' to grant channel members comment
-                access.
-            agent_content_hash (str, optional): For canvas views: hash of the canvas-derived
-                markdown the agent last wrote, recorded so the agent can later detect human edits to
-                the canvas.
-            pr_url (str, optional): For pull_request views: the pull request's URL. Required when
-                type is pull_request; ignored otherwise.
-            base_branch (str, optional): For diff views: base branch name for display purposes.
-            head_branch (str, optional): For diff views: head branch name for display purposes.
-            name (str, optional): Display label for the view tab. Preferred over the legacy 'label'
-                argument (name wins if both are supplied). Defaults to the last path segment of
-                view_key.
-            label (str, optional): Deprecated alias for 'name'. Display label for the view tab.
-                Defaults to the last path segment of view_key, stripped of any .html/.htm extension.
-            csp (object, optional): Content-Security-Policy domain declarations for the view.
-                Domains are validated server-side (https-only, no private/internal hosts) and
-                persisted.
         https://docs.slack.dev/reference/methods/agents.conversations.setView
         """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "type": type,
+                "view_key": view_key,
+                "content": content,
+                "blocks": blocks,
+                "canvas_id": canvas_id,
+                "access_level": access_level,
+                "agent_content_hash": agent_content_hash,
+                "pr_url": pr_url,
+                "base_branch": base_branch,
+                "head_branch": head_branch,
+                "name": name,
+                "label": label,
+                "csp": csp,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("agents.conversations.setView", json=kwargs)
 
     async def assistant_threads_setTitle(
