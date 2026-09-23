@@ -2032,11 +2032,12 @@ class AsyncWebClient(AsyncBaseClient):
     async def agents_conversations_archive(
         self,
         *,
-        channel_id: Optional[str] = None,
+        channel_id: str,
         summary_message_ts: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Archive a code channel.
+
         https://docs.slack.dev/reference/methods/agents.conversations.archive
         """
         kwargs.update(
@@ -2051,15 +2052,16 @@ class AsyncWebClient(AsyncBaseClient):
     async def agents_conversations_create(
         self,
         *,
+        name: str,
         team_id: Optional[str] = None,
         session_id: Optional[str] = None,
-        name: Optional[str] = None,
         is_private: Optional[bool] = None,
         origin_channel_id: Optional[str] = None,
         origin_message_ts: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create a dedicated code channel for an agent session.
+
         https://docs.slack.dev/reference/methods/agents.conversations.create
         """
         kwargs.update(
@@ -2085,6 +2087,7 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Fetch a canvas attached to a code channel.
+
         https://docs.slack.dev/reference/methods/agents.conversations.getCanvas
         """
         kwargs.update(
@@ -2101,10 +2104,11 @@ class AsyncWebClient(AsyncBaseClient):
     async def agents_conversations_listViews(
         self,
         *,
-        channel_id: Optional[str] = None,
+        channel_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
         """List the views currently attached to a code channel.
+
         https://docs.slack.dev/reference/methods/agents.conversations.listViews
         """
         kwargs.update({"channel_id": channel_id})
@@ -2114,14 +2118,13 @@ class AsyncWebClient(AsyncBaseClient):
     async def agents_conversations_removeView(
         self,
         *,
-        channel_id: Optional[str] = None,
+        channel_id: str,
         view_key: Optional[str] = None,
         view_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove a view from a code channel.
 
-        Provide exactly one of ``view_key`` or ``view_id``.
         https://docs.slack.dev/reference/methods/agents.conversations.removeView
         """
         kwargs.update(
@@ -2143,6 +2146,7 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Replace the full markdown content of a plan canvas attached to a code channel.
+
         https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent
         """
         kwargs.update(
@@ -2158,11 +2162,12 @@ class AsyncWebClient(AsyncBaseClient):
     async def agents_conversations_setCommands(
         self,
         *,
+        channel_id: str,
         commands: Sequence[Dict],
-        channel_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Register the set of agent-defined slash commands for the calling agent in a code channel.
+
         https://docs.slack.dev/reference/methods/agents.conversations.setCommands
         """
         kwargs.update(
@@ -2177,7 +2182,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def agents_conversations_setProperties(
         self,
         *,
-        channel_id: Optional[str] = None,
+        channel_id: str,
         title: Optional[str] = None,
         status: Optional[str] = None,
         code_channel: Optional[Dict] = None,
@@ -2185,6 +2190,7 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set properties on a code channel.
+
         https://docs.slack.dev/reference/methods/agents.conversations.setProperties
         """
         kwargs.update(
@@ -2202,7 +2208,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def agents_conversations_setView(
         self,
         *,
-        channel_id: Optional[str] = None,
+        channel_id: str,
         type: Optional[str] = None,
         view_key: Optional[str] = None,
         content: Optional[str] = None,
@@ -2219,6 +2225,7 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create or update a view in a code channel.
+
         https://docs.slack.dev/reference/methods/agents.conversations.setView
         """
         kwargs.update(
