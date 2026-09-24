@@ -93,6 +93,41 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"])["method"]
                 )
                 await async_method(app_id="AID123", enterprise_id="E111", team_ids=["T1", "T2"])
+            elif method_name == "agents_conversations_archive":
+                self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                await async_method(channel_id="C123")
+            elif method_name == "agents_conversations_create":
+                self.api_methods_to_call.remove(
+                    method(name="Fix flaky test", origin_channel_id="C123", origin_message_ts="1717171717.123456")["method"]
+                )
+                await async_method(name="Fix flaky test", origin_channel_id="C123", origin_message_ts="1717171717.123456")
+            elif method_name == "agents_conversations_getCanvas":
+                self.api_methods_to_call.remove(method(channel="C123", canvas_id="F123")["method"])
+                await async_method(channel="C123", canvas_id="F123")
+            elif method_name == "agents_conversations_listViews":
+                self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                await async_method(channel_id="C123")
+            elif method_name == "agents_conversations_removeView":
+                self.api_methods_to_call.remove(method(channel_id="C123", view_id="V123")["method"])
+                await async_method(channel_id="C123", view_id="V123")
+            elif method_name == "agents_conversations_setCanvasContent":
+                self.api_methods_to_call.remove(method(channel="C123", canvas_id="F123", content="# Plan")["method"])
+                await async_method(channel="C123", canvas_id="F123", content="# Plan")
+            elif method_name == "agents_conversations_setCommands":
+                self.api_methods_to_call.remove(method(channel_id="C123", commands=[])["method"])
+                await async_method(channel_id="C123", commands=[])
+            elif method_name == "agents_conversations_setProperties":
+                self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                await async_method(channel_id="C123")
+            elif method_name == "agents_conversations_setView":
+                self.api_methods_to_call.remove(method(channel_id="C123", type="diff")["method"])
+                await async_method(channel_id="C123", type="diff")
+            elif method_name == "agents_sessions_rename":
+                self.api_methods_to_call.remove(method(channel_id="C123", title="New title")["method"])
+                await async_method(channel_id="C123", title="New title")
+            elif method_name == "agents_sessions_setStatus":
+                self.api_methods_to_call.remove(method(channel_id="C123", status="processing")["method"])
+                await async_method(channel_id="C123", status="processing")
             elif method_name == "apps_manifest_create":
                 self.api_methods_to_call.remove(method(manifest="{}")["method"])
                 await async_method(manifest="{}")
@@ -1163,41 +1198,6 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "users_discoverableContacts_lookup":
                 self.api_methods_to_call.remove(method(email="foo@example.com")["method"])
                 await async_method(email="foo@example.com")
-            elif method_name == "agents_conversations_archive":
-                self.api_methods_to_call.remove(method(channel_id="C123")["method"])
-                await async_method(channel_id="C123")
-            elif method_name == "agents_conversations_create":
-                self.api_methods_to_call.remove(
-                    method(name="Fix flaky test", origin_channel_id="C123", origin_message_ts="1717171717.123456")["method"]
-                )
-                await async_method(name="Fix flaky test", origin_channel_id="C123", origin_message_ts="1717171717.123456")
-            elif method_name == "agents_conversations_getCanvas":
-                self.api_methods_to_call.remove(method(channel="C123", canvas_id="F123")["method"])
-                await async_method(channel="C123", canvas_id="F123")
-            elif method_name == "agents_conversations_listViews":
-                self.api_methods_to_call.remove(method(channel_id="C123")["method"])
-                await async_method(channel_id="C123")
-            elif method_name == "agents_conversations_removeView":
-                self.api_methods_to_call.remove(method(channel_id="C123", view_id="V123")["method"])
-                await async_method(channel_id="C123", view_id="V123")
-            elif method_name == "agents_conversations_setCanvasContent":
-                self.api_methods_to_call.remove(method(channel="C123", canvas_id="F123", content="# Plan")["method"])
-                await async_method(channel="C123", canvas_id="F123", content="# Plan")
-            elif method_name == "agents_conversations_setCommands":
-                self.api_methods_to_call.remove(method(channel_id="C123", commands=[])["method"])
-                await async_method(channel_id="C123", commands=[])
-            elif method_name == "agents_conversations_setProperties":
-                self.api_methods_to_call.remove(method(channel_id="C123")["method"])
-                await async_method(channel_id="C123")
-            elif method_name == "agents_conversations_setView":
-                self.api_methods_to_call.remove(method(channel_id="C123", type="diff")["method"])
-                await async_method(channel_id="C123", type="diff")
-            elif method_name == "agents_sessions_rename":
-                self.api_methods_to_call.remove(method(channel_id="C123", title="New title")["method"])
-                await async_method(channel_id="C123", title="New title")
-            elif method_name == "agents_sessions_setStatus":
-                self.api_methods_to_call.remove(method(channel_id="C123", status="processing")["method"])
-                await async_method(channel_id="C123", status="processing")
             else:
                 self.api_methods_to_call.remove(method(*{})["method"])
                 await async_method(*{})
