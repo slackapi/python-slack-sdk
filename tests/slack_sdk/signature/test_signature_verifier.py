@@ -98,6 +98,30 @@ class TestSignatureVerifier(unittest.TestCase):
         self.assertFalse(verifier.is_valid(self.body, None, None))
         self.assertFalse(verifier.is_valid(None, None, None))
 
+    def test_is_valid_non_numeric_timestamp(self):
+        # A non-integer X-Slack-Request-Timestamp header must cause is_valid to
+        # return False rather than raising ValueError from int().
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        self.assertFalse(verifier.is_valid(self.body, "not-a-number", self.valid_signature))
+        self.assertFalse(verifier.is_valid(self.body, "1.5", self.valid_signature))
+        self.assertFalse(verifier.is_valid(self.body, "", self.valid_signature))
+
+    def test_is_valid_request_non_numeric_timestamp_header(self):
+        # is_valid_request must also return False (not raise) when the
+        # X-Slack-Request-Timestamp header is non-numeric.
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        bad_headers = {
+            "X-Slack-Request-Timestamp": "not-a-number",
+            "X-Slack-Signature": self.valid_signature,
+        }
+        self.assertFalse(verifier.is_valid_request(self.body, bad_headers))
+
     def test_invalid_signing_secret(self):
         with self.assertRaises(ValueError):
             SignatureVerifier("")
