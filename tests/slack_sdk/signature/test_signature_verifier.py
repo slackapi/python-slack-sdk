@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import Mock
 
 from slack_sdk.signature import SignatureVerifier
 
@@ -99,8 +100,6 @@ class TestSignatureVerifier(unittest.TestCase):
         self.assertFalse(verifier.is_valid(None, None, None))
 
     def test_is_valid_non_numeric_timestamp(self):
-        # A non-integer X-Slack-Request-Timestamp header must cause is_valid to
-        # return False rather than raising ValueError from int().
         verifier = SignatureVerifier(
             signing_secret=self.signing_secret,
             clock=MockClock(),
@@ -110,8 +109,6 @@ class TestSignatureVerifier(unittest.TestCase):
         self.assertFalse(verifier.is_valid(self.body, "", self.valid_signature))
 
     def test_is_valid_request_non_numeric_timestamp_header(self):
-        # is_valid_request must also return False (not raise) when the
-        # X-Slack-Request-Timestamp header is non-numeric.
         verifier = SignatureVerifier(
             signing_secret=self.signing_secret,
             clock=MockClock(),
@@ -141,3 +138,11 @@ class TestSignatureVerifier(unittest.TestCase):
         with self.assertRaises(ValueError):
             verifier.signing_secret = None
         self.assertEqual(verifier.signing_secret, self.signing_secret)
+
+    def test_is_valid_rejects_numeric_timestamp_outside_replay_window(self):
+        clock = Mock()
+        verifier = SignatureVerifier(signing_secret=self.signing_secret, clock=clock)
+        for elapsed, expected in ((300, True), (301, False), (-301, False)):
+            with self.subTest(elapsed=elapsed):
+                clock.now.return_value = int(self.timestamp) + elapsed
+                self.assertEqual(verifier.is_valid(self.body, self.timestamp, self.valid_signature), expected)
