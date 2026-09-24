@@ -143,7 +143,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session: ClientWebSocketResponse = self.current_session  # type: ignore[assignment]
         session_id: str = self.build_session_id(session)
 
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new monitor_current_session() execution loop for {session_id} started")
         try:
             logging_interval = 100
@@ -151,11 +151,11 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
             while not self.closed:
                 if session != self.current_session:
-                    if self.logger.level <= logging.DEBUG:
+                    if self.logger.isEnabledFor(logging.DEBUG):
                         self.logger.debug(f"The monitor_current_session task for {session_id} is now cancelled")
                     break
                 try:
-                    if self.trace_enabled and self.logger.level <= logging.DEBUG:
+                    if self.trace_enabled and self.logger.isEnabledFor(logging.DEBUG):
                         # The logging here is for detailed investigation on potential issues in this client.
                         # If you don't see this log for a while, it means that
                         # this receive_messages execution is no longer working for some reason.
@@ -207,7 +207,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         f"(error: {type(e).__name__}, message: {e})"
                     )
         except asyncio.CancelledError:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"The monitor_current_session task for {session_id} is now cancelled")
             raise
 
@@ -217,7 +217,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # To avoid such, we access only the session that is active when this loop starts.
         session = self.current_session
         session_id = self.build_session_id(session)  # type: ignore[arg-type]
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new receive_messages() execution loop with {session_id} started")
         try:
             consecutive_error_count = 0
@@ -226,14 +226,14 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
             while not self.closed:
                 if session != self.current_session:
-                    if self.logger.level <= logging.DEBUG:
+                    if self.logger.isEnabledFor(logging.DEBUG):
                         self.logger.debug(f"The running receive_messages task for {session_id} is now cancelled")
                     break
                 try:
                     message: WSMessage = await session.receive()  # type: ignore[union-attr]
                     # just in case, checking if the value is not None
                     if message is not None:
-                        if self.logger.level <= logging.DEBUG:
+                        if self.logger.isEnabledFor(logging.DEBUG):
                             # The following logging prints every single received message
                             # except empty message data ones.
                             m_type = WSMsgType(message.type)
@@ -308,7 +308,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     else:
                         await asyncio.sleep(consecutive_error_count)
         except asyncio.CancelledError:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"The running receive_messages task for {session_id} is now cancelled")
             raise
 
@@ -326,7 +326,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             and not self.current_session.closed
             and not await self.is_ping_pong_failing()
         )
-        if self.logger.level <= logging.DEBUG and connected is False:
+        if self.logger.isEnabledFor(logging.DEBUG) and connected is False:
             # Prints more detailed information about the inactive connection
             is_ping_pong_failing = await self.is_ping_pong_failing()
             session_id = await self.session_id()
@@ -387,7 +387,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 self.logger.info(f"A new session ({session_id}) has been established")
 
                 # The first ping from the new connection
-                if self.logger.level <= logging.DEBUG:
+                if self.logger.isEnabledFor(logging.DEBUG):
                     self.logger.debug(f"Sending a ping message with the newly established connection ({session_id})...")
                 t = time.time()
                 await self.current_session.ping(f"sdk-ping-pong:{t}".encode("utf-8"))
@@ -395,18 +395,18 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 if self.current_session_monitor is not None:
                     self.current_session_monitor.cancel()
                 self.current_session_monitor = asyncio.ensure_future(self.monitor_current_session())
-                if self.logger.level <= logging.DEBUG:
+                if self.logger.isEnabledFor(logging.DEBUG):
                     self.logger.debug(f"A new monitor_current_session() executor has been recreated for {session_id}")
 
                 if self.message_receiver is not None:
                     self.message_receiver.cancel()
                 self.message_receiver = asyncio.ensure_future(self.receive_messages())
-                if self.logger.level <= logging.DEBUG:
+                if self.logger.isEnabledFor(logging.DEBUG):
                     self.logger.debug(f"A new receive_messages() executor has been recreated for {session_id}")
                 break
             except Exception as e:
                 if self.closed:
-                    if self.logger.level <= logging.DEBUG:
+                    if self.logger.isEnabledFor(logging.DEBUG):
                         self.logger.debug(f"Stopped connecting because the client is closed (error: {e})")
                     return
                 self.logger.exception(f"Failed to connect (error: {e}); Retrying...")
@@ -420,14 +420,14 @@ class SocketModeClient(AsyncBaseSocketModeClient):
 
     async def send_message(self, message: str):
         session_id = await self.session_id()
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"Sending a message: {message} from session: {session_id}")
         try:
             await self.current_session.send_str(message)  # type: ignore[union-attr]
         except ConnectionError as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f"Failed to send a message (error: {e}, message: {message}, session: {session_id})"
                     " as the underlying connection was replaced. Retrying the same request only one time..."

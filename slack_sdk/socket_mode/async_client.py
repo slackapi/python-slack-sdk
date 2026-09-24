@@ -106,7 +106,7 @@ class AsyncBaseSocketModeClient:
 
     async def enqueue_message(self, message: str):
         await self.message_queue.put(message)
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             queue_size = self.message_queue.qsize()
             session_id = await self.session_id()
             self.logger.debug(f"A new message enqueued (current queue size: {queue_size}, session: {session_id})")
@@ -140,7 +140,7 @@ class AsyncBaseSocketModeClient:
     async def run_message_listeners(self, message: dict, raw_message: str) -> None:
         session_id = await self.session_id()
         type, envelope_id = message.get("type"), message.get("envelope_id")
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(
                 f"Message processing started (type: {type}, envelope_id: {envelope_id}, session: {session_id})"
             )
@@ -166,7 +166,7 @@ class AsyncBaseSocketModeClient:
         except Exception as e:
             self.logger.exception(f"Failed to run message listeners: {e}, session: {session_id}")
         finally:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f"Message processing completed (type: {type}, envelope_id: {envelope_id}, session: {session_id})"
                 )
