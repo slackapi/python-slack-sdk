@@ -102,17 +102,17 @@ class TestWebClientCoverage(unittest.TestCase):
                 )
                 await async_method(name="Fix flaky test", origin_channel_id="C123", origin_message_ts="1717171717.123456")
             elif method_name == "agents_conversations_getCanvas":
-                self.api_methods_to_call.remove(method(channel="C123", canvas_id="Ct1234567890")["method"])
-                await async_method(channel="C123", canvas_id="Ct1234567890")
+                self.api_methods_to_call.remove(method(channel="C123", canvas_id="F123")["method"])
+                await async_method(channel="C123", canvas_id="F123")
             elif method_name == "agents_conversations_listViews":
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                 await async_method(channel_id="C123")
             elif method_name == "agents_conversations_removeView":
-                self.api_methods_to_call.remove(method(channel_id="C123", view_id="V123")["method"])
-                await async_method(channel_id="C123", view_id="V123")
+                self.api_methods_to_call.remove(method(channel_id="C123", view_id="Ct123")["method"])
+                await async_method(channel_id="C123", view_id="Ct123")
             elif method_name == "agents_conversations_setCanvasContent":
-                self.api_methods_to_call.remove(method(channel="C123", canvas_id="Ct1234567890", content="# Plan")["method"])
-                await async_method(channel="C123", canvas_id="Ct1234567890", content="# Plan")
+                self.api_methods_to_call.remove(method(channel="C123", canvas_id="F123", content="# Plan")["method"])
+                await async_method(channel="C123", canvas_id="F123", content="# Plan")
             elif method_name == "agents_conversations_setCommands":
                 self.api_methods_to_call.remove(method(channel_id="C123", commands=[])["method"])
                 await async_method(channel_id="C123", commands=[])
