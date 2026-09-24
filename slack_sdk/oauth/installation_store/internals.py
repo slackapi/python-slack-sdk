@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Type, TypeVar, Union
 
 
@@ -28,6 +28,9 @@ def _timestamp_to_type(ts: Union[TimestampType, datetime, str], target_type: Typ
         # see https://github.com/google/pytype/issues/1012
 
     elif isinstance(ts, datetime):
+        if ts.tzinfo is None:
+            # naive datetime values (e.g., loaded from a database) are stored in UTC
+            ts = ts.replace(tzinfo=timezone.utc)
         result = target_type(ts.timestamp())
     elif isinstance(ts, str):
         try:
