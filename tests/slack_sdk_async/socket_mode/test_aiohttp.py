@@ -102,6 +102,31 @@ class TestAiohttp(unittest.TestCase):
         self.assertTrue(session.closed)  # closed again by client.close()
 
     @async_test
+    async def test_connect_does_not_recreate_session_when_closed_during_reconnect(self):
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+        )
+        client.wss_uri = "ws://localhost:8888/link"
+        old_session = client.aiohttp_client_session
+
+        async def close_during_reconnect():
+            client.closed = True
+            await old_session.close()
+
+        client.current_session = MagicMock()
+        client.current_session.close = close_during_reconnect
+        try:
+            with patch.object(aiohttp, "ClientSession") as new_session:
+                await asyncio.wait_for(client.connect(), timeout=1.0)
+                new_session.assert_not_called()
+            self.assertIs(client.aiohttp_client_session, old_session)
+            self.assertTrue(old_session.closed)
+        finally:
+            await client.close()
+
+    @async_test
     async def test_init_with_loop(self):
         client = SocketModeClient(
             app_token="xapp-A111-222-xyz",

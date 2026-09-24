@@ -127,7 +127,6 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # over the lifetime of your application,
         # it is suggested you use a single session for the lifetime of your application
         # to benefit from connection pooling.
-        self._loop = loop
         self.aiohttp_client_session = aiohttp.ClientSession(loop=loop)
 
         self.on_message_listeners = on_message_listeners or []
@@ -323,7 +322,6 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         connected: bool = (
             not self.closed
             and not self.stale
-            and not self.aiohttp_client_session.closed
             and self.current_session is not None
             and not self.current_session.closed
             and not await self.is_ping_pong_failing()
@@ -371,11 +369,9 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 except Exception as e:
                     self.logger.exception(f"Failed to close the old session : {e}")
 
-                if self.aiohttp_client_session.closed:
-                    # All connections share this session. Once it has been closed,
-                    # every connection attempt fails, so it has to be recreated.
+                if self.aiohttp_client_session.closed and not self.closed:
                     self.logger.info("The aiohttp client session is closed; creating a new one")
-                    self.aiohttp_client_session = aiohttp.ClientSession(loop=self._loop)
+                    self.aiohttp_client_session = aiohttp.ClientSession()
 
                 if self.wss_uri is None:
                     # If the underlying WSS URL does not exist,
