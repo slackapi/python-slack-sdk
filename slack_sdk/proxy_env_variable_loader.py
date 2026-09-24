@@ -2,8 +2,9 @@
 
 import logging
 import os
+import re
 from typing import Optional
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urlsplit
 
 _default_logger = logging.getLogger(__name__)
 
@@ -28,11 +29,12 @@ def load_http_proxy_from_env(logger: logging.Logger = _default_logger) -> Option
 
 def _redact_credentials(url: str) -> str:
     """Replaces the user info (e.g., user:password@) in a URL so that it can be safely logged."""
+    if "@" in url:
+        scheme = re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://", url)
+        prefix = scheme.group(0) if scheme else ""
+        return f"{prefix}***@{url.rpartition('@')[2]}"
     try:
-        parts = urlsplit(url)
+        urlsplit(url)
     except ValueError:
         return "(unparsable URL)"
-    if "@" not in parts.netloc:
-        return url
-    host = parts.netloc.rpartition("@")[2]
-    return urlunsplit(parts._replace(netloc=f"***@{host}"))
+    return url
