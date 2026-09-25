@@ -123,12 +123,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         # To avoid such, we access only the session that is active when this loop starts.
         session: ClientConnection = self.current_session  # type: ignore[assignment]
         session_id: str = await self.session_id()
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new monitor_current_session() execution loop for {session_id} started")
         try:
             while not self.closed:
                 if session != self.current_session:
-                    if self.logger.level <= logging.DEBUG:
+                    if self.logger.isEnabledFor(logging.DEBUG):
                         self.logger.debug(f"The monitor_current_session task for {session_id} is now cancelled")
                     break
                 await asyncio.sleep(self.ping_interval)
@@ -142,7 +142,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                         f"(error: {type(e).__name__}, message: {e}, session: {session_id})"
                     )
         except asyncio.CancelledError:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"The monitor_current_session task for {session_id} is now cancelled")
             raise
 
@@ -153,12 +153,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
         session: ClientConnection = self.current_session  # type: ignore[assignment]
         session_id: str = await self.session_id()
         consecutive_error_count = 0
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new receive_messages() execution loop with {session_id} started")
         try:
             while not self.closed:
                 if session != self.current_session:
-                    if self.logger.level <= logging.DEBUG:
+                    if self.logger.isEnabledFor(logging.DEBUG):
                         self.logger.debug(f"The running receive_messages task for {session_id} is now cancelled")
                     break
                 try:
@@ -166,7 +166,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     if message is not None:
                         if isinstance(message, bytes):
                             message = message.decode("utf-8")
-                        if self.logger.level <= logging.DEBUG:
+                        if self.logger.isEnabledFor(logging.DEBUG):
                             self.logger.debug(
                                 f"Received message: {debug_redacted_message_string(message)}, session: {session_id}"
                             )
@@ -182,7 +182,7 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                     else:
                         await asyncio.sleep(consecutive_error_count)
         except asyncio.CancelledError:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"The running receive_messages task for {session_id} is now cancelled")
             raise
 
@@ -209,14 +209,14 @@ class SocketModeClient(AsyncBaseSocketModeClient):
             self.current_session_monitor.cancel()
         self.current_session_monitor = asyncio.ensure_future(self.monitor_current_session())
 
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new monitor_current_session() executor has been recreated for {session_id}")
 
         if self.message_receiver is not None:
             self.message_receiver.cancel()
         self.message_receiver = asyncio.ensure_future(self.receive_messages())
 
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new receive_messages() executor has been recreated for {session_id}")
 
         if old_session is not None:
@@ -231,14 +231,14 @@ class SocketModeClient(AsyncBaseSocketModeClient):
     async def send_message(self, message: str):
         session = self.current_session
         session_id = self.build_session_id(session)  # type: ignore[arg-type]
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"Sending a message: {message}, session: {session_id}")
         try:
             await session.send(message)  # type: ignore[union-attr]
         except WebSocketException as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f"Failed to send a message (error: {e}, message: {message}, session: {session_id})"
                     " as the underlying connection was replaced. Retrying the same request only one time..."
