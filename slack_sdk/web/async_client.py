@@ -2029,6 +2029,226 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"workflow_ids": workflow_ids})
         return await self.api_call("admin.workflows.unpublish", params=kwargs)
 
+    async def agents_conversations_archive(
+        self,
+        *,
+        channel_id: str,
+        summary_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Archive a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.archive
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "summary_message_ts": summary_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.archive", json=kwargs)
+
+    async def agents_conversations_create(
+        self,
+        *,
+        name: str,
+        team_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        is_private: Optional[bool] = None,
+        origin_channel_id: Optional[str] = None,
+        origin_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Create a dedicated code channel for an agent session.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.create
+        """
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "session_id": session_id,
+                "name": name,
+                "is_private": is_private,
+                "origin_channel_id": origin_channel_id,
+                "origin_message_ts": origin_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.create", json=kwargs)
+
+    async def agents_conversations_getCanvas(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content_format: Optional[str] = None,
+        include_resolved: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Fetch a canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.getCanvas
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content_format": content_format,
+                "include_resolved": include_resolved,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.getCanvas", json=kwargs)
+
+    async def agents_conversations_listViews(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List the views currently attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.listViews
+        """
+        kwargs.update({"channel_id": channel_id})
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.listViews", json=kwargs)
+
+    async def agents_conversations_removeView(
+        self,
+        *,
+        channel_id: str,
+        view_key: Optional[str] = None,
+        view_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Remove a view from a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.removeView
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "view_key": view_key,
+                "view_id": view_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.removeView", json=kwargs)
+
+    async def agents_conversations_setCanvasContent(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Replace the full markdown content of a plan canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content": content,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setCanvasContent", json=kwargs)
+
+    async def agents_conversations_setCommands(
+        self,
+        *,
+        channel_id: str,
+        commands: Sequence[Dict],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Register the set of agent-defined slash commands for the calling agent in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCommands
+        """
+        kwargs.update(
+            {
+                "commands": commands,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setCommands", json=kwargs)
+
+    async def agents_conversations_setProperties(
+        self,
+        *,
+        channel_id: str,
+        title: Optional[str] = None,
+        status: Optional[str] = None,
+        code_channel: Optional[Dict] = None,
+        agent_resource: Optional[Dict] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set properties on a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setProperties
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "title": title,
+                "status": status,
+                "code_channel": code_channel,
+                "agent_resource": agent_resource,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setProperties", json=kwargs)
+
+    async def agents_conversations_setView(
+        self,
+        *,
+        channel_id: str,
+        type: Optional[str] = None,
+        view_key: Optional[str] = None,
+        content: Optional[str] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        canvas_id: Optional[str] = None,
+        access_level: Optional[str] = None,
+        agent_content_hash: Optional[str] = None,
+        pr_url: Optional[str] = None,
+        base_branch: Optional[str] = None,
+        head_branch: Optional[str] = None,
+        name: Optional[str] = None,
+        label: Optional[str] = None,
+        csp: Optional[Dict] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Create or update a view in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setView
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "type": type,
+                "view_key": view_key,
+                "content": content,
+                "blocks": blocks,
+                "canvas_id": canvas_id,
+                "access_level": access_level,
+                "agent_content_hash": agent_content_hash,
+                "pr_url": pr_url,
+                "base_branch": base_branch,
+                "head_branch": head_branch,
+                "name": name,
+                "label": label,
+                "csp": csp,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setView", json=kwargs)
+
     async def agents_sessions_rename(
         self,
         *,
