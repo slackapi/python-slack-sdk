@@ -1,6 +1,9 @@
+import os
 import sys
+import time
 import unittest
 from datetime import datetime, timezone
+from unittest import mock
 
 import pytest
 
@@ -25,7 +28,6 @@ class TestFile(unittest.TestCase):
     [
         (1701209097, int, 1701209097),
         (datetime(2023, 11, 28, 22, 9, 7, tzinfo=timezone.utc), int, 1701209347),
-        (datetime(2023, 11, 28, 22, 9, 7), int, 1701209347),
         ("1701209605", int, 1701209605),
         ("2023-11-28 22:11:19", int, 1701209479),
         (1701209998.3429494, float, 1701209998.3429494),
@@ -37,6 +39,16 @@ class TestFile(unittest.TestCase):
 def test_timestamp_to_type(ts, target_type, expected_result):
     result = _timestamp_to_type(ts, target_type)
     assert result == expected_result
+
+
+@pytest.mark.skipif(not hasattr(time, "tzset"), reason="time.tzset is not available on this platform")
+def test_timestamp_to_type_naive_datetime_is_utc():
+    try:
+        with mock.patch.dict(os.environ, {"TZ": "America/New_York"}):
+            time.tzset()
+            assert _timestamp_to_type(datetime(2023, 11, 28, 22, 9, 7), int) == 1701209347
+    finally:
+        time.tzset()
 
 
 def test_timestamp_to_type_invalid_str():
