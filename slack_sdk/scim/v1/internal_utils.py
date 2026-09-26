@@ -108,7 +108,7 @@ def _convert_dict_keys(
                             )
                         result_dict[new_key].append(new_element)
                 else:
-                    result_dict[new_key].append(_create_copy(original_value))
+                    result_dict[new_key].append(_create_copy(element))
         else:
             result_dict[new_key] = _create_copy(original_value)
     return result_dict
