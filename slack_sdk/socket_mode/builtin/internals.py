@@ -14,6 +14,8 @@ from threading import Lock
 from typing import Tuple, Optional, Union, List, Callable, Dict
 from urllib.parse import urlparse, unquote
 
+from slack_sdk.proxy_env_variable_loader import _redact_credentials
+
 from .frame_header import FrameHeader
 
 
@@ -86,7 +88,9 @@ def _establish_new_socket_connection(
             log_message = f"Proxy connect response (session id: {session_id}):\n{text}"
             logger.debug(log_message)
         if status != 200:
-            raise Exception(f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})")
+            raise Exception(
+                f"Failed to connect to the proxy (proxy: {_redact_credentials(proxy)}, connect status code: {status})"
+            )
 
         sock = ssl_context.wrap_socket(
             sock,
