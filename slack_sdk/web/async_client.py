@@ -2216,7 +2216,6 @@ class AsyncWebClient(AsyncBaseClient):
         base_branch: Optional[str] = None,
         head_branch: Optional[str] = None,
         name: Optional[str] = None,
-        label: Optional[str] = None,
         csp: Optional[Dict] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
@@ -2238,7 +2237,6 @@ class AsyncWebClient(AsyncBaseClient):
                 "base_branch": base_branch,
                 "head_branch": head_branch,
                 "name": name,
-                "label": label,
                 "csp": csp,
             }
         )

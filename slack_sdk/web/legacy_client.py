@@ -2217,7 +2217,6 @@ class LegacyWebClient(LegacyBaseClient):
         base_branch: Optional[str] = None,
         head_branch: Optional[str] = None,
         name: Optional[str] = None,
-        label: Optional[str] = None,
         csp: Optional[Dict] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
@@ -2239,7 +2238,6 @@ class LegacyWebClient(LegacyBaseClient):
                 "base_branch": base_branch,
                 "head_branch": head_branch,
                 "name": name,
-                "label": label,
                 "csp": csp,
             }
         )
