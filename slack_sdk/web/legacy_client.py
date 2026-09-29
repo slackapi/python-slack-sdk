@@ -2184,8 +2184,6 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         channel_id: str,
-        title: Optional[str] = None,
-        status: Optional[str] = None,
         code_channel: Optional[Dict] = None,
         agent_resource: Optional[Dict] = None,
         **kwargs,
@@ -2197,8 +2195,6 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update(
             {
                 "channel_id": channel_id,
-                "title": title,
-                "status": status,
                 "code_channel": code_channel,
                 "agent_resource": agent_resource,
             }
