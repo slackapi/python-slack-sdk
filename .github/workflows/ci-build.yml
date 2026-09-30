@@ -152,7 +152,7 @@ jobs:
           pip install -r requirements/databases.txt
       - name: Run sync tests (PostgreSQL)
         env:
-          TEST_DATABASE_URL: postgresql://test_user:password@localhost/test
+          TEST_DATABASE_URL: postgresql+psycopg://test_user:password@localhost/test
         run: |
           PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
           PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
