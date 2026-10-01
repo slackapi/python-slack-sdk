@@ -16,3 +16,7 @@ class TEstInternals(unittest.TestCase):
         result = _to_snake_cased(json.loads(response_body))
         self.assertEqual(result["start_index"], 1)
         self.assertIsNotNone(result["resources"][0]["id"])
+
+    def test_snake_cased_list_of_plain_values(self):
+        result = _to_snake_cased({"schemas": ["urn:scim:schemas:core:1.0", "urn:scim:schemas:extension:enterprise:1.0"]})
+        self.assertEqual(result["schemas"], ["urn:scim:schemas:core:1.0", "urn:scim:schemas:extension:enterprise:1.0"])
