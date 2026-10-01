@@ -369,6 +369,10 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 except Exception as e:
                     self.logger.exception(f"Failed to close the old session : {e}")
 
+                if self.aiohttp_client_session.closed and not self.closed:
+                    self.logger.info("The aiohttp client session is closed; creating a new one")
+                    self.aiohttp_client_session = aiohttp.ClientSession()
+
                 if self.wss_uri is None:
                     # If the underlying WSS URL does not exist,
                     # acquiring a new active WSS URL from the server-side first
