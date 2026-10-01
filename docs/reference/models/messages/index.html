@@ -68,13 +68,14 @@ el.replaceWith(d);
 <pre><code class="python">class ChannelLink(Link):
     def __init__(self):
         &#34;&#34;&#34;Represents an @channel link, which notifies everyone present in this channel.
+
         https://docs.slack.dev/messaging/formatting-message-text/
         &#34;&#34;&#34;
         super().__init__(url=&#34;!channel&#34;, text=&#34;channel&#34;)</code></pre>
 </details>
-<div class="desc"><p>The base class for all model objects in this module</p>
-<p>Represents an @channel link, which notifies everyone present in this channel.
-<a href="https://docs.slack.dev/messaging/formatting-message-text/">https://docs.slack.dev/messaging/formatting-message-text/</a></p></div>
+<div class="desc"><p>The base class for all model objects in this module.</p>
+<p>Represents an @channel link, which notifies everyone present in this channel.</p>
+<p><a href="https://docs.slack.dev/messaging/formatting-message-text/">https://docs.slack.dev/messaging/formatting-message-text/</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.messages.Link" href="#slack_sdk.models.messages.Link">Link</a></li>
@@ -100,6 +101,7 @@ el.replaceWith(d);
         link: Optional[str] = None,
     ):
         &#34;&#34;&#34;Text containing a date or time should display that date in the local timezone of the person seeing the text.
+
         https://docs.slack.dev/messaging/formatting-message-text/#date-formatting
         &#34;&#34;&#34;
         if isinstance(date, datetime):
@@ -112,9 +114,9 @@ el.replaceWith(d);
             link = &#34;&#34;
         super().__init__(url=f&#34;!date^{epoch}^{date_format}{link}&#34;, text=fallback)</code></pre>
 </details>
-<div class="desc"><p>The base class for all model objects in this module</p>
-<p>Text containing a date or time should display that date in the local timezone of the person seeing the text.
-<a href="https://docs.slack.dev/messaging/formatting-message-text/#date-formatting">https://docs.slack.dev/messaging/formatting-message-text/#date-formatting</a></p></div>
+<div class="desc"><p>The base class for all model objects in this module.</p>
+<p>Text containing a date or time should display that date in the local timezone of the person seeing the text.</p>
+<p><a href="https://docs.slack.dev/messaging/formatting-message-text/#date-formatting">https://docs.slack.dev/messaging/formatting-message-text/#date-formatting</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.messages.Link" href="#slack_sdk.models.messages.Link">Link</a></li>
@@ -132,13 +134,14 @@ el.replaceWith(d);
 <pre><code class="python">class EveryoneLink(Link):
     def __init__(self):
         &#34;&#34;&#34;Represents an @everyone link, which notifies all users of this workspace.
+
         https://docs.slack.dev/messaging/formatting-message-text/
         &#34;&#34;&#34;
         super().__init__(url=&#34;!everyone&#34;, text=&#34;everyone&#34;)</code></pre>
 </details>
-<div class="desc"><p>The base class for all model objects in this module</p>
-<p>Represents an @everyone link, which notifies all users of this workspace.
-<a href="https://docs.slack.dev/messaging/formatting-message-text/">https://docs.slack.dev/messaging/formatting-message-text/</a></p></div>
+<div class="desc"><p>The base class for all model objects in this module.</p>
+<p>Represents an @everyone link, which notifies all users of this workspace.</p>
+<p><a href="https://docs.slack.dev/messaging/formatting-message-text/">https://docs.slack.dev/messaging/formatting-message-text/</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.messages.Link" href="#slack_sdk.models.messages.Link">Link</a></li>
@@ -156,13 +159,14 @@ el.replaceWith(d);
 <pre><code class="python">class HereLink(Link):
     def __init__(self):
         &#34;&#34;&#34;Represents an @here link, which notifies all online users of this channel.
+
         https://docs.slack.dev/messaging/formatting-message-text/
         &#34;&#34;&#34;
         super().__init__(url=&#34;!here&#34;, text=&#34;here&#34;)</code></pre>
 </details>
-<div class="desc"><p>The base class for all model objects in this module</p>
-<p>Represents an @here link, which notifies all online users of this channel.
-<a href="https://docs.slack.dev/messaging/formatting-message-text/">https://docs.slack.dev/messaging/formatting-message-text/</a></p></div>
+<div class="desc"><p>The base class for all model objects in this module.</p>
+<p>Represents an @here link, which notifies all online users of this channel.</p>
+<p><a href="https://docs.slack.dev/messaging/formatting-message-text/">https://docs.slack.dev/messaging/formatting-message-text/</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.messages.Link" href="#slack_sdk.models.messages.Link">Link</a></li>
@@ -180,7 +184,8 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class Link(BaseObject):
     def __init__(self, *, url: str, text: str):
-        &#34;&#34;&#34;Base class used to generate links in Slack&#39;s not-quite Markdown, not quite HTML syntax
+        &#34;&#34;&#34;Base class used to generate links in Slack&#39;s not-quite Markdown, not quite HTML syntax.
+
         https://docs.slack.dev/messaging/formatting-message-text/#linking_to_urls
         &#34;&#34;&#34;
         self.url = url
@@ -193,9 +198,9 @@ el.replaceWith(d);
             separator = &#34;&#34;
         return f&#34;&lt;{self.url}{separator}{self.text}&gt;&#34;</code></pre>
 </details>
-<div class="desc"><p>The base class for all model objects in this module</p>
-<p>Base class used to generate links in Slack's not-quite Markdown, not quite HTML syntax
-<a href="https://docs.slack.dev/messaging/formatting-message-text/#linking_to_urls">https://docs.slack.dev/messaging/formatting-message-text/#linking_to_urls</a></p></div>
+<div class="desc"><p>The base class for all model objects in this module.</p>
+<p>Base class used to generate links in Slack's not-quite Markdown, not quite HTML syntax.</p>
+<p><a href="https://docs.slack.dev/messaging/formatting-message-text/#linking_to_urls">https://docs.slack.dev/messaging/formatting-message-text/#linking_to_urls</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.BaseObject" href="../basic_objects.html#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
@@ -229,15 +234,16 @@ el.replaceWith(d);
     }
 
     def __init__(self, *, object_id: str, text: str = &#34;&#34;):
-        &#34;&#34;&#34;Convenience class to create links to specific object types
+        &#34;&#34;&#34;Convenience class to create links to specific object types.
+
         https://docs.slack.dev/messaging/formatting-message-text/#linking-channels
         &#34;&#34;&#34;
         prefix = self.prefix_mapping.get(object_id[0].upper(), &#34;@&#34;)
         super().__init__(url=f&#34;{prefix}{object_id}&#34;, text=text)</code></pre>
 </details>
-<div class="desc"><p>The base class for all model objects in this module</p>
-<p>Convenience class to create links to specific object types
-<a href="https://docs.slack.dev/messaging/formatting-message-text/#linking-channels">https://docs.slack.dev/messaging/formatting-message-text/#linking-channels</a></p></div>
+<div class="desc"><p>The base class for all model objects in this module.</p>
+<p>Convenience class to create links to specific object types.</p>
+<p><a href="https://docs.slack.dev/messaging/formatting-message-text/#linking-channels">https://docs.slack.dev/messaging/formatting-message-text/#linking-channels</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.messages.Link" href="#slack_sdk.models.messages.Link">Link</a></li>

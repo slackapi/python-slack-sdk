@@ -53,8 +53,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def normalize_datetime_for_db(dt: Optional[datetime]) -&gt; Optional[datetime]:
-    &#34;&#34;&#34;
-    Normalize timezone-aware datetime to naive UTC datetime for database storage.
+    &#34;&#34;&#34;Normalize timezone-aware datetime to naive UTC datetime for database storage.
 
     Ensures compatibility with existing databases using TIMESTAMP WITHOUT TIME ZONE.
     SQLAlchemy DateTime columns without timezone=True create naive timestamp columns

@@ -36,7 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>slack_sdk.socket_mode.websocket_client</code></h1>
 </header>
 <section id="section-intro">
-<p>websocket-client based Socket Mode client</p>
+<p>websocket-client based Socket Mode client.</p>
 <ul>
 <li><a href="https://docs.slack.dev/apis/events-api/using-socket-mode/">https://docs.slack.dev/apis/events-api/using-socket-mode/</a></li>
 <li><a href="https://docs.slack.dev/tools/python-slack-sdk/socket-mode/">https://docs.slack.dev/tools/python-slack-sdk/socket-mode/</a></li>
@@ -117,7 +117,7 @@ el.replaceWith(d);
         on_error_listeners: Optional[List[Callable[[WebSocketApp, Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
     ):
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Socket Mode client implementation built with the websocket-client library.
 
         Args:
             app_token: App-level token
@@ -297,7 +297,8 @@ el.replaceWith(d);
                     f&#34;(error: {type(e).__name__}, message: {e})&#34;
                 )</code></pre>
 </details>
-<div class="desc"><dl>
+<div class="desc"><p>Socket Mode client implementation built with the websocket-client library.</p>
+<dl>
 <dt>Args</dt>
 <dt>-----=</dt>
 <dt><strong><code>app_token</code></strong></dt>
