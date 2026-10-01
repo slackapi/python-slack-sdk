@@ -29,7 +29,6 @@ def _timestamp_to_type(ts: Union[TimestampType, datetime, str], target_type: Typ
 
     elif isinstance(ts, datetime):
         if ts.tzinfo is None:
-            # naive datetime values (e.g., loaded from a database) are stored in UTC
             ts = ts.replace(tzinfo=timezone.utc)
         result = target_type(ts.timestamp())
     elif isinstance(ts, str):
