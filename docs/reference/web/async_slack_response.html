@@ -74,17 +74,17 @@ el.replaceWith(d);
     import os
     import slack
 
-    client = slack.AsyncWebClient(token=os.environ[&#39;SLACK_API_TOKEN&#39;])
+    client = slack.AsyncWebClient(token=os.environ[&#34;SLACK_API_TOKEN&#34;])
 
-    response1 = await client.auth_revoke(test=&#39;true&#39;)
-    assert not response1[&#39;revoked&#39;]
+    response1 = await client.auth_revoke(test=&#34;true&#34;)
+    assert not response1[&#34;revoked&#34;]
 
     response2 = await client.auth_test()
-    assert response2.get(&#39;ok&#39;, False)
+    assert response2.get(&#34;ok&#34;, False)
 
     users = []
     async for page in await client.users_list(limit=2):
-        users = users + page[&#39;members&#39;]
+        users = users + page[&#34;members&#34;]
     ```
 
     Note:
@@ -150,6 +150,7 @@ el.replaceWith(d);
 
     def __aiter__(self):
         &#34;&#34;&#34;Enables the ability to iterate over the response.
+
         It&#39;s required async-for the iterator protocol.
 
         Note:
@@ -265,17 +266,17 @@ if 'next_cursor' is present.</p>
 <pre><code class="language-python">import os
 import slack
 
-client = slack.AsyncWebClient(token=os.environ['SLACK_API_TOKEN'])
+client = slack.AsyncWebClient(token=os.environ[&quot;SLACK_API_TOKEN&quot;])
 
-response1 = await client.auth_revoke(test='true')
-assert not response1['revoked']
+response1 = await client.auth_revoke(test=&quot;true&quot;)
+assert not response1[&quot;revoked&quot;]
 
 response2 = await client.auth_test()
-assert response2.get('ok', False)
+assert response2.get(&quot;ok&quot;, False)
 
 users = []
 async for page in await client.users_list(limit=2):
-    users = users + page['members']
+    users = users + page[&quot;members&quot;]
 </code></pre>
 <p>Note
 -----=

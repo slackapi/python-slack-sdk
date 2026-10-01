@@ -93,7 +93,8 @@ el.replaceWith(d);
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[RetryHandler]] = None,
     ):
-        &#34;&#34;&#34;API client for Audit Logs API
+        &#34;&#34;&#34;API client for Audit Logs API.
+
         See https://docs.slack.dev/admins/audit-logs-api/ for more details
 
         Args:
@@ -129,9 +130,9 @@ el.replaceWith(d);
         query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
-        &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API
-        returns as a list of all objects and a short description.
-        Authentication not required.
+        &#34;&#34;&#34;Returns information about the kind of objects the Audit Logs API returns.
+
+        Returned as a list of all objects, each with a short description. Authentication not required.
 
         Args:
             query_params: Set any values if you want to add query params
@@ -151,9 +152,9 @@ el.replaceWith(d);
         query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
-        &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
-        returns as a list of all actions and a short description of each.
-        Authentication not required.
+        &#34;&#34;&#34;Returns information about the kind of actions the Audit Logs API returns.
+
+        Returned as a list of all actions, each with a short description. Authentication not required.
 
         Args:
             query_params: Set any values if you want to add query params
@@ -182,6 +183,7 @@ el.replaceWith(d);
         headers: Optional[Dict[str, str]] = None,
     ) -&gt; AuditLogsResponse:
         &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
+
         It will return a list of actions that have occurred on the installed workspace or grid organization.
         Authentication required.
 
@@ -401,8 +403,8 @@ el.replaceWith(d);
         _debug_log_response(self.logger, resp)
         return resp</code></pre>
 </details>
-<div class="desc"><p>API client for Audit Logs API
-See <a href="https://docs.slack.dev/admins/audit-logs-api/">https://docs.slack.dev/admins/audit-logs-api/</a> for more details</p>
+<div class="desc"><p>API client for Audit Logs API.</p>
+<p>See <a href="https://docs.slack.dev/admins/audit-logs-api/">https://docs.slack.dev/admins/audit-logs-api/</a> for more details</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -482,9 +484,9 @@ See <a href="https://docs.slack.dev/admins/audit-logs-api/">https://docs.slack.d
     query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
-    &#34;&#34;&#34;Returns information about the kind of actions that the Audit Logs API
-    returns as a list of all actions and a short description of each.
-    Authentication not required.
+    &#34;&#34;&#34;Returns information about the kind of actions the Audit Logs API returns.
+
+    Returned as a list of all actions, each with a short description. Authentication not required.
 
     Args:
         query_params: Set any values if you want to add query params
@@ -499,9 +501,8 @@ See <a href="https://docs.slack.dev/admins/audit-logs-api/">https://docs.slack.d
         headers=headers,
     )</code></pre>
 </details>
-<div class="desc"><p>Returns information about the kind of actions that the Audit Logs API
-returns as a list of all actions and a short description of each.
-Authentication not required.</p>
+<div class="desc"><p>Returns information about the kind of actions the Audit Logs API returns.</p>
+<p>Returned as a list of all actions, each with a short description. Authentication not required.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -572,6 +573,7 @@ API response</p></div>
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
     &#34;&#34;&#34;This is the primary endpoint for retrieving actual audit events from your organization.
+
     It will return a list of actions that have occurred on the installed workspace or grid organization.
     Authentication required.
 
@@ -613,8 +615,8 @@ API response</p></div>
         headers=headers,
     )</code></pre>
 </details>
-<div class="desc"><p>This is the primary endpoint for retrieving actual audit events from your organization.
-It will return a list of actions that have occurred on the installed workspace or grid organization.
+<div class="desc"><p>This is the primary endpoint for retrieving actual audit events from your organization.</p>
+<p>It will return a list of actions that have occurred on the installed workspace or grid organization.
 Authentication required.</p>
 <p>The following filters can be applied in order to narrow the range of actions returned.
 Filters are added as query string parameters and can be combined together.
@@ -661,9 +663,9 @@ API response</p></div>
     query_params: Optional[Dict[str, Any]] = None,
     headers: Optional[Dict[str, str]] = None,
 ) -&gt; AuditLogsResponse:
-    &#34;&#34;&#34;Returns information about the kind of objects which the Audit Logs API
-    returns as a list of all objects and a short description.
-    Authentication not required.
+    &#34;&#34;&#34;Returns information about the kind of objects the Audit Logs API returns.
+
+    Returned as a list of all objects, each with a short description. Authentication not required.
 
     Args:
         query_params: Set any values if you want to add query params
@@ -677,9 +679,8 @@ API response</p></div>
         headers=headers,
     )</code></pre>
 </details>
-<div class="desc"><p>Returns information about the kind of objects which the Audit Logs API
-returns as a list of all objects and a short description.
-Authentication not required.</p>
+<div class="desc"><p>Returns information about the kind of objects the Audit Logs API returns.</p>
+<p>Returned as a list of all objects, each with a short description. Authentication not required.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
