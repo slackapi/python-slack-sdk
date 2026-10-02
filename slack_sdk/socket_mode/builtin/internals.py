@@ -60,8 +60,11 @@ def _establish_new_socket_connection(
     ssl_context = _use_or_create_ssl_context(ssl_context)
 
     if proxy is not None:
-        parsed_proxy = urlparse(proxy)
-        proxy_host, proxy_port = parsed_proxy.hostname, parsed_proxy.port or 80
+        try:
+            parsed_proxy = urlparse(proxy)
+            proxy_host, proxy_port = parsed_proxy.hostname, parsed_proxy.port or 80
+        except ValueError:
+            raise ValueError("Invalid proxy URL") from None
         sock = socket.create_connection((proxy_host, proxy_port), receive_timeout)
         if hasattr(socket, "TCP_NODELAY"):
             sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -80,7 +83,11 @@ def _establish_new_socket_connection(
         message.append("")
         req: str = "\r\n".join([line.lstrip() for line in message])
         if trace_enabled:
-            logger.debug(f"Proxy connect request (session id: {session_id}):\n{req}")
+            redacted_req = "\r\n".join(
+                "Proxy-Authorization: ***" if line.partition(":")[0].strip().lower() == "proxy-authorization" else line
+                for line in req.split("\r\n")
+            )
+            logger.debug(f"Proxy connect request (session id: {session_id}):\n{redacted_req}")
         with sock_send_lock:
             sock.send(req.encode("utf-8"))
         status, text = _parse_connect_response(sock)
