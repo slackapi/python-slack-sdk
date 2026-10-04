@@ -1,4 +1,5 @@
 from typing import Optional, Sequence
+from urllib.parse import urlencode
 
 
 class AuthorizeUrlGenerator:
@@ -20,12 +21,18 @@ class AuthorizeUrlGenerator:
     def generate(self, state: str, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         user_scopes = ",".join(self.user_scopes) if self.user_scopes else ""
-        url = f"{self.authorization_url}?state={state}&client_id={self.client_id}&scope={scopes}&user_scope={user_scopes}"
+        params = {
+            "state": state,
+            "client_id": self.client_id,
+            "scope": scopes,
+            "user_scope": user_scopes,
+        }
         if self.redirect_uri is not None:
-            url += f"&redirect_uri={self.redirect_uri}"
+            params["redirect_uri"] = self.redirect_uri
         if team is not None:
-            url += f"&team={team}"
-        return url
+            params["team"] = team
+        query = urlencode(params, safe=":,/")
+        return f"{self.authorization_url}?{query}"
 
 
 class OpenIDConnectAuthorizeUrlGenerator:
@@ -46,16 +53,16 @@ class OpenIDConnectAuthorizeUrlGenerator:
 
     def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
-        url = (
-            f"{self.authorization_url}?"
-            "response_type=code&"
-            f"state={state}&"
-            f"client_id={self.client_id}&"
-            f"scope={scopes}&"
-            f"redirect_uri={self.redirect_uri}"
-        )
+        params = {
+            "response_type": "code",
+            "state": state,
+            "client_id": self.client_id,
+            "scope": scopes,
+            "redirect_uri": self.redirect_uri,
+        }
         if team is not None:
-            url += f"&team={team}"
+            params["team"] = team
         if nonce is not None:
-            url += f"&nonce={nonce}"
-        return url
+            params["nonce"] = nonce
+        query = urlencode(params, safe=":,/")
+        return f"{self.authorization_url}?{query}"

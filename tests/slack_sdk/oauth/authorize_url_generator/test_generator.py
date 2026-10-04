@@ -1,4 +1,5 @@
 import unittest
+from urllib.parse import parse_qs, urlsplit
 
 from slack_sdk.oauth import AuthorizeUrlGenerator, OpenIDConnectAuthorizeUrlGenerator
 
@@ -70,3 +71,66 @@ class TestGenerator(unittest.TestCase):
             "&nonce=nnn"
         )
         self.assertEqual(expected, url)
+
+    def test_query_parameters_round_trip(self):
+        redirect_uri = "https://www.example.com/callback?view=home&lang=en"
+        generator = AuthorizeUrlGenerator(
+            client_id="111.222",
+            redirect_uri=redirect_uri,
+            scopes=["chat:write", "commands"],
+            user_scopes=["search:read"],
+        )
+        for state in (
+            "",
+            "plus+value",
+            "space value",
+            "key=value&other=value",
+            "percent%20value",
+            "fragment#value",
+            "日本語",
+        ):
+            with self.subTest(state=state):
+                url = generator.generate(state=state, team="T12345")
+                self.assertDictEqual(
+                    {
+                        "state": [state],
+                        "client_id": ["111.222"],
+                        "scope": ["chat:write,commands"],
+                        "user_scope": ["search:read"],
+                        "redirect_uri": [redirect_uri],
+                        "team": ["T12345"],
+                    },
+                    parse_qs(urlsplit(url).query, keep_blank_values=True),
+                )
+
+    def test_openid_connect_query_parameters_round_trip(self):
+        redirect_uri = "https://www.example.com/oidc/callback?view=home%20page&lang=en"
+        generator = OpenIDConnectAuthorizeUrlGenerator(
+            client_id="111.222",
+            redirect_uri=redirect_uri,
+            scopes=["openid", "profile"],
+        )
+        for value in (
+            "",
+            "plus+value",
+            "space value",
+            "key=value&other=value",
+            "percent%20value",
+            "fragment#value",
+            "日本語",
+        ):
+            with self.subTest(value=value):
+                state = f"state-{value}"
+                url = generator.generate(state=state, nonce=value, team="T12345")
+                self.assertDictEqual(
+                    {
+                        "response_type": ["code"],
+                        "state": [state],
+                        "client_id": ["111.222"],
+                        "scope": ["openid,profile"],
+                        "redirect_uri": [redirect_uri],
+                        "team": ["T12345"],
+                        "nonce": [value],
+                    },
+                    parse_qs(urlsplit(url).query, keep_blank_values=True),
+                )
