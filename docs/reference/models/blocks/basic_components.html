@@ -84,9 +84,9 @@ el.replaceWith(d);
         deny: Union[str, Dict[str, Any], PlainTextObject] = &#34;No&#34;,
         style: Optional[str] = None,
     ):
-        &#34;&#34;&#34;
-        An object that defines a dialog that provides a confirmation step to any
-        interactive element. This dialog will ask the user to confirm their action by
+        &#34;&#34;&#34;An object that defines a dialog that provides a confirmation step to any interactive element.
+
+        This dialog will ask the user to confirm their action by
         offering a confirm and deny button.
         https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/
         &#34;&#34;&#34;
@@ -152,9 +152,9 @@ el.replaceWith(d);
                 json[&#34;style&#34;] = self._style
             return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>An object that defines a dialog that provides a confirmation step to any
-interactive element. This dialog will ask the user to confirm their action by
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>An object that defines a dialog that provides a confirmation step to any interactive element.</p>
+<p>This dialog will ask the user to confirm their action by
 offering a confirm and deny button.
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/">https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/</a></p></div>
 <h3>Ancestors</h3>
@@ -293,8 +293,8 @@ def title_length(self) -&gt; bool:
         *,
         trigger_actions_on: Optional[List[Any]] = None,
     ):
-        &#34;&#34;&#34;
-        Determines when a plain-text input element will return a block_actions interaction payload.
+        &#34;&#34;&#34;Determines when a plain-text input element will return a block_actions interaction payload.
+
         https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object
         &#34;&#34;&#34;
         self._trigger_actions_on = trigger_actions_on or []
@@ -306,9 +306,9 @@ def title_length(self) -&gt; bool:
             json[&#34;trigger_actions_on&#34;] = self._trigger_actions_on
         return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>Determines when a plain-text input element will return a block_actions interaction payload.
-<a href="https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object">https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object</a></p></div>
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>Determines when a plain-text input element will return a block_actions interaction payload.</p>
+<p><a href="https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object">https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object</a></p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -376,8 +376,8 @@ def title_length(self) -&gt; bool:
         value: str,
         **others: Dict[str, Any],
     ):
-        &#34;&#34;&#34;
-        A feedback button element object for either positive or negative feedback.
+        &#34;&#34;&#34;A feedback button element object for either positive or negative feedback.
+
         https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields
 
         Args:
@@ -410,9 +410,9 @@ def title_length(self) -&gt; bool:
             json[&#34;value&#34;] = self._value
         return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>A feedback button element object for either positive or negative feedback.
-<a href="https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields">https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields</a></p>
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>A feedback button element object for either positive or negative feedback.</p>
+<p><a href="https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields">https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields</a></p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -505,7 +505,7 @@ def value_length(self) -&gt; bool:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class MarkdownTextObject(TextObject):
-    &#34;&#34;&#34;mrkdwn typed text object&#34;&#34;&#34;
+    &#34;&#34;&#34;mrkdwn typed text object.&#34;&#34;&#34;
 
     type = &#34;mrkdwn&#34;
 
@@ -514,8 +514,8 @@ def value_length(self) -&gt; bool:
         return super().attributes.union({&#34;verbatim&#34;})
 
     def __init__(self, *, text: str, verbatim: Optional[bool] = None):
-        &#34;&#34;&#34;A Markdown text object, meaning markdown characters will be parsed as
-        formatting information.
+        &#34;&#34;&#34;A Markdown text object, meaning markdown characters will be parsed as formatting information.
+
         https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
@@ -531,36 +531,29 @@ def value_length(self) -&gt; bool:
 
     @staticmethod
     def from_str(text: str) -&gt; &#34;MarkdownTextObject&#34;:
-        &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
+        &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
         return MarkdownTextObject(text=text)
 
     @staticmethod
     def direct_from_string(text: str) -&gt; Dict[str, Any]:
-        &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
+        &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
         return MarkdownTextObject.from_str(text).to_dict()
 
     @staticmethod
     def from_link(link: Link, title: str = &#34;&#34;) -&gt; &#34;MarkdownTextObject&#34;:
-        &#34;&#34;&#34;
-        Transform a Link object directly into the required object shape
-        to act as a MarkdownTextObject
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Transform a Link object directly into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
         if title:
             title = f&#34;: {title}&#34;
         return MarkdownTextObject(text=f&#34;{link}{title}&#34;)
 
     @staticmethod
     def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; Dict[str, Any]:
-        &#34;&#34;&#34;
-        Transform a Link object directly into the required object shape
-        to act as a MarkdownTextObject
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Transform a Link object directly into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
         return MarkdownTextObject.from_link(link, title).to_dict()</code></pre>
 </details>
-<div class="desc"><p>mrkdwn typed text object</p>
-<p>A Markdown text object, meaning markdown characters will be parsed as
-formatting information.
-<a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
+<div class="desc"><p>mrkdwn typed text object.</p>
+<p>A Markdown text object, meaning markdown characters will be parsed as formatting information.</p>
+<p><a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -598,14 +591,10 @@ although you can still include manual parsing strings. This field is only usable
 </summary>
 <pre><code class="python">@staticmethod
 def direct_from_link(link: Link, title: str = &#34;&#34;) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;
-    Transform a Link object directly into the required object shape
-    to act as a MarkdownTextObject
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Transform a Link object directly into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
     return MarkdownTextObject.from_link(link, title).to_dict()</code></pre>
 </details>
-<div class="desc"><p>Transform a Link object directly into the required object shape
-to act as a MarkdownTextObject</p></div>
+<div class="desc"><p>Transform a Link object directly into the required object shape to act as a MarkdownTextObject.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.MarkdownTextObject.direct_from_string"><code class="name flex">
 <span>def <span class="ident">direct_from_string</span></span>(<span>text: str) ‑> Dict[str, Any]</span>
@@ -617,10 +606,10 @@ to act as a MarkdownTextObject</p></div>
 </summary>
 <pre><code class="python">@staticmethod
 def direct_from_string(text: str) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
+    &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
     return MarkdownTextObject.from_str(text).to_dict()</code></pre>
 </details>
-<div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject</p></div>
+<div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.MarkdownTextObject.from_link"><code class="name flex">
 <span>def <span class="ident">from_link</span></span>(<span>link: <a title="slack_sdk.models.messages.Link" href="../messages/index.html#slack_sdk.models.messages.Link">Link</a>,<br>title: str = '') ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
@@ -632,16 +621,12 @@ def direct_from_string(text: str) -&gt; Dict[str, Any]:
 </summary>
 <pre><code class="python">@staticmethod
 def from_link(link: Link, title: str = &#34;&#34;) -&gt; &#34;MarkdownTextObject&#34;:
-    &#34;&#34;&#34;
-    Transform a Link object directly into the required object shape
-    to act as a MarkdownTextObject
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Transform a Link object directly into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
     if title:
         title = f&#34;: {title}&#34;
     return MarkdownTextObject(text=f&#34;{link}{title}&#34;)</code></pre>
 </details>
-<div class="desc"><p>Transform a Link object directly into the required object shape
-to act as a MarkdownTextObject</p></div>
+<div class="desc"><p>Transform a Link object directly into the required object shape to act as a MarkdownTextObject.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.MarkdownTextObject.from_str"><code class="name flex">
 <span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.MarkdownTextObject" href="#slack_sdk.models.blocks.basic_components.MarkdownTextObject">MarkdownTextObject</a></span>
@@ -653,10 +638,10 @@ to act as a MarkdownTextObject</p></div>
 </summary>
 <pre><code class="python">@staticmethod
 def from_str(text: str) -&gt; &#34;MarkdownTextObject&#34;:
-    &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject&#34;&#34;&#34;
+    &#34;&#34;&#34;Transforms a string into the required object shape to act as a MarkdownTextObject.&#34;&#34;&#34;
     return MarkdownTextObject(text=text)</code></pre>
 </details>
-<div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject</p></div>
+<div class="desc"><p>Transforms a string into the required object shape to act as a MarkdownTextObject.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -696,8 +681,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Option(JsonObject):
-    &#34;&#34;&#34;Option object used in dialogs, legacy message actions (interactivity in attachments),
-    and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
+    &#34;&#34;&#34;Option object used in dialogs, legacy message actions (interactivity in attachments), and blocks.
+
+    JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     &#34;&#34;&#34;
 
@@ -717,10 +703,10 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         url: Optional[str] = None,
         **others: Dict[str, Any],
     ):
-        &#34;&#34;&#34;
-        An object that represents a single selectable item in a block element (
-        SelectElement, OverflowMenuElement) or dialog element
-        (StaticDialogSelectElement)
+        &#34;&#34;&#34;An object that represents a single selectable item in a block or dialog element.
+
+        Usable in a block element (SelectElement, OverflowMenuElement) or a dialog element
+        (StaticDialogSelectElement).
 
         Blocks:
         https://docs.slack.dev/reference/block-kit/composition-objects/option-object
@@ -809,9 +795,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return option_objects
 
     def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:
-        &#34;&#34;&#34;
-        Different parent classes must call this with a valid value from OptionTypes -
-        either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
+        &#34;&#34;&#34;Different parent classes must call this with a valid value from OptionTypes.
+
+        It must be either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
         correct shape.
         &#34;&#34;&#34;
         self.validate_json()
@@ -838,15 +824,15 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 
     @staticmethod
     def from_single_value(value_and_label: str):
-        &#34;&#34;&#34;Creates a simple Option instance with the same value and label&#34;&#34;&#34;
+        &#34;&#34;&#34;Creates a simple Option instance with the same value and label.&#34;&#34;&#34;
         return Option(value=value_and_label, label=value_and_label)</code></pre>
 </details>
-<div class="desc"><p>Option object used in dialogs, legacy message actions (interactivity in attachments),
-and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
+<div class="desc"><p>Option object used in dialogs, legacy message actions (interactivity in attachments), and blocks.</p>
+<p>JSON must be retrieved with an explicit option_type - the Slack API has
 different required formats in different situations</p>
-<p>An object that represents a single selectable item in a block element (
-SelectElement, OverflowMenuElement) or dialog element
-(StaticDialogSelectElement)</p>
+<p>An object that represents a single selectable item in a block or dialog element.</p>
+<p>Usable in a block element (SelectElement, OverflowMenuElement) or a dialog element
+(StaticDialogSelectElement).</p>
 <p>Blocks:
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/option-object">https://docs.slack.dev/reference/block-kit/composition-objects/option-object</a></p>
 <p>Dialogs:
@@ -904,10 +890,10 @@ dialogs.</dd>
 </summary>
 <pre><code class="python">@staticmethod
 def from_single_value(value_and_label: str):
-    &#34;&#34;&#34;Creates a simple Option instance with the same value and label&#34;&#34;&#34;
+    &#34;&#34;&#34;Creates a simple Option instance with the same value and label.&#34;&#34;&#34;
     return Option(value=value_and_label, label=value_and_label)</code></pre>
 </details>
-<div class="desc"><p>Creates a simple Option instance with the same value and label</p></div>
+<div class="desc"><p>Creates a simple Option instance with the same value and label.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.Option.parse_all"><code class="name flex">
 <span>def <span class="ident">parse_all</span></span>(<span>options: Sequence[Dict[str, Any] | <a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None) ‑> List[<a title="slack_sdk.models.blocks.basic_components.Option" href="#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None</span>
@@ -927,9 +913,9 @@ def from_single_value(value_and_label: str):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def to_dict(self, option_type: str = &#34;block&#34;) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;
-    Different parent classes must call this with a valid value from OptionTypes -
-    either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
+    &#34;&#34;&#34;Different parent classes must call this with a valid value from OptionTypes.
+
+    It must be either &#34;dialog&#34;, &#34;action&#34;, or &#34;block&#34;, so that JSON is returned in the
     correct shape.
     &#34;&#34;&#34;
     self.validate_json()
@@ -954,8 +940,8 @@ def from_single_value(value_and_label: str):
             json[&#34;url&#34;] = self.url
         return json</code></pre>
 </details>
-<div class="desc"><p>Different parent classes must call this with a valid value from OptionTypes -
-either "dialog", "action", or "block", so that JSON is returned in the
+<div class="desc"><p>Different parent classes must call this with a valid value from OptionTypes.</p>
+<p>It must be either "dialog", "action", or "block", so that JSON is returned in the
 correct shape.</p></div>
 </dd>
 </dl>
@@ -979,9 +965,9 @@ correct shape.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class OptionGroup(JsonObject):
-    &#34;&#34;&#34;
-    JSON must be retrieved with an explicit option_type - the Slack API has
-    different required formats in different situations
+    &#34;&#34;&#34;JSON must be retrieved with an explicit option_type.
+
+    The Slack API has different required formats in different situations.
     &#34;&#34;&#34;
 
     attributes: Set[str] = set()
@@ -996,9 +982,9 @@ correct shape.</p></div>
         options: Sequence[Union[Dict[str, Any], Option]],
         **others: Dict[str, Any],
     ):
-        &#34;&#34;&#34;
-        Create a group of Option objects - pass in a label (that will be part of the
-        UI) and a list of Option objects.
+        &#34;&#34;&#34;Create a group of Option objects.
+
+        Pass in a label (that will be part of the UI) and a list of Option objects.
 
         Blocks:
         https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object
@@ -1064,10 +1050,10 @@ correct shape.</p></div>
                 &#34;options&#34;: dict_options,
             }</code></pre>
 </details>
-<div class="desc"><p>JSON must be retrieved with an explicit option_type - the Slack API has
-different required formats in different situations</p>
-<p>Create a group of Option objects - pass in a label (that will be part of the
-UI) and a list of Option objects.</p>
+<div class="desc"><p>JSON must be retrieved with an explicit option_type.</p>
+<p>The Slack API has different required formats in different situations.</p>
+<p>Create a group of Option objects.</p>
+<p>Pass in a label (that will be part of the UI) and a list of Option objects.</p>
 <p>Blocks:
 <a href="https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object">https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object</a></p>
 <p>Dialogs:
@@ -1136,7 +1122,7 @@ UI) and a list of Option objects.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class PlainTextObject(TextObject):
-    &#34;&#34;&#34;plain_text typed text object&#34;&#34;&#34;
+    &#34;&#34;&#34;plain_text typed text object.&#34;&#34;&#34;
 
     type = &#34;plain_text&#34;
 
@@ -1145,8 +1131,8 @@ UI) and a list of Option objects.</p>
         return super().attributes.union({&#34;emoji&#34;})
 
     def __init__(self, *, text: str, emoji: Optional[bool] = None):
-        &#34;&#34;&#34;A plain text object, meaning markdown characters will not be parsed as
-        formatting information.
+        &#34;&#34;&#34;A plain text object, meaning markdown characters will not be parsed as formatting information.
+
         https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
@@ -1164,13 +1150,12 @@ UI) and a list of Option objects.</p>
 
     @staticmethod
     def direct_from_string(text: str) -&gt; Dict[str, Any]:
-        &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject&#34;&#34;&#34;
+        &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject.&#34;&#34;&#34;
         return PlainTextObject.from_str(text).to_dict()</code></pre>
 </details>
-<div class="desc"><p>plain_text typed text object</p>
-<p>A plain text object, meaning markdown characters will not be parsed as
-formatting information.
-<a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
+<div class="desc"><p>plain_text typed text object.</p>
+<p>A plain text object, meaning markdown characters will not be parsed as formatting information.</p>
+<p><a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object">https://docs.slack.dev/reference/block-kit/composition-objects/text-object</a></p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -1206,10 +1191,10 @@ This field is only usable when type is plain_text.</dd>
 </summary>
 <pre><code class="python">@staticmethod
 def direct_from_string(text: str) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject&#34;&#34;&#34;
+    &#34;&#34;&#34;Transforms a string into the required object shape to act as a PlainTextObject.&#34;&#34;&#34;
     return PlainTextObject.from_str(text).to_dict()</code></pre>
 </details>
-<div class="desc"><p>Transforms a string into the required object shape to act as a PlainTextObject</p></div>
+<div class="desc"><p>Transforms a string into the required object shape to act as a PlainTextObject.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.PlainTextObject.from_str"><code class="name flex">
 <span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.PlainTextObject" href="#slack_sdk.models.blocks.basic_components.PlainTextObject">PlainTextObject</a></span>
@@ -1263,7 +1248,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class RawTextObject(TextObject):
-    &#34;&#34;&#34;raw_text typed text object&#34;&#34;&#34;
+    &#34;&#34;&#34;raw_text typed text object.&#34;&#34;&#34;
 
     type = &#34;raw_text&#34;
 
@@ -1273,6 +1258,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 
     def __init__(self, *, text: str):
         &#34;&#34;&#34;A raw text object used in table block cells.
+
         https://docs.slack.dev/reference/block-kit/composition-objects/text-object/
         https://docs.slack.dev/reference/block-kit/blocks/table-block
 
@@ -1283,21 +1269,21 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 
     @staticmethod
     def from_str(text: str) -&gt; &#34;RawTextObject&#34;:
-        &#34;&#34;&#34;Transforms a string into a RawTextObject&#34;&#34;&#34;
+        &#34;&#34;&#34;Transforms a string into a RawTextObject.&#34;&#34;&#34;
         return RawTextObject(text=text)
 
     @staticmethod
     def direct_from_string(text: str) -&gt; Dict[str, Any]:
-        &#34;&#34;&#34;Transforms a string into the required object shape to act as a RawTextObject&#34;&#34;&#34;
+        &#34;&#34;&#34;Transforms a string into the required object shape to act as a RawTextObject.&#34;&#34;&#34;
         return RawTextObject.from_str(text).to_dict()
 
     @JsonValidator(&#34;text attribute must have at least 1 character&#34;)
     def _validate_text_min_length(self):
         return len(self.text) &gt;= 1</code></pre>
 </details>
-<div class="desc"><p>raw_text typed text object</p>
-<p>A raw text object used in table block cells.
-<a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object/">https://docs.slack.dev/reference/block-kit/composition-objects/text-object/</a>
+<div class="desc"><p>raw_text typed text object.</p>
+<p>A raw text object used in table block cells.</p>
+<p><a href="https://docs.slack.dev/reference/block-kit/composition-objects/text-object/">https://docs.slack.dev/reference/block-kit/composition-objects/text-object/</a>
 <a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
 <dl>
 <dt>Args</dt>
@@ -1330,10 +1316,10 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 </summary>
 <pre><code class="python">@staticmethod
 def direct_from_string(text: str) -&gt; Dict[str, Any]:
-    &#34;&#34;&#34;Transforms a string into the required object shape to act as a RawTextObject&#34;&#34;&#34;
+    &#34;&#34;&#34;Transforms a string into the required object shape to act as a RawTextObject.&#34;&#34;&#34;
     return RawTextObject.from_str(text).to_dict()</code></pre>
 </details>
-<div class="desc"><p>Transforms a string into the required object shape to act as a RawTextObject</p></div>
+<div class="desc"><p>Transforms a string into the required object shape to act as a RawTextObject.</p></div>
 </dd>
 <dt id="slack_sdk.models.blocks.basic_components.RawTextObject.from_str"><code class="name flex">
 <span>def <span class="ident">from_str</span></span>(<span>text: str) ‑> <a title="slack_sdk.models.blocks.basic_components.RawTextObject" href="#slack_sdk.models.blocks.basic_components.RawTextObject">RawTextObject</a></span>
@@ -1345,10 +1331,10 @@ def direct_from_string(text: str) -&gt; Dict[str, Any]:
 </summary>
 <pre><code class="python">@staticmethod
 def from_str(text: str) -&gt; &#34;RawTextObject&#34;:
-    &#34;&#34;&#34;Transforms a string into a RawTextObject&#34;&#34;&#34;
+    &#34;&#34;&#34;Transforms a string into a RawTextObject.&#34;&#34;&#34;
     return RawTextObject(text=text)</code></pre>
 </details>
-<div class="desc"><p>Transforms a string into a RawTextObject</p></div>
+<div class="desc"><p>Transforms a string into a RawTextObject.</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -1397,6 +1383,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         url: Optional[str] = None,
     ):
         &#34;&#34;&#34;An object containing Slack file information to be used in an image block or image element.
+
         https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object
 
         Args:
@@ -1415,9 +1402,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             json[&#34;url&#34;] = self._url
         return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>An object containing Slack file information to be used in an image block or image element.
-<a href="https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object">https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object</a></p>
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>An object containing Slack file information to be used in an image block or image element.</p>
+<p><a href="https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object">https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object</a></p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -1473,6 +1460,7 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         **others: dict,
     ):
         &#34;&#34;&#34;Settings for a single column in a table block.
+
         https://docs.slack.dev/reference/block-kit/blocks/table-block
 
         Args:
@@ -1498,8 +1486,8 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         return None</code></pre>
 </details>
 <div class="desc"><p>Column settings for TableBlock columns.</p>
-<p>Settings for a single column in a table block.
-<a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
+<p>Settings for a single column in a table block.</p>
+<p><a href="https://docs.slack.dev/reference/block-kit/blocks/table-block">https://docs.slack.dev/reference/block-kit/blocks/table-block</a></p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -1546,7 +1534,7 @@ Defaults to false if not defined.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class TextObject(JsonObject):
-    &#34;&#34;&#34;The interface for text objects (types: plain_text, mrkdwn)&#34;&#34;&#34;
+    &#34;&#34;&#34;The interface for text objects (types: plain_text, mrkdwn).&#34;&#34;&#34;
 
     attributes = {&#34;text&#34;, &#34;type&#34;, &#34;emoji&#34;}
     logger = logging.getLogger(__name__)
@@ -1595,7 +1583,7 @@ Defaults to false if not defined.</dd>
         emoji: Optional[bool] = None,
         **kwargs,
     ):
-        &#34;&#34;&#34;Super class for new text &#34;objects&#34; used in Block kit&#34;&#34;&#34;
+        &#34;&#34;&#34;Super class for new text &#34;objects&#34; used in Block kit.&#34;&#34;&#34;
         if subtype:
             self._subtype_warning()
 
@@ -1603,8 +1591,8 @@ Defaults to false if not defined.</dd>
         self.type = type if type else subtype
         self.emoji = emoji</code></pre>
 </details>
-<div class="desc"><p>The interface for text objects (types: plain_text, mrkdwn)</p>
-<p>Super class for new text "objects" used in Block kit</p></div>
+<div class="desc"><p>The interface for text objects (types: plain_text, mrkdwn).</p>
+<p>Super class for new text "objects" used in Block kit.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -1690,7 +1678,7 @@ def subtype(self) -&gt; Optional[str]:
             json[&#34;trigger&#34;] = self._trigger
         return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<div class="desc"><p>The base class for JSON serializable class objects.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -1737,7 +1725,7 @@ def subtype(self) -&gt; Optional[str]:
             json.update({&#34;customizable_input_parameters&#34;: self._customizable_input_parameters})  # type: ignore[dict-item]
         return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<div class="desc"><p>The base class for JSON serializable class objects.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
