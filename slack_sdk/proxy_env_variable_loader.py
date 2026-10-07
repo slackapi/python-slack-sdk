@@ -2,7 +2,9 @@
 
 import logging
 import os
+import re
 from typing import Optional
+from urllib.parse import urlsplit
 
 _default_logger = logging.getLogger(__name__)
 
@@ -21,5 +23,18 @@ def load_http_proxy_from_env(logger: logging.Logger = _default_logger) -> Option
         logger.debug("The Slack SDK ignored the proxy env variable as an empty value is set.")
         return None
 
-    logger.debug(f"HTTP proxy URL has been loaded from an env variable: {proxy_url}")
+    logger.debug(f"HTTP proxy URL has been loaded from an env variable: {_redact_credentials(proxy_url)}")
     return proxy_url
+
+
+def _redact_credentials(url: str) -> str:
+    """Replaces the user info (e.g., user:password@) in a URL so that it can be safely logged."""
+    if "@" in url:
+        scheme = re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*://", url)
+        prefix = scheme.group(0) if scheme else ""
+        return f"{prefix}***@{url.rpartition('@')[2]}"
+    try:
+        urlsplit(url)
+    except ValueError:
+        return "(unparsable URL)"
+    return url
