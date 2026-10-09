@@ -134,3 +134,20 @@ class TestGenerator(unittest.TestCase):
                     },
                     parse_qs(urlsplit(url).query, keep_blank_values=True),
                 )
+
+    def test_pre_encoded_authorization_values_are_not_decoded(self):
+        redirect_uri = "https://www.example.com/callback%3Fa%3Db"
+        generator = AuthorizeUrlGenerator(
+            client_id="111.222", redirect_uri=redirect_uri
+        )
+        url = generator.generate(state="abc%2B")
+        self.assertIn("state=abc%252B", url)
+        self.assertIn("redirect_uri=https://www.example.com/callback%253Fa%253Db", url)
+
+        openid_generator = OpenIDConnectAuthorizeUrlGenerator(
+            client_id="111.222", redirect_uri=redirect_uri
+        )
+        url = openid_generator.generate(state="abc%2B", nonce="x%26y")
+        self.assertIn("state=abc%252B", url)
+        self.assertIn("redirect_uri=https://www.example.com/callback%253Fa%253Db", url)
+        self.assertIn("nonce=x%2526y", url)

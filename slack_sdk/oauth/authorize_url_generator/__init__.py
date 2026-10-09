@@ -3,6 +3,13 @@ from urllib.parse import urlencode
 
 
 class AuthorizeUrlGenerator:
+    """Generate an OAuth authorization URL.
+
+    Pass the complete ``redirect_uri`` and original ``state`` as values,
+    not as pre-encoded authorization query components. This generator
+    handles the outer query encoding.
+    """
+
     def __init__(
         self,
         *,
@@ -36,7 +43,11 @@ class AuthorizeUrlGenerator:
 
 
 class OpenIDConnectAuthorizeUrlGenerator:
-    """Refer to https://openid.net/specs/openid-connect-core-1_0.html."""
+    """Refer to https://openid.net/specs/openid-connect-core-1_0.html.
+
+    Supply ``redirect_uri``, ``state``, and ``nonce`` as values, without
+    pre-encoding them for the authorization query string.
+    """
 
     def __init__(
         self,
