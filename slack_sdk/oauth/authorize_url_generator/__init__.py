@@ -1,7 +1,15 @@
 from typing import Optional, Sequence
+from urllib.parse import urlencode
 
 
 class AuthorizeUrlGenerator:
+    """Generate an OAuth authorization URL.
+
+    Pass the complete ``redirect_uri`` and original ``state`` as values,
+    not as pre-encoded authorization query components. This generator
+    handles the outer query encoding.
+    """
+
     def __init__(
         self,
         *,
@@ -20,16 +28,26 @@ class AuthorizeUrlGenerator:
     def generate(self, state: str, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         user_scopes = ",".join(self.user_scopes) if self.user_scopes else ""
-        url = f"{self.authorization_url}?state={state}&client_id={self.client_id}&scope={scopes}&user_scope={user_scopes}"
+        params = {
+            "state": state,
+            "client_id": self.client_id,
+            "scope": scopes,
+            "user_scope": user_scopes,
+        }
         if self.redirect_uri is not None:
-            url += f"&redirect_uri={self.redirect_uri}"
+            params["redirect_uri"] = self.redirect_uri
         if team is not None:
-            url += f"&team={team}"
-        return url
+            params["team"] = team
+        query = urlencode(params, safe=":,/")
+        return f"{self.authorization_url}?{query}"
 
 
 class OpenIDConnectAuthorizeUrlGenerator:
-    """Refer to https://openid.net/specs/openid-connect-core-1_0.html."""
+    """Refer to https://openid.net/specs/openid-connect-core-1_0.html.
+
+    Supply ``redirect_uri``, ``state``, and ``nonce`` as values, without
+    pre-encoding them for the authorization query string.
+    """
 
     def __init__(
         self,
@@ -46,16 +64,16 @@ class OpenIDConnectAuthorizeUrlGenerator:
 
     def generate(self, state: str, nonce: Optional[str] = None, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
-        url = (
-            f"{self.authorization_url}?"
-            "response_type=code&"
-            f"state={state}&"
-            f"client_id={self.client_id}&"
-            f"scope={scopes}&"
-            f"redirect_uri={self.redirect_uri}"
-        )
+        params = {
+            "response_type": "code",
+            "state": state,
+            "client_id": self.client_id,
+            "scope": scopes,
+            "redirect_uri": self.redirect_uri,
+        }
         if team is not None:
-            url += f"&team={team}"
+            params["team"] = team
         if nonce is not None:
-            url += f"&nonce={nonce}"
-        return url
+            params["nonce"] = nonce
+        query = urlencode(params, safe=":,/")
+        return f"{self.authorization_url}?{query}"
