@@ -2467,10 +2467,8 @@ class AsyncWebClient(AsyncBaseClient):
         disconnected_user_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Sets the connection status between an app and up to 1000 users at once.
+        """Updates the connection status between an app and many users in one call, for backfilling an existing user base.
 
-        At least one of ``connected_user_ids`` or ``disconnected_user_ids`` is required;
-        combined they may not exceed 1000 users.
         https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate
         """
         if isinstance(connected_user_ids, (list, tuple)):
@@ -2491,10 +2489,8 @@ class AsyncWebClient(AsyncBaseClient):
         user_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Opens or updates the authorization modal that asks a user to connect a provider to an app.
+        """Opens or updates a standardized authentication modal for the calling app.
 
-        Provide ``trigger_id`` to open a new authorization modal, or ``user_id`` to update the one
-        already open for that user. ``user_id`` is ignored when ``trigger_id`` is provided.
         https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth
         """
         kwargs.update({"trigger_id": trigger_id, "user_id": user_id})
