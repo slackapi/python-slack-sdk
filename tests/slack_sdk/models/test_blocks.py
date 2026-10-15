@@ -1990,6 +1990,11 @@ class CarouselBlockTests(unittest.TestCase):
             CarouselBlock(elements=[]).validate_json()
 
 
+# ----------------------------------------------
+# Auth provider
+# ----------------------------------------------
+
+
 class AuthProviderBlockTests(unittest.TestCase):
     def test_document_required_fields(self):
         input = {

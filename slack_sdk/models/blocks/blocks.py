@@ -1228,10 +1228,12 @@ class AuthProviderBlock(Block):
             disconnect_url: The HTTPS URL opened when the user clicks Disconnect. Its host must be listed in
                 the app manifest's features.user_connections.auth_hosts, or be a subdomain of one.
                 Maximum length for this field is 3000 characters.
-            connected_identity: The display name of the connected account, shown when is_connected is true,
-                in the form of a plain_text text object. Maximum length for the text in this field is 75 characters.
+            connected_identity: The display name of the connected account, in the form of a plain_text text object.
+                Shown when is_connected is true.
+                Maximum length for the text in this field is 75 characters.
             connected_context: Additional context about the connection, such as an organization or workspace name,
-                in the form of a plain_text text object. Maximum length for the text in this field is 75 characters.
+                in the form of a plain_text text object.
+                Maximum length for the text in this field is 75 characters.
             accessory: An overflow menu element shown when the user is connected.
             fallback: A list of blocks rendered in place of this block by clients that don't support it.
             block_id: A unique identifier for a block. If not specified, a block_id will be generated.
