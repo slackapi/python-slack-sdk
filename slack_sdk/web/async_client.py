@@ -33,6 +33,7 @@ from .internal_utils import (
     _update_call_participants,
     _validate_for_legacy_client,
     _warn_if_message_text_content_is_missing,
+    _warn_if_unknown_kwargs,
 )
 
 
@@ -3292,6 +3293,27 @@ class AsyncWebClient(AsyncBaseClient):
 
         https://docs.slack.dev/reference/methods/chat.postMessage
         """
+        known_params = {
+            "channel",
+            "text",
+            "as_user",
+            "attachments",
+            "blocks",
+            "thread_ts",
+            "reply_broadcast",
+            "unfurl_links",
+            "unfurl_media",
+            "container_id",
+            "icon_emoji",
+            "icon_url",
+            "mrkdwn",
+            "link_names",
+            "username",
+            "parse",
+            "metadata",
+            "markdown_text",
+        }
+        _warn_if_unknown_kwargs("chat.postMessage", kwargs, known_params)
         kwargs.update(
             {
                 "channel": channel,

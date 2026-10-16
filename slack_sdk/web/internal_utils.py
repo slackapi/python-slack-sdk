@@ -9,7 +9,7 @@ from asyncio import Future
 from http.client import HTTPResponse
 from io import IOBase
 from ssl import SSLContext
-from typing import Any, Dict, Optional, Sequence, Union
+from typing import Any, Dict, Optional, Sequence, Set, Union
 from urllib.parse import urljoin
 from urllib.request import HTTPSHandler, OpenerDirector, ProxyHandler, Request, urlopen
 
@@ -319,6 +319,28 @@ def _build_unexpected_body_error_message(body: str) -> str:
         body_for_logging = body_for_logging[:100] + "..."
     message = f"Received a response in a non-JSON format: {body_for_logging}"
     return message
+
+
+def _warn_if_unknown_kwargs(endpoint: str, kwargs: Dict[str, Any], known_params: Set[str]) -> None:
+    """Warn when **kwargs carries keys that are not declared parameters.
+
+    WebClient methods keep **kwargs as an escape hatch for undocumented API
+    fields, but typos such as thread_id (instead of thread_ts) are otherwise
+    forwarded silently. See https://github.com/slackapi/python-slack-sdk/issues/1923
+    """
+    # for unit tests etc.
+    if os.environ.get("SKIP_SLACK_SDK_WARNING"):
+        return
+
+    unknown = sorted(key for key in kwargs if key not in known_params)
+    for key in unknown:
+        warnings.warn(
+            f"The `{key}` argument is not a recognized parameter of `{endpoint}` "
+            f"and will be forwarded to the Slack API as-is. "
+            f"If this was a typo, the intended parameter may be missing from the request.",
+            UserWarning,
+            stacklevel=3,
+        )
 
 
 def _remove_none_values(d: dict) -> dict:
