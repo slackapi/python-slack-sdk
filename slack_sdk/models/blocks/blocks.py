@@ -23,6 +23,7 @@ from .block_elements import (
     ImageElement,
     InputInteractiveElement,
     InteractiveElement,
+    OverflowMenuElement,
     RichTextElement,
     UrlSourceElement,
 )
@@ -118,6 +119,8 @@ class Block(JsonObject):
                     return ContainerBlock(**block)
                 elif type == CarouselBlock.type:
                     return CarouselBlock(**block)
+                elif type == AuthProviderBlock.type:
+                    return AuthProviderBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -1157,3 +1160,143 @@ class CarouselBlock(Block):
     @JsonValidator(f"elements attribute cannot exceed {elements_max_length} cards")
     def _validate_elements_length(self):
         return self.elements is None or len(self.elements) <= self.elements_max_length
+
+
+class AuthProviderBlock(Block):
+    type = "auth_provider"
+    value_max_length = 150
+    name_max_length = 75
+    description_max_length = 150
+    connected_identity_max_length = 75
+    connected_context_max_length = 75
+    url_max_length = 3000
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "value",
+                "name",
+                "is_connected",
+                "description",
+                "icon_url",
+                "auth_url",
+                "disconnect_url",
+                "connected_identity",
+                "connected_context",
+                "accessory",
+                "fallback",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        value: str,
+        name: Union[str, dict, PlainTextObject],
+        is_connected: bool,
+        description: Optional[Union[str, dict, PlainTextObject]] = None,
+        icon_url: Optional[str] = None,
+        auth_url: Optional[str] = None,
+        disconnect_url: Optional[str] = None,
+        connected_identity: Optional[Union[str, dict, PlainTextObject]] = None,
+        connected_context: Optional[Union[str, dict, PlainTextObject]] = None,
+        accessory: Optional[Union[dict, OverflowMenuElement]] = None,
+        fallback: Optional[Sequence[Union[dict, Block]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays authentication provider information, including its icon, name, and connection state.
+
+        https://docs.slack.dev/reference/block-kit/blocks/auth-provider-block
+
+        Args:
+            value (required): A unique identifier for this provider within the app. Included in interaction
+                payloads and used to derive the connect button's action_id as auth_provider_connect_<value>.
+                Maximum length for this field is 150 characters.
+            name (required): The provider's display name, in the form of a plain_text text object.
+                Maximum length for the text in this field is 75 characters.
+            is_connected (required): Whether the user is connected to this provider. Slack stores this value
+                for the user, so it must be set explicitly.
+            description: A description of the provider, in the form of a plain_text text object.
+                Maximum length for the text in this field is 150 characters.
+            icon_url: An HTTPS URL for the provider's icon. Defaults to the app's avatar if omitted.
+                Maximum length for this field is 3000 characters.
+            auth_url: The HTTPS URL opened when the user clicks Connect. Its host must be listed in the
+                app manifest's features.user_connections.auth_hosts, or be a subdomain of one.
+                Maximum length for this field is 3000 characters.
+            disconnect_url: The HTTPS URL opened when the user clicks Disconnect. Its host must be listed in
+                the app manifest's features.user_connections.auth_hosts, or be a subdomain of one.
+                Maximum length for this field is 3000 characters.
+            connected_identity: The display name of the connected account, in the form of a plain_text text object.
+                Shown when is_connected is true.
+                Maximum length for the text in this field is 75 characters.
+            connected_context: Additional context about the connection, such as an organization or workspace name,
+                in the form of a plain_text text object.
+                Maximum length for the text in this field is 75 characters.
+            accessory: An overflow menu element shown when the user is connected.
+            fallback: A list of blocks rendered in place of this block by clients that don't support it.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.value = value
+        self.name = TextObject.parse(name, default_type=PlainTextObject.type)
+        self.is_connected = is_connected
+        self.description = TextObject.parse(description, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.icon_url = icon_url
+        self.auth_url = auth_url
+        self.disconnect_url = disconnect_url
+        self.connected_identity = TextObject.parse(connected_identity, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.connected_context = TextObject.parse(connected_context, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
+        self.fallback = Block.parse_all(fallback) if fallback is not None else None
+
+    @JsonValidator("value attribute must be specified")
+    def _validate_value(self):
+        return self.value is not None and len(self.value) >= 1
+
+    @JsonValidator(f"value attribute cannot exceed {value_max_length} characters")
+    def _validate_value_length(self):
+        return self.value is None or len(self.value) <= self.value_max_length
+
+    @JsonValidator("name attribute must be specified")
+    def _validate_name(self):
+        return self.name is not None
+
+    @JsonValidator(f"name attribute cannot exceed {name_max_length} characters")
+    def _validate_name_length(self):
+        return self.name is None or len(self.name.text) <= self.name_max_length
+
+    @JsonValidator("is_connected attribute must be specified")
+    def _validate_is_connected(self):
+        return self.is_connected is not None
+
+    @JsonValidator(f"description attribute cannot exceed {description_max_length} characters")
+    def _validate_description_length(self):
+        return self.description is None or len(self.description.text) <= self.description_max_length
+
+    @JsonValidator(f"connected_identity attribute cannot exceed {connected_identity_max_length} characters")
+    def _validate_connected_identity_length(self):
+        return self.connected_identity is None or len(self.connected_identity.text) <= self.connected_identity_max_length
+
+    @JsonValidator(f"connected_context attribute cannot exceed {connected_context_max_length} characters")
+    def _validate_connected_context_length(self):
+        return self.connected_context is None or len(self.connected_context.text) <= self.connected_context_max_length
+
+    @JsonValidator(f"icon_url attribute cannot exceed {url_max_length} characters")
+    def _validate_icon_url_length(self):
+        return self.icon_url is None or len(self.icon_url) <= self.url_max_length
+
+    @JsonValidator(f"auth_url attribute cannot exceed {url_max_length} characters")
+    def _validate_auth_url_length(self):
+        return self.auth_url is None or len(self.auth_url) <= self.url_max_length
+
+    @JsonValidator(f"disconnect_url attribute cannot exceed {url_max_length} characters")
+    def _validate_disconnect_url_length(self):
+        return self.disconnect_url is None or len(self.disconnect_url) <= self.url_max_length
+
+    @JsonValidator("accessory attribute must be an overflow menu element")
+    def _validate_accessory(self):
+        return self.accessory is None or isinstance(self.accessory, OverflowMenuElement)
