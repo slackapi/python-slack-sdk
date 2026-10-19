@@ -5,6 +5,7 @@ from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
     ActionsBlock,
     AlertBlock,
+    AuthProviderBlock,
     Block,
     ButtonElement,
     CallBlock,
@@ -1987,3 +1988,135 @@ class CarouselBlockTests(unittest.TestCase):
     def test_empty_elements_validation(self):
         with self.assertRaises(SlackObjectFormationError):
             CarouselBlock(elements=[]).validate_json()
+
+
+# ----------------------------------------------
+# Auth provider
+# ----------------------------------------------
+
+
+class AuthProviderBlockTests(unittest.TestCase):
+    def test_document_required_fields(self):
+        input = {
+            "type": "auth_provider",
+            "value": "lumon",
+            "name": {"type": "plain_text", "text": "Lumon"},
+            "is_connected": False,
+        }
+        self.assertDictEqual(input, AuthProviderBlock(**input).to_dict())
+
+    def test_document_all_fields(self):
+        input = {
+            "type": "auth_provider",
+            "block_id": "lumon_connection",
+            "value": "lumon",
+            "name": {"type": "plain_text", "text": "Lumon"},
+            "is_connected": True,
+            "description": {"type": "plain_text", "text": "Connect your Lumon account"},
+            "icon_url": "https://lumon.example.com/icon.png",
+            "auth_url": "https://lumon.example.com/oauth/start",
+            "disconnect_url": "https://lumon.example.com/oauth/disconnect",
+            "connected_identity": {"type": "plain_text", "text": "mark.s@lumon.example.com"},
+            "connected_context": {"type": "plain_text", "text": "Macrodata Refinement"},
+            "accessory": {
+                "type": "overflow",
+                "action_id": "lumon_menu",
+                "options": [
+                    {"text": {"type": "plain_text", "text": "Switch accounts"}, "value": "switch"},
+                    {"text": {"type": "plain_text", "text": "Disconnect"}, "value": "disconnect"},
+                ],
+            },
+            "fallback": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Connected to Lumon"}},
+            ],
+        }
+        self.assertDictEqual(input, AuthProviderBlock(**input).to_dict())
+
+    def test_parse(self):
+        input = {
+            "type": "auth_provider",
+            "value": "lumon",
+            "name": {"type": "plain_text", "text": "Lumon"},
+            "is_connected": True,
+            "accessory": {
+                "type": "overflow",
+                "action_id": "lumon_menu",
+                "options": [{"text": {"type": "plain_text", "text": "Disconnect"}, "value": "disconnect"}],
+            },
+            "fallback": [{"type": "section", "text": {"type": "mrkdwn", "text": "Connected to Lumon"}}],
+        }
+        parsed = Block.parse(input)
+        self.assertIsInstance(parsed, AuthProviderBlock)
+        self.assertIsInstance(parsed.accessory, OverflowMenuElement)
+        self.assertIsInstance(parsed.fallback[0], SectionBlock)
+        self.assertDictEqual(input, parsed.to_dict())
+
+    def test_text_strings_become_plain_text(self):
+        block = AuthProviderBlock(
+            value="lumon",
+            name="Lumon",
+            is_connected=True,
+            description="Connect your Lumon account",
+            connected_identity="mark.s@lumon.example.com",
+            connected_context="Macrodata Refinement",
+        )
+        self.assertDictEqual(
+            {
+                "type": "auth_provider",
+                "value": "lumon",
+                "name": {"type": "plain_text", "text": "Lumon", "emoji": True},
+                "is_connected": True,
+                "description": {"type": "plain_text", "text": "Connect your Lumon account", "emoji": True},
+                "connected_identity": {"type": "plain_text", "text": "mark.s@lumon.example.com", "emoji": True},
+                "connected_context": {"type": "plain_text", "text": "Macrodata Refinement", "emoji": True},
+            },
+            block.to_dict(),
+        )
+
+    def test_required_fields_validation(self):
+        for missing in ["value", "name", "is_connected"]:
+            input = {"value": "lumon", "name": "Lumon", "is_connected": False, missing: None}
+            with self.subTest(missing=missing), self.assertRaises(SlackObjectFormationError):
+                AuthProviderBlock(**input).validate_json()
+
+    def test_empty_value_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            AuthProviderBlock(value="", name="Lumon", is_connected=False).validate_json()
+
+    def test_length_validation(self):
+        too_long = {
+            "value": "a" * 151,
+            "name": "a" * 76,
+            "description": "a" * 151,
+            "connected_identity": "a" * 76,
+            "connected_context": "a" * 76,
+            "icon_url": "https://example.com/" + "a" * 2981,
+            "auth_url": "https://example.com/" + "a" * 2981,
+            "disconnect_url": "https://example.com/" + "a" * 2981,
+        }
+        for field, value in too_long.items():
+            input = {"value": "lumon", "name": "Lumon", "is_connected": False, field: value}
+            with self.subTest(field=field), self.assertRaises(SlackObjectFormationError):
+                AuthProviderBlock(**input).validate_json()
+
+    def test_max_lengths_are_valid(self):
+        AuthProviderBlock(
+            value="a" * 150,
+            name="a" * 75,
+            is_connected=False,
+            description="a" * 150,
+            connected_identity="a" * 75,
+            connected_context="a" * 75,
+            icon_url="https://example.com/" + "a" * 2980,
+            auth_url="https://example.com/" + "a" * 2980,
+            disconnect_url="https://example.com/" + "a" * 2980,
+        ).validate_json()
+
+    def test_accessory_must_be_overflow(self):
+        with self.assertRaises(SlackObjectFormationError):
+            AuthProviderBlock(
+                value="lumon",
+                name="Lumon",
+                is_connected=True,
+                accessory={"type": "button", "action_id": "connect", "text": {"type": "plain_text", "text": "Connect"}},
+            ).validate_json()
