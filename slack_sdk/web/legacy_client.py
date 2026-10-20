@@ -1064,7 +1064,7 @@ class LegacyWebClient(LegacyBaseClient):
             }
         )
         return self.api_call("admin.conversations.bulkMove", params=kwargs)
-    
+
     def admin_conversations_bulkSetProperties(
         self,
         *,
