@@ -1229,15 +1229,15 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == WebClient.admin_conversations_bulkArchive.__name__:
                 self.api_methods_to_call.remove(method(channel_ids=["C123", "C234"])["method"])
                 await async_method(channel_ids=["C123", "C234"])
-            elif method_name == WebClient.admin_conversations_bulkSetProperties.__name__:
-                self.api_methods_to_call.remove(method(channel_ids=["C123", "C234"], property={"restrict_guests": True})["method"])
-                await async_method(channel_ids=["C123", "C234"], property={"restrict_guests": True})
             elif method_name == WebClient.admin_conversations_bulkDelete.__name__:
                 self.api_methods_to_call.remove(method(channel_ids=["C123", "C234"])["method"])
                 await async_method(channel_ids=["C123", "C234"])
             elif method_name == WebClient.admin_conversations_bulkMove.__name__:
                 self.api_methods_to_call.remove(method(channel_ids=["C123", "C234"], target_team_id="T123")["method"])
                 await async_method(channel_ids=["C123", "C234"], target_team_id="T123")
+            elif method_name == WebClient.admin_conversations_bulkSetProperties.__name__:
+                self.api_methods_to_call.remove(method(channel_ids=["C123", "C234"], property={"restrict_guests": True})["method"])
+                await async_method(channel_ids=["C123", "C234"], property={"restrict_guests": True})
             elif method_name == "admin_conversations_convertToPublic":
                 self.api_methods_to_call.remove(method(channel_id="C123")["method"])
                 await async_method(channel_id="C123")
