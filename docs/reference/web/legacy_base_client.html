@@ -128,6 +128,7 @@ el.replaceWith(d);
         auth: Optional[dict] = None,
     ) -&gt; Union[asyncio.Future, SlackResponse]:
         &#34;&#34;&#34;Create a request and execute the API call to Slack.
+
         Args:
             api_method (str): The target Slack API method.
                 e.g. &#39;chat.postMessage&#39;
@@ -150,13 +151,13 @@ el.replaceWith(d);
                 from the response can be accessed like a dict.
                 If the response included &#39;next_cursor&#39; it can
                 be iterated on to execute subsequent requests.
+
         Raises:
             SlackApiError: The following Slack API call failed:
                 &#39;chat.postMessage&#39;.
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         &#34;&#34;&#34;
-
         api_url = _get_url(self.base_url, api_method)
 
         headers = headers or {}
@@ -206,6 +207,7 @@ el.replaceWith(d);
 
     async def _send(self, http_verb: str, api_url: str, req_args: dict) -&gt; SlackResponse:
         &#34;&#34;&#34;Sends the request out for transmission.
+
         Args:
             http_verb (str): The HTTP verb. e.g. &#39;GET&#39; or &#39;POST&#39;.
             api_url (str): The Slack API url. e.g. &#39;https://slack.com/api/chat.postMessage&#39;
@@ -217,6 +219,7 @@ el.replaceWith(d);
                     &#39;channel&#39;: &#39;#random&#39;
                 }
             }
+
         Returns:
             The response parsed into a SlackResponse object.
         &#34;&#34;&#34;
@@ -242,6 +245,7 @@ el.replaceWith(d);
 
     async def _request(self, *, http_verb, api_url, req_args) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;Submit the HTTP request with the running session or a new session.
+
         Returns:
             A dictionary of the response data.
         &#34;&#34;&#34;
@@ -292,7 +296,8 @@ el.replaceWith(d);
         )
 
     def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -&gt; Dict[str, Any]:
-        &#34;&#34;&#34;This method is supposed to be used only for SlackResponse pagination
+        &#34;&#34;&#34;This method is supposed to be used only for SlackResponse pagination.
+
         You can paginate using Python&#39;s for iterator as below:
           for response in client.conversations_list(limit=100):
               # do something with each response here
@@ -573,9 +578,9 @@ el.replaceWith(d);
 
     @staticmethod
     def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -&gt; bool:
-        &#34;&#34;&#34;
-        Slack creates a unique string for your app and shares it with you. Verify
-        requests from Slack with confidence by verifying signatures using your
+        &#34;&#34;&#34;Slack creates a unique string for your app and shares it with you.
+
+        Verify requests from Slack with confidence by verifying signatures using your
         signing secret.
         On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
         header. The signature is created by combining the signing secret with the
@@ -588,6 +593,7 @@ el.replaceWith(d);
             timestamp: from the &#39;X-Slack-Request-Timestamp&#39; header
             signature: from the &#39;X-Slack-Signature&#39; header - the calculated signature
                 should match this.
+
         Returns:
             True if signatures matches
         &#34;&#34;&#34;
@@ -626,9 +632,9 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">@staticmethod
 def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -&gt; bool:
-    &#34;&#34;&#34;
-    Slack creates a unique string for your app and shares it with you. Verify
-    requests from Slack with confidence by verifying signatures using your
+    &#34;&#34;&#34;Slack creates a unique string for your app and shares it with you.
+
+    Verify requests from Slack with confidence by verifying signatures using your
     signing secret.
     On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
     header. The signature is created by combining the signing secret with the
@@ -641,6 +647,7 @@ def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, 
         timestamp: from the &#39;X-Slack-Request-Timestamp&#39; header
         signature: from the &#39;X-Slack-Signature&#39; header - the calculated signature
             should match this.
+
     Returns:
         True if signatures matches
     &#34;&#34;&#34;
@@ -655,8 +662,8 @@ def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, 
     calculated_signature = f&#34;v0={request_hash}&#34;
     return hmac.compare_digest(calculated_signature, signature)</code></pre>
 </details>
-<div class="desc"><p>Slack creates a unique string for your app and shares it with you. Verify
-requests from Slack with confidence by verifying signatures using your
+<div class="desc"><p>Slack creates a unique string for your app and shares it with you.</p>
+<p>Verify requests from Slack with confidence by verifying signatures using your
 signing secret.
 On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
 header. The signature is created by combining the signing secret with the
@@ -740,6 +747,7 @@ Default is 30 seconds.</p></div>
     auth: Optional[dict] = None,
 ) -&gt; Union[asyncio.Future, SlackResponse]:
     &#34;&#34;&#34;Create a request and execute the API call to Slack.
+
     Args:
         api_method (str): The target Slack API method.
             e.g. &#39;chat.postMessage&#39;
@@ -762,13 +770,13 @@ Default is 30 seconds.</p></div>
             from the response can be accessed like a dict.
             If the response included &#39;next_cursor&#39; it can
             be iterated on to execute subsequent requests.
+
     Raises:
         SlackApiError: The following Slack API call failed:
             &#39;chat.postMessage&#39;.
         SlackRequestError: Json data can only be submitted as
             POST requests.
     &#34;&#34;&#34;
-
     api_url = _get_url(self.base_url, api_method)
 
     headers = headers or {}

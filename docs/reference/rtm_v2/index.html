@@ -223,7 +223,7 @@ el.replaceWith(d);
         return self.current_session is not None and self.current_session.is_active()
 
     def issue_new_wss_url(self) -&gt; str:
-        &#34;&#34;&#34;Acquires a new WSS URL using rtm.connect API method&#34;&#34;&#34;
+        &#34;&#34;&#34;Acquires a new WSS URL using rtm.connect API method.&#34;&#34;&#34;
         try:
             api_response = self.web_client.rtm_connect()
             return api_response[&#34;url&#34;]
@@ -249,7 +249,7 @@ el.replaceWith(d);
                 self.logger.info(&#34;Connected to a new endpoint...&#34;)
 
     def connect(self):
-        &#34;&#34;&#34;Starts talking to the RTM server through a WebSocket connection&#34;&#34;&#34;
+        &#34;&#34;&#34;Starts talking to the RTM server through a WebSocket connection.&#34;&#34;&#34;
         if self.bot_id is None:
             self.bot_id = self.web_client.auth_test()[&#34;bot_id&#34;]
 
@@ -295,8 +295,8 @@ el.replaceWith(d);
         self.current_session.disconnect()
 
     def close(self) -&gt; None:
-        &#34;&#34;&#34;
-        Closes this instance and cleans up underlying resources.
+        &#34;&#34;&#34;Closes this instance and cleans up underlying resources.
+
         After calling this method, this instance is no longer usable.
         &#34;&#34;&#34;
         self.closed = True
@@ -534,16 +534,16 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def close(self) -&gt; None:
-    &#34;&#34;&#34;
-    Closes this instance and cleans up underlying resources.
+    &#34;&#34;&#34;Closes this instance and cleans up underlying resources.
+
     After calling this method, this instance is no longer usable.
     &#34;&#34;&#34;
     self.closed = True
     self.disconnect()
     self.current_session.close()</code></pre>
 </details>
-<div class="desc"><p>Closes this instance and cleans up underlying resources.
-After calling this method, this instance is no longer usable.</p></div>
+<div class="desc"><p>Closes this instance and cleans up underlying resources.</p>
+<p>After calling this method, this instance is no longer usable.</p></div>
 </dd>
 <dt id="slack_sdk.rtm_v2.RTMClient.connect"><code class="name flex">
 <span>def <span class="ident">connect</span></span>(<span>self)</span>
@@ -554,7 +554,7 @@ After calling this method, this instance is no longer usable.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def connect(self):
-    &#34;&#34;&#34;Starts talking to the RTM server through a WebSocket connection&#34;&#34;&#34;
+    &#34;&#34;&#34;Starts talking to the RTM server through a WebSocket connection.&#34;&#34;&#34;
     if self.bot_id is None:
         self.bot_id = self.web_client.auth_test()[&#34;bot_id&#34;]
 
@@ -595,7 +595,7 @@ After calling this method, this instance is no longer usable.</p></div>
 
     self.logger.info(f&#34;A new session has been established (session id: {self.session_id()})&#34;)</code></pre>
 </details>
-<div class="desc"><p>Starts talking to the RTM server through a WebSocket connection</p></div>
+<div class="desc"><p>Starts talking to the RTM server through a WebSocket connection.</p></div>
 </dd>
 <dt id="slack_sdk.rtm_v2.RTMClient.connect_to_new_endpoint"><code class="name flex">
 <span>def <span class="ident">connect_to_new_endpoint</span></span>(<span>self, force: bool = False)</span>
@@ -668,7 +668,7 @@ After calling this method, this instance is no longer usable.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def issue_new_wss_url(self) -&gt; str:
-    &#34;&#34;&#34;Acquires a new WSS URL using rtm.connect API method&#34;&#34;&#34;
+    &#34;&#34;&#34;Acquires a new WSS URL using rtm.connect API method.&#34;&#34;&#34;
     try:
         api_response = self.web_client.rtm_connect()
         return api_response[&#34;url&#34;]
@@ -684,7 +684,7 @@ After calling this method, this instance is no longer usable.</p></div>
             self.logger.error(f&#34;Failed to retrieve WSS URL: {e}&#34;)
             raise e</code></pre>
 </details>
-<div class="desc"><p>Acquires a new WSS URL using rtm.connect API method</p></div>
+<div class="desc"><p>Acquires a new WSS URL using rtm.connect API method.</p></div>
 </dd>
 <dt id="slack_sdk.rtm_v2.RTMClient.on"><code class="name flex">
 <span>def <span class="ident">on</span></span>(<span>self, event_type: str) ‑> Callable</span>

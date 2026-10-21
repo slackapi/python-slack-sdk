@@ -55,12 +55,12 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BaseObject:
-    &#34;&#34;&#34;The base class for all model objects in this module&#34;&#34;&#34;
+    &#34;&#34;&#34;The base class for all model objects in this module.&#34;&#34;&#34;
 
     def __str__(self):
         return f&#34;&lt;slack_sdk.{self.__class__.__name__}&gt;&#34;</code></pre>
 </details>
-<div class="desc"><p>The base class for all model objects in this module</p></div>
+<div class="desc"><p>The base class for all model objects in this module.</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -80,8 +80,8 @@ el.replaceWith(d);
     def __init__(self, attribute: str, enum: Iterable[str]):
         super().__init__(f&#34;{attribute} attribute must be one of the following values: {&#39;, &#39;.join(enum)}&#34;)</code></pre>
 </details>
-<div class="desc"><p>Decorate a method on a class to mark it as a JSON validator. Validation
-functions should return true if valid, false if not.</p>
+<div class="desc"><p>Decorate a method on a class to mark it as a JSON validator.</p>
+<p>Validation functions should return true if valid, false if not.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -102,18 +102,19 @@ functions should return true if valid, false if not.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class JsonObject(BaseObject, metaclass=ABCMeta):
-    &#34;&#34;&#34;The base class for JSON serializable class objects&#34;&#34;&#34;
+    &#34;&#34;&#34;The base class for JSON serializable class objects.&#34;&#34;&#34;
 
     @property
     @abstractmethod
     def attributes(self) -&gt; Set[str]:
-        &#34;&#34;&#34;Provide a set of attributes of this object that will make up its JSON structure&#34;&#34;&#34;
+        &#34;&#34;&#34;Provide a set of attributes of this object that will make up its JSON structure.&#34;&#34;&#34;
         return set()
 
     def validate_json(self) -&gt; None:
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Validate this object against its attribute validators.
+
         Raises:
-          SlackObjectFormationError if the object was not valid
+            SlackObjectFormationError: if the object was not valid
         &#34;&#34;&#34;
         for attribute in (func for func in dir(self) if not func.startswith(&#34;__&#34;)):
             method = getattr(self, attribute, None)
@@ -124,10 +125,7 @@ functions should return true if valid, false if not.</p>
         return getattr(self, key, None)
 
     def get_non_null_attributes(self) -&gt; dict:
-        &#34;&#34;&#34;
-        Construct a dictionary out of non-null keys (from attributes property)
-        present on this object
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Construct a dictionary out of non-null keys (from attributes property) present on this object.&#34;&#34;&#34;
 
         def to_dict_compatible(value: Union[dict, list, object, tuple]) -&gt; Union[dict, list, Any]:
             if isinstance(value, (list, tuple)):
@@ -164,8 +162,7 @@ functions should return true if valid, false if not.</p>
         }
 
     def to_dict(self, *args) -&gt; dict:
-        &#34;&#34;&#34;
-        Extract this object as a JSON-compatible, Slack-API-valid dictionary
+        &#34;&#34;&#34;Extract this object as a JSON-compatible, Slack-API-valid dictionary.
 
         Args:
           *args: Any specific formatting args (rare; generally not required)
@@ -188,7 +185,7 @@ functions should return true if valid, false if not.</p>
             return False
         return self.to_dict() == other.to_dict()</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<div class="desc"><p>The base class for JSON serializable class objects.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.BaseObject" href="#slack_sdk.models.basic_objects.BaseObject">BaseObject</a></li>
@@ -265,10 +262,10 @@ functions should return true if valid, false if not.</p>
 <pre><code class="python">@property
 @abstractmethod
 def attributes(self) -&gt; Set[str]:
-    &#34;&#34;&#34;Provide a set of attributes of this object that will make up its JSON structure&#34;&#34;&#34;
+    &#34;&#34;&#34;Provide a set of attributes of this object that will make up its JSON structure.&#34;&#34;&#34;
     return set()</code></pre>
 </details>
-<div class="desc"><p>Provide a set of attributes of this object that will make up its JSON structure</p></div>
+<div class="desc"><p>Provide a set of attributes of this object that will make up its JSON structure.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -282,10 +279,7 @@ def attributes(self) -&gt; Set[str]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_non_null_attributes(self) -&gt; dict:
-    &#34;&#34;&#34;
-    Construct a dictionary out of non-null keys (from attributes property)
-    present on this object
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Construct a dictionary out of non-null keys (from attributes property) present on this object.&#34;&#34;&#34;
 
     def to_dict_compatible(value: Union[dict, list, object, tuple]) -&gt; Union[dict, list, Any]:
         if isinstance(value, (list, tuple)):
@@ -321,8 +315,7 @@ def attributes(self) -&gt; Set[str]:
         if is_not_empty(self, key)
     }</code></pre>
 </details>
-<div class="desc"><p>Construct a dictionary out of non-null keys (from attributes property)
-present on this object</p></div>
+<div class="desc"><p>Construct a dictionary out of non-null keys (from attributes property) present on this object.</p></div>
 </dd>
 <dt id="slack_sdk.models.basic_objects.JsonObject.get_object_attribute"><code class="name flex">
 <span>def <span class="ident">get_object_attribute</span></span>(<span>self, key: str)</span>
@@ -346,8 +339,7 @@ present on this object</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def to_dict(self, *args) -&gt; dict:
-    &#34;&#34;&#34;
-    Extract this object as a JSON-compatible, Slack-API-valid dictionary
+    &#34;&#34;&#34;Extract this object as a JSON-compatible, Slack-API-valid dictionary.
 
     Args:
       *args: Any specific formatting args (rare; generally not required)
@@ -358,7 +350,7 @@ present on this object</p></div>
     self.validate_json()
     return self.get_non_null_attributes()</code></pre>
 </details>
-<div class="desc"><p>Extract this object as a JSON-compatible, Slack-API-valid dictionary</p>
+<div class="desc"><p>Extract this object as a JSON-compatible, Slack-API-valid dictionary.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -378,18 +370,23 @@ SlackObjectFormationError if the object was not valid</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def validate_json(self) -&gt; None:
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Validate this object against its attribute validators.
+
     Raises:
-      SlackObjectFormationError if the object was not valid
+        SlackObjectFormationError: if the object was not valid
     &#34;&#34;&#34;
     for attribute in (func for func in dir(self) if not func.startswith(&#34;__&#34;)):
         method = getattr(self, attribute, None)
         if callable(method) and hasattr(method, &#34;validator&#34;):
             method()</code></pre>
 </details>
-<div class="desc"><p>Raises
------=
-SlackObjectFormationError if the object was not valid</p></div>
+<div class="desc"><p>Validate this object against its attribute validators.</p>
+<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
+<dt><code>SlackObjectFormationError</code></dt>
+<dd>if the object was not valid</dd>
+</dl></div>
 </dd>
 </dl>
 </dd>
@@ -404,9 +401,9 @@ SlackObjectFormationError if the object was not valid</p></div>
 </summary>
 <pre><code class="python">class JsonValidator:
     def __init__(self, message: str):
-        &#34;&#34;&#34;
-        Decorate a method on a class to mark it as a JSON validator. Validation
-            functions should return true if valid, false if not.
+        &#34;&#34;&#34;Decorate a method on a class to mark it as a JSON validator.
+
+        Validation functions should return true if valid, false if not.
 
         Args:
             message: Message to be attached to the thrown SlackObjectFormationError
@@ -422,8 +419,8 @@ SlackObjectFormationError if the object was not valid</p></div>
         wrapped_f.validator = True  # type: ignore[attr-defined]
         return wrapped_f</code></pre>
 </details>
-<div class="desc"><p>Decorate a method on a class to mark it as a JSON validator. Validation
-functions should return true if valid, false if not.</p>
+<div class="desc"><p>Decorate a method on a class to mark it as a JSON validator.</p>
+<p>Validation functions should return true if valid, false if not.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>slack_sdk.signature API documentation</title>
-<meta name="description" content="Slack request signature verifier">
+<meta name="description" content="Slack request signature verifier.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -36,7 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>slack_sdk.signature</code></h1>
 </header>
 <section id="section-intro">
-<p>Slack request signature verifier</p>
+<p>Slack request signature verifier.</p>
 </section>
 <section>
 </section>
@@ -88,7 +88,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class SignatureVerifier:
     def __init__(self, signing_secret: str, clock: Clock = Clock()):
-        &#34;&#34;&#34;Slack request signature verifier
+        &#34;&#34;&#34;Slack request signature verifier.
 
         Slack signs its requests using a secret that&#39;s unique to your app.
         With the help of signing secrets, your app can more confidently verify
@@ -115,7 +115,7 @@ el.replaceWith(d);
         body: Union[str, bytes],
         headers: Mapping[str, str],
     ) -&gt; bool:
-        &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
+        &#34;&#34;&#34;Verifies if the given signature is valid.&#34;&#34;&#34;
         if headers is None:
             return False
         normalized_headers = {k.lower(): v for k, v in headers.items()}
@@ -131,7 +131,7 @@ el.replaceWith(d);
         timestamp: Optional[str],
         signature: Optional[str],
     ) -&gt; bool:
-        &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
+        &#34;&#34;&#34;Verifies if the given signature is valid.&#34;&#34;&#34;
         if timestamp is None or signature is None:
             return False
 
@@ -144,7 +144,7 @@ el.replaceWith(d);
         return hmac.compare_digest(calculated_signature, signature)
 
     def generate_signature(self, *, timestamp: str, body: Union[str, bytes]) -&gt; Optional[str]:
-        &#34;&#34;&#34;Generates a signature&#34;&#34;&#34;
+        &#34;&#34;&#34;Generates a signature.&#34;&#34;&#34;
         if timestamp is None:
             return None
         if body is None:
@@ -158,7 +158,7 @@ el.replaceWith(d);
         calculated_signature = f&#34;v0={request_hash}&#34;
         return calculated_signature</code></pre>
 </details>
-<div class="desc"><p>Slack request signature verifier</p>
+<div class="desc"><p>Slack request signature verifier.</p>
 <p>Slack signs its requests using a secret that's unique to your app.
 With the help of signing secrets, your app can more confidently verify
 whether requests from us are authentic.
@@ -189,7 +189,7 @@ def signing_secret(self) -&gt; str:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def generate_signature(self, *, timestamp: str, body: Union[str, bytes]) -&gt; Optional[str]:
-    &#34;&#34;&#34;Generates a signature&#34;&#34;&#34;
+    &#34;&#34;&#34;Generates a signature.&#34;&#34;&#34;
     if timestamp is None:
         return None
     if body is None:
@@ -203,7 +203,7 @@ def signing_secret(self) -&gt; str:
     calculated_signature = f&#34;v0={request_hash}&#34;
     return calculated_signature</code></pre>
 </details>
-<div class="desc"><p>Generates a signature</p></div>
+<div class="desc"><p>Generates a signature.</p></div>
 </dd>
 <dt id="slack_sdk.signature.SignatureVerifier.is_valid"><code class="name flex">
 <span>def <span class="ident">is_valid</span></span>(<span>self, body: str | bytes, timestamp: str | None, signature: str | None) ‑> bool</span>
@@ -219,7 +219,7 @@ def signing_secret(self) -&gt; str:
     timestamp: Optional[str],
     signature: Optional[str],
 ) -&gt; bool:
-    &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
+    &#34;&#34;&#34;Verifies if the given signature is valid.&#34;&#34;&#34;
     if timestamp is None or signature is None:
         return False
 
@@ -231,7 +231,7 @@ def signing_secret(self) -&gt; str:
         return False
     return hmac.compare_digest(calculated_signature, signature)</code></pre>
 </details>
-<div class="desc"><p>Verifies if the given signature is valid</p></div>
+<div class="desc"><p>Verifies if the given signature is valid.</p></div>
 </dd>
 <dt id="slack_sdk.signature.SignatureVerifier.is_valid_request"><code class="name flex">
 <span>def <span class="ident">is_valid_request</span></span>(<span>self, body: str | bytes, headers: Dict[str, str]) ‑> bool</span>
@@ -246,7 +246,7 @@ def signing_secret(self) -&gt; str:
     body: Union[str, bytes],
     headers: Mapping[str, str],
 ) -&gt; bool:
-    &#34;&#34;&#34;Verifies if the given signature is valid&#34;&#34;&#34;
+    &#34;&#34;&#34;Verifies if the given signature is valid.&#34;&#34;&#34;
     if headers is None:
         return False
     normalized_headers = {k.lower(): v for k, v in headers.items()}
@@ -256,7 +256,7 @@ def signing_secret(self) -&gt; str:
         signature=normalized_headers.get(&#34;x-slack-signature&#34;, None),
     )</code></pre>
 </details>
-<div class="desc"><p>Verifies if the given signature is valid</p></div>
+<div class="desc"><p>Verifies if the given signature is valid.</p></div>
 </dd>
 </dl>
 </dd>
