@@ -74,6 +74,7 @@ class TEstInternals(unittest.TestCase):
             )
         )
         user = response.users[0]
+        self.assertEqual(response.snake_cased_body["schemas"], ["urn:scim:schemas:core:1.0"])
         self.assertIsNotNone(user.unknown_fields.get("new_attribute"))
         # the unknown fields need to be also camel-cased
         self.assertIsNotNone(user.to_dict().get("newAttribute"))
