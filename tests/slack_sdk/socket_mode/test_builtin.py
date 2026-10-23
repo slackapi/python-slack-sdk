@@ -3,7 +3,7 @@ import socket
 import ssl
 import time
 import unittest
-from unittest.mock import patch, sentinel
+from unittest.mock import MagicMock, patch, sentinel
 from threading import Thread
 
 from slack_sdk import WebClient
@@ -128,22 +128,20 @@ class TestBuiltin(unittest.TestCase):
 
     def test_check_state_seeds_last_ping_pong_time_on_first_ping(self):
         conn = Connection(url="wss://example.com", logger=self.logger)
-        conn.sock = patch("socket.socket").start()  # non-None socket
+        conn.sock = MagicMock()
         self.assertIsNone(conn.last_ping_pong_time)
         with patch.object(conn, "ping"):
             conn.check_state()
         self.assertIsNotNone(conn.last_ping_pong_time)
-        patch.stopall()
 
     def test_check_state_does_not_overwrite_existing_last_ping_pong_time(self):
         conn = Connection(url="wss://example.com", logger=self.logger)
-        conn.sock = patch("socket.socket").start()
+        conn.sock = MagicMock()
         existing_time = time.time() - 1
         conn.last_ping_pong_time = existing_time
         with patch.object(conn, "ping"):
             conn.check_state()
         self.assertEqual(conn.last_ping_pong_time, existing_time)
-        patch.stopall()
 
     # ----------------------------------
     # FrameHeader
