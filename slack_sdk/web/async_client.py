@@ -2855,14 +2855,22 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         title: Optional[str] = None,
-        document_content: Dict[str, str],
+        document_content: Optional[Dict[str, str]] = None,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create Canvas for a user.
 
         https://docs.slack.dev/reference/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": document_content})
+        kwargs.update(
+            {
+                "title": title,
+                "document_content": document_content,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("canvases.create", json=kwargs)
 
     async def canvases_edit(

@@ -626,8 +626,8 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(id="R111")["method"])
                 await async_method(id="R111")
             elif method_name == "canvases_create":
-                self.api_methods_to_call.remove(method(document_content={})["method"])
-                await async_method(document_content={})
+                self.api_methods_to_call.remove(method(channel_id="C123")["method"])
+                await async_method(channel_id="C123")
             elif method_name == "conversations_canvases_create":
                 self.api_methods_to_call.remove(method(channel_id="C123", document_content={})["method"])
                 await async_method(channel_id="C123", document_content={})
