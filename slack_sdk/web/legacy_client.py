@@ -1065,6 +1065,24 @@ class LegacyWebClient(LegacyBaseClient):
         )
         return self.api_call("admin.conversations.bulkMove", params=kwargs)
 
+    def admin_conversations_bulkSetProperties(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        property: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set properties on channels in bulk.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.bulkSetProperties
+        """
+        kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        if isinstance(property, dict):
+            kwargs.update({"property": json.dumps(property)})
+        else:
+            kwargs.update({"property": property})
+        return self.api_call("admin.conversations.bulkSetProperties", params=kwargs)
+
     def admin_emoji_add(
         self,
         *,
