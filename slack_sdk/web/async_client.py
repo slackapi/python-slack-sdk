@@ -2892,6 +2892,20 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"canvas_id": canvas_id})
         return await self.api_call("canvases.delete", params=kwargs)
 
+    async def canvases_getContent(
+        self,
+        *,
+        canvas_id: str,
+        content_type: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Get the content of a canvas as markdown (default) or HTML.
+
+        https://docs.slack.dev/reference/methods/canvases.getContent
+        """
+        kwargs.update({"canvas_id": canvas_id, "content_type": content_type})
+        return await self.api_call("canvases.getContent", params=kwargs)
+
     async def canvases_access_set(
         self,
         *,
