@@ -133,13 +133,13 @@ el.replaceWith(d);
 
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;)
 
     def process_message(self):
         try:
             raw_message = self.message_queue.get(timeout=1)
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;)
 
             if raw_message is not None:
@@ -159,7 +159,7 @@ el.replaceWith(d);
 
     def run_message_listeners(self, message: dict, raw_message: str) -&gt; None:
         type, envelope_id = message.get(&#34;type&#34;), message.get(&#34;envelope_id&#34;)
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;)
         try:
             # just in case, adding the same logic to reconnect here
@@ -184,7 +184,7 @@ el.replaceWith(d);
         except Exception as e:
             self.logger.exception(f&#34;Failed to run message listeners: {e}&#34;)
         finally:
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;)
 
     def process_messages(self) -&gt; None:
@@ -322,7 +322,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def enqueue_message(self, message: str):
     self.message_queue.put(message)
-    if self.logger.level &lt;= logging.DEBUG:
+    if self.logger.isEnabledFor(logging.DEBUG):
         self.logger.debug(f&#34;A new message enqueued (current queue size: {self.message_queue.qsize()})&#34;)</code></pre>
 </details>
 <div class="desc"></div>
@@ -378,7 +378,7 @@ el.replaceWith(d);
 <pre><code class="python">def process_message(self):
     try:
         raw_message = self.message_queue.get(timeout=1)
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;A message dequeued (current queue size: {self.message_queue.qsize()})&#34;)
 
         if raw_message is not None:
@@ -425,7 +425,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def run_message_listeners(self, message: dict, raw_message: str) -&gt; None:
     type, envelope_id = message.get(&#34;type&#34;), message.get(&#34;envelope_id&#34;)
-    if self.logger.level &lt;= logging.DEBUG:
+    if self.logger.isEnabledFor(logging.DEBUG):
         self.logger.debug(f&#34;Message processing started (type: {type}, envelope_id: {envelope_id})&#34;)
     try:
         # just in case, adding the same logic to reconnect here
@@ -450,7 +450,7 @@ el.replaceWith(d);
     except Exception as e:
         self.logger.exception(f&#34;Failed to run message listeners: {e}&#34;)
     finally:
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id})&#34;)</code></pre>
 </details>
 <div class="desc"></div>
