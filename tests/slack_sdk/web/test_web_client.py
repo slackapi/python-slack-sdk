@@ -106,6 +106,17 @@ class TestWebClient(unittest.TestCase):
         self.client.conversations_list(exclude_archived="true")  # ok
         self.client.conversations_list(exclude_archived=True)  # ok
 
+    def test_team_info_slackbot_availability(self):
+        self.client.token = "xoxb-coverage"
+        response = self.client.team_info(team="T123")
+        self.assertEqual({"team": "T123"}, response.req_args["params"])
+        for include, encoded in [(True, "1"), (False, "0")]:
+            response = self.client.team_info(team="T123", include_slackbot_availability=include)
+            self.assertEqual(
+                {"team": "T123", "include_slackbot_availability": encoded},
+                response.req_args["params"],
+            )
+
     def test_issue_690_oauth_v2_access(self):
         self.client.token = ""
         resp = self.client.oauth_v2_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")

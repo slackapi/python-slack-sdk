@@ -5998,13 +5998,14 @@ class WebClient(BaseClient):
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -> SlackResponse:
         """Gets information about the current team.
 
         https://docs.slack.dev/reference/methods/team.info
         """
-        kwargs.update({"team": team, "domain": domain})
+        kwargs.update({"team": team, "domain": domain, "include_slackbot_availability": include_slackbot_availability})
         return self.api_call("team.info", http_verb="GET", params=kwargs)
 
     def team_integrationLogs(
