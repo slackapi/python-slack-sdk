@@ -6028,13 +6028,14 @@ el.replaceWith(d);
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Gets information about the current team.
 
         https://docs.slack.dev/reference/methods/team.info
         &#34;&#34;&#34;
-        kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain})
+        kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain, &#34;include_slackbot_availability&#34;: include_slackbot_availability})
         return self.api_call(&#34;team.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     def team_integrationLogs(
@@ -15954,7 +15955,7 @@ and <a href="https://docs.slack.dev/reference/methods/files.info">https://docs.s
 <p><a href="https://docs.slack.dev/reference/methods/team.externalTeams.list">https://docs.slack.dev/reference/methods/team.externalTeams.list</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.team_info"><code class="name flex">
-<span>def <span class="ident">team_info</span></span>(<span>self, *, team: str | None = None, domain: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">team_info</span></span>(<span>self,<br>*,<br>team: str | None = None,<br>domain: str | None = None,<br>include_slackbot_availability: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -15966,13 +15967,14 @@ and <a href="https://docs.slack.dev/reference/methods/files.info">https://docs.s
     *,
     team: Optional[str] = None,
     domain: Optional[str] = None,
+    include_slackbot_availability: Optional[bool] = None,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Gets information about the current team.
 
     https://docs.slack.dev/reference/methods/team.info
     &#34;&#34;&#34;
-    kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain})
+    kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain, &#34;include_slackbot_availability&#34;: include_slackbot_availability})
     return self.api_call(&#34;team.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Gets information about the current team.</p>
