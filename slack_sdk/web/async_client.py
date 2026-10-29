@@ -6008,13 +6008,14 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets information about the current team.
 
         https://docs.slack.dev/reference/methods/team.info
         """
-        kwargs.update({"team": team, "domain": domain})
+        kwargs.update({"team": team, "domain": domain, "include_slackbot_availability": include_slackbot_availability})
         return await self.api_call("team.info", http_verb="GET", params=kwargs)
 
     async def team_integrationLogs(
