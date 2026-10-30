@@ -22,6 +22,17 @@ class TestFile(unittest.TestCase):
         dt = _from_iso_format_to_datetime("2021-07-14 08:00:17")
         self.assertEqual(dt.timestamp(), 1626249617.0)
 
+    def test_iso_format_with_utc_offset(self):
+        dt = _from_iso_format_to_datetime("2021-07-14 17:00:17+09:00")
+        self.assertEqual(dt.timestamp(), 1626249617.0)
+        dt = _from_iso_format_to_datetime("2021-07-14 03:00:17-05:00")
+        self.assertEqual(dt.timestamp(), 1626249617.0)
+
+    def test_iso_format_with_utc_designator(self):
+        for iso_datetime_str in ["2021-07-14T08:00:17Z", "2021-07-14T08:00:17z", "2021-07-14T08:00:17.000Z"]:
+            dt = _from_iso_format_to_datetime(iso_datetime_str)
+            self.assertEqual(dt.timestamp(), 1626249617.0)
+
 
 @pytest.mark.parametrize(
     "ts,target_type,expected_result",
@@ -30,6 +41,8 @@ class TestFile(unittest.TestCase):
         (datetime(2023, 11, 28, 22, 9, 7, tzinfo=timezone.utc), int, 1701209347),
         ("1701209605", int, 1701209605),
         ("2023-11-28 22:11:19", int, 1701209479),
+        ("2023-11-28 17:11:19-05:00", int, 1701209479),
+        ("2023-11-28T22:11:19Z", int, 1701209479),
         (1701209998.3429494, float, 1701209998.3429494),
         (datetime(2023, 11, 28, 22, 20, 25, 262571, tzinfo=timezone.utc), float, 1701210025.262571),
         ("1701210054.4672053", float, 1701210054.4672053),
