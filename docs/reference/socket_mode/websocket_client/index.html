@@ -176,13 +176,13 @@ el.replaceWith(d);
 
     def connect(self) -&gt; None:
         def on_open(ws: WebSocketApp):
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(&#34;on_open invoked&#34;)
             for listener in self.on_open_listeners:
                 listener(ws)
 
         def on_message(ws: WebSocketApp, message: str):
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
             self.enqueue_message(message)
             for listener in self.on_message_listeners:
@@ -198,7 +198,7 @@ el.replaceWith(d);
             close_status_code: Optional[int] = None,
             close_msg: Optional[str] = None,
         ):
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;)
             if self.auto_reconnect_enabled:
                 self.logger.info(&#34;Received CLOSE event. Reconnecting...&#34;)
@@ -234,14 +234,14 @@ el.replaceWith(d);
             self.current_session.close()
 
     def send_message(self, message: str) -&gt; None:
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;Sending a message: {message}&#34;)
         try:
             self.current_session.send(message)  # type: ignore[union-attr]
         except WebSocketException as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f&#34;Failed to send a message (error: {e}, message: {message})&#34;
                     &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
@@ -408,13 +408,13 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def connect(self) -&gt; None:
     def on_open(ws: WebSocketApp):
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(&#34;on_open invoked&#34;)
         for listener in self.on_open_listeners:
             listener(ws)
 
     def on_message(ws: WebSocketApp, message: str):
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
@@ -430,7 +430,7 @@ el.replaceWith(d);
         close_status_code: Optional[int] = None,
         close_msg: Optional[str] = None,
     ):
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;on_close invoked: (code: {close_status_code}, message: {close_msg})&#34;)
         if self.auto_reconnect_enabled:
             self.logger.info(&#34;Received CLOSE event. Reconnecting...&#34;)
@@ -499,14 +499,14 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def send_message(self, message: str) -&gt; None:
-    if self.logger.level &lt;= logging.DEBUG:
+    if self.logger.isEnabledFor(logging.DEBUG):
         self.logger.debug(f&#34;Sending a message: {message}&#34;)
     try:
         self.current_session.send(message)  # type: ignore[union-attr]
     except WebSocketException as e:
         # We rarely get this exception while replacing the underlying WebSocket connections.
         # We can do one more try here as the self.current_session should be ready now.
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(
                 f&#34;Failed to send a message (error: {e}, message: {message})&#34;
                 &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
