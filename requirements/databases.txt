@@ -7,4 +7,4 @@ psycopg[binary]>=3.3.6,<4
 
 # asyncpg
 # Note: postgreSQL driver (async).
-asyncpg>=0.31.0,<1
+asyncpg>=0.32.0,<1
