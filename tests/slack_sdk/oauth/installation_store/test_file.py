@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 
 from slack_sdk.oauth.installation_store import Installation, FileInstallationStore
@@ -77,6 +78,34 @@ class TestFile(unittest.TestCase):
         self.assertIsNone(i)
         bot = store.find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)
+
+    def test_save_and_find_without_historical_data(self):
+        with tempfile.TemporaryDirectory() as base_dir:
+            store = FileInstallationStore(base_dir=base_dir, client_id="111.222", historical_data_enabled=False)
+            installation = Installation(
+                app_id="A111",
+                enterprise_id="E111",
+                team_id="T111",
+                user_id="U111",
+                bot_id="B111",
+                bot_token="xoxb-111",
+                bot_scopes=["chat:write"],
+                bot_user_id="U222",
+            )
+            store.save(installation)
+
+            bot = store.find_bot(enterprise_id="E111", team_id="T111")
+            self.assertIsNotNone(bot)
+
+            i = store.find_installation(enterprise_id="E111", team_id="T111")
+            self.assertIsNotNone(i)
+            self.assertEqual(i.bot_token, "xoxb-111")
+            i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+            self.assertIsNotNone(i)
+
+            store.delete_installation(enterprise_id="E111", team_id="T111")
+            i = store.find_installation(enterprise_id="E111", team_id="T111")
+            self.assertIsNone(i)
 
     def test_org_installation(self):
         store = FileInstallationStore(client_id="111.222")

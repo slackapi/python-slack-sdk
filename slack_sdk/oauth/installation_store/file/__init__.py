@@ -70,10 +70,14 @@ class FileInstallationStore(InstallationStore, AsyncInstallationStore):
                 f.write(entity)
 
         else:
+            # per workspace
+            entity = json.dumps(installation.__dict__)
+            with open(f"{team_installation_dir}/installer-latest", "w") as f:
+                f.write(entity)
+
+            # per workspace per user
             u_id = installation.user_id or none
-            installer_filepath = f"{team_installation_dir}/installer-{u_id}-latest"
-            with open(installer_filepath, "w") as f:
-                entity = json.dumps(installation.__dict__)
+            with open(f"{team_installation_dir}/installer-{u_id}-latest", "w") as f:
                 f.write(entity)
 
     def save_bot(self, bot: Bot):
