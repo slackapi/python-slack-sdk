@@ -3,6 +3,7 @@ from typing import List
 
 from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
+    ActionCellObject,
     ActionsBlock,
     AlertBlock,
     AuthProviderBlock,
@@ -1362,6 +1363,93 @@ class RichTextBlockTests(unittest.TestCase):
 
 
 # ----------------------------------------------
+# ActionCellObject
+# ----------------------------------------------
+
+
+class ActionCellObjectTests(unittest.TestCase):
+    def test_document(self):
+        """Test action_cell from Slack documentation example"""
+        input = {
+            "type": "action_cell",
+            "element": {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Mark done",
+                },
+                "action_id": "mark_done",
+                "value": "task_123",
+            },
+            "fallback": {
+                "type": "raw_text",
+                "text": "Open",
+            },
+        }
+        obj = ActionCellObject(**input)
+        self.assertIsInstance(obj.element, ButtonElement)
+        self.assertIsInstance(obj.fallback, RawTextObject)
+        self.assertDictEqual(input, obj.to_dict())
+
+    def test_raw_number_fallback(self):
+        """Test action_cell with a raw_number fallback"""
+        input = {
+            "type": "action_cell",
+            "element": {
+                "type": "button",
+                "text": {"type": "plain_text", "text": "Mark done"},
+                "action_id": "mark_done",
+                "value": "task_123",
+            },
+            "fallback": {"type": "raw_number", "value": 123, "text": "123"},
+        }
+        obj = ActionCellObject(**input)
+        self.assertIsInstance(obj.fallback, RawNumberObject)
+        self.assertDictEqual(input, obj.to_dict())
+
+    def test_with_object_helpers(self):
+        """Test action_cell built from ButtonElement and RawTextObject helpers"""
+        obj = ActionCellObject(
+            element=ButtonElement(text="Mark done", action_id="mark_done", value="task_123"),
+            fallback=RawTextObject(text="Open"),
+        )
+        expected = {
+            "type": "action_cell",
+            "element": {
+                "type": "button",
+                "text": {"type": "plain_text", "text": "Mark done", "emoji": True},
+                "action_id": "mark_done",
+                "value": "task_123",
+            },
+            "fallback": {"type": "raw_text", "text": "Open"},
+        }
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_element_validation(self):
+        """Test that a missing element fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            ActionCellObject(element=None).to_dict()
+
+    def test_element_type_validation(self):
+        """Test that a non-button element fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            ActionCellObject(element={"type": "image", "image_url": "https://example.com/a.png", "alt_text": "a"}).to_dict()
+
+    def test_fallback_type_validation(self):
+        """Test that a fallback other than raw_text or raw_number fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            ActionCellObject(
+                element={"type": "button", "text": {"type": "plain_text", "text": "Mark done"}},
+                fallback={"type": "rich_text", "elements": []},
+            ).to_dict()
+
+    def test_attributes(self):
+        """Test that ActionCellObject only has element, fallback, and type attributes"""
+        obj = ActionCellObject(element={"type": "button", "text": {"type": "plain_text", "text": "Mark done"}})
+        self.assertEqual(obj.attributes, {"element", "fallback", "type"})
+
+
+# ----------------------------------------------
 # RawNumberObject
 # ----------------------------------------------
 
@@ -2197,6 +2285,75 @@ class DataTableBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(expected, block.to_dict())
+
+    def test_with_action_cell(self):
+        """Test data table block with an action_cell from Slack documentation example"""
+        input = {
+            "type": "data_table",
+            "caption": "Tasks",
+            "rows": [
+                [{"type": "raw_text", "text": "Task"}, {"type": "raw_text", "text": "Action"}],
+                [
+                    {"type": "raw_text", "text": "Review the plan"},
+                    {
+                        "type": "action_cell",
+                        "element": {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Mark done",
+                            },
+                            "action_id": "mark_done",
+                            "value": "task_123",
+                        },
+                        "fallback": {
+                            "type": "raw_text",
+                            "text": "Open",
+                        },
+                    },
+                ],
+            ],
+        }
+        block = DataTableBlock(**input)
+        self.assertIsInstance(block.rows[1][1], ActionCellObject)
+        self.assertDictEqual(input, block.to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_action_cell_without_fallback(self):
+        """Test data table block with an action_cell that omits the optional fallback"""
+        input = {
+            "type": "data_table",
+            "caption": "Tasks",
+            "rows": [
+                [{"type": "raw_text", "text": "Task"}, {"type": "raw_text", "text": "Action"}],
+                [
+                    {"type": "raw_text", "text": "Review the plan"},
+                    {
+                        "type": "action_cell",
+                        "element": {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Mark done",
+                            },
+                            "action_id": "mark_done",
+                            "value": "task_123",
+                        },
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_action_cell_element_required(self):
+        """Test that an action_cell without an element fails"""
+        rows = [[{"type": "raw_text", "text": "Action"}], [{"type": "action_cell"}]]
+        with self.assertRaises(TypeError):
+            DataTableBlock(caption="missing element", rows=rows)
+        rows = [[{"type": "raw_text", "text": "Action"}], [{"type": "action_cell", "element": None}]]
+        with self.assertRaises(SlackObjectFormationError):
+            DataTableBlock(caption="missing element", rows=rows).to_dict()
 
     def test_rows_validation(self):
         """Test that empty rows fail validation"""

@@ -8,6 +8,7 @@ from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 
 from ...errors import SlackObjectFormationError
 from .basic_components import (
+    ActionCellObject,
     MarkdownTextObject,
     PlainTextObject,
     RawNumberObject,
@@ -1316,7 +1317,7 @@ class DataTableBlock(Block):
     def __init__(
         self,
         *,
-        rows: Sequence[Sequence[Union[RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any]]]],
+        rows: Sequence[Sequence[Union[ActionCellObject, RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any]]]],
         caption: str,
         page_size: Optional[int] = None,
         row_header_column_index: Optional[int] = None,
@@ -1339,10 +1340,18 @@ class DataTableBlock(Block):
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
 
-        self.rows = rows
+        self.rows = [[self._parse_cell(cell) for cell in row] for row in rows] if rows is not None else None
         self.caption = caption
         self.page_size = page_size
         self.row_header_column_index = row_header_column_index
+
+    @staticmethod
+    def _parse_cell(
+        cell: Union[ActionCellObject, RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any]],
+    ) -> Union[ActionCellObject, RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any], None]:
+        if isinstance(cell, dict) and cell.get("type") == ActionCellObject.type:
+            return ActionCellObject.parse(cell)
+        return cell
 
     @JsonValidator("rows attribute must be specified")
     def _validate_rows(self):
