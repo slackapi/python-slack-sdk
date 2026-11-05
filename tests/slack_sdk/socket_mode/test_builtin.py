@@ -3,7 +3,7 @@ import socket
 import ssl
 import time
 import unittest
-from unittest.mock import sentinel
+from unittest.mock import patch, sentinel
 from threading import Thread
 
 from slack_sdk import WebClient
@@ -46,6 +46,23 @@ class TestBuiltin(unittest.TestCase):
             self.assertFalse(client.is_connected())
             self.assertIsNone(client.session_id())  # not yet connected
         finally:
+            client.close()
+
+    def test_debug_message_follows_the_effective_log_level(self):
+        parent = logging.getLogger(f"{__name__}.debug_guard")
+        logger = logging.getLogger(f"{__name__}.debug_guard.client")
+        client = SocketModeClient(app_token="xapp-A111-222-xyz", logger=logger)
+        try:
+            with patch("slack_sdk.socket_mode.builtin.client.debug_redacted_message_string") as redact:
+                parent.setLevel(logging.INFO)
+                client._on_message("{}")
+                redact.assert_not_called()
+
+                parent.setLevel(logging.DEBUG)
+                client._on_message("{}")
+                redact.assert_called_once_with("{}")
+        finally:
+            parent.setLevel(logging.NOTSET)
             client.close()
 
     def test_issue_new_wss_url(self):

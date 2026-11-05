@@ -197,14 +197,14 @@ class SocketModeClient(BaseSocketModeClient):
             self.current_session.close()
 
     def send_message(self, message: str) -> None:
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"Sending a message (session id: {self.session_id()}, message: {message})")
         try:
             self.current_session.send(message)  # type: ignore[union-attr]
         except SlackClientNotConnectedError as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f"Failed to send a message (session id: {self.session_id()}, error: {e}, message: {message})"
                     " as the underlying connection was replaced. Retrying the same request only one time..."
@@ -221,10 +221,13 @@ class SocketModeClient(BaseSocketModeClient):
                     )
                     raise e
 
-    def close(self):
+    def close(self) -> None:
         self.closed = True
         self.auto_reconnect_enabled = False
+        self.current_session_state.terminated = True
         self.disconnect()
+        if self.current_session_runner.is_alive():
+            self.current_session_runner.shutdown()
         if self.current_app_monitor.is_alive():
             self.current_app_monitor.shutdown()
         if self.message_processor.is_alive():
@@ -232,7 +235,7 @@ class SocketModeClient(BaseSocketModeClient):
         self.message_workers.shutdown()
 
     def _on_message(self, message: str):
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"on_message invoked: (message: {debug_redacted_message_string(message)})")
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
@@ -251,7 +254,7 @@ class SocketModeClient(BaseSocketModeClient):
             listener(error)
 
     def _on_close(self, code: int, reason: Optional[str] = None):
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"on_close invoked (session id: {self.session_id()})")
         if self.auto_reconnect_enabled:
             self.logger.info(f"Received CLOSE event. Reconnecting... (session id: {self.session_id()})")

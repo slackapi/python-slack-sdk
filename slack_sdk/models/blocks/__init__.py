@@ -64,6 +64,7 @@ from .block_elements import (
 from .blocks import (
     ActionsBlock,
     AlertBlock,
+    AuthProviderBlock,
     Block,
     CallBlock,
     CardBlock,
@@ -139,6 +140,7 @@ __all__ = [
     "RichTextSectionElement",
     "ActionsBlock",
     "AlertBlock",
+    "AuthProviderBlock",
     "Block",
     "CallBlock",
     "CardBlock",

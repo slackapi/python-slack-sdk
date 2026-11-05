@@ -56,7 +56,8 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BackoffRetryIntervalCalculator(RetryIntervalCalculator):
-    &#34;&#34;&#34;Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
+    &#34;&#34;&#34;Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter.
+
     see also: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
     &#34;&#34;&#34;
 
@@ -64,7 +65,7 @@ el.replaceWith(d);
     jitter: Jitter
 
     def __init__(self, backoff_factor: float = 0.5, jitter: Optional[Jitter] = None):
-        &#34;&#34;&#34;Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
+        &#34;&#34;&#34;Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter.
 
         Args:
             backoff_factor: The factor for the backoff interval calculation
@@ -78,9 +79,9 @@ el.replaceWith(d);
         sleep_duration = self.jitter.recalculate(interval)
         return sleep_duration</code></pre>
 </details>
-<div class="desc"><p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter
-see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
-<p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter</p>
+<div class="desc"><p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter.</p>
+<p>see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
+<p>Retry interval calculator that calculates in the manner of Exponential Backoff And Jitter.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>

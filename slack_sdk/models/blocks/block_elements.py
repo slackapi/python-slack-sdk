@@ -188,10 +188,23 @@ class ButtonElement(InteractiveElement):
     text_max_length = 75
     url_max_length = 3000
     value_max_length = 2000
+    agent_prompt_max_length = 4000
 
     @property
     def attributes(self) -> Set[str]:  # type: ignore[override]
-        return super().attributes.union({"text", "url", "value", "style", "confirm", "accessibility_label"})
+        return super().attributes.union(
+            {
+                "text",
+                "url",
+                "value",
+                "style",
+                "confirm",
+                "accessibility_label",
+                "agent_prompt",
+                "agent_prompt_display",
+                "visible_to_user_ids",
+            }
+        )
 
     def __init__(
         self,
@@ -203,6 +216,9 @@ class ButtonElement(InteractiveElement):
         style: Optional[str] = None,  # primary, danger
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         accessibility_label: Optional[str] = None,
+        agent_prompt: Optional[str] = None,
+        agent_prompt_display: Optional[str] = None,
+        visible_to_user_ids: Optional[List[str]] = None,
         **others: dict,
     ):
         """An interactive element that inserts a button.
@@ -234,6 +250,12 @@ class ButtonElement(InteractiveElement):
             accessibility_label: A label for longer descriptive text about a button element.
                 This label will be read out by screen readers instead of the button text object.
                 Maximum length for this field is 75 characters.
+            agent_prompt: A prompt sent to Slackbot when the button is clicked, if Slackbot AI is available to the user.
+                Maximum length for this field is 4000 characters.
+            agent_prompt_display: Short text shown instead of the full agent_prompt in the user's Slackbot message.
+                Only takes effect alongside agent_prompt and defaults to the button's text.
+            visible_to_user_ids: User IDs for which the button appears.
+                If not provided, the button is visible to all users.
         """
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
@@ -245,6 +267,9 @@ class ButtonElement(InteractiveElement):
         self.style = style
         self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
         self.accessibility_label = accessibility_label
+        self.agent_prompt = agent_prompt
+        self.agent_prompt_display = agent_prompt_display
+        self.visible_to_user_ids = visible_to_user_ids
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def _validate_text_length(self) -> bool:
@@ -265,6 +290,10 @@ class ButtonElement(InteractiveElement):
     @JsonValidator(f"accessibility_label attribute cannot exceed {text_max_length} characters")
     def _validate_accessibility_label_length(self) -> bool:
         return self.accessibility_label is None or len(self.accessibility_label) <= self.text_max_length
+
+    @JsonValidator(f"agent_prompt attribute cannot exceed {agent_prompt_max_length} characters")
+    def _validate_agent_prompt_length(self) -> bool:
+        return self.agent_prompt is None or len(self.agent_prompt) <= self.agent_prompt_max_length
 
 
 class LinkButtonElement(ButtonElement):
