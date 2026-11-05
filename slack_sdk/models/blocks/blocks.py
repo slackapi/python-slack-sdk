@@ -1328,6 +1328,7 @@ class DataTableBlock(Block):
         **others: dict,
     ):
         """Displays structured, paginated data in a table with a required caption.
+
         https://docs.slack.dev/reference/block-kit/blocks/data-table-block
 
         Args:
@@ -1384,6 +1385,7 @@ class DataVisualizationBlock(Block):
         **others: dict,
     ):
         """Displays data as a chart, such as a pie, bar, area, or line chart.
+
         https://docs.slack.dev/reference/block-kit/blocks/data-visualization-block
 
         Args:
