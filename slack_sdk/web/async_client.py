@@ -1814,6 +1814,20 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"channel_ids": channel_ids})
         return await self.api_call("admin.users.invite", params=kwargs)
 
+    async def admin_users_getExpiration(
+        self,
+        *,
+        user_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Fetches the expiration timestamp for a guest.
+
+        https://docs.slack.dev/reference/methods/admin.users.getExpiration
+        """
+        kwargs.update({"user_id": user_id, "target_team": target_team})
+        return await self.api_call("admin.users.getExpiration", http_verb="GET", params=kwargs)
+
     async def admin_users_list(
         self,
         *,
@@ -2446,6 +2460,46 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"user_id": user_id, "status": status})
         return await self.api_call("apps.user.connection.update", params=kwargs)
 
+    async def apps_user_connection_bulkUpdate(
+        self,
+        *,
+        connected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        disconnected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Updates the connection status between an app and many users in one call, for backfilling an existing user base.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate
+        """
+        if isinstance(connected_user_ids, (list, tuple)):
+            kwargs.update({"connected_user_ids": ",".join(connected_user_ids)})
+        else:
+            kwargs.update({"connected_user_ids": connected_user_ids})
+        if isinstance(disconnected_user_ids, (list, tuple)):
+            kwargs.update({"disconnected_user_ids": ",".join(disconnected_user_ids)})
+        else:
+            kwargs.update({"disconnected_user_ids": disconnected_user_ids})
+        return await self.api_call("apps.user.connection.bulkUpdate", params=kwargs)
+
+    async def apps_user_connection_requestAuth(
+        self,
+        *,
+        primary_provider: Union[str, Dict[str, Any]],
+        trigger_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Opens or updates a standardized authentication modal for the calling app.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth
+        """
+        kwargs.update({"trigger_id": trigger_id, "user_id": user_id})
+        if isinstance(primary_provider, str):
+            kwargs.update({"primary_provider": primary_provider})
+        else:
+            kwargs.update({"primary_provider": json.dumps(primary_provider)})
+        return await self.api_call("apps.user.connection.requestAuth", params=kwargs)
+
     async def tooling_tokens_rotate(
         self,
         *,
@@ -2801,14 +2855,22 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         title: Optional[str] = None,
-        document_content: Dict[str, str],
+        document_content: Optional[Dict[str, str]] = None,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create Canvas for a user.
 
         https://docs.slack.dev/reference/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": document_content})
+        kwargs.update(
+            {
+                "title": title,
+                "document_content": document_content,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("canvases.create", json=kwargs)
 
     async def canvases_edit(
@@ -2837,6 +2899,20 @@ class AsyncWebClient(AsyncBaseClient):
         """
         kwargs.update({"canvas_id": canvas_id})
         return await self.api_call("canvases.delete", params=kwargs)
+
+    async def canvases_getContent(
+        self,
+        *,
+        canvas_id: str,
+        content_type: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Get the content of a canvas as markdown (default) or HTML.
+
+        https://docs.slack.dev/reference/methods/canvases.getContent
+        """
+        kwargs.update({"canvas_id": canvas_id, "content_type": content_type})
+        return await self.api_call("canvases.getContent", params=kwargs)
 
     async def canvases_access_set(
         self,
@@ -5932,13 +6008,14 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets information about the current team.
 
         https://docs.slack.dev/reference/methods/team.info
         """
-        kwargs.update({"team": team, "domain": domain})
+        kwargs.update({"team": team, "domain": domain, "include_slackbot_availability": include_slackbot_availability})
         return await self.api_call("team.info", http_verb="GET", params=kwargs)
 
     async def team_integrationLogs(

@@ -1815,6 +1815,20 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"channel_ids": channel_ids})
         return self.api_call("admin.users.invite", params=kwargs)
 
+    def admin_users_getExpiration(
+        self,
+        *,
+        user_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Fetches the expiration timestamp for a guest.
+
+        https://docs.slack.dev/reference/methods/admin.users.getExpiration
+        """
+        kwargs.update({"user_id": user_id, "target_team": target_team})
+        return self.api_call("admin.users.getExpiration", http_verb="GET", params=kwargs)
+
     def admin_users_list(
         self,
         *,
@@ -2447,6 +2461,46 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"user_id": user_id, "status": status})
         return self.api_call("apps.user.connection.update", params=kwargs)
 
+    def apps_user_connection_bulkUpdate(
+        self,
+        *,
+        connected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        disconnected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Updates the connection status between an app and many users in one call, for backfilling an existing user base.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate
+        """
+        if isinstance(connected_user_ids, (list, tuple)):
+            kwargs.update({"connected_user_ids": ",".join(connected_user_ids)})
+        else:
+            kwargs.update({"connected_user_ids": connected_user_ids})
+        if isinstance(disconnected_user_ids, (list, tuple)):
+            kwargs.update({"disconnected_user_ids": ",".join(disconnected_user_ids)})
+        else:
+            kwargs.update({"disconnected_user_ids": disconnected_user_ids})
+        return self.api_call("apps.user.connection.bulkUpdate", params=kwargs)
+
+    def apps_user_connection_requestAuth(
+        self,
+        *,
+        primary_provider: Union[str, Dict[str, Any]],
+        trigger_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Opens or updates a standardized authentication modal for the calling app.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth
+        """
+        kwargs.update({"trigger_id": trigger_id, "user_id": user_id})
+        if isinstance(primary_provider, str):
+            kwargs.update({"primary_provider": primary_provider})
+        else:
+            kwargs.update({"primary_provider": json.dumps(primary_provider)})
+        return self.api_call("apps.user.connection.requestAuth", params=kwargs)
+
     def tooling_tokens_rotate(
         self,
         *,
@@ -2802,14 +2856,22 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         title: Optional[str] = None,
-        document_content: Dict[str, str],
+        document_content: Optional[Dict[str, str]] = None,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Create Canvas for a user.
 
         https://docs.slack.dev/reference/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": document_content})
+        kwargs.update(
+            {
+                "title": title,
+                "document_content": document_content,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("canvases.create", json=kwargs)
 
     def canvases_edit(
@@ -2838,6 +2900,20 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"canvas_id": canvas_id})
         return self.api_call("canvases.delete", params=kwargs)
+
+    def canvases_getContent(
+        self,
+        *,
+        canvas_id: str,
+        content_type: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Get the content of a canvas as markdown (default) or HTML.
+
+        https://docs.slack.dev/reference/methods/canvases.getContent
+        """
+        kwargs.update({"canvas_id": canvas_id, "content_type": content_type})
+        return self.api_call("canvases.getContent", params=kwargs)
 
     def canvases_access_set(
         self,
@@ -5857,13 +5933,14 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about the current team.
 
         https://docs.slack.dev/reference/methods/team.info
         """
-        kwargs.update({"team": team, "domain": domain})
+        kwargs.update({"team": team, "domain": domain, "include_slackbot_availability": include_slackbot_availability})
         return self.api_call("team.info", http_verb="GET", params=kwargs)
 
     def team_integrationLogs(

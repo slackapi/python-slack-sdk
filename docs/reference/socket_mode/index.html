@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>slack_sdk.socket_mode API documentation</title>
-<meta name="description" content="Socket Mode is a method of connecting your app to Slack’s APIs using WebSockets instead of HTTP.
-You can use slack_sdk.socket_mode.SocketModeClient …">
+<meta name="description" content="Socket Mode is a method of connecting your app to Slack’s APIs using WebSockets instead of HTTP …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -37,8 +36,8 @@ el.replaceWith(d);
 <h1 class="title">Module <code>slack_sdk.socket_mode</code></h1>
 </header>
 <section id="section-intro">
-<p>Socket Mode is a method of connecting your app to Slack’s APIs using WebSockets instead of HTTP.
-You can use slack_sdk.socket_mode.SocketModeClient for managing Socket Mode connections
+<p>Socket Mode is a method of connecting your app to Slack’s APIs using WebSockets instead of HTTP.</p>
+<p>You can use slack_sdk.socket_mode.SocketModeClient for managing Socket Mode connections
 and performing interactions with Slack.</p>
 <p><a href="https://docs.slack.dev/apis/events-api/using-socket-mode/">https://docs.slack.dev/apis/events-api/using-socket-mode/</a></p>
 </section>
@@ -169,7 +168,7 @@ and performing interactions with Slack.</p>
         on_error_listeners: Optional[List[Callable[[Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[int, Optional[str]], None]]] = None,
     ):
-        &#34;&#34;&#34;Socket Mode client
+        &#34;&#34;&#34;Socket Mode client.
 
         Args:
             app_token: App-level token
@@ -282,14 +281,14 @@ and performing interactions with Slack.</p>
             self.current_session.close()
 
     def send_message(self, message: str) -&gt; None:
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;)
         try:
             self.current_session.send(message)  # type: ignore[union-attr]
         except SlackClientNotConnectedError as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f&#34;Failed to send a message (session id: {self.session_id()}, error: {e}, message: {message})&#34;
                     &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
@@ -306,10 +305,13 @@ and performing interactions with Slack.</p>
                     )
                     raise e
 
-    def close(self):
+    def close(self) -&gt; None:
         self.closed = True
         self.auto_reconnect_enabled = False
+        self.current_session_state.terminated = True
         self.disconnect()
+        if self.current_session_runner.is_alive():
+            self.current_session_runner.shutdown()
         if self.current_app_monitor.is_alive():
             self.current_app_monitor.shutdown()
         if self.message_processor.is_alive():
@@ -317,7 +319,7 @@ and performing interactions with Slack.</p>
         self.message_workers.shutdown()
 
     def _on_message(self, message: str):
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
@@ -336,7 +338,7 @@ and performing interactions with Slack.</p>
             listener(error)
 
     def _on_close(self, code: int, reason: Optional[str] = None):
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;on_close invoked (session id: {self.session_id()})&#34;)
         if self.auto_reconnect_enabled:
             self.logger.info(f&#34;Received CLOSE event. Reconnecting... (session id: {self.session_id()})&#34;)
@@ -375,7 +377,7 @@ and performing interactions with Slack.</p>
                     f&#34;(session id: {self.session_id()}, error: {type(e).__name__}, message: {e})&#34;
                 )</code></pre>
 </details>
-<div class="desc"><p>Socket Mode client</p>
+<div class="desc"><p>Socket Mode client.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -468,17 +470,20 @@ and performing interactions with Slack.</p>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.socket_mode.SocketModeClient.close"><code class="name flex">
-<span>def <span class="ident">close</span></span>(<span>self)</span>
+<span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def close(self):
+<pre><code class="python">def close(self) -&gt; None:
     self.closed = True
     self.auto_reconnect_enabled = False
+    self.current_session_state.terminated = True
     self.disconnect()
+    if self.current_session_runner.is_alive():
+        self.current_session_runner.shutdown()
     if self.current_app_monitor.is_alive():
         self.current_app_monitor.shutdown()
     if self.message_processor.is_alive():
@@ -572,14 +577,14 @@ and performing interactions with Slack.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def send_message(self, message: str) -&gt; None:
-    if self.logger.level &lt;= logging.DEBUG:
+    if self.logger.isEnabledFor(logging.DEBUG):
         self.logger.debug(f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;)
     try:
         self.current_session.send(message)  # type: ignore[union-attr]
     except SlackClientNotConnectedError as e:
         # We rarely get this exception while replacing the underlying WebSocket connections.
         # We can do one more try here as the self.current_session should be ready now.
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(
                 f&#34;Failed to send a message (session id: {self.session_id()}, error: {e}, message: {message})&#34;
                 &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;

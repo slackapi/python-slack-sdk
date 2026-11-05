@@ -55,10 +55,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Jitter:
-    &#34;&#34;&#34;Jitter interface&#34;&#34;&#34;
+    &#34;&#34;&#34;Jitter interface.&#34;&#34;&#34;
 
     def recalculate(self, duration: float) -&gt; float:
         &#34;&#34;&#34;Recalculate the given duration.
+
         see also: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
 
         Args:
@@ -69,7 +70,7 @@ el.replaceWith(d);
         &#34;&#34;&#34;
         raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Jitter interface</p></div>
+<div class="desc"><p>Jitter interface.</p></div>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.jitter.RandomJitter" href="#slack_sdk.http_retry.jitter.RandomJitter">RandomJitter</a></li>
@@ -86,6 +87,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">def recalculate(self, duration: float) -&gt; float:
     &#34;&#34;&#34;Recalculate the given duration.
+
     see also: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
 
     Args:
@@ -96,8 +98,8 @@ el.replaceWith(d);
     &#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Recalculate the given duration.
-see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
+<div class="desc"><p>Recalculate the given duration.</p>
+<p>see also: <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a></p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -119,12 +121,12 @@ A new duration that the jitter amount is added</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class RandomJitter(Jitter):
-    &#34;&#34;&#34;Random jitter implementation&#34;&#34;&#34;
+    &#34;&#34;&#34;Random jitter implementation.&#34;&#34;&#34;
 
     def recalculate(self, duration: float) -&gt; float:
         return duration + random.random()</code></pre>
 </details>
-<div class="desc"><p>Random jitter implementation</p></div>
+<div class="desc"><p>Random jitter implementation.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.http_retry.jitter.Jitter" href="#slack_sdk.http_retry.jitter.Jitter">Jitter</a></li>
