@@ -74,13 +74,7 @@ el.replaceWith(d);
     def generate(self, state: str, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
-        url = (
-            f&#34;{self.authorization_url}?&#34;
-            f&#34;state={state}&amp;&#34;
-            f&#34;client_id={self.client_id}&amp;&#34;
-            f&#34;scope={scopes}&amp;&#34;
-            f&#34;user_scope={user_scopes}&#34;
-        )
+        url = f&#34;{self.authorization_url}?state={state}&amp;client_id={self.client_id}&amp;scope={scopes}&amp;user_scope={user_scopes}&#34;
         if self.redirect_uri is not None:
             url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
         if team is not None:
@@ -101,13 +95,7 @@ el.replaceWith(d);
 <pre><code class="python">def generate(self, state: str, team: Optional[str] = None) -&gt; str:
     scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
     user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
-    url = (
-        f&#34;{self.authorization_url}?&#34;
-        f&#34;state={state}&amp;&#34;
-        f&#34;client_id={self.client_id}&amp;&#34;
-        f&#34;scope={scopes}&amp;&#34;
-        f&#34;user_scope={user_scopes}&#34;
-    )
+    url = f&#34;{self.authorization_url}?state={state}&amp;client_id={self.client_id}&amp;scope={scopes}&amp;user_scope={user_scopes}&#34;
     if self.redirect_uri is not None:
         url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
     if team is not None:
@@ -128,7 +116,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class OpenIDConnectAuthorizeUrlGenerator:
-    &#34;&#34;&#34;Refer to https://openid.net/specs/openid-connect-core-1_0.html&#34;&#34;&#34;
+    &#34;&#34;&#34;Refer to https://openid.net/specs/openid-connect-core-1_0.html.&#34;&#34;&#34;
 
     def __init__(
         self,
@@ -159,7 +147,7 @@ el.replaceWith(d);
             url += f&#34;&amp;nonce={nonce}&#34;
         return url</code></pre>
 </details>
-<div class="desc"><p>Refer to <a href="https://openid.net/specs/openid-connect-core-1_0.html">https://openid.net/specs/openid-connect-core-1_0.html</a></p></div>
+<div class="desc"><p>Refer to <a href="https://openid.net/specs/openid-connect-core-1_0.html.">https://openid.net/specs/openid-connect-core-1_0.html.</a></p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.oauth.authorize_url_generator.OpenIDConnectAuthorizeUrlGenerator.generate"><code class="name flex">

@@ -1,4 +1,4 @@
-"""Slack installation data store
+"""Slack installation data store.
 
 Refer to https://docs.slack.dev/tools/python-slack-sdk/oauth for details.
 """
@@ -37,11 +37,11 @@ class InstallationStore:
         raise NotImplementedError()
 
     def save(self, installation: Installation):
-        """Saves an installation data"""
+        """Saves an installation data."""
         raise NotImplementedError()
 
     def save_bot(self, bot: Bot):
-        """Saves a bot installation data"""
+        """Saves a bot installation data."""
         raise NotImplementedError()
 
     def find_bot(
@@ -51,7 +51,7 @@ class InstallationStore:
         team_id: Optional[str],
         is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        """Finds a bot scope installation per workspace / org"""
+        """Finds a bot scope installation per workspace / org."""
         raise NotImplementedError()
 
     def find_installation(
@@ -63,6 +63,7 @@ class InstallationStore:
         is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Installation]:
         """Finds a relevant installation for the given IDs.
+
         If the user_id is absent, this method may return the latest installation in the workspace / org.
         """
         raise NotImplementedError()
@@ -73,7 +74,7 @@ class InstallationStore:
         enterprise_id: Optional[str],
         team_id: Optional[str],
     ) -> None:
-        """Deletes a bot scope installation per workspace / org"""
+        """Deletes a bot scope installation per workspace / org."""
         raise NotImplementedError()
 
     def delete_installation(
@@ -83,7 +84,7 @@ class InstallationStore:
         team_id: Optional[str],
         user_id: Optional[str] = None,
     ) -> None:
-        """Deletes an installation that matches the given IDs"""
+        """Deletes an installation that matches the given IDs."""
         raise NotImplementedError()
 
     def delete_all(
@@ -92,6 +93,6 @@ class InstallationStore:
         enterprise_id: Optional[str],
         team_id: Optional[str],
     ):
-        """Deletes all installation data for the given workspace / org"""
+        """Deletes all installation data for the given workspace / org."""
         self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
         self.delete_installation(enterprise_id=enterprise_id, team_id=team_id)

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <meta name="generator" content="pdoc3 0.11.6">
 <title>slack_sdk.errors API documentation</title>
-<meta name="description" content="Errors that can be raised by this SDK">
+<meta name="description" content="Errors that can be raised by this SDK.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
@@ -36,7 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>slack_sdk.errors</code></h1>
 </header>
 <section id="section-intro">
-<p>Errors that can be raised by this SDK</p>
+<p>Errors that can be raised by this SDK.</p>
 </section>
 <section>
 </section>
@@ -57,12 +57,9 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BotUserAccessError(SlackClientError):
-    &#34;&#34;&#34;Error raised when an &#39;xoxb-*&#39; token is
-    being used for a Slack API method that only accepts &#39;xoxp-*&#39; tokens.
-    &#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Error raised when an &#39;xoxb-*&#39; token is being used for a Slack API method that only accepts &#39;xoxp-*&#39; tokens.&#34;&#34;&#34;</code></pre>
 </details>
-<div class="desc"><p>Error raised when an 'xoxb-<em>' token is
-being used for a Slack API method that only accepts 'xoxp-</em>' tokens.</p></div>
+<div class="desc"><p>Error raised when an 'xoxb-<em>' token is being used for a Slack API method that only accepts 'xoxp-</em>' tokens.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.errors.SlackClientError" href="#slack_sdk.errors.SlackClientError">SlackClientError</a></li>
@@ -125,14 +122,17 @@ i.e. str(SlackApiError("This text will be sent as a string."))</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SlackClientConfigurationError(SlackClientError):
-    &#34;&#34;&#34;Error raised because of invalid configuration on the client side:
+    &#34;&#34;&#34;Error raised because of invalid configuration on the client side.
+
     * when attempting to send messages over the websocket when the connection is closed.
     * when external system (e.g., Amazon S3) configuration / credentials are not correct
     &#34;&#34;&#34;</code></pre>
 </details>
-<div class="desc"><p>Error raised because of invalid configuration on the client side:
-* when attempting to send messages over the websocket when the connection is closed.
-* when external system (e.g., Amazon S3) configuration / credentials are not correct</p></div>
+<div class="desc"><p>Error raised because of invalid configuration on the client side.</p>
+<ul>
+<li>when attempting to send messages over the websocket when the connection is closed.</li>
+<li>when external system (e.g., Amazon S3) configuration / credentials are not correct</li>
+</ul></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.errors.SlackClientError" href="#slack_sdk.errors.SlackClientError">SlackClientError</a></li>
@@ -150,9 +150,9 @@ i.e. str(SlackApiError("This text will be sent as a string."))</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SlackClientError(Exception):
-    &#34;&#34;&#34;Base class for Client errors&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Base class for Client errors.&#34;&#34;&#34;</code></pre>
 </details>
-<div class="desc"><p>Base class for Client errors</p></div>
+<div class="desc"><p>Base class for Client errors.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>builtins.Exception</li>
@@ -179,11 +179,9 @@ i.e. str(SlackApiError("This text will be sent as a string."))</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SlackClientNotConnectedError(SlackClientError):
-    &#34;&#34;&#34;Error raised when attempting to send messages over the websocket when the
-    connection is closed.&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Error raised when attempting to send messages over the websocket when the connection is closed.&#34;&#34;&#34;</code></pre>
 </details>
-<div class="desc"><p>Error raised when attempting to send messages over the websocket when the
-connection is closed.</p></div>
+<div class="desc"><p>Error raised when attempting to send messages over the websocket when the connection is closed.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.errors.SlackClientError" href="#slack_sdk.errors.SlackClientError">SlackClientError</a></li>
@@ -201,9 +199,9 @@ connection is closed.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SlackObjectFormationError(SlackClientError):
-    &#34;&#34;&#34;Error raised when a constructed object is not valid/malformed&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Error raised when a constructed object is not valid/malformed.&#34;&#34;&#34;</code></pre>
 </details>
-<div class="desc"><p>Error raised when a constructed object is not valid/malformed</p></div>
+<div class="desc"><p>Error raised when a constructed object is not valid/malformed.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.errors.SlackClientError" href="#slack_sdk.errors.SlackClientError">SlackClientError</a></li>
@@ -241,14 +239,14 @@ connection is closed.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SlackTokenRotationError(SlackClientError):
-    &#34;&#34;&#34;Error raised when the oauth.v2.access call for token rotation fails&#34;&#34;&#34;
+    &#34;&#34;&#34;Error raised when the oauth.v2.access call for token rotation fails.&#34;&#34;&#34;
 
     api_error: SlackApiError
 
     def __init__(self, api_error: SlackApiError):
         self.api_error = api_error</code></pre>
 </details>
-<div class="desc"><p>Error raised when the oauth.v2.access call for token rotation fails</p></div>
+<div class="desc"><p>Error raised when the oauth.v2.access call for token rotation fails.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.errors.SlackClientError" href="#slack_sdk.errors.SlackClientError">SlackClientError</a></li>

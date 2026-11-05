@@ -53,8 +53,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def show_deprecation_warning_if_any(method_name: str):
-    &#34;&#34;&#34;Prints a warning if the given method is deprecated&#34;&#34;&#34;
-
+    &#34;&#34;&#34;Prints a warning if the given method is deprecated.&#34;&#34;&#34;
     skip_deprecation = os.environ.get(&#34;SLACKCLIENT_SKIP_DEPRECATION&#34;)  # for unit tests etc.
     if skip_deprecation:
         return
@@ -89,7 +88,7 @@ el.replaceWith(d);
         )
         warnings.warn(message)</code></pre>
 </details>
-<div class="desc"><p>Prints a warning if the given method is deprecated</p></div>
+<div class="desc"><p>Prints a warning if the given method is deprecated.</p></div>
 </dd>
 </dl>
 </section>

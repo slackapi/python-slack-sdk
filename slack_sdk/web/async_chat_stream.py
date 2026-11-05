@@ -4,7 +4,7 @@
 #
 #  1) Modify slack_sdk/web/client.py
 #  2) Run `python scripts/codegen.py`
-#  3) Run `black slack_sdk/`
+#  3) Run `ruff format slack_sdk/`
 #
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

@@ -174,7 +174,6 @@ el.replaceWith(d);
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         &#34;&#34;&#34;
-
         api_url = _get_url(self.base_url, api_method)
         if auth is not None:
             if isinstance(auth, Dict):
@@ -223,6 +222,7 @@ el.replaceWith(d);
                     &#39;channel&#39;: &#39;#random&#39;
                 }
             }
+
         Returns:
             The response parsed into a AsyncSlackResponse object.
         &#34;&#34;&#34;
@@ -247,6 +247,7 @@ el.replaceWith(d);
 
     async def _request(self, *, http_verb, api_url, req_args) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;Submit the HTTP request with the running session or a new session.
+
         Returns:
             A dictionary of the response data.
         &#34;&#34;&#34;
@@ -270,7 +271,7 @@ el.replaceWith(d);
         proxy: Optional[str],
         ssl: Optional[SSLContext],
     ) -&gt; FileUploadV2Result:
-        &#34;&#34;&#34;Upload a file using the issued upload URL&#34;&#34;&#34;
+        &#34;&#34;&#34;Upload a file using the issued upload URL.&#34;&#34;&#34;
         result = await _request_with_session(
             current_session=self.session,
             timeout=timeout,
@@ -412,7 +413,6 @@ with proxy support via the <code>HTTPS_PROXY</code>, <code>https_proxy</code>, <
         SlackRequestError: Json data can only be submitted as
             POST requests.
     &#34;&#34;&#34;
-
     api_url = _get_url(self.base_url, api_method)
     if auth is not None:
         if isinstance(auth, Dict):

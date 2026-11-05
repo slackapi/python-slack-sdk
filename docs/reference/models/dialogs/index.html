@@ -115,7 +115,7 @@ el.replaceWith(d);
                 json[&#34;value&#34;] = self.value
         return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<div class="desc"><p>The base class for JSON serializable class objects.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -261,10 +261,7 @@ def placeholder_length(self) -&gt; bool:
     state_max_length = 3000
 
     def __init__(self):
-        &#34;&#34;&#34;
-        Create a DialogBuilder to more easily construct the JSON required to submit a
-        dialog to Slack
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Create a DialogBuilder to more easily construct the JSON required to submit a dialog to Slack.&#34;&#34;&#34;
         self._title = None
         self._callback_id = None
         self._elements = []
@@ -273,8 +270,7 @@ def placeholder_length(self) -&gt; bool:
         self._state = None
 
     def title(self, title: str) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Specify a title for this dialog
+        &#34;&#34;&#34;Specify a title for this dialog.
 
         Args:
           title: must not exceed 24 characters
@@ -283,9 +279,7 @@ def placeholder_length(self) -&gt; bool:
         return self
 
     def state(self, state: Union[dict, str]) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Pass state into this dialog - dictionaries will be automatically formatted to
-        JSON
+        &#34;&#34;&#34;Pass state into this dialog - dictionaries will be automatically formatted to JSON.
 
         Args:
             state: Extra state information that you need to pass from this dialog
@@ -298,9 +292,7 @@ def placeholder_length(self) -&gt; bool:
         return self
 
     def callback_id(self, callback_id: str) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Specify a callback ID for this dialog, which your application will then
-        receive upon dialog submission
+        &#34;&#34;&#34;Specify a callback ID for this dialog, which your application will then receive upon dialog submission.
 
         Args:
           callback_id: a string identifying this particular dialog
@@ -309,9 +301,9 @@ def placeholder_length(self) -&gt; bool:
         return self
 
     def submit_label(self, label: str) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        The label to use on the &#39;Submit&#39; button on the dialog. Defaults to &#39;Submit&#39;
-        if not specified.
+        &#34;&#34;&#34;The label to use on the &#39;Submit&#39; button on the dialog.
+
+        Defaults to &#39;Submit&#39; if not specified.
 
         Args:
             label: must not exceed 24 characters, and must be a single word (no
@@ -321,9 +313,9 @@ def placeholder_length(self) -&gt; bool:
         return self
 
     def notify_on_cancel(self, notify: bool) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Whether this dialog should send a request to your application even if the
-        user cancels their interaction. Defaults to False.
+        &#34;&#34;&#34;Whether this dialog should send a request to your application even if the user cancels their interaction.
+
+        Defaults to False.
 
         Args:
             notify: Set to True to indicate that your application should receive a
@@ -345,8 +337,7 @@ def placeholder_length(self) -&gt; bool:
         max_length: int = 150,
         subtype: Optional[str] = None,
     ) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Text elements are single-line plain text fields.
+        &#34;&#34;&#34;Text elements are single-line plain text fields.
 
         https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements
 
@@ -396,9 +387,9 @@ def placeholder_length(self) -&gt; bool:
         max_length: int = 3000,
         subtype: Optional[str] = None,
     ) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        A textarea is a multi-line plain text editing control. You&#39;ve likely
-        encountered these on the world wide web. Use this element if you want a
+        &#34;&#34;&#34;A textarea is a multi-line plain text editing control.
+
+        You&#39;ve likely encountered these on the world wide web. Use this element if you want a
         relatively long answer from users. The element UI provides a remaining
         character count to the max_length you have set or the default,
         3000.
@@ -448,9 +439,9 @@ def placeholder_length(self) -&gt; bool:
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        &#34;&#34;&#34;Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A select element may contain up to 100 selections, provided as a list of
@@ -491,9 +482,9 @@ def placeholder_length(self) -&gt; bool:
         placeholder: Optional[str] = None,
         min_query_length: Optional[int] = None,
     ) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        &#34;&#34;&#34;Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A list of options can be loaded from an external URL and used in your dialog
@@ -536,9 +527,9 @@ def placeholder_length(self) -&gt; bool:
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        Now you can easily populate a select menu with a list of users. For example,
-        when you are creating a bug tracking app, you want to include a field for an
+        &#34;&#34;&#34;Now you can easily populate a select menu with a list of users.
+
+        For example, when you are creating a bug tracking app, you want to include a field for an
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn&#39;t need access to a related OAuth scope.
 
@@ -573,9 +564,9 @@ def placeholder_length(self) -&gt; bool:
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        You can also provide a select menu with a list of channels. Specify your
-        data_source as channels to limit only to public channels
+        &#34;&#34;&#34;You can also provide a select menu with a list of channels.
+
+        Specify your data_source as channels to limit only to public channels
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
@@ -608,9 +599,9 @@ def placeholder_length(self) -&gt; bool:
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ) -&gt; &#34;DialogBuilder&#34;:
-        &#34;&#34;&#34;
-        You can also provide a select menu with a list of conversations - including
-        private channels, direct messages, MPIMs, and whatever else we consider a
+        &#34;&#34;&#34;You can also provide a select menu with a list of conversations.
+
+        This includes private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
@@ -677,9 +668,8 @@ def placeholder_length(self) -&gt; bool:
             json[&#34;state&#34;] = self._state
         return json</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>Create a DialogBuilder to more easily construct the JSON required to submit a
-dialog to Slack</p></div>
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>Create a DialogBuilder to more easily construct the JSON required to submit a dialog to Slack.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -719,9 +709,7 @@ dialog to Slack</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def callback_id(self, callback_id: str) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Specify a callback ID for this dialog, which your application will then
-    receive upon dialog submission
+    &#34;&#34;&#34;Specify a callback ID for this dialog, which your application will then receive upon dialog submission.
 
     Args:
       callback_id: a string identifying this particular dialog
@@ -729,8 +717,7 @@ dialog to Slack</p></div>
     self._callback_id = callback_id
     return self</code></pre>
 </details>
-<div class="desc"><p>Specify a callback ID for this dialog, which your application will then
-receive upon dialog submission</p>
+<div class="desc"><p>Specify a callback ID for this dialog, which your application will then receive upon dialog submission.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -769,9 +756,9 @@ def callback_id_present(self) -&gt; bool:
     value: Optional[str] = None,
     placeholder: Optional[str] = None,
 ) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    You can also provide a select menu with a list of channels. Specify your
-    data_source as channels to limit only to public channels
+    &#34;&#34;&#34;You can also provide a select menu with a list of channels.
+
+    Specify your data_source as channels to limit only to public channels
 
     https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
@@ -795,8 +782,8 @@ def callback_id_present(self) -&gt; bool:
     )
     return self</code></pre>
 </details>
-<div class="desc"><p>You can also provide a select menu with a list of channels. Specify your
-data_source as channels to limit only to public channels</p>
+<div class="desc"><p>You can also provide a select menu with a list of channels.</p>
+<p>Specify your data_source as channels to limit only to public channels</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <dl>
 <dt>Args</dt>
@@ -832,9 +819,9 @@ completing the element. 150 character maximum.</dd>
     value: Optional[str] = None,
     placeholder: Optional[str] = None,
 ) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    You can also provide a select menu with a list of conversations - including
-    private channels, direct messages, MPIMs, and whatever else we consider a
+    &#34;&#34;&#34;You can also provide a select menu with a list of conversations.
+
+    This includes private channels, direct messages, MPIMs, and whatever else we consider a
     conversation-like thing.
 
     https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
@@ -859,8 +846,8 @@ completing the element. 150 character maximum.</dd>
     )
     return self</code></pre>
 </details>
-<div class="desc"><p>You can also provide a select menu with a list of conversations - including
-private channels, direct messages, MPIMs, and whatever else we consider a
+<div class="desc"><p>You can also provide a select menu with a list of conversations.</p>
+<p>This includes private channels, direct messages, MPIMs, and whatever else we consider a
 conversation-like thing.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <dl>
@@ -912,9 +899,9 @@ def elements_length(self) -&gt; bool:
     placeholder: Optional[str] = None,
     min_query_length: Optional[int] = None,
 ) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Use the select element for multiple choice selections allowing users to pick
-    a single item from a list. True to web roots, this selection is displayed as
+    &#34;&#34;&#34;Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+    True to web roots, this selection is displayed as
     a dropdown menu.
 
     A list of options can be loaded from an external URL and used in your dialog
@@ -948,8 +935,8 @@ def elements_length(self) -&gt; bool:
     )
     return self</code></pre>
 </details>
-<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick
-a single item from a list. True to web roots, this selection is displayed as
+<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick a single item from a list.</p>
+<p>True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A list of options can be loaded from an external URL and used in your dialog
 menus.</p>
@@ -986,9 +973,9 @@ completing the element. 150 character maximum.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def notify_on_cancel(self, notify: bool) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Whether this dialog should send a request to your application even if the
-    user cancels their interaction. Defaults to False.
+    &#34;&#34;&#34;Whether this dialog should send a request to your application even if the user cancels their interaction.
+
+    Defaults to False.
 
     Args:
         notify: Set to True to indicate that your application should receive a
@@ -997,8 +984,8 @@ completing the element. 150 character maximum.</dd>
     self._notify_on_cancel = notify
     return self</code></pre>
 </details>
-<div class="desc"><p>Whether this dialog should send a request to your application even if the
-user cancels their interaction. Defaults to False.</p>
+<div class="desc"><p>Whether this dialog should send a request to your application even if the user cancels their interaction.</p>
+<p>Defaults to False.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -1016,9 +1003,7 @@ request even if the user cancels interaction with the dialog.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def state(self, state: Union[dict, str]) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Pass state into this dialog - dictionaries will be automatically formatted to
-    JSON
+    &#34;&#34;&#34;Pass state into this dialog - dictionaries will be automatically formatted to JSON.
 
     Args:
         state: Extra state information that you need to pass from this dialog
@@ -1030,8 +1015,7 @@ request even if the user cancels interaction with the dialog.</dd>
         self._state = state
     return self</code></pre>
 </details>
-<div class="desc"><p>Pass state into this dialog - dictionaries will be automatically formatted to
-JSON</p>
+<div class="desc"><p>Pass state into this dialog - dictionaries will be automatically formatted to JSON.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -1072,9 +1056,9 @@ def state_length(self) -&gt; bool:
     value: Optional[str] = None,
     placeholder: Optional[str] = None,
 ) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Use the select element for multiple choice selections allowing users to pick
-    a single item from a list. True to web roots, this selection is displayed as
+    &#34;&#34;&#34;Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+    True to web roots, this selection is displayed as
     a dropdown menu.
 
     A select element may contain up to 100 selections, provided as a list of
@@ -1105,8 +1089,8 @@ def state_length(self) -&gt; bool:
     )
     return self</code></pre>
 </details>
-<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick
-a single item from a list. True to web roots, this selection is displayed as
+<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick a single item from a list.</p>
+<p>True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A select element may contain up to 100 selections, provided as a list of
 Option or OptionGroup objects</p>
@@ -1140,9 +1124,9 @@ completing the element. 150 character maximum.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def submit_label(self, label: str) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    The label to use on the &#39;Submit&#39; button on the dialog. Defaults to &#39;Submit&#39;
-    if not specified.
+    &#34;&#34;&#34;The label to use on the &#39;Submit&#39; button on the dialog.
+
+    Defaults to &#39;Submit&#39; if not specified.
 
     Args:
         label: must not exceed 24 characters, and must be a single word (no
@@ -1151,8 +1135,8 @@ completing the element. 150 character maximum.</dd>
     self._submit_label = label
     return self</code></pre>
 </details>
-<div class="desc"><p>The label to use on the 'Submit' button on the dialog. Defaults to 'Submit'
-if not specified.</p>
+<div class="desc"><p>The label to use on the 'Submit' button on the dialog.</p>
+<p>Defaults to 'Submit' if not specified.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -1210,9 +1194,9 @@ def submit_label_valid(self) -&gt; bool:
     max_length: int = 3000,
     subtype: Optional[str] = None,
 ) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    A textarea is a multi-line plain text editing control. You&#39;ve likely
-    encountered these on the world wide web. Use this element if you want a
+    &#34;&#34;&#34;A textarea is a multi-line plain text editing control.
+
+    You&#39;ve likely encountered these on the world wide web. Use this element if you want a
     relatively long answer from users. The element UI provides a remaining
     character count to the max_length you have set or the default,
     3000.
@@ -1252,8 +1236,8 @@ def submit_label_valid(self) -&gt; bool:
     )
     return self</code></pre>
 </details>
-<div class="desc"><p>A textarea is a multi-line plain text editing control. You've likely
-encountered these on the world wide web. Use this element if you want a
+<div class="desc"><p>A textarea is a multi-line plain text editing control.</p>
+<p>You've likely encountered these on the world wide web. Use this element if you want a
 relatively long answer from users. The element UI provides a remaining
 character count to the max_length you have set or the default,
 3000.</p>
@@ -1309,8 +1293,7 @@ subtype.</dd>
     max_length: int = 150,
     subtype: Optional[str] = None,
 ) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Text elements are single-line plain text fields.
+    &#34;&#34;&#34;Text elements are single-line plain text fields.
 
     https://docs.slack.dev/legacy/legacy-dialogs/#attributes_text_elements
 
@@ -1388,8 +1371,7 @@ subtype.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def title(self, title: str) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Specify a title for this dialog
+    &#34;&#34;&#34;Specify a title for this dialog.
 
     Args:
       title: must not exceed 24 characters
@@ -1397,7 +1379,7 @@ subtype.</dd>
     self._title = title
     return self</code></pre>
 </details>
-<div class="desc"><p>Specify a title for this dialog</p>
+<div class="desc"><p>Specify a title for this dialog.</p>
 <dl>
 <dt>Args</dt>
 <dt>-----=</dt>
@@ -1450,9 +1432,9 @@ def title_present(self) -&gt; bool:
     value: Optional[str] = None,
     placeholder: Optional[str] = None,
 ) -&gt; &#34;DialogBuilder&#34;:
-    &#34;&#34;&#34;
-    Now you can easily populate a select menu with a list of users. For example,
-    when you are creating a bug tracking app, you want to include a field for an
+    &#34;&#34;&#34;Now you can easily populate a select menu with a list of users.
+
+    For example, when you are creating a bug tracking app, you want to include a field for an
     assignee. Slack pre-populates the user list in client-side, so your app
     doesn&#39;t need access to a related OAuth scope.
 
@@ -1478,8 +1460,8 @@ def title_present(self) -&gt; bool:
     )
     return self</code></pre>
 </details>
-<div class="desc"><p>Now you can easily populate a select menu with a list of users. For example,
-when you are creating a bug tracking app, you want to include a field for an
+<div class="desc"><p>Now you can easily populate a select menu with a list of users.</p>
+<p>For example, when you are creating a bug tracking app, you want to include a field for an
 assignee. Slack pre-populates the user list in client-side, so your app
 doesn't need access to a related OAuth scope.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users</a></p>
@@ -1533,9 +1515,9 @@ completing the element. 150 character maximum.</dd>
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ):
-        &#34;&#34;&#34;
-        You can also provide a select menu with a list of channels. Specify your
-        data_source as channels to limit only to public channels
+        &#34;&#34;&#34;You can also provide a select menu with a list of channels.
+
+        Specify your data_source as channels to limit only to public channels
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
 
@@ -1556,9 +1538,9 @@ completing the element. 150 character maximum.</dd>
             placeholder=placeholder,
         )</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>You can also provide a select menu with a list of channels. Specify your
-data_source as channels to limit only to public channels</p>
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>You can also provide a select menu with a list of channels.</p>
+<p>Specify your data_source as channels to limit only to public channels</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <dl>
 <dt>Args</dt>
@@ -1626,9 +1608,9 @@ completing the element. 150 character maximum.</dd>
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ):
-        &#34;&#34;&#34;
-        You can also provide a select menu with a list of conversations - including
-        private channels, direct messages, MPIMs, and whatever else we consider a
+        &#34;&#34;&#34;You can also provide a select menu with a list of conversations.
+
+        This includes private channels, direct messages, MPIMs, and whatever else we consider a
         conversation-like thing.
 
         https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations
@@ -1650,9 +1632,9 @@ completing the element. 150 character maximum.</dd>
             placeholder=placeholder,
         )</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>You can also provide a select menu with a list of conversations - including
-private channels, direct messages, MPIMs, and whatever else we consider a
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>You can also provide a select menu with a list of conversations.</p>
+<p>This includes private channels, direct messages, MPIMs, and whatever else we consider a
 conversation-like thing.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_channels_conversations</a></p>
 <dl>
@@ -1726,9 +1708,9 @@ completing the element. 150 character maximum.</dd>
         optional: Optional[bool] = False,
         placeholder: Optional[str] = None,
     ):
-        &#34;&#34;&#34;
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        &#34;&#34;&#34;Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A list of options can be loaded from an external URL and used in your dialog
@@ -1758,9 +1740,9 @@ completing the element. 150 character maximum.</dd>
         )
         self.min_query_length = min_query_length</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>Use the select element for multiple choice selections allowing users to pick
-a single item from a list. True to web roots, this selection is displayed as
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>Use the select element for multiple choice selections allowing users to pick a single item from a list.</p>
+<p>True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A list of options can be loaded from an external URL and used in your dialog
 menus.</p>
@@ -1839,9 +1821,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DialogStaticSelector(AbstractDialogSelector):
-    &#34;&#34;&#34;
-    Use the select element for multiple choice selections allowing users to pick a
-    single item from a list. True to web roots, this selection is displayed as a
+    &#34;&#34;&#34;Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+    True to web roots, this selection is displayed as a
     dropdown menu.
 
     https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
@@ -1861,9 +1843,9 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
         value: Optional[Union[Option, str]] = None,
         placeholder: Optional[str] = None,
     ):
-        &#34;&#34;&#34;
-        Use the select element for multiple choice selections allowing users to pick
-        a single item from a list. True to web roots, this selection is displayed as
+        &#34;&#34;&#34;Use the select element for multiple choice selections allowing users to pick a single item from a list.
+
+        True to web roots, this selection is displayed as
         a dropdown menu.
 
         A select element may contain up to 100 selections, provided as a list of
@@ -1903,12 +1885,12 @@ def attributes(self) -&gt; Set[str]:  # type: ignore[override]
             json[&#34;options&#34;] = extract_json(self.options, &#34;dialog&#34;)
         return json</code></pre>
 </details>
-<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick a
-single item from a list. True to web roots, this selection is displayed as a
+<div class="desc"><p>Use the select element for multiple choice selections allowing users to pick a single item from a list.</p>
+<p>True to web roots, this selection is displayed as a
 dropdown menu.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#select_elements">https://docs.slack.dev/legacy/legacy-dialogs/#select_elements</a></p>
-<p>Use the select element for multiple choice selections allowing users to pick
-a single item from a list. True to web roots, this selection is displayed as
+<p>Use the select element for multiple choice selections allowing users to pick a single item from a list.</p>
+<p>True to web roots, this selection is displayed as
 a dropdown menu.</p>
 <p>A select element may contain up to 100 selections, provided as a list of
 Option or OptionGroup objects</p>
@@ -1992,9 +1974,9 @@ def options_length(self) -&gt; bool:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DialogTextArea(DialogTextComponent):
-    &#34;&#34;&#34;
-    A textarea is a multi-line plain text editing control. You&#39;ve likely encountered
-    these on the world wide web. Use this element if you want a relatively long
+    &#34;&#34;&#34;A textarea is a multi-line plain text editing control.
+
+    You&#39;ve likely encountered these on the world wide web. Use this element if you want a relatively long
     answer from users. The element UI provides a remaining character count to the
     max_length you have set or the default, 3000.
 
@@ -2004,8 +1986,8 @@ def options_length(self) -&gt; bool:
     type = &#34;textarea&#34;
     max_value_length = 3000</code></pre>
 </details>
-<div class="desc"><p>A textarea is a multi-line plain text editing control. You've likely encountered
-these on the world wide web. Use this element if you want a relatively long
+<div class="desc"><p>A textarea is a multi-line plain text editing control.</p>
+<p>You've likely encountered these on the world wide web. Use this element if you want a relatively long
 answer from users. The element UI provides a remaining character count to the
 max_length you have set or the default, 3000.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#textarea_elements">https://docs.slack.dev/legacy/legacy-dialogs/#textarea_elements</a></p></div>
@@ -2147,7 +2129,7 @@ max_length you have set or the default, 3000.</p>
     def subtype_valid(self) -&gt; bool:
         return self.subtype is None or self.subtype in TextElementSubtypes</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p></div>
+<div class="desc"><p>The base class for JSON serializable class objects.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="slack_sdk.models.basic_objects.JsonObject" href="../basic_objects.html#slack_sdk.models.basic_objects.JsonObject">JsonObject</a></li>
@@ -2388,8 +2370,7 @@ def value_length(self) -&gt; bool:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DialogTextField(DialogTextComponent):
-    &#34;&#34;&#34;
-    Text elements are single-line plain text fields.
+    &#34;&#34;&#34;Text elements are single-line plain text fields.
 
     https://docs.slack.dev/legacy/legacy-dialogs/#text_elements
     &#34;&#34;&#34;
@@ -2453,9 +2434,9 @@ def value_length(self) -&gt; bool:
         value: Optional[str] = None,
         placeholder: Optional[str] = None,
     ):
-        &#34;&#34;&#34;
-        Now you can easily populate a select menu with a list of users. For example,
-        when you are creating a bug tracking app, you want to include a field for an
+        &#34;&#34;&#34;Now you can easily populate a select menu with a list of users.
+
+        For example, when you are creating a bug tracking app, you want to include a field for an
         assignee. Slack pre-populates the user list in client-side, so your app
         doesn&#39;t need access to a related OAuth scope.
 
@@ -2478,9 +2459,9 @@ def value_length(self) -&gt; bool:
             placeholder=placeholder,
         )</code></pre>
 </details>
-<div class="desc"><p>The base class for JSON serializable class objects</p>
-<p>Now you can easily populate a select menu with a list of users. For example,
-when you are creating a bug tracking app, you want to include a field for an
+<div class="desc"><p>The base class for JSON serializable class objects.</p>
+<p>Now you can easily populate a select menu with a list of users.</p>
+<p>For example, when you are creating a bug tracking app, you want to include a field for an
 assignee. Slack pre-populates the user list in client-side, so your app
 doesn't need access to a related OAuth scope.</p>
 <p><a href="https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users">https://docs.slack.dev/legacy/legacy-dialogs/#dynamic_select_elements_users</a></p>

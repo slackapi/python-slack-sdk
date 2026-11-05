@@ -1,3 +1,3 @@
-"""Check the latest version at https://pypi.org/project/slack-sdk/"""
+"""Check the latest version at https://pypi.org/project/slack-sdk/."""
 
-__version__ = "3.44.0"
+__version__ = "3.46.0"

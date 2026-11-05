@@ -3,7 +3,7 @@ from slack_sdk.models.basic_objects import JsonObject, EnumValidator
 
 
 class Metadata(JsonObject):
-    """Message metadata
+    """Message metadata.
 
     https://docs.slack.dev/messaging/message-metadata/
     """
@@ -64,7 +64,7 @@ CustomFieldType = {
 
 
 class ExternalRef(JsonObject):
-    """Reference (and optional type) used to identify an entity within the developer's system"""
+    """Reference (and optional type) used to identify an entity within the developer's system."""
 
     attributes = {
         "id",
@@ -89,7 +89,7 @@ class ExternalRef(JsonObject):
 
 
 class FileEntitySlackFile(JsonObject):
-    """Slack file reference for file entities"""
+    """Slack file reference for file entities."""
 
     attributes = {
         "id",
@@ -114,7 +114,7 @@ class FileEntitySlackFile(JsonObject):
 
 
 class EntityIconSlackFile(JsonObject):
-    """Slack file reference for entity icon"""
+    """Slack file reference for entity icon."""
 
     attributes = {
         "id",
@@ -139,7 +139,7 @@ class EntityIconSlackFile(JsonObject):
 
 
 class EntityIconField(JsonObject):
-    """Icon field for entity attributes"""
+    """Icon field for entity attributes."""
 
     attributes = {
         "alt_text",
@@ -167,7 +167,7 @@ class EntityIconField(JsonObject):
 
 
 class EntityEditSelectConfig(JsonObject):
-    """Select configuration for entity edit support"""
+    """Select configuration for entity edit support."""
 
     attributes = {
         "current_value",
@@ -201,7 +201,7 @@ class EntityEditSelectConfig(JsonObject):
 
 
 class EntityEditNumberConfig(JsonObject):
-    """Number configuration for entity edit support"""
+    """Number configuration for entity edit support."""
 
     attributes = {
         "is_decimal_allowed",
@@ -229,7 +229,7 @@ class EntityEditNumberConfig(JsonObject):
 
 
 class EntityEditTextConfig(JsonObject):
-    """Text configuration for entity edit support"""
+    """Text configuration for entity edit support."""
 
     attributes = {
         "min_length",
@@ -254,7 +254,7 @@ class EntityEditTextConfig(JsonObject):
 
 
 class EntityEditSupport(JsonObject):
-    """Edit support configuration for entity fields"""
+    """Edit support configuration for entity fields."""
 
     attributes = {
         "enabled",
@@ -294,7 +294,7 @@ class EntityEditSupport(JsonObject):
 
 
 class EntityFullSizePreviewError(JsonObject):
-    """Error information for full-size preview"""
+    """Error information for full-size preview."""
 
     attributes = {
         "code",
@@ -319,7 +319,7 @@ class EntityFullSizePreviewError(JsonObject):
 
 
 class EntityFullSizePreview(JsonObject):
-    """Full-size preview configuration for entity"""
+    """Full-size preview configuration for entity."""
 
     attributes = {
         "is_supported",
@@ -350,7 +350,7 @@ class EntityFullSizePreview(JsonObject):
 
 
 class EntityUserIDField(JsonObject):
-    """User ID field for entity"""
+    """User ID field for entity."""
 
     attributes = {
         "user_id",
@@ -372,7 +372,7 @@ class EntityUserIDField(JsonObject):
 
 
 class EntityUserField(JsonObject):
-    """User field for entity"""
+    """User field for entity."""
 
     attributes = {
         "text",
@@ -403,7 +403,7 @@ class EntityUserField(JsonObject):
 
 
 class EntityRefField(JsonObject):
-    """Entity reference field"""
+    """Entity reference field."""
 
     attributes = {
         "entity_url",
@@ -437,7 +437,7 @@ class EntityRefField(JsonObject):
 
 
 class EntityTypedField(JsonObject):
-    """Typed field for entity with various display options"""
+    """Typed field for entity with various display options."""
 
     attributes = {
         "type",
@@ -498,7 +498,7 @@ class EntityTypedField(JsonObject):
 
 
 class EntityStringField(JsonObject):
-    """String field for entity"""
+    """String field for entity."""
 
     attributes = {
         "value",
@@ -544,7 +544,7 @@ class EntityStringField(JsonObject):
 
 
 class EntityTimestampField(JsonObject):
-    """Timestamp field for entity"""
+    """Timestamp field for entity."""
 
     attributes = {
         "value",
@@ -575,7 +575,7 @@ class EntityTimestampField(JsonObject):
 
 
 class EntityImageField(JsonObject):
-    """Image field for entity"""
+    """Image field for entity."""
 
     attributes = {
         "alt_text",
@@ -612,7 +612,7 @@ class EntityImageField(JsonObject):
 
 
 class EntityBooleanCheckboxField(JsonObject):
-    """Boolean checkbox properties"""
+    """Boolean checkbox properties."""
 
     attributes = {"type", "text", "description"}
 
@@ -636,7 +636,7 @@ class EntityBooleanCheckboxField(JsonObject):
 
 
 class EntityBooleanTextField(JsonObject):
-    """Boolean text properties"""
+    """Boolean text properties."""
 
     attributes = {"type", "true_text", "false_text", "true_description", "false_description"}
 
@@ -664,7 +664,7 @@ class EntityBooleanTextField(JsonObject):
 
 
 class EntityArrayItemField(JsonObject):
-    """Array item field for entity (similar to EntityTypedField but with optional type)"""
+    """Array item field for entity (similar to EntityTypedField but with optional type)."""
 
     attributes = {
         "type",
@@ -725,7 +725,7 @@ class EntityArrayItemField(JsonObject):
 
 
 class EntityCustomField(JsonObject):
-    """Custom field for entity with flexible types"""
+    """Custom field for entity with flexible types."""
 
     attributes = {
         "label",
@@ -799,7 +799,7 @@ class EntityCustomField(JsonObject):
 
 
 class FileEntityFields(JsonObject):
-    """Fields specific to file entities"""
+    """Fields specific to file entities."""
 
     attributes = {
         "preview",
@@ -842,7 +842,7 @@ class FileEntityFields(JsonObject):
 
 
 class TaskEntityFields(JsonObject):
-    """Fields specific to task entities"""
+    """Fields specific to task entities."""
 
     attributes = {
         "description",
@@ -885,7 +885,7 @@ class TaskEntityFields(JsonObject):
 
 
 class IncidentEntityFields(JsonObject):
-    """Fields specific to incident entities"""
+    """Fields specific to incident entities."""
 
     attributes = {
         "status",
@@ -931,7 +931,7 @@ class IncidentEntityFields(JsonObject):
 
 
 class ContentItemEntityFields(JsonObject):
-    """Fields specific to content item entities"""
+    """Fields specific to content item entities."""
 
     attributes = {
         "preview",
@@ -968,7 +968,7 @@ class ContentItemEntityFields(JsonObject):
 
 
 class EntityActionProcessingState(JsonObject):
-    """Processing state configuration for entity action button"""
+    """Processing state configuration for entity action button."""
 
     attributes = {
         "enabled",
@@ -993,7 +993,7 @@ class EntityActionProcessingState(JsonObject):
 
 
 class EntityActionButton(JsonObject):
-    """Action button for entity"""
+    """Action button for entity."""
 
     attributes = {
         "text",
@@ -1033,7 +1033,7 @@ class EntityActionButton(JsonObject):
 
 
 class EntityTitle(JsonObject):
-    """Title for entity attributes"""
+    """Title for entity attributes."""
 
     attributes = {
         "text",
@@ -1058,7 +1058,7 @@ class EntityTitle(JsonObject):
 
 
 class EntityAttributes(JsonObject):
-    """Attributes for an entity"""
+    """Attributes for an entity."""
 
     attributes = {
         "title",
@@ -1101,7 +1101,7 @@ class EntityAttributes(JsonObject):
 
 
 class EntityActions(JsonObject):
-    """Actions configuration for entity"""
+    """Actions configuration for entity."""
 
     attributes = {
         "primary_actions",
@@ -1126,7 +1126,7 @@ class EntityActions(JsonObject):
 
 
 class EntityPayload(JsonObject):
-    """Payload schema for an entity"""
+    """Payload schema for an entity."""
 
     attributes = {
         "attributes",
@@ -1187,7 +1187,7 @@ class EntityPayload(JsonObject):
 
 
 class EntityMetadata(JsonObject):
-    """Work object entity metadata
+    """Work object entity metadata.
 
     https://docs.slack.dev/messaging/work-objects/
     """
@@ -1228,7 +1228,7 @@ class EntityMetadata(JsonObject):
 
 
 class EventAndEntityMetadata(JsonObject):
-    """Message metadata with entities
+    """Message metadata with entities.
 
     https://docs.slack.dev/messaging/message-metadata/
     https://docs.slack.dev/messaging/work-objects/
