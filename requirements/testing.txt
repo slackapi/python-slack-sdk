@@ -40,6 +40,10 @@ cryptography<46; implementation_name == "pypy" and python_version == "3.10"
 # Note: used only under slack_sdk/*_store.
 boto3<=2
 
+# certifi
+# Note: botocore verifies TLS with certifi; floor for the eMudhra CA distrust.
+certifi>=2026.10.19
+
 # moto
 # Note: for AWS tests.
 moto>=4.2.14,<6

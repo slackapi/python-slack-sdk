@@ -1834,6 +1834,20 @@ el.replaceWith(d);
             kwargs.update({&#34;channel_ids&#34;: channel_ids})
         return self.api_call(&#34;admin.users.invite&#34;, params=kwargs)
 
+    def admin_users_getExpiration(
+        self,
+        *,
+        user_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Fetches the expiration timestamp for a guest.
+
+        https://docs.slack.dev/reference/methods/admin.users.getExpiration
+        &#34;&#34;&#34;
+        kwargs.update({&#34;user_id&#34;: user_id, &#34;target_team&#34;: target_team})
+        return self.api_call(&#34;admin.users.getExpiration&#34;, http_verb=&#34;GET&#34;, params=kwargs)
+
     def admin_users_list(
         self,
         *,
@@ -2049,6 +2063,220 @@ el.replaceWith(d);
             kwargs.update({&#34;workflow_ids&#34;: workflow_ids})
         return self.api_call(&#34;admin.workflows.unpublish&#34;, params=kwargs)
 
+    def agents_conversations_archive(
+        self,
+        *,
+        channel_id: str,
+        summary_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Archive a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.archive
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;summary_message_ts&#34;: summary_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.archive&#34;, json=kwargs)
+
+    def agents_conversations_create(
+        self,
+        *,
+        name: str,
+        team_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        is_private: Optional[bool] = None,
+        origin_channel_id: Optional[str] = None,
+        origin_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Create a dedicated code channel for an agent session.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.create
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;team_id&#34;: team_id,
+                &#34;session_id&#34;: session_id,
+                &#34;name&#34;: name,
+                &#34;is_private&#34;: is_private,
+                &#34;origin_channel_id&#34;: origin_channel_id,
+                &#34;origin_message_ts&#34;: origin_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.create&#34;, json=kwargs)
+
+    def agents_conversations_getCanvas(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content_format: Optional[str] = None,
+        include_resolved: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Fetch a canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.getCanvas
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;canvas_id&#34;: canvas_id,
+                &#34;content_format&#34;: content_format,
+                &#34;include_resolved&#34;: include_resolved,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.getCanvas&#34;, json=kwargs)
+
+    def agents_conversations_listViews(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;List the views currently attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.listViews
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_id&#34;: channel_id})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.listViews&#34;, json=kwargs)
+
+    def agents_conversations_removeView(
+        self,
+        *,
+        channel_id: str,
+        view_key: Optional[str] = None,
+        view_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Remove a view from a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.removeView
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;view_key&#34;: view_key,
+                &#34;view_id&#34;: view_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.removeView&#34;, json=kwargs)
+
+    def agents_conversations_setCanvasContent(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Replace the full markdown content of a plan canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel&#34;: channel,
+                &#34;canvas_id&#34;: canvas_id,
+                &#34;content&#34;: content,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.setCanvasContent&#34;, json=kwargs)
+
+    def agents_conversations_setCommands(
+        self,
+        *,
+        channel_id: str,
+        commands: Sequence[Dict],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Register the set of agent-defined slash commands for the calling agent in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCommands
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;commands&#34;: commands,
+                &#34;channel_id&#34;: channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.setCommands&#34;, json=kwargs)
+
+    def agents_conversations_setProperties(
+        self,
+        *,
+        channel_id: str,
+        code_channel: Optional[Dict] = None,
+        agent_resource: Optional[Dict] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Set properties on a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setProperties
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;code_channel&#34;: code_channel,
+                &#34;agent_resource&#34;: agent_resource,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.setProperties&#34;, json=kwargs)
+
+    def agents_conversations_setView(
+        self,
+        *,
+        channel_id: str,
+        type: Optional[str] = None,
+        view_key: Optional[str] = None,
+        content: Optional[str] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        canvas_id: Optional[str] = None,
+        access_level: Optional[str] = None,
+        agent_content_hash: Optional[str] = None,
+        pr_url: Optional[str] = None,
+        base_branch: Optional[str] = None,
+        head_branch: Optional[str] = None,
+        name: Optional[str] = None,
+        csp: Optional[Dict] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Create or update a view in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setView
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;channel_id&#34;: channel_id,
+                &#34;type&#34;: type,
+                &#34;view_key&#34;: view_key,
+                &#34;content&#34;: content,
+                &#34;blocks&#34;: blocks,
+                &#34;canvas_id&#34;: canvas_id,
+                &#34;access_level&#34;: access_level,
+                &#34;agent_content_hash&#34;: agent_content_hash,
+                &#34;pr_url&#34;: pr_url,
+                &#34;base_branch&#34;: base_branch,
+                &#34;head_branch&#34;: head_branch,
+                &#34;name&#34;: name,
+                &#34;csp&#34;: csp,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call(&#34;agents.conversations.setView&#34;, json=kwargs)
+
     def agents_sessions_rename(
         self,
         *,
@@ -2251,6 +2479,46 @@ el.replaceWith(d);
         &#34;&#34;&#34;
         kwargs.update({&#34;user_id&#34;: user_id, &#34;status&#34;: status})
         return self.api_call(&#34;apps.user.connection.update&#34;, params=kwargs)
+
+    def apps_user_connection_bulkUpdate(
+        self,
+        *,
+        connected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        disconnected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Updates the connection status between an app and many users in one call, for backfilling an existing user base.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate
+        &#34;&#34;&#34;
+        if isinstance(connected_user_ids, (list, tuple)):
+            kwargs.update({&#34;connected_user_ids&#34;: &#34;,&#34;.join(connected_user_ids)})
+        else:
+            kwargs.update({&#34;connected_user_ids&#34;: connected_user_ids})
+        if isinstance(disconnected_user_ids, (list, tuple)):
+            kwargs.update({&#34;disconnected_user_ids&#34;: &#34;,&#34;.join(disconnected_user_ids)})
+        else:
+            kwargs.update({&#34;disconnected_user_ids&#34;: disconnected_user_ids})
+        return self.api_call(&#34;apps.user.connection.bulkUpdate&#34;, params=kwargs)
+
+    def apps_user_connection_requestAuth(
+        self,
+        *,
+        primary_provider: Union[str, Dict[str, Any]],
+        trigger_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Opens or updates a standardized authentication modal for the calling app.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth
+        &#34;&#34;&#34;
+        kwargs.update({&#34;trigger_id&#34;: trigger_id, &#34;user_id&#34;: user_id})
+        if isinstance(primary_provider, str):
+            kwargs.update({&#34;primary_provider&#34;: primary_provider})
+        else:
+            kwargs.update({&#34;primary_provider&#34;: json.dumps(primary_provider)})
+        return self.api_call(&#34;apps.user.connection.requestAuth&#34;, params=kwargs)
 
     def tooling_tokens_rotate(
         self,
@@ -2607,14 +2875,22 @@ el.replaceWith(d);
         self,
         *,
         title: Optional[str] = None,
-        document_content: Dict[str, str],
+        document_content: Optional[Dict[str, str]] = None,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Create Canvas for a user.
 
         https://docs.slack.dev/reference/methods/canvases.create
         &#34;&#34;&#34;
-        kwargs.update({&#34;title&#34;: title, &#34;document_content&#34;: document_content})
+        kwargs.update(
+            {
+                &#34;title&#34;: title,
+                &#34;document_content&#34;: document_content,
+                &#34;channel_id&#34;: channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return self.api_call(&#34;canvases.create&#34;, json=kwargs)
 
     def canvases_edit(
@@ -2643,6 +2919,20 @@ el.replaceWith(d);
         &#34;&#34;&#34;
         kwargs.update({&#34;canvas_id&#34;: canvas_id})
         return self.api_call(&#34;canvases.delete&#34;, params=kwargs)
+
+    def canvases_getContent(
+        self,
+        *,
+        canvas_id: str,
+        content_type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Get the content of a canvas as markdown (default) or HTML.
+
+        https://docs.slack.dev/reference/methods/canvases.getContent
+        &#34;&#34;&#34;
+        kwargs.update({&#34;canvas_id&#34;: canvas_id, &#34;content_type&#34;: content_type})
+        return self.api_call(&#34;canvases.getContent&#34;, params=kwargs)
 
     def canvases_access_set(
         self,
@@ -5738,13 +6028,14 @@ el.replaceWith(d);
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -&gt; SlackResponse:
         &#34;&#34;&#34;Gets information about the current team.
 
         https://docs.slack.dev/reference/methods/team.info
         &#34;&#34;&#34;
-        kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain})
+        kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain, &#34;include_slackbot_availability&#34;: include_slackbot_availability})
         return self.api_call(&#34;team.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
     def team_integrationLogs(
@@ -8836,6 +9127,31 @@ via the app_requested event, or by the admin.apps.requests.list method.
 <div class="desc"><p>Add an Enterprise user to a workspace.</p>
 <p><a href="https://docs.slack.dev/reference/methods/admin.users.assign">https://docs.slack.dev/reference/methods/admin.users.assign</a></p></div>
 </dd>
+<dt id="slack_sdk.web.client.WebClient.admin_users_getExpiration"><code class="name flex">
+<span>def <span class="ident">admin_users_getExpiration</span></span>(<span>self, *, user_id: str, target_team: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_users_getExpiration(
+    self,
+    *,
+    user_id: str,
+    target_team: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Fetches the expiration timestamp for a guest.
+
+    https://docs.slack.dev/reference/methods/admin.users.getExpiration
+    &#34;&#34;&#34;
+    kwargs.update({&#34;user_id&#34;: user_id, &#34;target_team&#34;: target_team})
+    return self.api_call(&#34;admin.users.getExpiration&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Fetches the expiration timestamp for a guest.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.users.getExpiration">https://docs.slack.dev/reference/methods/admin.users.getExpiration</a></p></div>
+</dd>
 <dt id="slack_sdk.web.client.WebClient.admin_users_invite"><code class="name flex">
 <span>def <span class="ident">admin_users_invite</span></span>(<span>self,<br>*,<br>team_id: str,<br>email: str,<br>channel_ids: str | Sequence[str],<br>custom_message: str | None = None,<br>email_password_policy_enabled: bool | None = None,<br>guest_expiration_ts: str | float | None = None,<br>is_restricted: bool | None = None,<br>is_ultra_restricted: bool | None = None,<br>real_name: str | None = None,<br>resend: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -9474,6 +9790,319 @@ via the app_requested event, or by the admin.apps.requests.list method.
 <div class="desc"><p>Unpublish workflows within the team or enterprise.</p>
 <p><a href="https://docs.slack.dev/reference/methods/admin.workflows.unpublish">https://docs.slack.dev/reference/methods/admin.workflows.unpublish</a></p></div>
 </dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_archive"><code class="name flex">
+<span>def <span class="ident">agents_conversations_archive</span></span>(<span>self, *, channel_id: str, summary_message_ts: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_archive(
+    self,
+    *,
+    channel_id: str,
+    summary_message_ts: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Archive a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.archive
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel_id&#34;: channel_id,
+            &#34;summary_message_ts&#34;: summary_message_ts,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.archive&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Archive a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.archive">https://docs.slack.dev/reference/methods/agents.conversations.archive</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_create"><code class="name flex">
+<span>def <span class="ident">agents_conversations_create</span></span>(<span>self,<br>*,<br>name: str,<br>team_id: str | None = None,<br>session_id: str | None = None,<br>is_private: bool | None = None,<br>origin_channel_id: str | None = None,<br>origin_message_ts: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_create(
+    self,
+    *,
+    name: str,
+    team_id: Optional[str] = None,
+    session_id: Optional[str] = None,
+    is_private: Optional[bool] = None,
+    origin_channel_id: Optional[str] = None,
+    origin_message_ts: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Create a dedicated code channel for an agent session.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.create
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;team_id&#34;: team_id,
+            &#34;session_id&#34;: session_id,
+            &#34;name&#34;: name,
+            &#34;is_private&#34;: is_private,
+            &#34;origin_channel_id&#34;: origin_channel_id,
+            &#34;origin_message_ts&#34;: origin_message_ts,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.create&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Create a dedicated code channel for an agent session.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.create">https://docs.slack.dev/reference/methods/agents.conversations.create</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_getCanvas"><code class="name flex">
+<span>def <span class="ident">agents_conversations_getCanvas</span></span>(<span>self,<br>*,<br>channel: str,<br>canvas_id: str,<br>content_format: str | None = None,<br>include_resolved: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_getCanvas(
+    self,
+    *,
+    channel: str,
+    canvas_id: str,
+    content_format: Optional[str] = None,
+    include_resolved: Optional[bool] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Fetch a canvas attached to a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.getCanvas
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;canvas_id&#34;: canvas_id,
+            &#34;content_format&#34;: content_format,
+            &#34;include_resolved&#34;: include_resolved,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.getCanvas&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Fetch a canvas attached to a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.getCanvas">https://docs.slack.dev/reference/methods/agents.conversations.getCanvas</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_listViews"><code class="name flex">
+<span>def <span class="ident">agents_conversations_listViews</span></span>(<span>self, *, channel_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_listViews(
+    self,
+    *,
+    channel_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;List the views currently attached to a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.listViews
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_id&#34;: channel_id})
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.listViews&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>List the views currently attached to a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.listViews">https://docs.slack.dev/reference/methods/agents.conversations.listViews</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_removeView"><code class="name flex">
+<span>def <span class="ident">agents_conversations_removeView</span></span>(<span>self,<br>*,<br>channel_id: str,<br>view_key: str | None = None,<br>view_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_removeView(
+    self,
+    *,
+    channel_id: str,
+    view_key: Optional[str] = None,
+    view_id: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Remove a view from a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.removeView
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel_id&#34;: channel_id,
+            &#34;view_key&#34;: view_key,
+            &#34;view_id&#34;: view_id,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.removeView&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Remove a view from a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.removeView">https://docs.slack.dev/reference/methods/agents.conversations.removeView</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_setCanvasContent"><code class="name flex">
+<span>def <span class="ident">agents_conversations_setCanvasContent</span></span>(<span>self, *, channel: str, canvas_id: str, content: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_setCanvasContent(
+    self,
+    *,
+    channel: str,
+    canvas_id: str,
+    content: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Replace the full markdown content of a plan canvas attached to a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel&#34;: channel,
+            &#34;canvas_id&#34;: canvas_id,
+            &#34;content&#34;: content,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.setCanvasContent&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Replace the full markdown content of a plan canvas attached to a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent">https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_setCommands"><code class="name flex">
+<span>def <span class="ident">agents_conversations_setCommands</span></span>(<span>self, *, channel_id: str, commands: Sequence[Dict], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_setCommands(
+    self,
+    *,
+    channel_id: str,
+    commands: Sequence[Dict],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Register the set of agent-defined slash commands for the calling agent in a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.setCommands
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;commands&#34;: commands,
+            &#34;channel_id&#34;: channel_id,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.setCommands&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Register the set of agent-defined slash commands for the calling agent in a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.setCommands">https://docs.slack.dev/reference/methods/agents.conversations.setCommands</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_setProperties"><code class="name flex">
+<span>def <span class="ident">agents_conversations_setProperties</span></span>(<span>self,<br>*,<br>channel_id: str,<br>code_channel: Dict | None = None,<br>agent_resource: Dict | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_setProperties(
+    self,
+    *,
+    channel_id: str,
+    code_channel: Optional[Dict] = None,
+    agent_resource: Optional[Dict] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Set properties on a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.setProperties
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel_id&#34;: channel_id,
+            &#34;code_channel&#34;: code_channel,
+            &#34;agent_resource&#34;: agent_resource,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.setProperties&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Set properties on a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.setProperties">https://docs.slack.dev/reference/methods/agents.conversations.setProperties</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.agents_conversations_setView"><code class="name flex">
+<span>def <span class="ident">agents_conversations_setView</span></span>(<span>self,<br>*,<br>channel_id: str,<br>type: str | None = None,<br>view_key: str | None = None,<br>content: str | None = None,<br>blocks: Sequence[Dict | <a title="slack_sdk.models.blocks.blocks.Block" href="../models/blocks/blocks.html#slack_sdk.models.blocks.blocks.Block">Block</a>] | None = None,<br>canvas_id: str | None = None,<br>access_level: str | None = None,<br>agent_content_hash: str | None = None,<br>pr_url: str | None = None,<br>base_branch: str | None = None,<br>head_branch: str | None = None,<br>name: str | None = None,<br>csp: Dict | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def agents_conversations_setView(
+    self,
+    *,
+    channel_id: str,
+    type: Optional[str] = None,
+    view_key: Optional[str] = None,
+    content: Optional[str] = None,
+    blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+    canvas_id: Optional[str] = None,
+    access_level: Optional[str] = None,
+    agent_content_hash: Optional[str] = None,
+    pr_url: Optional[str] = None,
+    base_branch: Optional[str] = None,
+    head_branch: Optional[str] = None,
+    name: Optional[str] = None,
+    csp: Optional[Dict] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Create or update a view in a code channel.
+
+    https://docs.slack.dev/reference/methods/agents.conversations.setView
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;channel_id&#34;: channel_id,
+            &#34;type&#34;: type,
+            &#34;view_key&#34;: view_key,
+            &#34;content&#34;: content,
+            &#34;blocks&#34;: blocks,
+            &#34;canvas_id&#34;: canvas_id,
+            &#34;access_level&#34;: access_level,
+            &#34;agent_content_hash&#34;: agent_content_hash,
+            &#34;pr_url&#34;: pr_url,
+            &#34;base_branch&#34;: base_branch,
+            &#34;head_branch&#34;: head_branch,
+            &#34;name&#34;: name,
+            &#34;csp&#34;: csp,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
+    return self.api_call(&#34;agents.conversations.setView&#34;, json=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Create or update a view in a code channel.</p>
+<p><a href="https://docs.slack.dev/reference/methods/agents.conversations.setView">https://docs.slack.dev/reference/methods/agents.conversations.setView</a></p></div>
+</dd>
 <dt id="slack_sdk.web.client.WebClient.agents_sessions_rename"><code class="name flex">
 <span>def <span class="ident">agents_sessions_rename</span></span>(<span>self, *, channel_id: str, title: str, thread_ts: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -9785,6 +10414,68 @@ via the app_requested event, or by the admin.apps.requests.list method.
 </details>
 <div class="desc"><p>Uninstalls your app from a workspace.</p>
 <p><a href="https://docs.slack.dev/reference/methods/apps.uninstall">https://docs.slack.dev/reference/methods/apps.uninstall</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.apps_user_connection_bulkUpdate"><code class="name flex">
+<span>def <span class="ident">apps_user_connection_bulkUpdate</span></span>(<span>self,<br>*,<br>connected_user_ids: str | Sequence[str] | None = None,<br>disconnected_user_ids: str | Sequence[str] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_user_connection_bulkUpdate(
+    self,
+    *,
+    connected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+    disconnected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Updates the connection status between an app and many users in one call, for backfilling an existing user base.
+
+    https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate
+    &#34;&#34;&#34;
+    if isinstance(connected_user_ids, (list, tuple)):
+        kwargs.update({&#34;connected_user_ids&#34;: &#34;,&#34;.join(connected_user_ids)})
+    else:
+        kwargs.update({&#34;connected_user_ids&#34;: connected_user_ids})
+    if isinstance(disconnected_user_ids, (list, tuple)):
+        kwargs.update({&#34;disconnected_user_ids&#34;: &#34;,&#34;.join(disconnected_user_ids)})
+    else:
+        kwargs.update({&#34;disconnected_user_ids&#34;: disconnected_user_ids})
+    return self.api_call(&#34;apps.user.connection.bulkUpdate&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Updates the connection status between an app and many users in one call, for backfilling an existing user base.</p>
+<p><a href="https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate">https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.apps_user_connection_requestAuth"><code class="name flex">
+<span>def <span class="ident">apps_user_connection_requestAuth</span></span>(<span>self,<br>*,<br>primary_provider: str | Dict[str, Any],<br>trigger_id: str | None = None,<br>user_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apps_user_connection_requestAuth(
+    self,
+    *,
+    primary_provider: Union[str, Dict[str, Any]],
+    trigger_id: Optional[str] = None,
+    user_id: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Opens or updates a standardized authentication modal for the calling app.
+
+    https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth
+    &#34;&#34;&#34;
+    kwargs.update({&#34;trigger_id&#34;: trigger_id, &#34;user_id&#34;: user_id})
+    if isinstance(primary_provider, str):
+        kwargs.update({&#34;primary_provider&#34;: primary_provider})
+    else:
+        kwargs.update({&#34;primary_provider&#34;: json.dumps(primary_provider)})
+    return self.api_call(&#34;apps.user.connection.requestAuth&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Opens or updates a standardized authentication modal for the calling app.</p>
+<p><a href="https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth">https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.apps_user_connection_update"><code class="name flex">
 <span>def <span class="ident">apps_user_connection_update</span></span>(<span>self, *, user_id: str, status: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
@@ -10423,7 +11114,7 @@ via the app_requested event, or by the admin.apps.requests.list method.
 <p><a href="https://docs.slack.dev/reference/methods/canvases.access.set">https://docs.slack.dev/reference/methods/canvases.access.set</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.canvases_create"><code class="name flex">
-<span>def <span class="ident">canvases_create</span></span>(<span>self, *, title: str | None = None, document_content: Dict[str, str], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">canvases_create</span></span>(<span>self,<br>*,<br>title: str | None = None,<br>document_content: Dict[str, str] | None = None,<br>channel_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -10434,14 +11125,22 @@ via the app_requested event, or by the admin.apps.requests.list method.
     self,
     *,
     title: Optional[str] = None,
-    document_content: Dict[str, str],
+    document_content: Optional[Dict[str, str]] = None,
+    channel_id: Optional[str] = None,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Create Canvas for a user.
 
     https://docs.slack.dev/reference/methods/canvases.create
     &#34;&#34;&#34;
-    kwargs.update({&#34;title&#34;: title, &#34;document_content&#34;: document_content})
+    kwargs.update(
+        {
+            &#34;title&#34;: title,
+            &#34;document_content&#34;: document_content,
+            &#34;channel_id&#34;: channel_id,
+        }
+    )
+    kwargs = _remove_none_values(kwargs)
     return self.api_call(&#34;canvases.create&#34;, json=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Create Canvas for a user.</p>
@@ -10495,6 +11194,31 @@ via the app_requested event, or by the admin.apps.requests.list method.
 </details>
 <div class="desc"><p>Update an existing canvas.</p>
 <p><a href="https://docs.slack.dev/reference/methods/canvases.edit">https://docs.slack.dev/reference/methods/canvases.edit</a></p></div>
+</dd>
+<dt id="slack_sdk.web.client.WebClient.canvases_getContent"><code class="name flex">
+<span>def <span class="ident">canvases_getContent</span></span>(<span>self, *, canvas_id: str, content_type: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def canvases_getContent(
+    self,
+    *,
+    canvas_id: str,
+    content_type: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Get the content of a canvas as markdown (default) or HTML.
+
+    https://docs.slack.dev/reference/methods/canvases.getContent
+    &#34;&#34;&#34;
+    kwargs.update({&#34;canvas_id&#34;: canvas_id, &#34;content_type&#34;: content_type})
+    return self.api_call(&#34;canvases.getContent&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Get the content of a canvas as markdown (default) or HTML.</p>
+<p><a href="https://docs.slack.dev/reference/methods/canvases.getContent">https://docs.slack.dev/reference/methods/canvases.getContent</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.canvases_sections_lookup"><code class="name flex">
 <span>def <span class="ident">canvases_sections_lookup</span></span>(<span>self, *, canvas_id: str, criteria: Dict[str, Any], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
@@ -15231,7 +15955,7 @@ and <a href="https://docs.slack.dev/reference/methods/files.info">https://docs.s
 <p><a href="https://docs.slack.dev/reference/methods/team.externalTeams.list">https://docs.slack.dev/reference/methods/team.externalTeams.list</a></p></div>
 </dd>
 <dt id="slack_sdk.web.client.WebClient.team_info"><code class="name flex">
-<span>def <span class="ident">team_info</span></span>(<span>self, *, team: str | None = None, domain: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+<span>def <span class="ident">team_info</span></span>(<span>self,<br>*,<br>team: str | None = None,<br>domain: str | None = None,<br>include_slackbot_availability: bool | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
 <dd>
 <details class="source">
@@ -15243,13 +15967,14 @@ and <a href="https://docs.slack.dev/reference/methods/files.info">https://docs.s
     *,
     team: Optional[str] = None,
     domain: Optional[str] = None,
+    include_slackbot_availability: Optional[bool] = None,
     **kwargs,
 ) -&gt; SlackResponse:
     &#34;&#34;&#34;Gets information about the current team.
 
     https://docs.slack.dev/reference/methods/team.info
     &#34;&#34;&#34;
-    kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain})
+    kwargs.update({&#34;team&#34;: team, &#34;domain&#34;: domain, &#34;include_slackbot_availability&#34;: include_slackbot_availability})
     return self.api_call(&#34;team.info&#34;, http_verb=&#34;GET&#34;, params=kwargs)</code></pre>
 </details>
 <div class="desc"><p>Gets information about the current team.</p>
@@ -16409,6 +17134,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.admin_usergroups_listChannels" href="#slack_sdk.web.client.WebClient.admin_usergroups_listChannels">admin_usergroups_listChannels</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_usergroups_removeChannels" href="#slack_sdk.web.client.WebClient.admin_usergroups_removeChannels">admin_usergroups_removeChannels</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_assign" href="#slack_sdk.web.client.WebClient.admin_users_assign">admin_users_assign</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.admin_users_getExpiration" href="#slack_sdk.web.client.WebClient.admin_users_getExpiration">admin_users_getExpiration</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_invite" href="#slack_sdk.web.client.WebClient.admin_users_invite">admin_users_invite</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_list" href="#slack_sdk.web.client.WebClient.admin_users_list">admin_users_list</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_users_remove" href="#slack_sdk.web.client.WebClient.admin_users_remove">admin_users_remove</a></code></li>
@@ -16429,6 +17155,15 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.admin_workflows_permissions_lookup" href="#slack_sdk.web.client.WebClient.admin_workflows_permissions_lookup">admin_workflows_permissions_lookup</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_workflows_search" href="#slack_sdk.web.client.WebClient.admin_workflows_search">admin_workflows_search</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.admin_workflows_unpublish" href="#slack_sdk.web.client.WebClient.admin_workflows_unpublish">admin_workflows_unpublish</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_archive" href="#slack_sdk.web.client.WebClient.agents_conversations_archive">agents_conversations_archive</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_create" href="#slack_sdk.web.client.WebClient.agents_conversations_create">agents_conversations_create</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_getCanvas" href="#slack_sdk.web.client.WebClient.agents_conversations_getCanvas">agents_conversations_getCanvas</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_listViews" href="#slack_sdk.web.client.WebClient.agents_conversations_listViews">agents_conversations_listViews</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_removeView" href="#slack_sdk.web.client.WebClient.agents_conversations_removeView">agents_conversations_removeView</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_setCanvasContent" href="#slack_sdk.web.client.WebClient.agents_conversations_setCanvasContent">agents_conversations_setCanvasContent</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_setCommands" href="#slack_sdk.web.client.WebClient.agents_conversations_setCommands">agents_conversations_setCommands</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_setProperties" href="#slack_sdk.web.client.WebClient.agents_conversations_setProperties">agents_conversations_setProperties</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.agents_conversations_setView" href="#slack_sdk.web.client.WebClient.agents_conversations_setView">agents_conversations_setView</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.agents_sessions_rename" href="#slack_sdk.web.client.WebClient.agents_sessions_rename">agents_sessions_rename</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.agents_sessions_setStatus" href="#slack_sdk.web.client.WebClient.agents_sessions_setStatus">agents_sessions_setStatus</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.api_test" href="#slack_sdk.web.client.WebClient.api_test">api_test</a></code></li>
@@ -16440,6 +17175,8 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.apps_manifest_update" href="#slack_sdk.web.client.WebClient.apps_manifest_update">apps_manifest_update</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.apps_manifest_validate" href="#slack_sdk.web.client.WebClient.apps_manifest_validate">apps_manifest_validate</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.apps_uninstall" href="#slack_sdk.web.client.WebClient.apps_uninstall">apps_uninstall</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.apps_user_connection_bulkUpdate" href="#slack_sdk.web.client.WebClient.apps_user_connection_bulkUpdate">apps_user_connection_bulkUpdate</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.apps_user_connection_requestAuth" href="#slack_sdk.web.client.WebClient.apps_user_connection_requestAuth">apps_user_connection_requestAuth</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.apps_user_connection_update" href="#slack_sdk.web.client.WebClient.apps_user_connection_update">apps_user_connection_update</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.assistant_threads_setStatus" href="#slack_sdk.web.client.WebClient.assistant_threads_setStatus">assistant_threads_setStatus</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.assistant_threads_setSuggestedPrompts" href="#slack_sdk.web.client.WebClient.assistant_threads_setSuggestedPrompts">assistant_threads_setSuggestedPrompts</a></code></li>
@@ -16464,6 +17201,7 @@ to learn more about updating views and avoiding race conditions with the hash ar
 <li><code><a title="slack_sdk.web.client.WebClient.canvases_create" href="#slack_sdk.web.client.WebClient.canvases_create">canvases_create</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.canvases_delete" href="#slack_sdk.web.client.WebClient.canvases_delete">canvases_delete</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.canvases_edit" href="#slack_sdk.web.client.WebClient.canvases_edit">canvases_edit</a></code></li>
+<li><code><a title="slack_sdk.web.client.WebClient.canvases_getContent" href="#slack_sdk.web.client.WebClient.canvases_getContent">canvases_getContent</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.canvases_sections_lookup" href="#slack_sdk.web.client.WebClient.canvases_sections_lookup">canvases_sections_lookup</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.channels_archive" href="#slack_sdk.web.client.WebClient.channels_archive">channels_archive</a></code></li>
 <li><code><a title="slack_sdk.web.client.WebClient.channels_create" href="#slack_sdk.web.client.WebClient.channels_create">channels_create</a></code></li>
