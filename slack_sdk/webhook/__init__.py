@@ -1,6 +1,4 @@
-"""You can use slack_sdk.webhook.WebhookClient for Incoming Webhooks
-and message responses using response_url in payloads.
-"""
+"""You can use slack_sdk.webhook.WebhookClient for Incoming Webhooks and message responses using response_url in payloads."""
 
 # from .async_client import AsyncWebhookClient
 from .client import WebhookClient

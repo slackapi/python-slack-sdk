@@ -73,13 +73,15 @@ el.replaceWith(d);
 <p>Slack APIs safely accept "0"/"1" as boolean values.
 Using True/False (bool in Python) doesn't work with aiohttp.
 This method converts only the bool values in top-level of a given dict.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>params</code></strong></dt>
 <dd>params as a dict</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>Modified dict</p></div>
+<p>Returns
+-----=
+Modified dict</p></div>
 </dd>
 <dt id="slack_sdk.web.internal_utils.get_user_agent"><code class="name flex">
 <span>def <span class="ident">get_user_agent</span></span>(<span>prefix: str | None = None, suffix: str | None = None)</span>
@@ -90,8 +92,7 @@ This method converts only the bool values in top-level of a given dict.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_user_agent(prefix: Optional[str] = None, suffix: Optional[str] = None):
-    &#34;&#34;&#34;Construct the user-agent header with the package info,
-    Python version and OS version.
+    &#34;&#34;&#34;Construct the user-agent header with the package info, Python version and OS version.
 
     Returns:
         The user agent string.
@@ -106,10 +107,10 @@ This method converts only the bool values in top-level of a given dict.</p>
     suffix = f&#34; {suffix}&#34; if suffix else &#34;&#34;
     return prefix + user_agent_string + suffix</code></pre>
 </details>
-<div class="desc"><p>Construct the user-agent header with the package info,
-Python version and OS version.</p>
-<h2 id="returns">Returns</h2>
-<p>The user agent string.
+<div class="desc"><p>Construct the user-agent header with the package info, Python version and OS version.</p>
+<p>Returns
+-----=
+The user agent string.
 e.g. 'Python/3.7.17 slackclient/2.0.0 Darwin/17.7.0'</p></div>
 </dd>
 </dl>

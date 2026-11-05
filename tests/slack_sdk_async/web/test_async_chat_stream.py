@@ -142,6 +142,7 @@ class TestAsyncChatStream(unittest.TestCase):
                 )
             ],
             markdown_text="*",
+            session_status="processing",
             token="xoxb-chat_stream_test_token2",
         )
 
@@ -179,6 +180,7 @@ class TestAsyncChatStream(unittest.TestCase):
                 json.dumps(stop_request.get("chunks")),
                 '[{"text": "**", "type": "markdown_text"}]',
             )
+            self.assertEqual(stop_request.get("session_status"), "processing")
             self.assertEqual(stop_request.get("token"), "xoxb-chat_stream_test_token2")
             self.assertEqual(stop_request.get("ts"), "123.123")
 

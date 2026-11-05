@@ -72,10 +72,10 @@ el.replaceWith(d);
         self.expiration_seconds = expiration_seconds
 
     def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-        return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;
+        return f&#34;{self.cookie_name}={state}; Secure; HttpOnly; Path=/; Max-Age={self.expiration_seconds}&#34;
 
     def build_set_cookie_for_deletion(self) -&gt; str:
-        return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
+        return f&#34;{self.cookie_name}=deleted; Secure; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
 
     def is_valid_browser(
         self,
@@ -126,7 +126,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_deletion(self) -&gt; str:
-    return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;</code></pre>
+    return f&#34;{self.cookie_name}=deleted; Secure; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -139,7 +139,7 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-    return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;</code></pre>
+    return f&#34;{self.cookie_name}={state}; Secure; HttpOnly; Path=/; Max-Age={self.expiration_seconds}&#34;</code></pre>
 </details>
 <div class="desc"></div>
 </dd>

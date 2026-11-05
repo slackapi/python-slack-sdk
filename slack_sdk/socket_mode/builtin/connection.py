@@ -102,7 +102,7 @@ class Connection:
             port: int = parsed_url.port or (443 if parsed_url.scheme == "wss" else 80)
             if self.trace_enabled:
                 self.logger.debug(
-                    f"Connecting to the address for handshake: {hostname}:{port} " f"(session id: {self.session_id})"
+                    f"Connecting to the address for handshake: {hostname}:{port} (session id: {self.session_id})"
                 )
             sock: Union[ssl.SSLSocket, socket] = _establish_new_socket_connection(  # type: ignore[valid-type]
                 session_id=self.session_id,
@@ -204,7 +204,7 @@ class Connection:
         if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode("utf-8")
-            self.logger.debug("Sending a ping data frame " f"(session id: {self.session_id}, payload: {payload})")
+            self.logger.debug(f"Sending a ping data frame (session id: {self.session_id}, payload: {payload})")
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PING)
         with self.sock_send_lock:
             if self.sock is not None:
@@ -217,7 +217,7 @@ class Connection:
         if self.trace_enabled and self.ping_pong_trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode("utf-8")
-            self.logger.debug("Sending a pong data frame " f"(session id: {self.session_id}, payload: {payload})")
+            self.logger.debug(f"Sending a pong data frame (session id: {self.session_id}, payload: {payload})")
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_PONG)
         with self.sock_send_lock:
             if self.sock is not None:
@@ -230,7 +230,7 @@ class Connection:
         if self.trace_enabled:
             if isinstance(payload, bytes):
                 payload = payload.decode("utf-8")
-            self.logger.debug("Sending a text data frame " f"(session id: {self.session_id}, payload: {payload})")
+            self.logger.debug(f"Sending a text data frame (session id: {self.session_id}, payload: {payload})")
         data = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
         with self.sock_send_lock:
             try:
@@ -278,12 +278,11 @@ class Connection:
                         self.disconnect()
                         return
             else:
-                self.logger.debug("This connection is already closed." f" (session id: {self.session_id})")
+                self.logger.debug(f"This connection is already closed. (session id: {self.session_id})")
             self.consecutive_check_state_error_count = 0
         except Exception as e:
             error_message = (
-                "Failed to check the state of sock "
-                f"(session id: {self.session_id}, error: {type(e).__name__}, message: {e})"
+                f"Failed to check the state of sock (session id: {self.session_id}, error: {type(e).__name__}, message: {e})"
             )
             if self.trace_enabled:
                 self.logger.exception(error_message)
@@ -375,7 +374,7 @@ class Connection:
                                         self.last_ping_pong_time = float(ping_time)
                                     except Exception as e:
                                         self.logger.debug(
-                                            "Failed to parse a pong message " f" (message: {str_message}, error: {e}"
+                                            f"Failed to parse a pong message  (message: {str_message}, error: {e}"
                                         )
                         elif header.opcode == FrameHeader.OPCODE_TEXT:
                             if self.on_message_listener is not None:
@@ -413,13 +412,13 @@ class Connection:
                 # getting errno.EBADF and the socket is no longer available
                 if e.errno == 9 and state.terminated:
                     self.logger.debug(
-                        "The reason why you got [Errno 9] Bad file descriptor here is " "the socket is no longer available."
+                        "The reason why you got [Errno 9] Bad file descriptor here is the socket is no longer available."
                     )
                 else:
                     if self.on_error_listener is not None:
                         self.on_error_listener(e)
                     else:
-                        error_message = "Got an OSError while receiving data" f" (session id: {self.session_id}, error: {e})"
+                        error_message = f"Got an OSError while receiving data (session id: {self.session_id}, error: {e})"
                         if self.trace_enabled:
                             self.logger.exception(error_message)
                         else:
@@ -430,9 +429,7 @@ class Connection:
                     try:
                         self.disconnect()
                     except Exception as disconnection_error:
-                        error_message = (
-                            "Failed to disconnect" f" (session id: {self.session_id}, error: {disconnection_error})"
-                        )
+                        error_message = f"Failed to disconnect (session id: {self.session_id}, error: {disconnection_error})"
                         if self.trace_enabled:
                             self.logger.exception(error_message)
                         else:
@@ -443,7 +440,7 @@ class Connection:
                 if self.on_error_listener is not None:
                     self.on_error_listener(e)
                 else:
-                    error_message = "Got an exception while receiving data" f" (session id: {self.session_id}, error: {e})"
+                    error_message = f"Got an exception while receiving data (session id: {self.session_id}, error: {e})"
                     if self.trace_enabled:
                         self.logger.exception(error_message)
                     else:

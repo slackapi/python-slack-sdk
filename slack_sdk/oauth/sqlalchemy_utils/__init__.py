@@ -5,8 +5,7 @@ from typing import Optional
 # TODO: Remove this function in next major release (v4.0.0) after updating all
 # DateTime columns to DateTime(timezone=True). See issue #1832 for context.
 def normalize_datetime_for_db(dt: Optional[datetime]) -> Optional[datetime]:
-    """
-    Normalize timezone-aware datetime to naive UTC datetime for database storage.
+    """Normalize timezone-aware datetime to naive UTC datetime for database storage.
 
     Ensures compatibility with existing databases using TIMESTAMP WITHOUT TIME ZONE.
     SQLAlchemy DateTime columns without timezone=True create naive timestamp columns

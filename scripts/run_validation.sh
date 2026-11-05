@@ -6,7 +6,7 @@ script_dir=`dirname $0`
 cd ${script_dir}/..
 
 # keep in sync with LATEST_SUPPORTED_PY in .github/workflows/ci-build.yml
-LATEST_SUPPORTED_PY="3.14"
+LATEST_SUPPORTED_PY="3.15"
 current_py=$(python --version | sed -E 's/Python ([0-9]+\.[0-9]+).*/\1/')
 
 ./scripts/install.sh
@@ -17,7 +17,7 @@ echo "Generating code ..." && python scripts/codegen.py --path .
 
 # Run mypy type checking only on the latest supported Python version
 if [[ "$current_py" == "$LATEST_SUPPORTED_PY" ]]; then
-    echo "Running black (code formatter) ..." && ./scripts/format.sh --no-install
+    echo "Running ruff (code formatter) ..." && ./scripts/format.sh --no-install
     echo "Running linting checks ..." && ./scripts/lint.sh --no-install
     echo "Running mypy type checking ..." && ./scripts/run_mypy.sh --no-install
 else

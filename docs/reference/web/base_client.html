@@ -165,7 +165,6 @@ el.replaceWith(d);
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         &#34;&#34;&#34;
-
         api_url = _get_url(self.base_url, api_method)
         headers = headers or {}
         headers.update(self.headers)
@@ -226,7 +225,7 @@ el.replaceWith(d);
         )
 
     def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -&gt; Dict[str, Any]:
-        &#34;&#34;&#34;This method is supposed to be used only for SlackResponse pagination
+        &#34;&#34;&#34;This method is supposed to be used only for SlackResponse pagination.
 
         You can paginate using Python&#39;s for iterator as below:
 
@@ -606,7 +605,7 @@ el.replaceWith(d);
         proxy: Optional[str],
         ssl: Optional[SSLContext],
     ) -&gt; FileUploadV2Result:
-        &#34;&#34;&#34;Upload a file using the issued upload URL&#34;&#34;&#34;
+        &#34;&#34;&#34;Upload a file using the issued upload URL.&#34;&#34;&#34;
         result = _upload_file_via_v2_url(
             url=url,
             data=data,
@@ -624,9 +623,9 @@ el.replaceWith(d);
 
     @staticmethod
     def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -&gt; bool:
-        &#34;&#34;&#34;
-        Slack creates a unique string for your app and shares it with you. Verify
-        requests from Slack with confidence by verifying signatures using your
+        &#34;&#34;&#34;Slack creates a unique string for your app and shares it with you.
+
+        Verify requests from Slack with confidence by verifying signatures using your
         signing secret.
 
         On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
@@ -681,9 +680,9 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">@staticmethod
 def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -&gt; bool:
-    &#34;&#34;&#34;
-    Slack creates a unique string for your app and shares it with you. Verify
-    requests from Slack with confidence by verifying signatures using your
+    &#34;&#34;&#34;Slack creates a unique string for your app and shares it with you.
+
+    Verify requests from Slack with confidence by verifying signatures using your
     signing secret.
 
     On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
@@ -714,15 +713,16 @@ def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, 
     calculated_signature = f&#34;v0={request_hash}&#34;
     return hmac.compare_digest(calculated_signature, signature)</code></pre>
 </details>
-<div class="desc"><p>Slack creates a unique string for your app and shares it with you. Verify
-requests from Slack with confidence by verifying signatures using your
+<div class="desc"><p>Slack creates a unique string for your app and shares it with you.</p>
+<p>Verify requests from Slack with confidence by verifying signatures using your
 signing secret.</p>
 <p>On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
 header. The signature is created by combining the signing secret with the
 body of the request we're sending using a standard HMAC-SHA256 keyed hash.</p>
 <p><a href="https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview">https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview</a></p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>signing_secret</code></strong></dt>
 <dd>Your application's signing secret, available in the
 Slack API dashboard</dd>
@@ -734,8 +734,9 @@ Slack API dashboard</dd>
 <dd>from the 'X-Slack-Signature' header - the calculated signature
 should match this.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>True if signatures matches</p></div>
+<p>Returns
+-----=
+True if signatures matches</p></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
@@ -841,7 +842,6 @@ Default is 30 seconds.</p></div>
         SlackRequestError: Json data can only be submitted as
             POST requests.
     &#34;&#34;&#34;
-
     api_url = _get_url(self.base_url, api_method)
     headers = headers or {}
     headers.update(self.headers)
@@ -863,8 +863,9 @@ Default is 30 seconds.</p></div>
     return self._sync_send(api_url=api_url, req_args=req_args)</code></pre>
 </details>
 <div class="desc"><p>Create a request and execute the API call to Slack.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>api_method</code></strong> :&ensp;<code>str</code></dt>
 <dd>The target Slack API method.
 e.g. 'chat.postMessage'</dd>
@@ -889,14 +890,16 @@ e.g. {'key1': 'value1', 'key2': 'value2'}</dd>
 <dt><strong><code>auth</code></strong> :&ensp;<code>dict</code></dt>
 <dd>A dictionary that consists of client_id and client_secret</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>(SlackResponse)
+<p>Returns
+-----=
+(SlackResponse)
 The server's response to an HTTP request. Data
 from the response can be accessed like a dict.
 If the response included 'next_cursor' it can
 be iterated on to execute subsequent requests.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackApiError</code></dt>
 <dd>The following Slack API call failed:
 'chat.postMessage'.</dd>

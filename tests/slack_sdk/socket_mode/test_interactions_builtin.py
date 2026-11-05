@@ -112,14 +112,12 @@ class TestInteractionsBuiltin(unittest.TestCase):
 
                     self.assertEqual(len(socket_mode_envelopes), len(received_socket_mode_requests))
                 finally:
-                    pass
-                    # client.close()
+                    client.close()
                 self.logger.info(f"Passed with buffer size: {buffer_size}")
 
         finally:
             # Restore the default value
             sys.setrecursionlimit(default_recursion_limit)
-            client.close()
 
         self.logger.info(f"Passed with buffer size: {buffer_size_list}")
 
@@ -145,5 +143,27 @@ class TestInteractionsBuiltin(unittest.TestCase):
             client.connect()
             time.sleep(1)  # wait for the connection
             client.send_message("foo")
+        finally:
+            client.close()
+
+    def test_close_reaps_current_session_runner(self):
+        # Regression for #1873: close() must reap current_session_runner without hanging.
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+            trace_enabled=True,
+        )
+        try:
+            client.wss_uri = "ws://0.0.0.0:3011/link"
+            client.connect()
+            self.assertTrue(client.is_connected())
+            time.sleep(1)
+
+            client.close()
+
+            self.assertFalse(client.current_session_runner.is_alive())
+            self.assertFalse(client.current_app_monitor.is_alive())
+            self.assertFalse(client.message_processor.is_alive())
         finally:
             client.close()

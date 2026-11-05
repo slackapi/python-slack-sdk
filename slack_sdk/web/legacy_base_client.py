@@ -113,6 +113,7 @@ class LegacyBaseClient:
         auth: Optional[dict] = None,
     ) -> Union[asyncio.Future, SlackResponse]:
         """Create a request and execute the API call to Slack.
+
         Args:
             api_method (str): The target Slack API method.
                 e.g. 'chat.postMessage'
@@ -135,13 +136,13 @@ class LegacyBaseClient:
                 from the response can be accessed like a dict.
                 If the response included 'next_cursor' it can
                 be iterated on to execute subsequent requests.
+
         Raises:
             SlackApiError: The following Slack API call failed:
                 'chat.postMessage'.
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         """
-
         api_url = _get_url(self.base_url, api_method)
 
         headers = headers or {}
@@ -191,6 +192,7 @@ class LegacyBaseClient:
 
     async def _send(self, http_verb: str, api_url: str, req_args: dict) -> SlackResponse:
         """Sends the request out for transmission.
+
         Args:
             http_verb (str): The HTTP verb. e.g. 'GET' or 'POST'.
             api_url (str): The Slack API url. e.g. 'https://slack.com/api/chat.postMessage'
@@ -202,6 +204,7 @@ class LegacyBaseClient:
                     'channel': '#random'
                 }
             }
+
         Returns:
             The response parsed into a SlackResponse object.
         """
@@ -227,6 +230,7 @@ class LegacyBaseClient:
 
     async def _request(self, *, http_verb, api_url, req_args) -> Dict[str, Any]:
         """Submit the HTTP request with the running session or a new session.
+
         Returns:
             A dictionary of the response data.
         """
@@ -277,7 +281,8 @@ class LegacyBaseClient:
         )
 
     def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-        """This method is supposed to be used only for SlackResponse pagination
+        """This method is supposed to be used only for SlackResponse pagination.
+
         You can paginate using Python's for iterator as below:
           for response in client.conversations_list(limit=100):
               # do something with each response here
@@ -558,9 +563,9 @@ class LegacyBaseClient:
 
     @staticmethod
     def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -> bool:
-        """
-        Slack creates a unique string for your app and shares it with you. Verify
-        requests from Slack with confidence by verifying signatures using your
+        """Slack creates a unique string for your app and shares it with you.
+
+        Verify requests from Slack with confidence by verifying signatures using your
         signing secret.
         On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
         header. The signature is created by combining the signing secret with the
@@ -573,6 +578,7 @@ class LegacyBaseClient:
             timestamp: from the 'X-Slack-Request-Timestamp' header
             signature: from the 'X-Slack-Signature' header - the calculated signature
                 should match this.
+
         Returns:
             True if signatures matches
         """

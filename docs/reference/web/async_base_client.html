@@ -174,7 +174,6 @@ el.replaceWith(d);
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         &#34;&#34;&#34;
-
         api_url = _get_url(self.base_url, api_method)
         if auth is not None:
             if isinstance(auth, Dict):
@@ -223,6 +222,7 @@ el.replaceWith(d);
                     &#39;channel&#39;: &#39;#random&#39;
                 }
             }
+
         Returns:
             The response parsed into a AsyncSlackResponse object.
         &#34;&#34;&#34;
@@ -247,6 +247,7 @@ el.replaceWith(d);
 
     async def _request(self, *, http_verb, api_url, req_args) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;Submit the HTTP request with the running session or a new session.
+
         Returns:
             A dictionary of the response data.
         &#34;&#34;&#34;
@@ -270,7 +271,7 @@ el.replaceWith(d);
         proxy: Optional[str],
         ssl: Optional[SSLContext],
     ) -&gt; FileUploadV2Result:
-        &#34;&#34;&#34;Upload a file using the issued upload URL&#34;&#34;&#34;
+        &#34;&#34;&#34;Upload a file using the issued upload URL.&#34;&#34;&#34;
         result = await _request_with_session(
             current_session=self.session,
             timeout=timeout,
@@ -412,7 +413,6 @@ with proxy support via the <code>HTTPS_PROXY</code>, <code>https_proxy</code>, <
         SlackRequestError: Json data can only be submitted as
             POST requests.
     &#34;&#34;&#34;
-
     api_url = _get_url(self.base_url, api_method)
     if auth is not None:
         if isinstance(auth, Dict):
@@ -448,8 +448,9 @@ with proxy support via the <code>HTTPS_PROXY</code>, <code>https_proxy</code>, <
     )</code></pre>
 </details>
 <div class="desc"><p>Create a request and execute the API call to Slack.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>api_method</code></strong> :&ensp;<code>str</code></dt>
 <dd>The target Slack API method.
 e.g. 'chat.postMessage'</dd>
@@ -474,14 +475,16 @@ e.g. {'key1': 'value1', 'key2': 'value2'}</dd>
 <dt><strong><code>auth</code></strong> :&ensp;<code>dict</code></dt>
 <dd>A dictionary that consists of client_id and client_secret</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>(AsyncSlackResponse)
+<p>Returns
+-----=
+(AsyncSlackResponse)
 The server's response to an HTTP request. Data
 from the response can be accessed like a dict.
 If the response included 'next_cursor' it can
 be iterated on to execute subsequent requests.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>SlackApiError</code></dt>
 <dd>The following Slack API call failed:
 'chat.postMessage'.</dd>

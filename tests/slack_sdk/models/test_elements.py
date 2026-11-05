@@ -92,6 +92,42 @@ class InteractiveElementTests(unittest.TestCase):
 
 
 class ButtonElementTests(unittest.TestCase):
+    def test_agent_prompt_and_visibility_fields(self):
+        fields = {
+            "agent_prompt": "Summarize this incident and suggest next steps.",
+            "agent_prompt_display": "Summarize this incident",
+            "visible_to_user_ids": ["U123456", "U789012"],
+        }
+        for optional_fields in ({}, *({key: value} for key, value in fields.items()), fields):
+            with self.subTest(fields=list(optional_fields)):
+                input = {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "Summarize with Slackbot"},
+                    "action_id": "summarize_incident",
+                    **optional_fields,
+                }
+                self.assertDictEqual(input, ButtonElement(**input).to_dict())
+                self.assertDictEqual(input, BlockElement.parse(input).to_dict())
+
+    def test_agent_prompt_and_visibility_fields_none_are_omitted(self):
+        button = ButtonElement(
+            text="Summarize with Slackbot",
+            agent_prompt=None,
+            agent_prompt_display=None,
+            visible_to_user_ids=None,
+        ).to_dict()
+        for field in ("agent_prompt", "agent_prompt_display", "visible_to_user_ids"):
+            self.assertNotIn(field, button)
+
+    def test_agent_prompt_max_length(self):
+        prompt = "a" * 4000
+        button = ButtonElement(text="Summarize with Slackbot", agent_prompt=prompt).to_dict()
+        self.assertEqual(prompt, button["agent_prompt"])
+
+    def test_agent_prompt_too_long(self):
+        with self.assertRaisesRegex(SlackObjectFormationError, "agent_prompt"):
+            ButtonElement(text="Summarize with Slackbot", agent_prompt="a" * 4001).to_dict()
+
     def test_document_1(self):
         input = {
             "type": "button",
@@ -1172,6 +1208,31 @@ class RichTextInputElementTests(unittest.TestCase):
                 "type": "rich_text_input",
             },
         )
+
+    def test_min_lines(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_input",
+            "min_lines": 5,
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
+
+    def test_max_lines(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_input",
+            "max_lines": 16,
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
+
+    def test_min_and_max_lines(self):
+        input = {
+            "type": "rich_text_input",
+            "action_id": "rich_input",
+            "min_lines": 3,
+            "max_lines": 20,
+        }
+        self.assertDictEqual(input, RichTextInputElement(**input).to_dict())
 
 
 class PlainTextInputElementTests(unittest.TestCase):

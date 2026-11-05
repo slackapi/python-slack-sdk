@@ -4,13 +4,13 @@
 #
 #  1) Modify slack_sdk/web/client.py
 #  2) Run `python scripts/codegen.py`
-#  3) Run `black slack_sdk/`
+#  3) Run `ruff format slack_sdk/`
 #
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-from asyncio import Future
-
 """A Python module for interacting with Slack's Web API."""
+
+from asyncio import Future
 
 import json
 import os
@@ -110,7 +110,8 @@ class LegacyWebClient(LegacyBaseClient):
         metadata_only: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve analytics data for a given date, presented as a compressed JSON file
+        """Retrieve analytics data for a given date, presented as a compressed JSON file.
+
         https://docs.slack.dev/reference/methods/admin.analytics.getFile
         """
         kwargs.update({"type": type})
@@ -130,6 +131,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Approve an app for installation on a workspace.
+
         Either app_id or request_id is required.
         These IDs can be obtained either directly via the app_requested event,
         or by the admin.apps.requests.list method.
@@ -160,6 +162,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List approved apps for an org or workspace.
+
         https://docs.slack.dev/reference/methods/admin.apps.approved.list
         """
         kwargs.update(
@@ -180,7 +183,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Clear an app resolution
+        """Clear an app resolution.
+
         https://docs.slack.dev/reference/methods/admin.apps.clearResolution
         """
         kwargs.update(
@@ -201,6 +205,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List app requests for a team/workspace.
+
         https://docs.slack.dev/reference/methods/admin.apps.requests.cancel
         """
         kwargs.update(
@@ -221,6 +226,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List app requests for a team/workspace.
+
         https://docs.slack.dev/reference/methods/admin.apps.requests.list
         """
         kwargs.update(
@@ -242,6 +248,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Restrict an app for installation on a workspace.
+
         Exactly one of the team_id or enterprise_id arguments is required, not both.
         Either app_id or request_id is required. These IDs can be obtained either directly
         via the app_requested event, or by the admin.apps.requests.list method.
@@ -272,6 +279,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List restricted apps for an org or workspace.
+
         https://docs.slack.dev/reference/methods/admin.apps.restricted.list
         """
         kwargs.update(
@@ -293,6 +301,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Uninstall an app from one or many workspaces, or an entire enterprise organization.
+
         With an org-level token, enterprise_id or team_ids is required.
         https://docs.slack.dev/reference/methods/admin.apps.uninstall
         """
@@ -324,7 +333,8 @@ class LegacyWebClient(LegacyBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Get logs for a specified team/org
+        """Get logs for a specified team/org.
+
         https://docs.slack.dev/reference/methods/admin.apps.activities.list
         """
         kwargs.update(
@@ -352,7 +362,8 @@ class LegacyWebClient(LegacyBaseClient):
         app_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Look up the app config for connectors by their IDs
+        """Look up the app config for connectors by their IDs.
+
         https://docs.slack.dev/reference/methods/admin.apps.config.lookup
         """
         if isinstance(app_ids, (list, tuple)):
@@ -369,7 +380,8 @@ class LegacyWebClient(LegacyBaseClient):
         workflow_auth_strategy: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Set the app config for a connector
+        """Set the app config for a connector.
+
         https://docs.slack.dev/reference/methods/admin.apps.config.set
         """
         kwargs.update(
@@ -392,6 +404,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Fetch all the entities assigned to a particular authentication policy by name.
+
         https://docs.slack.dev/reference/methods/admin.auth.policy.getEntities
         """
         kwargs.update({"policy_name": policy_name})
@@ -412,6 +425,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Assign entities to a particular authentication policy.
+
         https://docs.slack.dev/reference/methods/admin.auth.policy.assignEntities
         """
         if isinstance(entity_ids, (list, tuple)):
@@ -431,6 +445,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove specified entities from a specified authentication policy.
+
         https://docs.slack.dev/reference/methods/admin.auth.policy.removeEntities
         """
         if isinstance(entity_ids, (list, tuple)):
@@ -450,6 +465,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Create a Salesforce channel for the corresponding object provided.
+
         https://docs.slack.dev/reference/methods/admin.conversations.createForObjects
         """
         kwargs.update(
@@ -466,6 +482,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Link a Salesforce record to a channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.linkObjects
         """
         kwargs.update(
@@ -485,6 +502,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Unlink a Salesforce record from a channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.unlinkObjects
         """
         kwargs.update(
@@ -503,7 +521,8 @@ class LegacyWebClient(LegacyBaseClient):
         restricted_subjects: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create an Information Barrier
+        """Create an Information Barrier.
+
         https://docs.slack.dev/reference/methods/admin.barriers.create
         """
         kwargs.update({"primary_usergroup_id": primary_usergroup_id})
@@ -523,7 +542,8 @@ class LegacyWebClient(LegacyBaseClient):
         barrier_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Delete an existing Information Barrier
+        """Delete an existing Information Barrier.
+
         https://docs.slack.dev/reference/methods/admin.barriers.delete
         """
         kwargs.update({"barrier_id": barrier_id})
@@ -538,7 +558,8 @@ class LegacyWebClient(LegacyBaseClient):
         restricted_subjects: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Update an existing Information Barrier
+        """Update an existing Information Barrier.
+
         https://docs.slack.dev/reference/methods/admin.barriers.update
         """
         kwargs.update({"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id})
@@ -559,8 +580,10 @@ class LegacyWebClient(LegacyBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Get all Information Barriers for your organization
-        https://docs.slack.dev/reference/methods/admin.barriers.list"""
+        """Get all Information Barriers for your organization.
+
+        https://docs.slack.dev/reference/methods/admin.barriers.list
+        """
         kwargs.update(
             {
                 "cursor": cursor,
@@ -580,6 +603,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Create a public or private channel-based conversation.
+
         https://docs.slack.dev/reference/methods/admin.conversations.create
         """
         kwargs.update(
@@ -600,6 +624,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Delete a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.delete
         """
         kwargs.update({"channel_id": channel_id})
@@ -613,6 +638,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.invite
         """
         kwargs.update({"channel_id": channel_id})
@@ -630,6 +656,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Archive a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.archive
         """
         kwargs.update({"channel_id": channel_id})
@@ -642,6 +669,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Unarchive a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.archive
         """
         kwargs.update({"channel_id": channel_id})
@@ -655,6 +683,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Rename a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.rename
         """
         kwargs.update({"channel_id": channel_id, "name": name})
@@ -673,6 +702,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Search for public or private channels in an Enterprise organization.
+
         https://docs.slack.dev/reference/methods/admin.conversations.search
         """
         kwargs.update(
@@ -704,6 +734,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Convert a public channel to a private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.convertToPrivate
         """
         kwargs.update({"channel_id": channel_id})
@@ -716,6 +747,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Convert a privte channel to a public channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.convertToPublic
         """
         kwargs.update({"channel_id": channel_id})
@@ -729,6 +761,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the posting permissions for a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.setConversationPrefs
         """
         kwargs.update({"channel_id": channel_id})
@@ -745,6 +778,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get conversation preferences for a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.getConversationPrefs
         """
         kwargs.update({"channel_id": channel_id})
@@ -758,6 +792,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Disconnect a connected channel from one or more workspaces.
+
         https://docs.slack.dev/reference/methods/admin.conversations.disconnectShared
         """
         kwargs.update({"channel_id": channel_id})
@@ -778,6 +813,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Returns channels on the given team using the filters.
+
         https://docs.slack.dev/reference/methods/admin.conversations.lookup
         """
         kwargs.update(
@@ -803,9 +839,9 @@ class LegacyWebClient(LegacyBaseClient):
         team_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List all disconnected channels—i.e.,
-        channels that were once connected to other workspaces and then disconnected—and
-        the corresponding original channel IDs for key revocation with EKM.
+        """List all disconnected channels and the corresponding original channel IDs for key revocation with EKM.
+
+        Disconnected channels are those that were once connected to other workspaces and then disconnected.
         https://docs.slack.dev/reference/methods/admin.conversations.ekm.listOriginalConnectedChannelInfo
         """
         kwargs.update(
@@ -833,6 +869,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add an allowlist of IDP groups for accessing a channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.addGroup
         """
         kwargs.update(
@@ -856,6 +893,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all IDP Groups linked to a channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.listGroups
         """
         kwargs.update(
@@ -879,6 +917,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove a linked IDP group linked from a private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.removeGroup
         """
         kwargs.update(
@@ -904,6 +943,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a public or private channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.setTeams
         """
         kwargs.update(
@@ -928,6 +968,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the workspaces in an Enterprise grid org that connect to a channel.
+
         https://docs.slack.dev/reference/methods/admin.conversations.getTeams
         """
         kwargs.update(
@@ -945,7 +986,8 @@ class LegacyWebClient(LegacyBaseClient):
         channel_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Get a channel's retention policy
+        """Get a channel's retention policy.
+
         https://docs.slack.dev/reference/methods/admin.conversations.getCustomRetention
         """
         kwargs.update({"channel_id": channel_id})
@@ -957,7 +999,8 @@ class LegacyWebClient(LegacyBaseClient):
         channel_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Remove a channel's retention policy
+        """Remove a channel's retention policy.
+
         https://docs.slack.dev/reference/methods/admin.conversations.removeCustomRetention
         """
         kwargs.update({"channel_id": channel_id})
@@ -970,7 +1013,8 @@ class LegacyWebClient(LegacyBaseClient):
         duration_days: int,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Set a channel's retention policy
+        """Set a channel's retention policy.
+
         https://docs.slack.dev/reference/methods/admin.conversations.setCustomRetention
         """
         kwargs.update({"channel_id": channel_id, "duration_days": duration_days})
@@ -983,6 +1027,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Archive public or private channels in bulk.
+
         https://docs.slack.dev/reference/methods/admin.conversations.bulkArchive
         """
         kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
@@ -995,6 +1040,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Delete public or private channels in bulk.
+
         https://slack.com/api/admin.conversations.bulkDelete
         """
         kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
@@ -1008,6 +1054,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Move public or private channels in bulk.
+
         https://docs.slack.dev/reference/methods/admin.conversations.bulkMove
         """
         kwargs.update(
@@ -1026,6 +1073,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add an emoji.
+
         https://docs.slack.dev/reference/methods/admin.emoji.add
         """
         kwargs.update({"name": name, "url": url})
@@ -1039,6 +1087,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add an emoji alias.
+
         https://docs.slack.dev/reference/methods/admin.emoji.addAlias
         """
         kwargs.update({"alias_for": alias_for, "name": name})
@@ -1052,6 +1101,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List emoji for an Enterprise Grid organization.
+
         https://docs.slack.dev/reference/methods/admin.emoji.list
         """
         kwargs.update({"cursor": cursor, "limit": limit})
@@ -1064,6 +1114,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove an emoji across an Enterprise Grid organization.
+
         https://docs.slack.dev/reference/methods/admin.emoji.remove
         """
         kwargs.update({"name": name})
@@ -1077,6 +1128,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Rename an emoji.
+
         https://docs.slack.dev/reference/methods/admin.emoji.rename
         """
         kwargs.update({"name": name, "new_name": new_name})
@@ -1091,7 +1143,8 @@ class LegacyWebClient(LegacyBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Look up functions by a set of apps
+        """Look up functions by a set of apps.
+
         https://docs.slack.dev/reference/methods/admin.functions.list
         """
         if isinstance(app_ids, (list, tuple)):
@@ -1113,8 +1166,9 @@ class LegacyWebClient(LegacyBaseClient):
         function_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Lookup the visibility of multiple Slack functions
-        and include the users if it is limited to particular named entities.
+        """Lookup the visibility of multiple Slack functions.
+
+        Include the users if the visibility is limited to particular named entities.
         https://docs.slack.dev/reference/methods/admin.functions.permissions.lookup
         """
         if isinstance(function_ids, (list, tuple)):
@@ -1131,8 +1185,8 @@ class LegacyWebClient(LegacyBaseClient):
         user_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Set the visibility of a Slack function
-        and define the users or workspaces if it is set to named_entities
+        """Set the visibility of a Slack function and define the users or workspaces if it is set to named_entities.
+
         https://docs.slack.dev/reference/methods/admin.functions.permissions.set
         """
         kwargs.update(
@@ -1156,7 +1210,8 @@ class LegacyWebClient(LegacyBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Adds members to the specified role with the specified scopes
+        """Adds members to the specified role with the specified scopes.
+
         https://docs.slack.dev/reference/methods/admin.roles.addAssignments
         """
         kwargs.update({"role_id": role_id})
@@ -1181,6 +1236,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists assignments for all roles across entities.
+
             Options to scope results by any combination of roles or entities
         https://docs.slack.dev/reference/methods/admin.roles.listAssignments
         """
@@ -1203,7 +1259,8 @@ class LegacyWebClient(LegacyBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Removes a set of users from a role for the given scopes and entities
+        """Removes a set of users from a role for the given scopes and entities.
+
         https://docs.slack.dev/reference/methods/admin.roles.removeAssignments
         """
         kwargs.update({"role_id": role_id})
@@ -1226,6 +1283,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Wipes all valid sessions on all devices for a given user.
+
         https://docs.slack.dev/reference/methods/admin.users.session.reset
         """
         kwargs.update(
@@ -1245,7 +1303,8 @@ class LegacyWebClient(LegacyBaseClient):
         web_only: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
+        """Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users.
+
         https://docs.slack.dev/reference/methods/admin.users.session.resetBulk
         """
         if isinstance(user_ids, (list, tuple)):
@@ -1268,6 +1327,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invalidate a single session for a user by session_id.
+
         https://docs.slack.dev/reference/methods/admin.users.session.invalidate
         """
         kwargs.update({"session_id": session_id, "team_id": team_id})
@@ -1282,7 +1342,8 @@ class LegacyWebClient(LegacyBaseClient):
         user_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Lists all active user sessions for an organization
+        """Lists all active user sessions for an organization.
+
         https://docs.slack.dev/reference/methods/admin.users.session.list
         """
         kwargs.update(
@@ -1303,6 +1364,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the default channels of a workspace.
+
         https://docs.slack.dev/reference/methods/admin.teams.settings.setDefaultChannels
         """
         kwargs.update({"team_id": team_id})
@@ -1318,8 +1380,9 @@ class LegacyWebClient(LegacyBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Get user-specific session settings—the session duration
-        and what happens when the client closes—given a list of users.
+        """Get user-specific session settings for a given list of users.
+
+        The settings include the session duration and what happens when the client closes.
         https://docs.slack.dev/reference/methods/admin.users.session.getSettings
         """
         if isinstance(user_ids, (list, tuple)):
@@ -1336,8 +1399,9 @@ class LegacyWebClient(LegacyBaseClient):
         duration: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Configure the user-level session settings—the session duration
-        and what happens when the client closes—for one or more users.
+        """Configure the user-level session settings for one or more users.
+
+        The settings include the session duration and what happens when the client closes.
         https://docs.slack.dev/reference/methods/admin.users.session.setSettings
         """
         if isinstance(user_ids, (list, tuple)):
@@ -1358,8 +1422,9 @@ class LegacyWebClient(LegacyBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Clear user-specific session settings—the session duration
-        and what happens when the client closes—for a list of users.
+        """Clear user-specific session settings for a list of users.
+
+        The settings include the session duration and what happens when the client closes.
         https://docs.slack.dev/reference/methods/admin.users.session.clearSettings
         """
         if isinstance(user_ids, (list, tuple)):
@@ -1375,8 +1440,9 @@ class LegacyWebClient(LegacyBaseClient):
         date_sessions_started: Optional[Union[str, int]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Ask Slackbot to send you an export listing all workspace members using unsupported software,
-        presented as a zipped CSV file.
+        """Ask Slackbot to send you an export listing all workspace members using unsupported software.
+
+        The export is presented as a zipped CSV file.
         https://docs.slack.dev/reference/methods/admin.users.unsupportedVersions.export
         """
         kwargs.update(
@@ -1395,6 +1461,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Approve a workspace invite request.
+
         https://docs.slack.dev/reference/methods/admin.inviteRequests.approve
         """
         kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
@@ -1409,6 +1476,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all approved workspace invite requests.
+
         https://docs.slack.dev/reference/methods/admin.inviteRequests.approved.list
         """
         kwargs.update(
@@ -1429,6 +1497,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all denied workspace invite requests.
+
         https://docs.slack.dev/reference/methods/admin.inviteRequests.denied.list
         """
         kwargs.update(
@@ -1448,6 +1517,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deny a workspace invite request.
+
         https://docs.slack.dev/reference/methods/admin.inviteRequests.deny
         """
         kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
@@ -1469,6 +1539,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all of the admins on a given workspace.
+
         https://docs.slack.dev/reference/methods/admin.inviteRequests.list
         """
         kwargs.update(
@@ -1490,6 +1561,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Create an Enterprise team.
+
         https://docs.slack.dev/reference/methods/admin.teams.create
         """
         kwargs.update(
@@ -1510,6 +1582,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all teams on an Enterprise organization.
+
         https://docs.slack.dev/reference/methods/admin.teams.list
         """
         kwargs.update({"cursor": cursor, "limit": limit})
@@ -1524,6 +1597,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List all of the admins on a given workspace.
+
         https://docs.slack.dev/reference/methods/admin.teams.owners.list
         """
         kwargs.update({"team_id": team_id, "cursor": cursor, "limit": limit})
@@ -1535,7 +1609,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Fetch information about settings in a workspace
+        """Fetch information about settings in a workspace.
+
         https://docs.slack.dev/reference/methods/admin.teams.settings.info
         """
         kwargs.update({"team_id": team_id})
@@ -1549,6 +1624,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the description of a given workspace.
+
         https://docs.slack.dev/reference/methods/admin.teams.settings.setDescription
         """
         kwargs.update({"team_id": team_id, "description": description})
@@ -1562,6 +1638,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the icon of a workspace.
+
         https://docs.slack.dev/reference/methods/admin.teams.settings.setDiscoverability
         """
         kwargs.update({"team_id": team_id, "discoverability": discoverability})
@@ -1575,6 +1652,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the icon of a workspace.
+
         https://docs.slack.dev/reference/methods/admin.teams.settings.setIcon
         """
         kwargs.update({"team_id": team_id, "image_url": image_url})
@@ -1588,6 +1666,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the icon of a workspace.
+
         https://docs.slack.dev/reference/methods/admin.teams.settings.setName
         """
         kwargs.update({"team_id": team_id, "name": name})
@@ -1602,6 +1681,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
+
         https://docs.slack.dev/reference/methods/admin.usergroups.addChannels
         """
         kwargs.update({"team_id": team_id, "usergroup_id": usergroup_id})
@@ -1620,6 +1700,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Associate one or more default workspaces with an organization-wide IDP group.
+
         https://docs.slack.dev/reference/methods/admin.usergroups.addTeams
         """
         kwargs.update({"usergroup_id": usergroup_id, "auto_provision": auto_provision})
@@ -1638,6 +1719,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
+
         https://docs.slack.dev/reference/methods/admin.usergroups.listChannels
         """
         kwargs.update(
@@ -1657,6 +1739,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add one or more default channels to an IDP group.
+
         https://docs.slack.dev/reference/methods/admin.usergroups.removeChannels
         """
         kwargs.update({"usergroup_id": usergroup_id})
@@ -1677,6 +1760,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add an Enterprise user to a workspace.
+
         https://docs.slack.dev/reference/methods/admin.users.assign
         """
         kwargs.update(
@@ -1709,6 +1793,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invite a user to a workspace.
+
         https://docs.slack.dev/reference/methods/admin.users.invite
         """
         kwargs.update(
@@ -1730,6 +1815,20 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"channel_ids": channel_ids})
         return self.api_call("admin.users.invite", params=kwargs)
 
+    def admin_users_getExpiration(
+        self,
+        *,
+        user_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Fetches the expiration timestamp for a guest.
+
+        https://docs.slack.dev/reference/methods/admin.users.getExpiration
+        """
+        kwargs.update({"user_id": user_id, "target_team": target_team})
+        return self.api_call("admin.users.getExpiration", http_verb="GET", params=kwargs)
+
     def admin_users_list(
         self,
         *,
@@ -1740,7 +1839,8 @@ class LegacyWebClient(LegacyBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List users on a workspace
+        """List users on a workspace.
+
         https://docs.slack.dev/reference/methods/admin.users.list
         """
         kwargs.update(
@@ -1762,6 +1862,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove a user from a workspace.
+
         https://docs.slack.dev/reference/methods/admin.users.remove
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
@@ -1775,6 +1876,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an existing guest, regular user, or owner to be an admin user.
+
         https://docs.slack.dev/reference/methods/admin.users.setAdmin
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
@@ -1789,6 +1891,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an expiration for a guest user.
+
         https://docs.slack.dev/reference/methods/admin.users.setExpiration
         """
         kwargs.update({"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id})
@@ -1802,6 +1905,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an existing guest, regular user, or admin user to be a workspace owner.
+
         https://docs.slack.dev/reference/methods/admin.users.setOwner
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
@@ -1815,6 +1919,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set an existing guest user, admin user, or owner to be a regular user.
+
         https://docs.slack.dev/reference/methods/admin.users.setRegular
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
@@ -1835,7 +1940,8 @@ class LegacyWebClient(LegacyBaseClient):
         source: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Search workflows within the team or enterprise
+        """Search workflows within the team or enterprise.
+
         https://docs.slack.dev/reference/methods/admin.workflows.search
         """
         if collaborator_ids is not None:
@@ -1865,7 +1971,8 @@ class LegacyWebClient(LegacyBaseClient):
         max_workflow_triggers: Optional[int] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Look up the permissions for a set of workflows
+        """Look up the permissions for a set of workflows.
+
         https://docs.slack.dev/reference/methods/admin.workflows.permissions.lookup
         """
         if isinstance(workflow_ids, (list, tuple)):
@@ -1886,7 +1993,8 @@ class LegacyWebClient(LegacyBaseClient):
         workflow_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Add collaborators to workflows within the team or enterprise
+        """Add collaborators to workflows within the team or enterprise.
+
         https://docs.slack.dev/reference/methods/admin.workflows.collaborators.add
         """
         if isinstance(collaborator_ids, (list, tuple)):
@@ -1906,7 +2014,8 @@ class LegacyWebClient(LegacyBaseClient):
         workflow_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Remove collaborators from workflows within the team or enterprise
+        """Remove collaborators from workflows within the team or enterprise.
+
         https://docs.slack.dev/reference/methods/admin.workflows.collaborators.remove
         """
         if isinstance(collaborator_ids, (list, tuple)):
@@ -1925,7 +2034,8 @@ class LegacyWebClient(LegacyBaseClient):
         workflow_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Unpublish workflows within the team or enterprise
+        """Unpublish workflows within the team or enterprise.
+
         https://docs.slack.dev/reference/methods/admin.workflows.unpublish
         """
         if isinstance(workflow_ids, (list, tuple)):
@@ -1934,6 +2044,274 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"workflow_ids": workflow_ids})
         return self.api_call("admin.workflows.unpublish", params=kwargs)
 
+    def agents_conversations_archive(
+        self,
+        *,
+        channel_id: str,
+        summary_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Archive a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.archive
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "summary_message_ts": summary_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.archive", json=kwargs)
+
+    def agents_conversations_create(
+        self,
+        *,
+        name: str,
+        team_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        is_private: Optional[bool] = None,
+        origin_channel_id: Optional[str] = None,
+        origin_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Create a dedicated code channel for an agent session.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.create
+        """
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "session_id": session_id,
+                "name": name,
+                "is_private": is_private,
+                "origin_channel_id": origin_channel_id,
+                "origin_message_ts": origin_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.create", json=kwargs)
+
+    def agents_conversations_getCanvas(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content_format: Optional[str] = None,
+        include_resolved: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Fetch a canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.getCanvas
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content_format": content_format,
+                "include_resolved": include_resolved,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.getCanvas", json=kwargs)
+
+    def agents_conversations_listViews(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """List the views currently attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.listViews
+        """
+        kwargs.update({"channel_id": channel_id})
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.listViews", json=kwargs)
+
+    def agents_conversations_removeView(
+        self,
+        *,
+        channel_id: str,
+        view_key: Optional[str] = None,
+        view_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Remove a view from a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.removeView
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "view_key": view_key,
+                "view_id": view_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.removeView", json=kwargs)
+
+    def agents_conversations_setCanvasContent(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Replace the full markdown content of a plan canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content": content,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.setCanvasContent", json=kwargs)
+
+    def agents_conversations_setCommands(
+        self,
+        *,
+        channel_id: str,
+        commands: Sequence[Dict],
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Register the set of agent-defined slash commands for the calling agent in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCommands
+        """
+        kwargs.update(
+            {
+                "commands": commands,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.setCommands", json=kwargs)
+
+    def agents_conversations_setProperties(
+        self,
+        *,
+        channel_id: str,
+        code_channel: Optional[Dict] = None,
+        agent_resource: Optional[Dict] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set properties on a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setProperties
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "code_channel": code_channel,
+                "agent_resource": agent_resource,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.setProperties", json=kwargs)
+
+    def agents_conversations_setView(
+        self,
+        *,
+        channel_id: str,
+        type: Optional[str] = None,
+        view_key: Optional[str] = None,
+        content: Optional[str] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        canvas_id: Optional[str] = None,
+        access_level: Optional[str] = None,
+        agent_content_hash: Optional[str] = None,
+        pr_url: Optional[str] = None,
+        base_branch: Optional[str] = None,
+        head_branch: Optional[str] = None,
+        name: Optional[str] = None,
+        csp: Optional[Dict] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Create or update a view in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setView
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "type": type,
+                "view_key": view_key,
+                "content": content,
+                "blocks": blocks,
+                "canvas_id": canvas_id,
+                "access_level": access_level,
+                "agent_content_hash": agent_content_hash,
+                "pr_url": pr_url,
+                "base_branch": base_branch,
+                "head_branch": head_branch,
+                "name": name,
+                "csp": csp,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.conversations.setView", json=kwargs)
+
+    def agents_sessions_rename(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Rename an agent session.
+
+        https://docs.slack.dev/reference/methods/agents.sessions.rename
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "title": title,
+                "thread_ts": thread_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.sessions.rename", json=kwargs)
+
+    def agents_sessions_setStatus(
+        self,
+        *,
+        channel_id: str,
+        status: str,
+        thread_ts: Optional[str] = None,
+        title: Optional[str] = None,
+        initiator_user_id: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set an agent session's lifecycle status, creating the session if needed.
+
+        https://docs.slack.dev/reference/methods/agents.sessions.setStatus
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "status": status,
+                "thread_ts": thread_ts,
+                "title": title,
+                "initiator_user_id": initiator_user_id,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return self.api_call("agents.sessions.setStatus", json=kwargs)
+
     def api_test(
         self,
         *,
@@ -1941,6 +2319,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Checks API calling code.
+
         https://docs.slack.dev/reference/methods/api.test
         """
         kwargs.update({"error": error})
@@ -1952,8 +2331,9 @@ class LegacyWebClient(LegacyBaseClient):
         app_token: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Generate a temporary Socket Mode WebSocket URL that your app can connect to
-        in order to receive events and interactive payloads
+        """Generate a temporary Socket Mode WebSocket URL for your app.
+
+        Your app connects to this URL to receive events and interactive payloads.
         https://docs.slack.dev/reference/methods/apps.connections.open
         """
         kwargs.update({"token": app_token})
@@ -1968,6 +2348,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get a list of authorizations for the given event context.
+
         Each authorization represents an app installation that the event is visible to.
         https://docs.slack.dev/reference/methods/apps.event.authorizations.list
         """
@@ -1982,6 +2363,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Uninstalls your app from a workspace.
+
         https://docs.slack.dev/reference/methods/apps.uninstall
         """
         kwargs.update({"client_id": client_id, "client_secret": client_secret})
@@ -1993,7 +2375,8 @@ class LegacyWebClient(LegacyBaseClient):
         manifest: Union[str, Dict[str, Any]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create an app from an app manifest
+        """Create an app from an app manifest.
+
         https://docs.slack.dev/reference/methods/apps.manifest.create
         """
         if isinstance(manifest, str):
@@ -2008,7 +2391,8 @@ class LegacyWebClient(LegacyBaseClient):
         app_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Permanently deletes an app created through app manifests
+        """Permanently deletes an app created through app manifests.
+
         https://docs.slack.dev/reference/methods/apps.manifest.delete
         """
         kwargs.update({"app_id": app_id})
@@ -2020,7 +2404,8 @@ class LegacyWebClient(LegacyBaseClient):
         app_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Export an app manifest from an existing app
+        """Export an app manifest from an existing app.
+
         https://docs.slack.dev/reference/methods/apps.manifest.export
         """
         kwargs.update({"app_id": app_id})
@@ -2033,7 +2418,8 @@ class LegacyWebClient(LegacyBaseClient):
         manifest: Union[str, Dict[str, Any]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Update an app from an app manifest
+        """Update an app from an app manifest.
+
         https://docs.slack.dev/reference/methods/apps.manifest.update
         """
         if isinstance(manifest, str):
@@ -2050,7 +2436,8 @@ class LegacyWebClient(LegacyBaseClient):
         app_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Validate an app manifest
+        """Validate an app manifest.
+
         https://docs.slack.dev/reference/methods/apps.manifest.validate
         """
         if isinstance(manifest, str):
@@ -2068,10 +2455,51 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates the connection status between a user and an app.
+
         https://docs.slack.dev/reference/methods/apps.user.connection.update
         """
         kwargs.update({"user_id": user_id, "status": status})
         return self.api_call("apps.user.connection.update", params=kwargs)
+
+    def apps_user_connection_bulkUpdate(
+        self,
+        *,
+        connected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        disconnected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Updates the connection status between an app and many users in one call, for backfilling an existing user base.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate
+        """
+        if isinstance(connected_user_ids, (list, tuple)):
+            kwargs.update({"connected_user_ids": ",".join(connected_user_ids)})
+        else:
+            kwargs.update({"connected_user_ids": connected_user_ids})
+        if isinstance(disconnected_user_ids, (list, tuple)):
+            kwargs.update({"disconnected_user_ids": ",".join(disconnected_user_ids)})
+        else:
+            kwargs.update({"disconnected_user_ids": disconnected_user_ids})
+        return self.api_call("apps.user.connection.bulkUpdate", params=kwargs)
+
+    def apps_user_connection_requestAuth(
+        self,
+        *,
+        primary_provider: Union[str, Dict[str, Any]],
+        trigger_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Opens or updates a standardized authentication modal for the calling app.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth
+        """
+        kwargs.update({"trigger_id": trigger_id, "user_id": user_id})
+        if isinstance(primary_provider, str):
+            kwargs.update({"primary_provider": primary_provider})
+        else:
+            kwargs.update({"primary_provider": json.dumps(primary_provider)})
+        return self.api_call("apps.user.connection.requestAuth", params=kwargs)
 
     def tooling_tokens_rotate(
         self,
@@ -2079,7 +2507,8 @@ class LegacyWebClient(LegacyBaseClient):
         refresh_token: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Exchanges a refresh token for a new app configuration token
+        """Exchanges a refresh token for a new app configuration token.
+
         https://docs.slack.dev/reference/methods/tooling.tokens.rotate
         """
         kwargs.update({"refresh_token": refresh_token})
@@ -2098,6 +2527,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the status for an AI assistant thread.
+
         https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         """
         kwargs.update(
@@ -2123,6 +2553,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the title for the given assistant thread.
+
         https://docs.slack.dev/reference/methods/assistant.threads.setTitle
         """
         kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title})
@@ -2132,15 +2563,18 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         channel_id: str,
-        thread_ts: str,
+        thread_ts: Optional[str] = None,
         title: Optional[str] = None,
         prompts: List[Dict[str, str]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set suggested prompts for the given assistant thread.
+
         https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "prompts": prompts})
+        kwargs.update({"channel_id": channel_id, "prompts": prompts})
+        if thread_ts is not None:
+            kwargs.update({"thread_ts": thread_ts})
         if title is not None:
             kwargs.update({"title": title})
         return self.api_call("assistant.threads.setSuggestedPrompts", json=kwargs)
@@ -2152,6 +2586,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Revokes a token.
+
         https://docs.slack.dev/reference/methods/auth.revoke
         """
         kwargs.update({"test": test})
@@ -2162,6 +2597,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Checks authentication & identity.
+
         https://docs.slack.dev/reference/methods/auth.test
         """
         return self.api_call("auth.test", params=kwargs)
@@ -2174,10 +2610,38 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List the workspaces a token can access.
+
         https://docs.slack.dev/reference/methods/auth.teams.list
         """
         kwargs.update({"cursor": cursor, "limit": limit, "include_icon": include_icon})
         return self.api_call("auth.teams.list", params=kwargs)
+
+    def blocks_validate(
+        self,
+        *,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        message: Optional[Union[str, Dict]] = None,
+        view: Optional[Union[str, Dict, View]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Validates an array of blocks, or a message or view payload.
+
+        Provide exactly one of ``blocks``, ``message``, or ``view``.
+        https://docs.slack.dev/reference/methods/blocks.validate
+        """
+        if blocks is not None:
+            if isinstance(blocks, str):
+                kwargs.update({"blocks": blocks})
+            else:
+                kwargs.update({"blocks": json.dumps([b.to_dict() if isinstance(b, Block) else b for b in blocks])})
+        if message is not None:
+            kwargs.update({"message": message if isinstance(message, str) else json.dumps(message)})
+        if view is not None:
+            if isinstance(view, View):
+                kwargs.update({"view": json.dumps(view.to_dict())})
+            else:
+                kwargs.update({"view": view if isinstance(view, str) else json.dumps(view)})
+        return self.api_call("blocks.validate", params=kwargs)
 
     def bookmarks_add(
         self,
@@ -2192,6 +2656,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add bookmark to a channel.
+
         https://docs.slack.dev/reference/methods/bookmarks.add
         """
         kwargs.update(
@@ -2218,6 +2683,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Edit bookmark.
+
         https://docs.slack.dev/reference/methods/bookmarks.edit
         """
         kwargs.update(
@@ -2238,6 +2704,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List bookmark for the channel.
+
         https://docs.slack.dev/reference/methods/bookmarks.list
         """
         kwargs.update({"channel_id": channel_id})
@@ -2251,6 +2718,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove bookmark from the channel.
+
         https://docs.slack.dev/reference/methods/bookmarks.remove
         """
         kwargs.update({"bookmark_id": bookmark_id, "channel_id": channel_id})
@@ -2264,6 +2732,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about a bot user.
+
         https://docs.slack.dev/reference/methods/bots.info
         """
         kwargs.update({"bot": bot, "team_id": team_id})
@@ -2283,6 +2752,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Registers a new Call.
+
         https://docs.slack.dev/reference/methods/calls.add
         """
         kwargs.update(
@@ -2310,6 +2780,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Ends a Call.
+
         https://docs.slack.dev/reference/methods/calls.end
         """
         kwargs.update({"id": id, "duration": duration})
@@ -2322,6 +2793,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Returns information about a Call.
+
         https://docs.slack.dev/reference/methods/calls.info
         """
         kwargs.update({"id": id})
@@ -2335,6 +2807,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Registers new participants added to a Call.
+
         https://docs.slack.dev/reference/methods/calls.participants.add
         """
         kwargs.update({"id": id})
@@ -2349,6 +2822,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Registers participants removed from a Call.
+
         https://docs.slack.dev/reference/methods/calls.participants.remove
         """
         kwargs.update({"id": id})
@@ -2365,6 +2839,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates information about a Call.
+
         https://docs.slack.dev/reference/methods/calls.update
         """
         kwargs.update(
@@ -2381,13 +2856,22 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         *,
         title: Optional[str] = None,
-        document_content: Dict[str, str],
+        document_content: Optional[Dict[str, str]] = None,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create Canvas for a user
+        """Create Canvas for a user.
+
         https://docs.slack.dev/reference/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": document_content})
+        kwargs.update(
+            {
+                "title": title,
+                "document_content": document_content,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("canvases.create", json=kwargs)
 
     def canvases_edit(
@@ -2397,7 +2881,8 @@ class LegacyWebClient(LegacyBaseClient):
         changes: Sequence[Dict[str, Any]],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Update an existing canvas
+        """Update an existing canvas.
+
         https://docs.slack.dev/reference/methods/canvases.edit
         """
         kwargs.update({"canvas_id": canvas_id, "changes": changes})
@@ -2409,11 +2894,26 @@ class LegacyWebClient(LegacyBaseClient):
         canvas_id: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Deletes a canvas
+        """Deletes a canvas.
+
         https://docs.slack.dev/reference/methods/canvases.delete
         """
         kwargs.update({"canvas_id": canvas_id})
         return self.api_call("canvases.delete", params=kwargs)
+
+    def canvases_getContent(
+        self,
+        *,
+        canvas_id: str,
+        content_type: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Get the content of a canvas as markdown (default) or HTML.
+
+        https://docs.slack.dev/reference/methods/canvases.getContent
+        """
+        kwargs.update({"canvas_id": canvas_id, "content_type": content_type})
+        return self.api_call("canvases.getContent", params=kwargs)
 
     def canvases_access_set(
         self,
@@ -2424,7 +2924,8 @@ class LegacyWebClient(LegacyBaseClient):
         user_ids: Optional[Union[Sequence[str], str]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Sets the access level to a canvas for specified entities
+        """Sets the access level to a canvas for specified entities.
+
         https://docs.slack.dev/reference/methods/canvases.access.set
         """
         kwargs.update({"canvas_id": canvas_id, "access_level": access_level})
@@ -2449,7 +2950,8 @@ class LegacyWebClient(LegacyBaseClient):
         user_ids: Optional[Union[Sequence[str], str]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create a Channel Canvas for a channel
+        """Create a Channel Canvas for a channel.
+
         https://docs.slack.dev/reference/methods/canvases.access.delete
         """
         kwargs.update({"canvas_id": canvas_id})
@@ -2472,7 +2974,8 @@ class LegacyWebClient(LegacyBaseClient):
         criteria: Dict[str, Any],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Find sections matching the provided criteria
+        """Find sections matching the provided criteria.
+
         https://docs.slack.dev/reference/methods/canvases.sections.lookup
         """
         kwargs.update({"canvas_id": canvas_id, "criteria": json.dumps(criteria)})
@@ -2610,7 +3113,7 @@ class LegacyWebClient(LegacyBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a channel"""
+        """Retrieve a thread of messages posted to a channel."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("channels.replies", http_verb="GET", params=kwargs)
 
@@ -2661,6 +3164,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Appends text to an existing streaming conversation.
+
         https://docs.slack.dev/reference/methods/chat.appendStream
         """
         kwargs.update(
@@ -2684,6 +3188,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes a message.
+
         https://docs.slack.dev/reference/methods/chat.delete
         """
         kwargs.update({"channel": channel, "ts": ts, "as_user": as_user})
@@ -2698,6 +3203,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes a scheduled message.
+
         https://docs.slack.dev/reference/methods/chat.deleteScheduledMessage
         """
         kwargs.update(
@@ -2716,7 +3222,8 @@ class LegacyWebClient(LegacyBaseClient):
         message_ts: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a permalink URL for a specific extant message
+        """Retrieve a permalink URL for a specific extant message.
+
         https://docs.slack.dev/reference/methods/chat.getPermalink
         """
         kwargs.update({"channel": channel, "message_ts": message_ts})
@@ -2730,6 +3237,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Share a me message into a channel.
+
         https://docs.slack.dev/reference/methods/chat.meMessage
         """
         kwargs.update({"channel": channel, "text": text})
@@ -2754,6 +3262,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends an ephemeral message to a user in a channel.
+
         https://docs.slack.dev/reference/methods/chat.postEphemeral
         """
         kwargs.update(
@@ -2803,6 +3312,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends a message to a channel.
+
         https://docs.slack.dev/reference/methods/chat.postMessage
         """
         kwargs.update(
@@ -2853,6 +3363,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Schedules a message.
+
         https://docs.slack.dev/reference/methods/chat.scheduleMessage
         """
         kwargs.update(
@@ -2891,6 +3402,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists all scheduled messages.
+
         https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
         """
         kwargs.update(
@@ -2921,6 +3433,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a new streaming conversation.
+
         https://docs.slack.dev/reference/methods/chat.startStream
         """
         kwargs.update(
@@ -2950,9 +3463,11 @@ class LegacyWebClient(LegacyBaseClient):
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
         chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        session_status: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Stops a streaming conversation.
+
         https://docs.slack.dev/reference/methods/chat.stopStream
         """
         kwargs.update(
@@ -2963,6 +3478,7 @@ class LegacyWebClient(LegacyBaseClient):
                 "blocks": blocks,
                 "metadata": metadata,
                 "chunks": chunks,
+                "session_status": session_status,
             }
         )
         _parse_web_class_objects(kwargs)
@@ -2985,6 +3501,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Provide custom unfurl behavior for user-posted URLs.
+
         https://docs.slack.dev/reference/methods/chat.unfurl
         """
         kwargs.update(
@@ -3024,6 +3541,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates a message in a channel.
+
         https://docs.slack.dev/reference/methods/chat.update
         """
         kwargs.update(
@@ -3063,6 +3581,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Accepts an invitation to a Slack Connect channel.
+
         https://docs.slack.dev/reference/methods/conversations.acceptSharedInvite
         """
         if channel_id is None and invite_id is None:
@@ -3087,6 +3606,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Approves an invitation to a Slack Connect channel.
+
         https://docs.slack.dev/reference/methods/conversations.approveSharedInvite
         """
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
@@ -3099,6 +3619,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Archives a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.archive
         """
         kwargs.update({"channel": channel})
@@ -3111,6 +3632,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Closes a direct message or multi-person direct message.
+
         https://docs.slack.dev/reference/methods/conversations.close
         """
         kwargs.update({"channel": channel})
@@ -3124,7 +3646,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Initiates a public or private channel-based conversation
+        """Initiates a public or private channel-based conversation.
+
         https://docs.slack.dev/reference/methods/conversations.create
         """
         kwargs.update({"name": name, "is_private": is_private, "team_id": team_id})
@@ -3138,6 +3661,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Declines a Slack Connect channel invite.
+
         https://docs.slack.dev/reference/methods/conversations.declineSharedInvite
         """
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
@@ -3147,6 +3671,7 @@ class LegacyWebClient(LegacyBaseClient):
         self, *, action: str, channel: str, target_team: str, **kwargs
     ) -> Union[Future, SlackResponse]:
         """Sets a team in a shared External Limited channel to a shared Slack Connect channel or vice versa.
+
         https://docs.slack.dev/reference/methods/conversations.externalInvitePermissions.set
         """
         kwargs.update(
@@ -3171,6 +3696,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Fetches a conversation's history of messages and events.
+
         https://docs.slack.dev/reference/methods/conversations.history
         """
         kwargs.update(
@@ -3195,6 +3721,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve information about a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.info
         """
         kwargs.update(
@@ -3215,6 +3742,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Invites users to a channel.
+
         https://docs.slack.dev/reference/methods/conversations.invite
         """
         kwargs.update(
@@ -3238,6 +3766,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sends an invitation to a Slack Connect channel.
+
         https://docs.slack.dev/reference/methods/conversations.inviteShared
         """
         if emails is None and user_ids is None:
@@ -3260,6 +3789,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Joins an existing conversation.
+
         https://docs.slack.dev/reference/methods/conversations.join
         """
         kwargs.update({"channel": channel})
@@ -3273,6 +3803,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Removes a user from a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.kick
         """
         kwargs.update({"channel": channel, "user": user})
@@ -3285,6 +3816,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Leaves a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.leave
         """
         kwargs.update({"channel": channel})
@@ -3301,6 +3833,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists all channels in a Slack team.
+
         https://docs.slack.dev/reference/methods/conversations.list
         """
         kwargs.update(
@@ -3325,8 +3858,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List shared channel invites that have been generated
-        or received but have not yet been approved by all parties.
+        """List shared channel invites that have been generated or received but have not yet been approved by all parties.
+
         https://docs.slack.dev/reference/methods/conversations.listConnectInvites
         """
         kwargs.update({"count": count, "cursor": cursor, "team_id": team_id})
@@ -3340,6 +3873,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the read cursor in a channel.
+
         https://docs.slack.dev/reference/methods/conversations.mark
         """
         kwargs.update({"channel": channel, "ts": ts})
@@ -3354,6 +3888,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve members of a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.members
         """
         kwargs.update({"channel": channel, "cursor": cursor, "limit": limit})
@@ -3368,6 +3903,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Opens or resumes a direct message or multi-person direct message.
+
         https://docs.slack.dev/reference/methods/conversations.open
         """
         if channel is None and users is None:
@@ -3387,6 +3923,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Renames a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.rename
         """
         kwargs.update({"channel": channel, "name": name})
@@ -3405,7 +3942,8 @@ class LegacyWebClient(LegacyBaseClient):
         oldest: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a conversation
+        """Retrieve a thread of messages posted to a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.replies
         """
         kwargs.update(
@@ -3432,6 +3970,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
+
         https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.approve
         """
         kwargs.update(
@@ -3453,6 +3992,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deny a request to invite an external user to a channel.
+
         https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.deny
         """
         kwargs.update({"invite_id": invite_id, "message": message})
@@ -3471,6 +4011,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists requests to add external users to channels with ability to filter.
+
         https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.list
         """
         kwargs.update(
@@ -3498,6 +4039,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the purpose for a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.setPurpose
         """
         kwargs.update({"channel": channel, "purpose": purpose})
@@ -3511,6 +4053,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Sets the topic for a conversation.
+
         https://docs.slack.dev/reference/methods/conversations.setTopic
         """
         kwargs.update({"channel": channel, "topic": topic})
@@ -3523,6 +4066,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Reverses conversation archival.
+
         https://docs.slack.dev/reference/methods/conversations.unarchive
         """
         kwargs.update({"channel": channel})
@@ -3535,7 +4079,8 @@ class LegacyWebClient(LegacyBaseClient):
         document_content: Dict[str, str],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create a Channel Canvas for a channel
+        """Create a Channel Canvas for a channel.
+
         https://docs.slack.dev/reference/methods/conversations.canvases.create
         """
         kwargs.update({"channel_id": channel_id, "document_content": document_content})
@@ -3549,6 +4094,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Open a dialog with a user.
+
         https://docs.slack.dev/reference/methods/dialog.open
         """
         kwargs.update({"dialog": dialog, "trigger_id": trigger_id})
@@ -3561,6 +4107,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Ends the current user's Do Not Disturb session immediately.
+
         https://docs.slack.dev/reference/methods/dnd.endDnd
         """
         return self.api_call("dnd.endDnd", params=kwargs)
@@ -3570,6 +4117,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Ends the current user's snooze mode immediately.
+
         https://docs.slack.dev/reference/methods/dnd.endSnooze
         """
         return self.api_call("dnd.endSnooze", params=kwargs)
@@ -3582,6 +4130,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieves a user's current Do Not Disturb status.
+
         https://docs.slack.dev/reference/methods/dnd.info
         """
         kwargs.update({"team_id": team_id, "user": user})
@@ -3594,6 +4143,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Turns on Do Not Disturb mode for the current user, or changes its duration.
+
         https://docs.slack.dev/reference/methods/dnd.setSnooze
         """
         kwargs.update({"num_minutes": num_minutes})
@@ -3606,6 +4156,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieves the Do Not Disturb status for users on a team.
+
         https://docs.slack.dev/reference/methods/dnd.teamInfo
         """
         if isinstance(users, (list, tuple)):
@@ -3621,6 +4172,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists custom emoji for a team.
+
         https://docs.slack.dev/reference/methods/emoji.list
         """
         kwargs.update({"include_categories": include_categories})
@@ -3636,6 +4188,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Provides entity details for the flexpane.
+
         https://docs.slack.dev/reference/methods/entity.presentDetails/
         """
         kwargs.update({"trigger_id": trigger_id})
@@ -3658,6 +4211,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes an existing comment on a file.
+
         https://docs.slack.dev/reference/methods/files.comments.delete
         """
         kwargs.update({"file": file, "id": id})
@@ -3670,6 +4224,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes a file.
+
         https://docs.slack.dev/reference/methods/files.delete
         """
         kwargs.update({"file": file})
@@ -3686,6 +4241,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about a team file.
+
         https://docs.slack.dev/reference/methods/files.info
         """
         kwargs.update(
@@ -3714,6 +4270,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists & filters team files.
+
         https://docs.slack.dev/reference/methods/files.list
         """
         kwargs.update(
@@ -3742,6 +4299,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve information about a remote file added to Slack.
+
         https://docs.slack.dev/reference/methods/files.remote.info
         """
         kwargs.update({"external_id": external_id, "file": file})
@@ -3758,6 +4316,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve information about a remote file added to Slack.
+
         https://docs.slack.dev/reference/methods/files.remote.list
         """
         kwargs.update(
@@ -3783,6 +4342,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Adds a file from a remote service.
+
         https://docs.slack.dev/reference/methods/files.remote.add
         """
         kwargs.update(
@@ -3822,6 +4382,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates an existing remote file.
+
         https://docs.slack.dev/reference/methods/files.remote.update
         """
         kwargs.update(
@@ -3857,6 +4418,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove a remote file.
+
         https://docs.slack.dev/reference/methods/files.remote.remove
         """
         kwargs.update({"external_id": external_id, "file": file})
@@ -3871,6 +4433,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Share a remote file into a channel.
+
         https://docs.slack.dev/reference/methods/files.remote.share
         """
         if external_id is None and file is None:
@@ -3888,7 +4451,8 @@ class LegacyWebClient(LegacyBaseClient):
         file: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Revokes public/external sharing access for a file
+        """Revokes public/external sharing access for a file.
+
         https://docs.slack.dev/reference/methods/files.revokePublicURL
         """
         kwargs.update({"file": file})
@@ -3901,6 +4465,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Enables a file for public/external sharing.
+
         https://docs.slack.dev/reference/methods/files.sharedPublicURL
         """
         kwargs.update({"file": file})
@@ -3920,6 +4485,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Uploads or creates a file.
+
         https://docs.slack.dev/reference/methods/files.upload
         """
         _print_files_upload_v2_suggestion()
@@ -3972,7 +4538,7 @@ class LegacyWebClient(LegacyBaseClient):
         request_file_info: bool = True,  # since v3.23, this flag is no longer necessary
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """This wrapper method provides an easy way to upload files using the following endpoints:
+        """Provide an easy way to upload files using the following endpoints.
 
         - step1: https://docs.slack.dev/reference/methods/files.getUploadURLExternal
 
@@ -4066,6 +4632,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets a URL for an edge external upload.
+
         https://docs.slack.dev/reference/methods/files.getUploadURLExternal
         """
         kwargs.update(
@@ -4089,6 +4656,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Finishes an upload started with files.getUploadURLExternal.
+
         https://docs.slack.dev/reference/methods/files.completeUploadExternal
         """
         _files = [{k: v for k, v in f.items() if v is not None} for f in files]
@@ -4111,7 +4679,8 @@ class LegacyWebClient(LegacyBaseClient):
         outputs: Dict[str, Any],
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Signal the successful completion of a function
+        """Signal the successful completion of a function.
+
         https://docs.slack.dev/reference/methods/functions.completeSuccess
         """
         kwargs.update({"function_execution_id": function_execution_id, "outputs": json.dumps(outputs)})
@@ -4124,7 +4693,8 @@ class LegacyWebClient(LegacyBaseClient):
         error: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Signal the failure to execute a function
+        """Signal the failure to execute a function.
+
         https://docs.slack.dev/reference/methods/functions.completeError
         """
         kwargs.update({"function_execution_id": function_execution_id, "error": error})
@@ -4272,7 +4842,7 @@ class LegacyWebClient(LegacyBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a private channel"""
+        """Retrieve a thread of messages posted to a private channel."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("groups.replies", http_verb="GET", params=kwargs)
 
@@ -4375,7 +4945,7 @@ class LegacyWebClient(LegacyBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a direct message conversation"""
+        """Retrieve a thread of messages posted to a direct message conversation."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("im.replies", http_verb="GET", params=kwargs)
 
@@ -4389,7 +4959,8 @@ class LegacyWebClient(LegacyBaseClient):
         to_old: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """For Enterprise Grid workspaces, map local user IDs to global user IDs
+        """For Enterprise Grid workspaces, map local user IDs to global user IDs.
+
         https://docs.slack.dev/reference/methods/migration.exchange
         """
         if isinstance(users, (list, tuple)):
@@ -4465,9 +5036,7 @@ class LegacyWebClient(LegacyBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Retrieve a thread of messages posted to a direct message conversation from a
-        multiparty direct message.
-        """
+        """Retrieve a thread of messages posted to a direct message conversation from a multiparty direct message."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return self.api_call("mpim.replies", http_verb="GET", params=kwargs)
 
@@ -4489,6 +5058,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token.
+
         https://docs.slack.dev/reference/methods/oauth.v2.access
         """
         if redirect_uri is not None:
@@ -4515,6 +5085,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token.
+
         https://docs.slack.dev/reference/methods/oauth.access
         """
         if redirect_uri is not None:
@@ -4534,7 +5105,8 @@ class LegacyWebClient(LegacyBaseClient):
         client_secret: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Exchanges a legacy access token for a new expiring access token and refresh token
+        """Exchanges a legacy access token for a new expiring access token and refresh token.
+
         https://docs.slack.dev/reference/methods/oauth.v2.exchange
         """
         kwargs.update({"client_id": client_id, "client_secret": client_secret, "token": token})
@@ -4551,6 +5123,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
+
         https://docs.slack.dev/reference/methods/openid.connect.token
         """
         if redirect_uri is not None:
@@ -4572,6 +5145,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get the identity of a user who has authorized Sign in with Slack.
+
         https://docs.slack.dev/reference/methods/openid.connect.userInfo
         """
         return self.api_call("openid.connect.userInfo", params=kwargs)
@@ -4584,6 +5158,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Pins an item to a channel.
+
         https://docs.slack.dev/reference/methods/pins.add
         """
         kwargs.update({"channel": channel, "timestamp": timestamp})
@@ -4596,6 +5171,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists items pinned to a channel.
+
         https://docs.slack.dev/reference/methods/pins.list
         """
         kwargs.update({"channel": channel})
@@ -4609,6 +5185,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Un-pins an item from a channel.
+
         https://docs.slack.dev/reference/methods/pins.remove
         """
         kwargs.update({"channel": channel, "timestamp": timestamp})
@@ -4623,6 +5200,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Adds a reaction to an item.
+
         https://docs.slack.dev/reference/methods/reactions.add
         """
         kwargs.update({"channel": channel, "name": name, "timestamp": timestamp})
@@ -4639,6 +5217,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets reactions for an item.
+
         https://docs.slack.dev/reference/methods/reactions.get
         """
         kwargs.update(
@@ -4665,6 +5244,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists reactions made by a user.
+
         https://docs.slack.dev/reference/methods/reactions.list
         """
         kwargs.update(
@@ -4691,6 +5271,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Removes a reaction from an item.
+
         https://docs.slack.dev/reference/methods/reactions.remove
         """
         kwargs.update(
@@ -4715,6 +5296,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Creates a reminder.
+
         https://docs.slack.dev/reference/methods/reminders.add
         """
         kwargs.update(
@@ -4736,6 +5318,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Marks a reminder as complete.
+
         https://docs.slack.dev/reference/methods/reminders.complete
         """
         kwargs.update({"reminder": reminder, "team_id": team_id})
@@ -4749,6 +5332,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes a reminder.
+
         https://docs.slack.dev/reference/methods/reminders.delete
         """
         kwargs.update({"reminder": reminder, "team_id": team_id})
@@ -4762,6 +5346,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about a reminder.
+
         https://docs.slack.dev/reference/methods/reminders.info
         """
         kwargs.update({"reminder": reminder, "team_id": team_id})
@@ -4774,6 +5359,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists all reminders created by or for a given user.
+
         https://docs.slack.dev/reference/methods/reminders.list
         """
         kwargs.update({"team_id": team_id})
@@ -4787,6 +5373,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a Real Time Messaging session.
+
         https://docs.slack.dev/reference/methods/rtm.connect
         """
         kwargs.update({"batch_presence_aware": batch_presence_aware, "presence_sub": presence_sub})
@@ -4805,6 +5392,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Starts a Real Time Messaging session.
+
         https://docs.slack.dev/reference/methods/rtm.start
         """
         kwargs.update(
@@ -4833,6 +5421,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Searches for messages and files matching a query.
+
         https://docs.slack.dev/reference/methods/search.all
         """
         kwargs.update(
@@ -4861,6 +5450,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Searches for files matching a query.
+
         https://docs.slack.dev/reference/methods/search.files
         """
         kwargs.update(
@@ -4890,6 +5480,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Searches for messages matching a query.
+
         https://docs.slack.dev/reference/methods/search.messages
         """
         kwargs.update(
@@ -4915,6 +5506,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Revoke access to a List for specified entities.
+
         https://docs.slack.dev/reference/methods/slackLists.access.delete
         """
         kwargs.update({"list_id": list_id, "channel_ids": channel_ids, "user_ids": user_ids})
@@ -4931,6 +5523,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the access level to a List for specified entities.
+
         https://docs.slack.dev/reference/methods/slackLists.access.set
         """
         kwargs.update({"list_id": list_id, "access_level": access_level, "channel_ids": channel_ids, "user_ids": user_ids})
@@ -4949,6 +5542,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Creates a List.
+
         https://docs.slack.dev/reference/methods/slackLists.create
         """
         kwargs.update(
@@ -4972,6 +5566,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve List download URL from an export job to download List contents.
+
         https://docs.slack.dev/reference/methods/slackLists.download.get
         """
         kwargs.update(
@@ -4991,6 +5586,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Initiate a job to export List contents.
+
         https://docs.slack.dev/reference/methods/slackLists.download.start
         """
         kwargs.update(
@@ -5012,6 +5608,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add a new item to an existing List.
+
         https://docs.slack.dev/reference/methods/slackLists.items.create
         """
         kwargs.update(
@@ -5033,6 +5630,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes an item from an existing List.
+
         https://docs.slack.dev/reference/methods/slackLists.items.delete
         """
         kwargs.update(
@@ -5052,6 +5650,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Deletes multiple items from an existing List.
+
         https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple
         """
         kwargs.update(
@@ -5072,6 +5671,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get a row from a List.
+
         https://docs.slack.dev/reference/methods/slackLists.items.info
         """
         kwargs.update(
@@ -5094,6 +5694,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get records from a List.
+
         https://docs.slack.dev/reference/methods/slackLists.items.list
         """
         kwargs.update(
@@ -5115,6 +5716,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Updates cells in a List.
+
         https://docs.slack.dev/reference/methods/slackLists.items.update
         """
         kwargs.update(
@@ -5136,6 +5738,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update a List.
+
         https://docs.slack.dev/reference/methods/slackLists.update
         """
         kwargs.update(
@@ -5159,6 +5762,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Adds a star to an item.
+
         https://docs.slack.dev/reference/methods/stars.add
         """
         kwargs.update(
@@ -5182,6 +5786,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists stars for a user.
+
         https://docs.slack.dev/reference/methods/stars.list
         """
         kwargs.update(
@@ -5205,6 +5810,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Removes a star from an item.
+
         https://docs.slack.dev/reference/methods/stars.remove
         """
         kwargs.update(
@@ -5229,6 +5835,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets the access logs for the current team.
+
         https://docs.slack.dev/reference/methods/team.accessLogs
         """
         kwargs.update(
@@ -5251,6 +5858,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets billable users information for the current team.
+
         https://docs.slack.dev/reference/methods/team.billableInfo
         """
         kwargs.update({"team_id": team_id, "user": user})
@@ -5261,6 +5869,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Reads a workspace's billing plan information.
+
         https://docs.slack.dev/reference/methods/team.billing.info
         """
         return self.api_call("team.billing.info", params=kwargs)
@@ -5272,6 +5881,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Disconnects an external organization.
+
         https://docs.slack.dev/reference/methods/team.externalTeams.disconnect
         """
         kwargs.update(
@@ -5294,6 +5904,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Returns a list of all the external teams connected and details about the connection.
+
         https://docs.slack.dev/reference/methods/team.externalTeams.list
         """
         kwargs.update(
@@ -5322,12 +5933,14 @@ class LegacyWebClient(LegacyBaseClient):
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about the current team.
+
         https://docs.slack.dev/reference/methods/team.info
         """
-        kwargs.update({"team": team, "domain": domain})
+        kwargs.update({"team": team, "domain": domain, "include_slackbot_availability": include_slackbot_availability})
         return self.api_call("team.info", http_verb="GET", params=kwargs)
 
     def team_integrationLogs(
@@ -5343,6 +5956,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets the integration logs for the current team.
+
         https://docs.slack.dev/reference/methods/team.integrationLogs
         """
         kwargs.update(
@@ -5365,6 +5979,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve a team's profile.
+
         https://docs.slack.dev/reference/methods/team.profile.get
         """
         kwargs.update({"visibility": visibility})
@@ -5375,6 +5990,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieve a list of a workspace's team preferences.
+
         https://docs.slack.dev/reference/methods/team.preferences.list
         """
         return self.api_call("team.preferences.list", params=kwargs)
@@ -5390,7 +6006,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Create a User Group
+        """Create a User Group.
+
         https://docs.slack.dev/reference/methods/usergroups.create
         """
         kwargs.update(
@@ -5416,7 +6033,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Disable an existing User Group
+        """Disable an existing User Group.
+
         https://docs.slack.dev/reference/methods/usergroups.disable
         """
         kwargs.update({"usergroup": usergroup, "include_count": include_count, "team_id": team_id})
@@ -5430,7 +6048,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Enable a User Group
+        """Enable a User Group.
+
         https://docs.slack.dev/reference/methods/usergroups.enable
         """
         kwargs.update({"usergroup": usergroup, "include_count": include_count, "team_id": team_id})
@@ -5445,7 +6064,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List all User Groups for a team
+        """List all User Groups for a team.
+
         https://docs.slack.dev/reference/methods/usergroups.list
         """
         kwargs.update(
@@ -5470,7 +6090,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Update an existing User Group
+        """Update an existing User Group.
+
         https://docs.slack.dev/reference/methods/usergroups.update
         """
         kwargs.update(
@@ -5497,7 +6118,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """List all users in a User Group
+        """List all users in a User Group.
+
         https://docs.slack.dev/reference/methods/usergroups.users.list
         """
         kwargs.update(
@@ -5518,7 +6140,8 @@ class LegacyWebClient(LegacyBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Update the list of users for a User Group
+        """Update the list of users for a User Group.
+
         https://docs.slack.dev/reference/methods/usergroups.users.update
         """
         kwargs.update(
@@ -5546,6 +6169,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List conversations the calling user may access.
+
         https://docs.slack.dev/reference/methods/users.conversations
         """
         kwargs.update(
@@ -5567,7 +6191,8 @@ class LegacyWebClient(LegacyBaseClient):
         self,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Delete the user profile photo
+        """Delete the user profile photo.
+
         https://docs.slack.dev/reference/methods/users.deletePhoto
         """
         return self.api_call("users.deletePhoto", http_verb="GET", params=kwargs)
@@ -5579,6 +6204,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets user presence information.
+
         https://docs.slack.dev/reference/methods/users.getPresence
         """
         kwargs.update({"user": user})
@@ -5589,6 +6215,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Get a user's identity.
+
         https://docs.slack.dev/reference/methods/users.identity
         """
         return self.api_call("users.identity", http_verb="GET", params=kwargs)
@@ -5601,6 +6228,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Gets information about a user.
+
         https://docs.slack.dev/reference/methods/users.info
         """
         kwargs.update({"user": user, "include_locale": include_locale})
@@ -5616,6 +6244,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Lists all users in a Slack team.
+
         https://docs.slack.dev/reference/methods/users.list
         """
         kwargs.update(
@@ -5635,6 +6264,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Find a user with an email address.
+
         https://docs.slack.dev/reference/methods/users.lookupByEmail
         """
         kwargs.update({"email": email})
@@ -5649,7 +6279,8 @@ class LegacyWebClient(LegacyBaseClient):
         crop_y: Optional[Union[int, str]] = None,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Set the user profile photo
+        """Set the user profile photo.
+
         https://docs.slack.dev/reference/methods/users.setPhoto
         """
         kwargs.update({"crop_w": crop_w, "crop_x": crop_x, "crop_y": crop_y})
@@ -5662,6 +6293,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Manually sets user presence.
+
         https://docs.slack.dev/reference/methods/users.setPresence
         """
         kwargs.update({"presence": presence})
@@ -5672,7 +6304,8 @@ class LegacyWebClient(LegacyBaseClient):
         email: str,
         **kwargs,
     ) -> Union[Future, SlackResponse]:
-        """Lookup an email address to see if someone is on Slack
+        """Lookup an email address to see if someone is on Slack.
+
         https://docs.slack.dev/reference/methods/users.discoverableContacts.lookup
         """
         kwargs.update({"email": email})
@@ -5686,6 +6319,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Retrieves a user's profile information.
+
         https://docs.slack.dev/reference/methods/users.profile.get
         """
         kwargs.update({"user": user, "include_labels": include_labels})
@@ -5701,6 +6335,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set the profile information for a user.
+
         https://docs.slack.dev/reference/methods/users.profile.set
         """
         kwargs.update(
@@ -5724,6 +6359,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Open a view for a user.
+
         https://docs.slack.dev/reference/methods/views.open
         See https://docs.slack.dev/surfaces/modals/ for details.
         """
@@ -5745,6 +6381,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Push a view onto the stack of a root view.
+
         Push a new view onto the existing view stack by passing a view
         payload and a valid trigger_id generated from an interaction
         within the existing modal.
@@ -5771,6 +6408,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update an existing view.
+
         Update a view by passing a new view definition along with the
         view_id returned in views.open or the external_id.
         See the modals documentation (https://docs.slack.dev/surfaces/modals/#updating_views)
@@ -5801,6 +6439,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Publish a static view for a User.
+
         Create or update the view that comprises an
         app's Home tab (https://docs.slack.dev/surfaces/app-home/)
         https://docs.slack.dev/reference/methods/views.publish
@@ -5822,6 +6461,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Add featured workflows to a channel.
+
         https://docs.slack.dev/reference/methods/workflows.featured.add
         """
         kwargs.update({"channel_id": channel_id})
@@ -5838,6 +6478,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """List the featured workflows for specified channels.
+
         https://docs.slack.dev/reference/methods/workflows.featured.list
         """
         if isinstance(channel_ids, (list, tuple)):
@@ -5854,6 +6495,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Remove featured workflows from a channel.
+
         https://docs.slack.dev/reference/methods/workflows.featured.remove
         """
         kwargs.update({"channel_id": channel_id})
@@ -5871,6 +6513,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Set featured workflows for a channel.
+
         https://docs.slack.dev/reference/methods/workflows.featured.set
         """
         kwargs.update({"channel_id": channel_id})
@@ -5888,6 +6531,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Indicate a successful outcome of a workflow step's execution.
+
         https://docs.slack.dev/reference/methods/workflows.stepCompleted
         """
         kwargs.update({"workflow_step_execute_id": workflow_step_execute_id})
@@ -5905,6 +6549,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Indicate an unsuccessful outcome of a workflow step's execution.
+
         https://docs.slack.dev/reference/methods/workflows.stepFailed
         """
         kwargs.update(
@@ -5926,6 +6571,7 @@ class LegacyWebClient(LegacyBaseClient):
         **kwargs,
     ) -> Union[Future, SlackResponse]:
         """Update the configuration for a workflow extension step.
+
         https://docs.slack.dev/reference/methods/workflows.updateStep
         """
         kwargs.update({"workflow_step_edit_id": workflow_step_edit_id})

@@ -1,4 +1,5 @@
 """asyncio compatible RetryHandler interface.
+
 You can pass an array of handlers to customize retry logics in supported API clients.
 """
 
@@ -18,6 +19,7 @@ default_interval_calculator = BackoffRetryIntervalCalculator()
 
 class AsyncRetryHandler:
     """asyncio compatible RetryHandler interface.
+
     You can pass an array of handlers to customize retry logics in supported API clients.
     """
 

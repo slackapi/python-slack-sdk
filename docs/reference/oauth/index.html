@@ -36,7 +36,7 @@ el.replaceWith(d);
 <h1 class="title">Module <code>slack_sdk.oauth</code></h1>
 </header>
 <section id="section-intro">
-<p>Modules for implementing the Slack OAuth flow</p>
+<p>Modules for implementing the Slack OAuth flow.</p>
 <p><a href="https://docs.slack.dev/tools/python-slack-sdk/oauth">https://docs.slack.dev/tools/python-slack-sdk/oauth</a></p>
 </section>
 <section>
@@ -107,13 +107,7 @@ el.replaceWith(d);
     def generate(self, state: str, team: Optional[str] = None) -&gt; str:
         scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
         user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
-        url = (
-            f&#34;{self.authorization_url}?&#34;
-            f&#34;state={state}&amp;&#34;
-            f&#34;client_id={self.client_id}&amp;&#34;
-            f&#34;scope={scopes}&amp;&#34;
-            f&#34;user_scope={user_scopes}&#34;
-        )
+        url = f&#34;{self.authorization_url}?state={state}&amp;client_id={self.client_id}&amp;scope={scopes}&amp;user_scope={user_scopes}&#34;
         if self.redirect_uri is not None:
             url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
         if team is not None:
@@ -134,13 +128,7 @@ el.replaceWith(d);
 <pre><code class="python">def generate(self, state: str, team: Optional[str] = None) -&gt; str:
     scopes = &#34;,&#34;.join(self.scopes) if self.scopes else &#34;&#34;
     user_scopes = &#34;,&#34;.join(self.user_scopes) if self.user_scopes else &#34;&#34;
-    url = (
-        f&#34;{self.authorization_url}?&#34;
-        f&#34;state={state}&amp;&#34;
-        f&#34;client_id={self.client_id}&amp;&#34;
-        f&#34;scope={scopes}&amp;&#34;
-        f&#34;user_scope={user_scopes}&#34;
-    )
+    url = f&#34;{self.authorization_url}?state={state}&amp;client_id={self.client_id}&amp;scope={scopes}&amp;user_scope={user_scopes}&#34;
     if self.redirect_uri is not None:
         url += f&#34;&amp;redirect_uri={self.redirect_uri}&#34;
     if team is not None:
@@ -186,11 +174,11 @@ el.replaceWith(d);
         raise NotImplementedError()
 
     def save(self, installation: Installation):
-        &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+        &#34;&#34;&#34;Saves an installation data.&#34;&#34;&#34;
         raise NotImplementedError()
 
     def save_bot(self, bot: Bot):
-        &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
+        &#34;&#34;&#34;Saves a bot installation data.&#34;&#34;&#34;
         raise NotImplementedError()
 
     def find_bot(
@@ -200,7 +188,7 @@ el.replaceWith(d);
         team_id: Optional[str],
         is_enterprise_install: Optional[bool] = False,
     ) -&gt; Optional[Bot]:
-        &#34;&#34;&#34;Finds a bot scope installation per workspace / org&#34;&#34;&#34;
+        &#34;&#34;&#34;Finds a bot scope installation per workspace / org.&#34;&#34;&#34;
         raise NotImplementedError()
 
     def find_installation(
@@ -212,6 +200,7 @@ el.replaceWith(d);
         is_enterprise_install: Optional[bool] = False,
     ) -&gt; Optional[Installation]:
         &#34;&#34;&#34;Finds a relevant installation for the given IDs.
+
         If the user_id is absent, this method may return the latest installation in the workspace / org.
         &#34;&#34;&#34;
         raise NotImplementedError()
@@ -222,7 +211,7 @@ el.replaceWith(d);
         enterprise_id: Optional[str],
         team_id: Optional[str],
     ) -&gt; None:
-        &#34;&#34;&#34;Deletes a bot scope installation per workspace / org&#34;&#34;&#34;
+        &#34;&#34;&#34;Deletes a bot scope installation per workspace / org.&#34;&#34;&#34;
         raise NotImplementedError()
 
     def delete_installation(
@@ -232,7 +221,7 @@ el.replaceWith(d);
         team_id: Optional[str],
         user_id: Optional[str] = None,
     ) -&gt; None:
-        &#34;&#34;&#34;Deletes an installation that matches the given IDs&#34;&#34;&#34;
+        &#34;&#34;&#34;Deletes an installation that matches the given IDs.&#34;&#34;&#34;
         raise NotImplementedError()
 
     def delete_all(
@@ -241,7 +230,7 @@ el.replaceWith(d);
         enterprise_id: Optional[str],
         team_id: Optional[str],
     ):
-        &#34;&#34;&#34;Deletes all installation data for the given workspace / org&#34;&#34;&#34;
+        &#34;&#34;&#34;Deletes all installation data for the given workspace / org.&#34;&#34;&#34;
         self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
         self.delete_installation(enterprise_id=enterprise_id, team_id=team_id)</code></pre>
 </details>
@@ -303,11 +292,11 @@ def logger(self) -&gt; Logger:
     enterprise_id: Optional[str],
     team_id: Optional[str],
 ):
-    &#34;&#34;&#34;Deletes all installation data for the given workspace / org&#34;&#34;&#34;
+    &#34;&#34;&#34;Deletes all installation data for the given workspace / org.&#34;&#34;&#34;
     self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
     self.delete_installation(enterprise_id=enterprise_id, team_id=team_id)</code></pre>
 </details>
-<div class="desc"><p>Deletes all installation data for the given workspace / org</p></div>
+<div class="desc"><p>Deletes all installation data for the given workspace / org.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.InstallationStore.delete_bot"><code class="name flex">
 <span>def <span class="ident">delete_bot</span></span>(<span>self, *, enterprise_id: str | None, team_id: str | None) ‑> None</span>
@@ -323,10 +312,10 @@ def logger(self) -&gt; Logger:
     enterprise_id: Optional[str],
     team_id: Optional[str],
 ) -&gt; None:
-    &#34;&#34;&#34;Deletes a bot scope installation per workspace / org&#34;&#34;&#34;
+    &#34;&#34;&#34;Deletes a bot scope installation per workspace / org.&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Deletes a bot scope installation per workspace / org</p></div>
+<div class="desc"><p>Deletes a bot scope installation per workspace / org.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.InstallationStore.delete_installation"><code class="name flex">
 <span>def <span class="ident">delete_installation</span></span>(<span>self, *, enterprise_id: str | None, team_id: str | None, user_id: str | None = None) ‑> None</span>
@@ -343,10 +332,10 @@ def logger(self) -&gt; Logger:
     team_id: Optional[str],
     user_id: Optional[str] = None,
 ) -&gt; None:
-    &#34;&#34;&#34;Deletes an installation that matches the given IDs&#34;&#34;&#34;
+    &#34;&#34;&#34;Deletes an installation that matches the given IDs.&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Deletes an installation that matches the given IDs</p></div>
+<div class="desc"><p>Deletes an installation that matches the given IDs.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.InstallationStore.find_bot"><code class="name flex">
 <span>def <span class="ident">find_bot</span></span>(<span>self,<br>*,<br>enterprise_id: str | None,<br>team_id: str | None,<br>is_enterprise_install: bool | None = False) ‑> <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="installation_store/models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a> | None</span>
@@ -363,10 +352,10 @@ def logger(self) -&gt; Logger:
     team_id: Optional[str],
     is_enterprise_install: Optional[bool] = False,
 ) -&gt; Optional[Bot]:
-    &#34;&#34;&#34;Finds a bot scope installation per workspace / org&#34;&#34;&#34;
+    &#34;&#34;&#34;Finds a bot scope installation per workspace / org.&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Finds a bot scope installation per workspace / org</p></div>
+<div class="desc"><p>Finds a bot scope installation per workspace / org.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.InstallationStore.find_installation"><code class="name flex">
 <span>def <span class="ident">find_installation</span></span>(<span>self,<br>*,<br>enterprise_id: str | None,<br>team_id: str | None,<br>user_id: str | None = None,<br>is_enterprise_install: bool | None = False) ‑> <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a> | None</span>
@@ -385,12 +374,13 @@ def logger(self) -&gt; Logger:
     is_enterprise_install: Optional[bool] = False,
 ) -&gt; Optional[Installation]:
     &#34;&#34;&#34;Finds a relevant installation for the given IDs.
+
     If the user_id is absent, this method may return the latest installation in the workspace / org.
     &#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Finds a relevant installation for the given IDs.
-If the user_id is absent, this method may return the latest installation in the workspace / org.</p></div>
+<div class="desc"><p>Finds a relevant installation for the given IDs.</p>
+<p>If the user_id is absent, this method may return the latest installation in the workspace / org.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.InstallationStore.save"><code class="name flex">
 <span>def <span class="ident">save</span></span>(<span>self,<br>installation: <a title="slack_sdk.oauth.installation_store.models.installation.Installation" href="installation_store/models/installation.html#slack_sdk.oauth.installation_store.models.installation.Installation">Installation</a>)</span>
@@ -401,10 +391,10 @@ If the user_id is absent, this method may return the latest installation in the 
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def save(self, installation: Installation):
-    &#34;&#34;&#34;Saves an installation data&#34;&#34;&#34;
+    &#34;&#34;&#34;Saves an installation data.&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Saves an installation data</p></div>
+<div class="desc"><p>Saves an installation data.</p></div>
 </dd>
 <dt id="slack_sdk.oauth.InstallationStore.save_bot"><code class="name flex">
 <span>def <span class="ident">save_bot</span></span>(<span>self,<br>bot: <a title="slack_sdk.oauth.installation_store.models.bot.Bot" href="installation_store/models/bot.html#slack_sdk.oauth.installation_store.models.bot.Bot">Bot</a>)</span>
@@ -415,10 +405,10 @@ If the user_id is absent, this method may return the latest installation in the 
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def save_bot(self, bot: Bot):
-    &#34;&#34;&#34;Saves a bot installation data&#34;&#34;&#34;
+    &#34;&#34;&#34;Saves a bot installation data.&#34;&#34;&#34;
     raise NotImplementedError()</code></pre>
 </details>
-<div class="desc"><p>Saves a bot installation data</p></div>
+<div class="desc"><p>Saves a bot installation data.</p></div>
 </dd>
 </dl>
 </dd>
@@ -448,6 +438,7 @@ If the user_id is absent, this method may return the latest installation in the 
 <li><a title="slack_sdk.oauth.state_store.file.FileOAuthStateStore" href="state_store/file/index.html#slack_sdk.oauth.state_store.file.FileOAuthStateStore">FileOAuthStateStore</a></li>
 <li><a title="slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore" href="state_store/sqlalchemy/index.html#slack_sdk.oauth.state_store.sqlalchemy.SQLAlchemyOAuthStateStore">SQLAlchemyOAuthStateStore</a></li>
 <li><a title="slack_sdk.oauth.state_store.sqlite3.SQLite3OAuthStateStore" href="state_store/sqlite3/index.html#slack_sdk.oauth.state_store.sqlite3.SQLite3OAuthStateStore">SQLite3OAuthStateStore</a></li>
+<li><a title="slack_sdk.oauth.state_store.stateless.StatelessOAuthStateStore" href="state_store/stateless/index.html#slack_sdk.oauth.state_store.stateless.StatelessOAuthStateStore">StatelessOAuthStateStore</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
@@ -520,10 +511,10 @@ def logger(self) -&gt; Logger:
         self.expiration_seconds = expiration_seconds
 
     def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-        return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;
+        return f&#34;{self.cookie_name}={state}; Secure; HttpOnly; Path=/; Max-Age={self.expiration_seconds}&#34;
 
     def build_set_cookie_for_deletion(self) -&gt; str:
-        return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
+        return f&#34;{self.cookie_name}=deleted; Secure; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;
 
     def is_valid_browser(
         self,
@@ -574,7 +565,7 @@ def logger(self) -&gt; Logger:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_deletion(self) -&gt; str:
-    return f&#34;{self.cookie_name}=deleted; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; &#34;Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;</code></pre>
+    return f&#34;{self.cookie_name}=deleted; Secure; HttpOnly; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT&#34;</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -587,7 +578,7 @@ def logger(self) -&gt; Logger:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def build_set_cookie_for_new_state(self, state: str) -&gt; str:
-    return f&#34;{self.cookie_name}={state}; &#34; &#34;Secure; &#34; &#34;HttpOnly; &#34; &#34;Path=/; &#34; f&#34;Max-Age={self.expiration_seconds}&#34;</code></pre>
+    return f&#34;{self.cookie_name}={state}; Secure; HttpOnly; Path=/; Max-Age={self.expiration_seconds}&#34;</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -631,7 +622,7 @@ def logger(self) -&gt; Logger:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class OpenIDConnectAuthorizeUrlGenerator:
-    &#34;&#34;&#34;Refer to https://openid.net/specs/openid-connect-core-1_0.html&#34;&#34;&#34;
+    &#34;&#34;&#34;Refer to https://openid.net/specs/openid-connect-core-1_0.html.&#34;&#34;&#34;
 
     def __init__(
         self,
@@ -662,7 +653,7 @@ def logger(self) -&gt; Logger:
             url += f&#34;&amp;nonce={nonce}&#34;
         return url</code></pre>
 </details>
-<div class="desc"><p>Refer to <a href="https://openid.net/specs/openid-connect-core-1_0.html">https://openid.net/specs/openid-connect-core-1_0.html</a></p></div>
+<div class="desc"><p>Refer to <a href="https://openid.net/specs/openid-connect-core-1_0.html.">https://openid.net/specs/openid-connect-core-1_0.html.</a></p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.oauth.OpenIDConnectAuthorizeUrlGenerator.generate"><code class="name flex">

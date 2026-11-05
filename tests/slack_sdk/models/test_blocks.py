@@ -5,11 +5,13 @@ from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
     ActionsBlock,
     AlertBlock,
+    AuthProviderBlock,
     Block,
     ButtonElement,
     CallBlock,
     CardBlock,
     CarouselBlock,
+    ContainerBlock,
     ContextActionsBlock,
     ContextBlock,
     DataTableBlock,
@@ -27,6 +29,7 @@ from slack_sdk.models.blocks import (
     OverflowMenuElement,
     PlainTextObject,
     PlanBlock,
+    RawNumberObject,
     RawTextObject,
     RichTextBlock,
     RichTextElementParts,
@@ -37,6 +40,7 @@ from slack_sdk.models.blocks import (
     SectionBlock,
     StaticSelectElement,
     TableBlock,
+    TableBlockColumnSettings,
     TaskCardBlock,
     VideoBlock,
 )
@@ -1359,6 +1363,40 @@ class RichTextBlockTests(unittest.TestCase):
 
 
 # ----------------------------------------------
+# RawNumberObject
+# ----------------------------------------------
+
+
+class RawNumberObjectTests(unittest.TestCase):
+    def test_basic_creation(self):
+        """Test basic RawNumberObject creation"""
+        obj = RawNumberObject(value=42, text="42")
+        expected = {"type": "raw_number", "value": 42, "text": "42"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_float_value(self):
+        """Test RawNumberObject accepts a float value"""
+        obj = RawNumberObject(value=3.14, text="3.14")
+        expected = {"type": "raw_number", "value": 3.14, "text": "3.14"}
+        self.assertDictEqual(expected, obj.to_dict())
+
+    def test_text_length_validation_min(self):
+        """Test that empty text fails validation"""
+        with self.assertRaises(SlackObjectFormationError):
+            RawNumberObject(value=0, text="").to_dict()
+
+    def test_text_length_validation_at_min(self):
+        """Test that text with 1 character passes validation"""
+        obj = RawNumberObject(value=1, text="1")
+        obj.to_dict()  # Should not raise
+
+    def test_attributes(self):
+        """Test that RawNumberObject only has value, text, and type attributes"""
+        obj = RawNumberObject(value=42, text="42")
+        self.assertEqual(obj.attributes, {"value", "text", "type"})
+
+
+# ----------------------------------------------
 # RawTextObject
 # ----------------------------------------------
 
@@ -1444,6 +1482,35 @@ class TableBlockTests(unittest.TestCase):
         self.assertDictEqual(input, TableBlock(**input).to_dict())
         self.assertDictEqual(input, Block.parse(input).to_dict())
 
+    def test_with_raw_number(self):
+        """Test table block with raw_number cells"""
+        input = {
+            "type": "table",
+            "rows": [
+                [{"type": "raw_text", "text": "Widgets"}, {"type": "raw_number", "value": 42, "text": "42"}],
+                [
+                    {
+                        "type": "rich_text",
+                        "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "Gadgets"}]}],
+                    },
+                    {"type": "raw_number", "value": 7, "text": "7"},
+                ],
+            ],
+        }
+        self.assertDictEqual(input, TableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_raw_number_cell_objects(self):
+        """Test table using typed RawNumberObject cells"""
+        block = TableBlock(
+            rows=[[RawTextObject(text="Count"), RawNumberObject(value=42, text="42")]],
+        )
+        expected = {
+            "type": "table",
+            "rows": [[{"type": "raw_text", "text": "Count"}, {"type": "raw_number", "value": 42, "text": "42"}]],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
     def test_minimal_table(self):
         """Test table with only required fields"""
         input = {
@@ -1463,6 +1530,72 @@ class TableBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(input, TableBlock(**input).to_dict())
+
+    def test_with_column_settings_objects(self):
+        """Test table using typed TableBlockColumnSettings objects"""
+        block = TableBlock(
+            rows=[[{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}]],
+            column_settings=[
+                TableBlockColumnSettings(align="right", is_wrapped=True),
+                TableBlockColumnSettings(align="left"),
+            ],
+        )
+        expected = {
+            "type": "table",
+            "column_settings": [{"align": "right", "is_wrapped": True}, {"align": "left"}],
+            "rows": [[{"type": "raw_text", "text": "A"}, {"type": "raw_text", "text": "B"}]],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_with_rich_text_cell_objects(self):
+        """Test table using typed RichTextBlock objects"""
+        cell = RichTextBlock(elements=[RichTextSectionElement(elements=[RichTextElementParts.Text(text="Hello")])])
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Header"), cell],
+            ],
+        )
+        expected = {
+            "type": "table",
+            "rows": [
+                [
+                    {"type": "raw_text", "text": "Header"},
+                    {
+                        "type": "rich_text",
+                        "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "Hello"}]}],
+                    },
+                ]
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
+
+    def test_mixed_typed_and_dict_cells(self):
+        """Test table accepts a mix of typed objects and plain dicts"""
+        block = TableBlock(
+            rows=[
+                [RawTextObject(text="Col A"), RawTextObject(text="Col B")],
+                [
+                    {"type": "raw_text", "text": "Data"},
+                    RichTextBlock(elements=[{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}]),
+                ],
+            ],
+            column_settings=[TableBlockColumnSettings(align="left"), {"align": "right"}],
+        )
+        expected = {
+            "type": "table",
+            "column_settings": [{"align": "left"}, {"align": "right"}],
+            "rows": [
+                [{"type": "raw_text", "text": "Col A"}, {"type": "raw_text", "text": "Col B"}],
+                [
+                    {"type": "raw_text", "text": "Data"},
+                    {
+                        "type": "rich_text",
+                        "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "rich"}]}],
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())
 
     def test_column_settings_variations(self):
         """Test various column_settings configurations"""
@@ -1738,10 +1871,14 @@ class CardBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
             "type": "card",
-            "icon": "https://picsum.photos/36/36",
+            "icon": {"type": "image", "image_url": "https://picsum.photos/36/36", "alt_text": "Icon"},
             "title": {"type": "mrkdwn", "text": "Lumon Industries", "verbatim": False},
             "subtitle": {"type": "mrkdwn", "text": "Committed to work-life balance", "verbatim": False},
-            "hero_image": "https://picsum.photos/400/300",
+            "hero_image": {
+                "type": "image",
+                "image_url": "https://picsum.photos/400/300",
+                "alt_text": "Sample hero image",
+            },
             "body": {"type": "mrkdwn", "text": "Please enjoy each card equally.", "verbatim": False},
             "actions": [
                 {
@@ -1752,6 +1889,24 @@ class CardBlockTests(unittest.TestCase):
             ],
         }
         self.assertDictEqual(input, CardBlock(**input).to_dict())
+
+    def test_image_element_icon_and_hero_image(self):
+        block = CardBlock(
+            icon=ImageElement(image_url="https://picsum.photos/36/36", alt_text="Icon"),
+            hero_image=ImageElement(image_url="https://picsum.photos/400/300", alt_text="Sample hero image"),
+            title=MarkdownTextObject(text="Lumon Industries"),
+        )
+        expected = {
+            "type": "card",
+            "icon": {"type": "image", "image_url": "https://picsum.photos/36/36", "alt_text": "Icon"},
+            "hero_image": {
+                "type": "image",
+                "image_url": "https://picsum.photos/400/300",
+                "alt_text": "Sample hero image",
+            },
+            "title": {"type": "mrkdwn", "text": "Lumon Industries"},
+        }
+        self.assertDictEqual(expected, block.to_dict())
 
     def test_parse(self):
         input = {
@@ -1841,6 +1996,135 @@ class AlertBlockTests(unittest.TestCase):
             AlertBlock(text="").validate_json()
 
 
+class ContainerBlockTests(unittest.TestCase):
+    def test_document(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "My Container"},
+            "child_blocks": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Hello"}},
+                {"type": "divider"},
+            ],
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_parse(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "Parsed"},
+            "child_blocks": [
+                {"type": "header", "text": {"type": "plain_text", "text": "Header"}},
+            ],
+        }
+        parsed = Block.parse(input)
+        self.assertIsNotNone(parsed)
+        self.assertDictEqual(input, parsed.to_dict())
+
+    def test_all_properties_collapsible(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "Full Container"},
+            "subtitle": {"type": "mrkdwn", "text": "A subtitle"},
+            "child_blocks": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Content"}},
+            ],
+            "width": "wide",
+            "icon": {"type": "image", "image_url": "https://example.com/img.png", "alt_text": "icon"},
+            "is_collapsible": True,
+            "default_collapsed": True,
+            "block_id": "container-1",
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_all_properties_header_divider(self):
+        input = {
+            "type": "container",
+            "title": {"type": "plain_text", "text": "Full Container"},
+            "subtitle": {"type": "mrkdwn", "text": "A subtitle"},
+            "child_blocks": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Content"}},
+            ],
+            "width": "wide",
+            "icon": {"type": "image", "image_url": "https://example.com/img.png", "alt_text": "icon"},
+            "has_header_divider": True,
+            "block_id": "container-2",
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_rich_text_title(self):
+        input = {
+            "type": "container",
+            "rich_text_title": {
+                "type": "rich_text",
+                "elements": [
+                    {
+                        "type": "rich_text_section",
+                        "elements": [{"type": "text", "text": "Rich Title"}],
+                    }
+                ],
+            },
+            "child_blocks": [
+                {"type": "divider"},
+            ],
+        }
+        self.assertDictEqual(input, ContainerBlock(**input).to_dict())
+
+    def test_width_values(self):
+        for width in ["narrow", "standard", "wide", "full"]:
+            input = {
+                "type": "container",
+                "title": {"type": "plain_text", "text": "Test"},
+                "child_blocks": [{"type": "divider"}],
+                "width": width,
+            }
+            ContainerBlock(**input).validate_json()
+
+    def test_invalid_width(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Test"},
+                child_blocks=[{"type": "divider"}],
+                width="extra_wide",
+            ).validate_json()
+
+    def test_title_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "a" * 151},
+                child_blocks=[{"type": "divider"}],
+            ).validate_json()
+
+    def test_subtitle_length_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Title"},
+                subtitle={"type": "mrkdwn", "text": "a" * 151},
+                child_blocks=[{"type": "divider"}],
+            ).validate_json()
+
+    def test_missing_title_and_rich_text_title(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                child_blocks=[{"type": "divider"}],
+            ).validate_json()
+
+    def test_empty_child_blocks(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Test"},
+                child_blocks=[],
+            ).validate_json()
+
+    def test_collapsible_with_header_divider(self):
+        with self.assertRaises(SlackObjectFormationError):
+            ContainerBlock(
+                title={"type": "plain_text", "text": "Test"},
+                child_blocks=[{"type": "divider"}],
+                is_collapsible=True,
+                has_header_divider=True,
+            ).validate_json()
+
+
 class CarouselBlockTests(unittest.TestCase):
     def test_document(self):
         input = {
@@ -1882,3 +2166,135 @@ class CarouselBlockTests(unittest.TestCase):
     def test_empty_elements_validation(self):
         with self.assertRaises(SlackObjectFormationError):
             CarouselBlock(elements=[]).validate_json()
+
+
+# ----------------------------------------------
+# Auth provider
+# ----------------------------------------------
+
+
+class AuthProviderBlockTests(unittest.TestCase):
+    def test_document_required_fields(self):
+        input = {
+            "type": "auth_provider",
+            "value": "lumon",
+            "name": {"type": "plain_text", "text": "Lumon"},
+            "is_connected": False,
+        }
+        self.assertDictEqual(input, AuthProviderBlock(**input).to_dict())
+
+    def test_document_all_fields(self):
+        input = {
+            "type": "auth_provider",
+            "block_id": "lumon_connection",
+            "value": "lumon",
+            "name": {"type": "plain_text", "text": "Lumon"},
+            "is_connected": True,
+            "description": {"type": "plain_text", "text": "Connect your Lumon account"},
+            "icon_url": "https://lumon.example.com/icon.png",
+            "auth_url": "https://lumon.example.com/oauth/start",
+            "disconnect_url": "https://lumon.example.com/oauth/disconnect",
+            "connected_identity": {"type": "plain_text", "text": "mark.s@lumon.example.com"},
+            "connected_context": {"type": "plain_text", "text": "Macrodata Refinement"},
+            "accessory": {
+                "type": "overflow",
+                "action_id": "lumon_menu",
+                "options": [
+                    {"text": {"type": "plain_text", "text": "Switch accounts"}, "value": "switch"},
+                    {"text": {"type": "plain_text", "text": "Disconnect"}, "value": "disconnect"},
+                ],
+            },
+            "fallback": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": "Connected to Lumon"}},
+            ],
+        }
+        self.assertDictEqual(input, AuthProviderBlock(**input).to_dict())
+
+    def test_parse(self):
+        input = {
+            "type": "auth_provider",
+            "value": "lumon",
+            "name": {"type": "plain_text", "text": "Lumon"},
+            "is_connected": True,
+            "accessory": {
+                "type": "overflow",
+                "action_id": "lumon_menu",
+                "options": [{"text": {"type": "plain_text", "text": "Disconnect"}, "value": "disconnect"}],
+            },
+            "fallback": [{"type": "section", "text": {"type": "mrkdwn", "text": "Connected to Lumon"}}],
+        }
+        parsed = Block.parse(input)
+        self.assertIsInstance(parsed, AuthProviderBlock)
+        self.assertIsInstance(parsed.accessory, OverflowMenuElement)
+        self.assertIsInstance(parsed.fallback[0], SectionBlock)
+        self.assertDictEqual(input, parsed.to_dict())
+
+    def test_text_strings_become_plain_text(self):
+        block = AuthProviderBlock(
+            value="lumon",
+            name="Lumon",
+            is_connected=True,
+            description="Connect your Lumon account",
+            connected_identity="mark.s@lumon.example.com",
+            connected_context="Macrodata Refinement",
+        )
+        self.assertDictEqual(
+            {
+                "type": "auth_provider",
+                "value": "lumon",
+                "name": {"type": "plain_text", "text": "Lumon", "emoji": True},
+                "is_connected": True,
+                "description": {"type": "plain_text", "text": "Connect your Lumon account", "emoji": True},
+                "connected_identity": {"type": "plain_text", "text": "mark.s@lumon.example.com", "emoji": True},
+                "connected_context": {"type": "plain_text", "text": "Macrodata Refinement", "emoji": True},
+            },
+            block.to_dict(),
+        )
+
+    def test_required_fields_validation(self):
+        for missing in ["value", "name", "is_connected"]:
+            input = {"value": "lumon", "name": "Lumon", "is_connected": False, missing: None}
+            with self.subTest(missing=missing), self.assertRaises(SlackObjectFormationError):
+                AuthProviderBlock(**input).validate_json()
+
+    def test_empty_value_validation(self):
+        with self.assertRaises(SlackObjectFormationError):
+            AuthProviderBlock(value="", name="Lumon", is_connected=False).validate_json()
+
+    def test_length_validation(self):
+        too_long = {
+            "value": "a" * 151,
+            "name": "a" * 76,
+            "description": "a" * 151,
+            "connected_identity": "a" * 76,
+            "connected_context": "a" * 76,
+            "icon_url": "https://example.com/" + "a" * 2981,
+            "auth_url": "https://example.com/" + "a" * 2981,
+            "disconnect_url": "https://example.com/" + "a" * 2981,
+        }
+        for field, value in too_long.items():
+            input = {"value": "lumon", "name": "Lumon", "is_connected": False, field: value}
+            with self.subTest(field=field), self.assertRaises(SlackObjectFormationError):
+                AuthProviderBlock(**input).validate_json()
+
+    def test_max_lengths_are_valid(self):
+        AuthProviderBlock(
+            value="a" * 150,
+            name="a" * 75,
+            is_connected=False,
+            description="a" * 150,
+            connected_identity="a" * 75,
+            connected_context="a" * 75,
+            icon_url="https://example.com/" + "a" * 2980,
+            auth_url="https://example.com/" + "a" * 2980,
+            disconnect_url="https://example.com/" + "a" * 2980,
+        ).validate_json()
+
+    def test_accessory_must_be_overflow(self):
+        with self.assertRaises(SlackObjectFormationError):
+            AuthProviderBlock(
+                value="lumon",
+                name="Lumon",
+                is_connected=True,
+                accessory={"type": "button", "action_id": "connect", "text": {"type": "plain_text", "text": "Connect"}},
+            ).validate_json()

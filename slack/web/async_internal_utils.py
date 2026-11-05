@@ -46,6 +46,7 @@ def _get_headers(
     request_specific_headers: Optional[dict],
 ) -> Dict[str, str]:
     """Constructs the headers need for a request.
+
     Args:
         has_json (bool): Whether or not the request has json.
         has_files (bool): Whether or not the request has files.
@@ -163,6 +164,7 @@ async def _request_with_session(
     req_args: dict,
 ) -> Dict[str, any]:
     """Submit the HTTP request with the running session or a new session.
+
     Returns:
         A dictionary of the response data.
     """
