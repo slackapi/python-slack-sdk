@@ -249,7 +249,11 @@ class Connection:
         try:
             if self.sock is not None:
                 try:
-                    self.ping(f"{self.session_id}:{time.time()}")
+                    ping_time = time.time()
+                    self.ping(f"{self.session_id}:{ping_time}")
+                    # Seed on first ping so the stale check fires even if no pong ever arrives.
+                    if self.last_ping_pong_time is None:
+                        self.last_ping_pong_time = ping_time
                 except ssl.SSLZeroReturnError as e:
                     self.logger.info(
                         "Unable to send a ping message. Closing the connection..."
