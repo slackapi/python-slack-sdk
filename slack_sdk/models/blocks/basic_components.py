@@ -1,11 +1,14 @@
 import copy
 import logging
 import warnings
-from typing import Any, Dict, List, Optional, Sequence, Set, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
 from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 from slack_sdk.models.messages import Link
+
+if TYPE_CHECKING:
+    from .block_elements import ButtonElement
 
 ButtonStyles = {"danger", "primary"}
 DynamicSelectElementTypes = {"channels", "conversations", "users"}
@@ -149,6 +152,66 @@ class MarkdownTextObject(TextObject):
     def direct_from_link(link: Link, title: str = "") -> Dict[str, Any]:
         """Transform a Link object directly into the required object shape to act as a MarkdownTextObject."""
         return MarkdownTextObject.from_link(link, title).to_dict()
+
+
+class ActionCellObject(JsonObject):
+    """action_cell typed object."""
+
+    type = "action_cell"
+    attributes = {"element", "fallback", "type"}
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def parse(cls, cell: Union["ActionCellObject", Dict[str, Any]]) -> Optional["ActionCellObject"]:
+        if cell:
+            if isinstance(cell, ActionCellObject):
+                return cell
+            elif isinstance(cell, dict):
+                return ActionCellObject(**cell)
+            else:
+                cls.logger.warning(f"Unknown type ({type(cell)}) detected when parsing an ActionCellObject")
+        return None
+
+    def __init__(
+        self,
+        *,
+        element: Union[Dict[str, Any], "ButtonElement"],
+        fallback: Optional[Union[Dict[str, Any], "RawNumberObject", "RawTextObject"]] = None,
+        **others: dict,
+    ):
+        """Defines an object containing a button element. Action cells can only be used in the data table block.
+
+        https://docs.slack.dev/reference/block-kit/blocks/data-table-block
+
+        Args:
+            element (required): A button element.
+            fallback: A raw_text or raw_number cell.
+        """
+        # Imported here since block_elements imports this module
+        from .block_elements import BlockElement
+
+        show_unknown_key_warning(self, others)
+        self.element = BlockElement.parse(element)
+        self.fallback = fallback
+        if isinstance(fallback, dict):
+            d = copy.copy(fallback)
+            t = d.pop("type", None)
+            if t == RawNumberObject.type:
+                self.fallback = RawNumberObject(**d)
+            elif t == RawTextObject.type:
+                self.fallback = RawTextObject(**d)
+
+    @JsonValidator("element attribute must be specified")
+    def _validate_element(self):
+        return self.element is not None
+
+    @JsonValidator("element attribute must be a button element")
+    def _validate_element_type(self):
+        return self.element is None or getattr(self.element, "type", None) == "button"
+
+    @JsonValidator("fallback attribute must be a raw_text or raw_number cell")
+    def _validate_fallback(self):
+        return self.fallback is None or isinstance(self.fallback, (RawNumberObject, RawTextObject))
 
 
 class RawNumberObject(JsonObject):
