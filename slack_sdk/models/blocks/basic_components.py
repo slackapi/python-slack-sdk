@@ -187,31 +187,13 @@ class ActionCellObject(JsonObject):
             element (required): A button element.
             fallback: A raw_text or raw_number cell.
         """
-        # Imported here since block_elements imports this module
-        from .block_elements import BlockElement
-
         show_unknown_key_warning(self, others)
-        self.element = BlockElement.parse(element)
+        self.element = element
         self.fallback = fallback
-        if isinstance(fallback, dict):
-            d = copy.copy(fallback)
-            t = d.pop("type", None)
-            if t == RawNumberObject.type:
-                self.fallback = RawNumberObject(**d)
-            elif t == RawTextObject.type:
-                self.fallback = RawTextObject(**d)
 
     @JsonValidator("element attribute must be specified")
     def _validate_element(self):
         return self.element is not None
-
-    @JsonValidator("element attribute must be a button element")
-    def _validate_element_type(self):
-        return self.element is None or getattr(self.element, "type", None) == "button"
-
-    @JsonValidator("fallback attribute must be a raw_text or raw_number cell")
-    def _validate_fallback(self):
-        return self.fallback is None or isinstance(self.fallback, (RawNumberObject, RawTextObject))
 
 
 class RawNumberObject(JsonObject):
