@@ -106,6 +106,17 @@ Key conventions:
 - The `api_call` method name uses Slack's dot-notation (e.g., `"chat.postMessage"`)
 - Docstrings include a link to the Slack API reference
 
+### Registering a New Method in the Coverage Test
+
+When you add a Web API method, you **must** also register it in the method coverage test, or it will silently go unexercised:
+
+`tests/slack_sdk_async/web/test_web_client_coverage.py`
+
+1. Add the API method name (dot-notation, e.g. `"chat.postMessage"`) to the `all_api_methods` string.
+2. If the method has **required** arguments, add an `elif method_name == "<client_method_name>":` branch in `run_method` that calls it with sample arguments (the generic `else` only works for methods with no required args).
+
+The test calls every method in `all_api_methods` against the mock API server and asserts none were left uncalled. A method absent from the list is **not** covered even though the suite passes — the list is the source of truth for coverage.
+
 ### Error Types
 
 All SDK exceptions are defined in `slack_sdk/errors/__init__.py` and inherit from `SlackClientError`.
