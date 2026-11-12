@@ -960,13 +960,13 @@ class TestWebClientCoverage(unittest.TestCase):
                     method(
                         display_name="Daily priorities",
                         instructions="# Purpose",
-                        mcp_servers=[{"service_type": "app", "app_id": "A123"}],
+                        mcp_servers=[{"service_type": "app", "app_id": "A123", "server_id": "Amcp123"}],
                     )["method"]
                 )
                 await async_method(
                     display_name="Daily priorities",
                     instructions="# Purpose",
-                    mcp_servers=[{"service_type": "app", "app_id": "A123"}],
+                    mcp_servers=[{"service_type": "app", "app_id": "A123", "server_id": "Amcp123"}],
                 )
             elif method_name == "team_externalTeams_disconnect":
                 self.api_methods_to_call.remove(method(target_team="T111")["method"])
