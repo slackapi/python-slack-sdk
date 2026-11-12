@@ -5810,6 +5810,37 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"skill_id": skill_id})
         return self.api_call("slackbot.skills.info", params=kwargs)
 
+    def slackbot_skills_list(
+        self,
+        *,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        filter: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Lists Slackbot skills from the caller's point of view. Instructions are not included.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.list
+
+        Args:
+            category: Only return skills in this category.
+            cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
+              returned by a previous request's `response_metadata`. Must be used with the same `filter` and `category`.
+            filter: `library`: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
+              `owned`: skills the caller created. `catalog`: the organization's official skills.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+        """
+        kwargs.update(
+            {
+                "category": category,
+                "cursor": cursor,
+                "filter": filter,
+                "limit": limit,
+            }
+        )
+        return self.api_call("slackbot.skills.list", params=kwargs)
+
     def slackbot_skills_update(
         self,
         *,
