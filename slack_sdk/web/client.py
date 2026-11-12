@@ -1266,12 +1266,12 @@ class WebClient(BaseClient):
     def admin_slackbot_skills_list(
         self,
         *,
-        auto_enabled_status: Optional[str] = None,
         category: Optional[str] = None,
-        creator_ids: Optional[Union[str, Sequence[str]]] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
+        creator_ids: Optional[Union[str, Sequence[str]]] = None,
         publish_status: Optional[str] = None,
+        auto_enabled_status: Optional[str] = None,
         sort: Optional[str] = None,
         sort_dir: Optional[str] = None,
         **kwargs,
@@ -1281,25 +1281,25 @@ class WebClient(BaseClient):
         https://docs.slack.dev/reference/methods/admin.slackbot.skills.list
 
         Args:
-            auto_enabled_status: Filter by org deployment, independently of publication.
             category: Only return skills in this category.
-            creator_ids: Only return skills created by these users. Accepts U or W user IDs.
             cursor: Continuation from the previous page. Keep all filters and sorting unchanged. Pages can be empty while a
               continuation remains; continue until next_cursor is empty. Changes during traversal may move results;
               pagination is not a snapshot.
             limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+            creator_ids: Only return skills created by these users. Accepts U or W user IDs.
             publish_status: Filter by publication to the org catalog.
+            auto_enabled_status: Filter by org deployment, independently of publication.
             sort: Sort across the inventory. Name uses case-insensitive ordering. Unedited skills use their creation date
               for date_updated sorting.
             sort_dir: Sort direction; file ID breaks ties.
         """
         kwargs.update(
             {
-                "auto_enabled_status": auto_enabled_status,
                 "category": category,
                 "cursor": cursor,
                 "limit": limit,
                 "publish_status": publish_status,
+                "auto_enabled_status": auto_enabled_status,
                 "sort": sort,
                 "sort_dir": sort_dir,
             }
