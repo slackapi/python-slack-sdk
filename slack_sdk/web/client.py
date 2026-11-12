@@ -1332,8 +1332,8 @@ class WebClient(BaseClient):
     def admin_slackbot_skills_setAutoEnabled(
         self,
         *,
-        permission_type: str,
         skill_id: str,
+        permission_type: str,
         usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> SlackResponse:
@@ -1342,12 +1342,12 @@ class WebClient(BaseClient):
         https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled
 
         Args:
-            permission_type: Deployment audience.
             skill_id: Canvas skill to deploy.
+            permission_type: Deployment audience.
             usergroup_ids: One to 100 user groups for named_entities. Duplicates count toward the input limit and are
               stored once. Omit for other permission types.
         """
-        kwargs.update({"permission_type": permission_type, "skill_id": skill_id})
+        kwargs.update({"skill_id": skill_id, "permission_type": permission_type})
         if isinstance(usergroup_ids, (list, tuple)):
             kwargs.update({"usergroup_ids": ",".join(usergroup_ids)})
         else:
