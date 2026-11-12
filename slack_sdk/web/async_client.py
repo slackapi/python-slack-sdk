@@ -5889,11 +5889,11 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         skill_id: str,
-        category: Optional[str] = None,
-        description: Optional[str] = None,
         display_name: Optional[str] = None,
-        example_prompt: Optional[str] = None,
         instructions: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
         mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
@@ -5905,21 +5905,21 @@ class AsyncWebClient(AsyncBaseClient):
 
         Args:
             skill_id: Skill to change.
-            category: One of the skill categories. Send an empty string to clear.
-            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
             display_name: Human-readable label. Max 255 characters.
-            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
             instructions: Markdown that replaces the whole document.
+            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
+            category: One of the skill categories. Send an empty string to clear.
+            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
             mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
         """
         kwargs.update(
             {
                 "skill_id": skill_id,
-                "category": category,
-                "description": description,
                 "display_name": display_name,
-                "example_prompt": example_prompt,
                 "instructions": instructions,
+                "description": description,
+                "category": category,
+                "example_prompt": example_prompt,
             }
         )
         if isinstance(mcp_servers, (list, tuple)):
