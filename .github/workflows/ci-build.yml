@@ -29,6 +29,14 @@ jobs:
           python-version: ${{ env.LATEST_SUPPORTED_PY }}
       - name: Run lint verification
         run: ./scripts/lint.sh
+      - name: Verify generated web clients match codegen
+        run: |
+          python scripts/codegen.py --path .
+          ./scripts/format.sh --no-install
+          if ! git diff --exit-code -- slack_sdk/web/async_chat_stream.py slack_sdk/web/async_client.py slack_sdk/web/legacy_client.py; then
+            echo "::error::Generated web clients are out of date. Run 'python scripts/codegen.py --path .' and './scripts/format.sh', then commit the changes."
+            exit 1
+          fi
 
   typecheck:
     name: Typecheck
