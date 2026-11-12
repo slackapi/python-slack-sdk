@@ -82,6 +82,7 @@ class AsyncRetryHandler:
 
 
 __all__ = [
+    "AsyncRetryHandler",
     "RetryState",
     "HttpRequest",
     "HttpResponse",
