@@ -5580,6 +5580,138 @@ class WebClient(BaseClient):
         )
         return self.api_call("search.messages", http_verb="GET", params=kwargs)
 
+    def slackbot_skills_create(
+        self,
+        *,
+        display_name: str,
+        instructions: Optional[str] = None,
+        canvas_id: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.create
+
+        Args:
+            display_name: Human-readable label. Max 255 characters; not unique.
+            instructions: Markdown body of the skill. Send exactly one of `instructions` or `canvas_id`.
+            canvas_id: Canvas the caller owns to turn into a skill. Send exactly one of `instructions` or `canvas_id`.
+            description: When Slackbot should use the skill. Max 400 characters.
+            category: One of the skill categories.
+            example_prompt: Max 200 characters. May contain `{skill}`, which becomes the skill mention.
+            mcp_servers: Apps the skill needs, capped at the caller's MCP server limit. Declaring an app doesn't grant
+              access to it.
+        """
+        kwargs.update(
+            {
+                "display_name": display_name,
+                "instructions": instructions,
+                "canvas_id": canvas_id,
+                "description": description,
+                "category": category,
+                "example_prompt": example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return self.api_call("slackbot.skills.create", params=kwargs)
+
+    def slackbot_skills_info(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Returns one Slackbot skill, including its instructions.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.info
+
+        Args:
+            skill_id: Skill to fetch: a canvas file ID or a `builtin:` reference.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.info", params=kwargs)
+
+    def slackbot_skills_list(
+        self,
+        *,
+        filter: Optional[str] = None,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists Slackbot skills from the caller's point of view. Instructions are not included.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.list
+
+        Args:
+            filter: `library`: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
+              `owned`: skills the caller created. `catalog`: the organization's official skills.
+            category: Only return skills in this category.
+            cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
+              returned by a previous request's `response_metadata`. Must be used with the same `filter` and `category`.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+        """
+        kwargs.update(
+            {
+                "filter": filter,
+                "category": category,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        return self.api_call("slackbot.skills.list", params=kwargs)
+
+    def slackbot_skills_update(
+        self,
+        *,
+        skill_id: str,
+        display_name: Optional[str] = None,
+        instructions: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Changes a Slackbot skill's instructions or metadata.
+
+        Only the inputs you send are changed; a call that changes nothing succeeds without writing.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.update
+
+        Args:
+            skill_id: Skill to change.
+            display_name: Human-readable label. Max 255 characters.
+            instructions: Markdown that replaces the whole document.
+            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
+            category: One of the skill categories. Send an empty string to clear.
+            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
+            mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
+        """
+        kwargs.update(
+            {
+                "skill_id": skill_id,
+                "display_name": display_name,
+                "instructions": instructions,
+                "description": description,
+                "category": category,
+                "example_prompt": example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return self.api_call("slackbot.skills.update", params=kwargs)
+
     def slackLists_access_delete(
         self,
         *,
@@ -5834,138 +5966,6 @@ class WebClient(BaseClient):
         )
         kwargs = _remove_none_values(kwargs)
         return self.api_call("slackLists.update", json=kwargs)
-
-    def slackbot_skills_create(
-        self,
-        *,
-        display_name: str,
-        instructions: Optional[str] = None,
-        canvas_id: Optional[str] = None,
-        description: Optional[str] = None,
-        category: Optional[str] = None,
-        example_prompt: Optional[str] = None,
-        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
-        **kwargs,
-    ) -> SlackResponse:
-        """Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.
-
-        https://docs.slack.dev/reference/methods/slackbot.skills.create
-
-        Args:
-            display_name: Human-readable label. Max 255 characters; not unique.
-            instructions: Markdown body of the skill. Send exactly one of `instructions` or `canvas_id`.
-            canvas_id: Canvas the caller owns to turn into a skill. Send exactly one of `instructions` or `canvas_id`.
-            description: When Slackbot should use the skill. Max 400 characters.
-            category: One of the skill categories.
-            example_prompt: Max 200 characters. May contain `{skill}`, which becomes the skill mention.
-            mcp_servers: Apps the skill needs, capped at the caller's MCP server limit. Declaring an app doesn't grant
-              access to it.
-        """
-        kwargs.update(
-            {
-                "display_name": display_name,
-                "instructions": instructions,
-                "canvas_id": canvas_id,
-                "description": description,
-                "category": category,
-                "example_prompt": example_prompt,
-            }
-        )
-        if isinstance(mcp_servers, (list, tuple)):
-            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
-        else:
-            kwargs.update({"mcp_servers": mcp_servers})
-        return self.api_call("slackbot.skills.create", params=kwargs)
-
-    def slackbot_skills_info(
-        self,
-        *,
-        skill_id: str,
-        **kwargs,
-    ) -> SlackResponse:
-        """Returns one Slackbot skill, including its instructions.
-
-        https://docs.slack.dev/reference/methods/slackbot.skills.info
-
-        Args:
-            skill_id: Skill to fetch: a canvas file ID or a `builtin:` reference.
-        """
-        kwargs.update({"skill_id": skill_id})
-        return self.api_call("slackbot.skills.info", params=kwargs)
-
-    def slackbot_skills_list(
-        self,
-        *,
-        filter: Optional[str] = None,
-        category: Optional[str] = None,
-        cursor: Optional[str] = None,
-        limit: Optional[int] = None,
-        **kwargs,
-    ) -> SlackResponse:
-        """Lists Slackbot skills from the caller's point of view. Instructions are not included.
-
-        https://docs.slack.dev/reference/methods/slackbot.skills.list
-
-        Args:
-            filter: `library`: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
-              `owned`: skills the caller created. `catalog`: the organization's official skills.
-            category: Only return skills in this category.
-            cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
-              returned by a previous request's `response_metadata`. Must be used with the same `filter` and `category`.
-            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
-        """
-        kwargs.update(
-            {
-                "filter": filter,
-                "category": category,
-                "cursor": cursor,
-                "limit": limit,
-            }
-        )
-        return self.api_call("slackbot.skills.list", params=kwargs)
-
-    def slackbot_skills_update(
-        self,
-        *,
-        skill_id: str,
-        display_name: Optional[str] = None,
-        instructions: Optional[str] = None,
-        description: Optional[str] = None,
-        category: Optional[str] = None,
-        example_prompt: Optional[str] = None,
-        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
-        **kwargs,
-    ) -> SlackResponse:
-        """Changes a Slackbot skill's instructions or metadata.
-
-        Only the inputs you send are changed; a call that changes nothing succeeds without writing.
-
-        https://docs.slack.dev/reference/methods/slackbot.skills.update
-
-        Args:
-            skill_id: Skill to change.
-            display_name: Human-readable label. Max 255 characters.
-            instructions: Markdown that replaces the whole document.
-            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
-            category: One of the skill categories. Send an empty string to clear.
-            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
-            mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
-        """
-        kwargs.update(
-            {
-                "skill_id": skill_id,
-                "display_name": display_name,
-                "instructions": instructions,
-                "description": description,
-                "category": category,
-                "example_prompt": example_prompt,
-            }
-        )
-        if isinstance(mcp_servers, (list, tuple)):
-            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
-        else:
-            kwargs.update({"mcp_servers": mcp_servers})
-        return self.api_call("slackbot.skills.update", params=kwargs)
 
     def stars_add(
         self,
