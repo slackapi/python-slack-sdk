@@ -5810,6 +5810,22 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"skill_id": skill_id})
         return self.api_call("slackbot.skills.info", params=kwargs)
 
+    def slackbot_skills_library_add(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Turns a skill on in the caller's personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.add
+
+        Args:
+            skill_id: Skill to turn on for the caller.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.library.add", params=kwargs)
+
     def slackbot_skills_list(
         self,
         *,
