@@ -5826,6 +5826,22 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"skill_id": skill_id})
         return self.api_call("slackbot.skills.library.add", params=kwargs)
 
+    def slackbot_skills_library_remove(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Turns a skill off in the caller's personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.remove
+
+        Args:
+            skill_id: Skill to turn off for the caller.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.library.remove", params=kwargs)
+
     def slackbot_skills_list(
         self,
         *,
