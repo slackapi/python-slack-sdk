@@ -5817,6 +5817,48 @@ class WebClient(BaseClient):
         kwargs = _remove_none_values(kwargs)
         return self.api_call("slackLists.update", json=kwargs)
 
+    def slackbot_skills_create(
+        self,
+        *,
+        display_name: str,
+        canvas_id: Optional[str] = None,
+        category: Optional[str] = None,
+        description: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        instructions: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.create
+
+        Args:
+            display_name: Human-readable label. Max 255 characters; not unique.
+            canvas_id: Canvas the caller owns to turn into a skill. Send exactly one of `instructions` or `canvas_id`.
+            category: One of the skill categories.
+            description: When Slackbot should use the skill. Max 400 characters.
+            example_prompt: Max 200 characters. May contain `{skill}`, which becomes the skill mention.
+            instructions: Markdown body of the skill. Send exactly one of `instructions` or `canvas_id`.
+            mcp_servers: Apps the skill needs, capped at the caller's MCP server limit. Declaring an app doesn't grant
+              access to it.
+        """
+        kwargs.update(
+            {
+                "display_name": display_name,
+                "canvas_id": canvas_id,
+                "category": category,
+                "description": description,
+                "example_prompt": example_prompt,
+                "instructions": instructions,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return self.api_call("slackbot.skills.create", params=kwargs)
+
     def stars_add(
         self,
         *,
