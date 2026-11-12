@@ -2863,14 +2863,22 @@ class WebClient(BaseClient):
         self,
         *,
         title: Optional[str] = None,
-        document_content: Dict[str, str],
+        document_content: Optional[Dict[str, str]] = None,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> SlackResponse:
         """Create Canvas for a user.
 
         https://docs.slack.dev/reference/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": document_content})
+        kwargs.update(
+            {
+                "title": title,
+                "document_content": document_content,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return self.api_call("canvases.create", json=kwargs)
 
     def canvases_edit(
@@ -2899,6 +2907,20 @@ class WebClient(BaseClient):
         """
         kwargs.update({"canvas_id": canvas_id})
         return self.api_call("canvases.delete", params=kwargs)
+
+    def canvases_getContent(
+        self,
+        *,
+        canvas_id: str,
+        content_type: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Get the content of a canvas as markdown (default) or HTML.
+
+        https://docs.slack.dev/reference/methods/canvases.getContent
+        """
+        kwargs.update({"canvas_id": canvas_id, "content_type": content_type})
+        return self.api_call("canvases.getContent", params=kwargs)
 
     def canvases_access_set(
         self,
@@ -5994,13 +6016,14 @@ class WebClient(BaseClient):
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -> SlackResponse:
         """Gets information about the current team.
 
         https://docs.slack.dev/reference/methods/team.info
         """
-        kwargs.update({"team": team, "domain": domain})
+        kwargs.update({"team": team, "domain": domain, "include_slackbot_availability": include_slackbot_availability})
         return self.api_call("team.info", http_verb="GET", params=kwargs)
 
     def team_integrationLogs(

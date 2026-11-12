@@ -144,7 +144,7 @@ el.replaceWith(d);
 
     async def enqueue_message(self, message: str):
         await self.message_queue.put(message)
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             queue_size = self.message_queue.qsize()
             session_id = await self.session_id()
             self.logger.debug(f&#34;A new message enqueued (current queue size: {queue_size}, session: {session_id})&#34;)
@@ -178,7 +178,7 @@ el.replaceWith(d);
     async def run_message_listeners(self, message: dict, raw_message: str) -&gt; None:
         session_id = await self.session_id()
         type, envelope_id = message.get(&#34;type&#34;), message.get(&#34;envelope_id&#34;)
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(
                 f&#34;Message processing started (type: {type}, envelope_id: {envelope_id}, session: {session_id})&#34;
             )
@@ -204,7 +204,7 @@ el.replaceWith(d);
         except Exception as e:
             self.logger.exception(f&#34;Failed to run message listeners: {e}, session: {session_id}&#34;)
         finally:
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id}, session: {session_id})&#34;
                 )</code></pre>
@@ -346,7 +346,7 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">async def enqueue_message(self, message: str):
     await self.message_queue.put(message)
-    if self.logger.level &lt;= logging.DEBUG:
+    if self.logger.isEnabledFor(logging.DEBUG):
         queue_size = self.message_queue.qsize()
         session_id = await self.session_id()
         self.logger.debug(f&#34;A new message enqueued (current queue size: {queue_size}, session: {session_id})&#34;)</code></pre>
@@ -450,7 +450,7 @@ el.replaceWith(d);
 <pre><code class="python">async def run_message_listeners(self, message: dict, raw_message: str) -&gt; None:
     session_id = await self.session_id()
     type, envelope_id = message.get(&#34;type&#34;), message.get(&#34;envelope_id&#34;)
-    if self.logger.level &lt;= logging.DEBUG:
+    if self.logger.isEnabledFor(logging.DEBUG):
         self.logger.debug(
             f&#34;Message processing started (type: {type}, envelope_id: {envelope_id}, session: {session_id})&#34;
         )
@@ -476,7 +476,7 @@ el.replaceWith(d);
     except Exception as e:
         self.logger.exception(f&#34;Failed to run message listeners: {e}, session: {session_id}&#34;)
     finally:
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(
                 f&#34;Message processing completed (type: {type}, envelope_id: {envelope_id}, session: {session_id})&#34;
             )</code></pre>
