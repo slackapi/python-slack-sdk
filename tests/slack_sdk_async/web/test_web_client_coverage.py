@@ -311,9 +311,9 @@ class TestWebClientCoverage(unittest.TestCase):
                 await async_method(skill_ids=["F123", "F234"])
             elif method_name == "admin_slackbot_skills_setAutoEnabled":
                 self.api_methods_to_call.remove(
-                    method(permission_type="named_entities", skill_id="F123", usergroup_ids=["S123"])["method"]
+                    method(skill_id="F123", permission_type="named_entities", usergroup_ids=["S123"])["method"]
                 )
-                await async_method(permission_type="named_entities", skill_id="F123", usergroup_ids=["S123"])
+                await async_method(skill_id="F123", permission_type="named_entities", usergroup_ids=["S123"])
             elif method_name == "admin_slackbot_skills_unpublish":
                 self.api_methods_to_call.remove(method(skill_ids=["F123", "F234"])["method"])
                 await async_method(skill_ids=["F123", "F234"])
