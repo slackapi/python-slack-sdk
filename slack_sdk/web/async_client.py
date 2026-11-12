@@ -1064,6 +1064,24 @@ class AsyncWebClient(AsyncBaseClient):
         )
         return await self.api_call("admin.conversations.bulkMove", params=kwargs)
 
+    async def admin_conversations_bulkSetProperties(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        property: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set properties on channels in bulk.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.bulkSetProperties
+        """
+        kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        if isinstance(property, dict):
+            kwargs.update({"property": json.dumps(property)})
+        else:
+            kwargs.update({"property": property})
+        return await self.api_call("admin.conversations.bulkSetProperties", params=kwargs)
+
     async def admin_emoji_add(
         self,
         *,
