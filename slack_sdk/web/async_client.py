@@ -5885,6 +5885,49 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"skill_id": skill_id})
         return await self.api_call("slackbot.skills.info", params=kwargs)
 
+    async def slackbot_skills_update(
+        self,
+        *,
+        skill_id: str,
+        category: Optional[str] = None,
+        description: Optional[str] = None,
+        display_name: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        instructions: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Changes a Slackbot skill's instructions or metadata.
+
+        Only the inputs you send are changed; a call that changes nothing succeeds without writing.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.update
+
+        Args:
+            skill_id: Skill to change.
+            category: One of the skill categories. Send an empty string to clear.
+            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
+            display_name: Human-readable label. Max 255 characters.
+            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
+            instructions: Markdown that replaces the whole document.
+            mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
+        """
+        kwargs.update(
+            {
+                "skill_id": skill_id,
+                "category": category,
+                "description": description,
+                "display_name": display_name,
+                "example_prompt": example_prompt,
+                "instructions": instructions,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return await self.api_call("slackbot.skills.update", params=kwargs)
+
     async def stars_add(
         self,
         *,
