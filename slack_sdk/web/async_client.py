@@ -1339,6 +1339,31 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"skill_ids": skill_ids})
         return await self.api_call("admin.slackbot.skills.publish", params=kwargs)
 
+    async def admin_slackbot_skills_setAutoEnabled(
+        self,
+        *,
+        permission_type: str,
+        skill_id: str,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Sets who a Slackbot skill is automatically turned on for.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled
+
+        Args:
+            permission_type: Deployment audience.
+            skill_id: Canvas skill to deploy.
+            usergroup_ids: One to 100 user groups for named_entities. Duplicates count toward the input limit and are
+              stored once. Omit for other permission types.
+        """
+        kwargs.update({"permission_type": permission_type, "skill_id": skill_id})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({"usergroup_ids": ",".join(usergroup_ids)})
+        else:
+            kwargs.update({"usergroup_ids": usergroup_ids})
+        return await self.api_call("admin.slackbot.skills.setAutoEnabled", params=kwargs)
+
     async def admin_users_session_reset(
         self,
         *,
