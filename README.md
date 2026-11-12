@@ -1,7 +1,7 @@
 <h1 align="center">Python Slack SDK</h1>
 
 <p align="center">
-    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml">
+    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml?query=branch%3Amain">
         <img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml"></a>
     <a href="https://codecov.io/gh/slackapi/python-slack-sdk">
         <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/python-slack-sdk"></a>
