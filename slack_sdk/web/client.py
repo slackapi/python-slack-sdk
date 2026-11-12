@@ -1354,6 +1354,25 @@ class WebClient(BaseClient):
             kwargs.update({"usergroup_ids": usergroup_ids})
         return self.api_call("admin.slackbot.skills.setAutoEnabled", params=kwargs)
 
+    def admin_slackbot_skills_unpublish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Removes Slackbot skills from the org catalog, preserving access, libraries, and deployments.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.unpublish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        """
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return self.api_call("admin.slackbot.skills.unpublish", params=kwargs)
+
     def admin_users_session_reset(
         self,
         *,
