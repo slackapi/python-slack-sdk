@@ -1358,6 +1358,31 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"skill_ids": skill_ids})
         return self.api_call("admin.slackbot.skills.publish", params=kwargs)
 
+    def admin_slackbot_skills_setAutoEnabled(
+        self,
+        *,
+        skill_id: str,
+        permission_type: str,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Sets who a Slackbot skill is automatically turned on for.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled
+
+        Args:
+            skill_id: Canvas skill to deploy.
+            permission_type: Deployment audience.
+            usergroup_ids: One to 100 user groups for named_entities. Duplicates count toward the input limit and are
+              stored once. Omit for other permission types.
+        """
+        kwargs.update({"skill_id": skill_id, "permission_type": permission_type})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({"usergroup_ids": ",".join(usergroup_ids)})
+        else:
+            kwargs.update({"usergroup_ids": usergroup_ids})
+        return self.api_call("admin.slackbot.skills.setAutoEnabled", params=kwargs)
+
     def admin_users_session_reset(
         self,
         *,
