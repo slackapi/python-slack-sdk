@@ -1328,6 +1328,25 @@ class WebClient(BaseClient):
             kwargs.update({"creator_ids": creator_ids})
         return self.api_call("admin.slackbot.skills.list", params=kwargs)
 
+    def admin_slackbot_skills_publish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Publishes Slackbot skills to an organization's catalog.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.publish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        """
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return self.api_call("admin.slackbot.skills.publish", params=kwargs)
+
     def admin_users_session_reset(
         self,
         *,
