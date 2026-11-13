@@ -82,6 +82,7 @@ class Connection:
         self.all_message_trace_enabled = all_message_trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.last_ping_pong_time = None
+        self._first_ping_time: Optional[float] = None
         self.consecutive_check_state_error_count = 0
         self.sock = None
         # To avoid ssl.SSLError: [SSL: BAD_LENGTH] bad length
@@ -251,9 +252,8 @@ class Connection:
                 try:
                     ping_time = time.time()
                     self.ping(f"{self.session_id}:{ping_time}")
-                    # Seed on first ping so the stale check fires even if no pong ever arrives.
-                    if self.last_ping_pong_time is None:
-                        self.last_ping_pong_time = ping_time
+                    if self._first_ping_time is None:
+                        self._first_ping_time = ping_time
                 except ssl.SSLZeroReturnError as e:
                     self.logger.info(
                         "Unable to send a ping message. Closing the connection..."
@@ -262,8 +262,11 @@ class Connection:
                     self.disconnect()
                     return
 
-                if self.last_ping_pong_time is not None:
-                    disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                stale_check_since = (
+                    self.last_ping_pong_time if self.last_ping_pong_time is not None else self._first_ping_time
+                )
+                if stale_check_since is not None:
+                    disconnected_seconds = int(time.time() - stale_check_since)
                     if self.trace_enabled and disconnected_seconds > self.ping_interval:
                         message = (
                             f"{disconnected_seconds} seconds have passed "

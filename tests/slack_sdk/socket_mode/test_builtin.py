@@ -126,22 +126,30 @@ class TestBuiltin(unittest.TestCase):
 
         self.assertIsNotNone(conn)
 
-    def test_check_state_seeds_last_ping_pong_time_on_first_ping(self):
-        conn = Connection(url="wss://example.com", logger=self.logger)
-        conn.sock = MagicMock()
+    def test_check_state_disconnects_when_no_pong_arrives(self):
+        conn = Connection(url="wss://example.com", logger=self.logger, ping_interval=1)
+        sock = MagicMock()
+        conn.sock = sock
+        with patch("slack_sdk.socket_mode.builtin.connection.time") as mock_time:
+            mock_time.time.return_value = 1000.0
+            conn.check_state()
+            self.assertIsNotNone(conn.sock)
+            mock_time.time.return_value = 1005.0
+            conn.check_state()
+        self.assertIsNone(conn.sock)
+        sock.close.assert_called_once()
         self.assertIsNone(conn.last_ping_pong_time)
-        with patch.object(conn, "ping"):
-            conn.check_state()
-        self.assertIsNotNone(conn.last_ping_pong_time)
 
-    def test_check_state_does_not_overwrite_existing_last_ping_pong_time(self):
-        conn = Connection(url="wss://example.com", logger=self.logger)
+    def test_check_state_uses_last_pong_over_first_ping(self):
+        conn = Connection(url="wss://example.com", logger=self.logger, ping_interval=1)
         conn.sock = MagicMock()
-        existing_time = time.time() - 1
-        conn.last_ping_pong_time = existing_time
-        with patch.object(conn, "ping"):
+        with patch("slack_sdk.socket_mode.builtin.connection.time") as mock_time:
+            mock_time.time.return_value = 1000.0
             conn.check_state()
-        self.assertEqual(conn.last_ping_pong_time, existing_time)
+            conn.last_ping_pong_time = 1003.0
+            mock_time.time.return_value = 1005.0
+            conn.check_state()
+        self.assertIsNotNone(conn.sock)
 
     # ----------------------------------
     # FrameHeader
