@@ -41,15 +41,21 @@ class TestWebClientFilesUploadV2(unittest.TestCase):
         cleanup_mock_web_api_server(self)
 
     def test_upload_file_via_v2_url_returns_the_error_response(self):
-        result = _upload_file_via_v2_url(
-            url=f"{self.server_url}/upload/v1/abc",
-            data=b"hello",
-            timeout=5,
-            logger=logging.getLogger(__name__),
-        )
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.DEBUG)
+
+        with self.assertLogs(logger, logging.DEBUG) as logs:
+            result = _upload_file_via_v2_url(
+                url=f"{self.server_url}/upload/v1/abc",
+                data=b"hello",
+                timeout=5,
+                logger=logger,
+            )
 
         self.assertEqual(result["status"], 500)
         self.assertEqual(result["body"], "upload failed")
+        self.assertIn("Received the following response - status: 500", logs.output[-1])
+        self.assertIn("body: upload failed", logs.output[-1])
 
     def test_files_upload_v2_raises_slack_request_error_without_retrying_the_upload(self):
         client = WebClient(

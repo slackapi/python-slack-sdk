@@ -413,16 +413,26 @@ def _upload_file_via_v2_url(
             resp = urlopen(req, context=ssl, timeout=timeout)
     except HTTPError as e:
         charset = e.headers.get_content_charset() or "utf-8"
-        return {"status": e.code, "headers": dict(e.headers.items()), "body": e.read().decode(charset)}
+        error_result = {"status": e.code, "headers": dict(e.headers.items()), "body": e.read().decode(charset)}
+        _debug_log_response(logger, error_result)
+        return error_result
 
     charset = resp.headers.get_content_charset() or "utf-8"
     # read the response body here
     body: str = resp.read().decode(charset)
-    if logger.level <= logging.DEBUG:
-        message = f"Received the following response - status: {resp.status}, headers: {dict(resp.headers)}, body: {body}"
-        logger.debug(message)
+    result = {"status": resp.status, "headers": resp.headers, "body": body}
+    _debug_log_response(logger, result)
+    return result
 
-    return {"status": resp.status, "headers": resp.headers, "body": body}
+
+def _debug_log_response(logger: logging.Logger, result: Dict[str, Any]) -> None:
+    if logger.level <= logging.DEBUG:
+        logger.debug(
+            "Received the following response - "
+            f"status: {result['status']}, "
+            f"headers: {dict(result['headers'])}, "
+            f"body: {result['body']}"
+        )
 
 
 def _validate_for_legacy_client(
