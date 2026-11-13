@@ -5732,6 +5732,22 @@ class WebClient(BaseClient):
             kwargs.update({"mcp_servers": mcp_servers})
         return self.api_call("slackbot.skills.create", params=kwargs)
 
+    def slackbot_skills_delete(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Deletes a Slackbot skill and its canvas, and removes it from every library, skill set, and the org catalog.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.delete
+
+        Args:
+            skill_id: Skill to delete.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.delete", params=kwargs)
+
     def slackbot_skills_info(
         self,
         *,
