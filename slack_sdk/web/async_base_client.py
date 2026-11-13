@@ -252,5 +252,5 @@ class AsyncBaseClient:
         )
         return FileUploadV2Result(
             status=result.get("status_code"),  # type: ignore[arg-type]
-            body=result.get("body"),  # type: ignore[arg-type]
+            body=result.get("data"),  # type: ignore[arg-type]
         )

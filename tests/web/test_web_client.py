@@ -3,6 +3,7 @@ import io
 import re
 import socket
 import unittest
+from unittest.mock import patch
 
 import slack.errors as err
 from slack import WebClient
@@ -312,3 +313,10 @@ class TestWebClient(unittest.TestCase):
         client = WebClient(base_url="http://localhost:8888", team_id="T_DEFAULT")
         resp = client.users_list(token="xoxb-users_list_pagination")
         self.assertIsNone(resp["error"])
+
+    def test_bodyless_requests_send_form_urlencoded_content_type(self):
+        response = {"status": 200, "headers": {}, "body": '{"ok": true}'}
+        with patch.object(self.client, "_perform_urllib_http_request", return_value=response) as transport:
+            self.client.api_test()
+        headers = transport.call_args[1]["args"]["headers"]
+        self.assertEqual("application/x-www-form-urlencoded", headers["Content-Type"])
