@@ -87,10 +87,10 @@ jobs:
         uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
 
   notify:
+    if: github.event_name == 'release' && !github.event.release.prerelease && github.repository == 'slackapi/python-slack-sdk'
     runs-on: ubuntu-latest
     needs:
       - pypi-publish
-    if: github.event_name == 'release' && !github.event.release.prerelease && github.repository == 'slackapi/python-slack-sdk'
     permissions:
       contents: read
 
