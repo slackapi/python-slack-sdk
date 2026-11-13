@@ -404,26 +404,25 @@ def _upload_file_via_v2_url(
     if logger.level <= logging.DEBUG:
         logger.debug(f"Sending a request: POST {url}")
 
-    resp: Union[HTTPResponse, HTTPError]
+    resp: Optional[HTTPResponse] = None
     req: Request = Request(method="POST", url=url, data=data, headers={})
     try:
         if opener:
             resp = opener.open(req, timeout=timeout)
         else:
             resp = urlopen(req, context=ssl, timeout=timeout)
-        status = resp.status
     except HTTPError as e:
-        resp = e
-        status = e.code
+        charset = e.headers.get_content_charset() or "utf-8"
+        return {"status": e.code, "headers": dict(e.headers.items()), "body": e.read().decode(charset)}
 
     charset = resp.headers.get_content_charset() or "utf-8"
     # read the response body here
     body: str = resp.read().decode(charset)
     if logger.level <= logging.DEBUG:
-        message = f"Received the following response - status: {status}, headers: {dict(resp.headers)}, body: {body}"
+        message = f"Received the following response - status: {resp.status}, headers: {dict(resp.headers)}, body: {body}"
         logger.debug(message)
 
-    return {"status": status, "headers": resp.headers, "body": body}
+    return {"status": resp.status, "headers": resp.headers, "body": body}
 
 
 def _validate_for_legacy_client(
