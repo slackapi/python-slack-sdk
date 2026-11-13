@@ -21,11 +21,13 @@ EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [
 ]
 
 
+def _is_validator(value: Any) -> bool:
+    return callable(value) and hasattr(value, "validator")
+
+
 @lru_cache(maxsize=None)
 def _class_validator_names(cls: type) -> FrozenSet[str]:
-    return frozenset(
-        name for name in dir(cls) if not name.startswith("__") and hasattr(getattr(cls, name, None), "validator")
-    )
+    return frozenset(name for name in dir(cls) if not name.startswith("__") and _is_validator(getattr(cls, name, None)))
 
 
 class JsonObject(BaseObject, metaclass=ABCMeta):
@@ -43,11 +45,12 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         Raises:
             SlackObjectFormationError: if the object was not valid
         """
-        instance_names = (name for name in vars(self) if not name.startswith("__"))
-        for name in sorted(_class_validator_names(type(self)).union(instance_names)):
-            method = getattr(self, name, None)
-            if callable(method) and hasattr(method, "validator"):
-                method()
+        instance_attribute_names = (name for name in vars(self) if not name.startswith("__"))
+        candidate_names = _class_validator_names(type(self)).union(instance_attribute_names)
+        for name in sorted(candidate_names):
+            attribute: Any = getattr(self, name, None)
+            if _is_validator(attribute):
+                attribute()
 
     def get_object_attribute(self, key: str):
         return getattr(self, key, None)
