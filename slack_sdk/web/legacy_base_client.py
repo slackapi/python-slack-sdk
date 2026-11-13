@@ -360,7 +360,7 @@ class LegacyBaseClient:
 
             request_headers = self._build_urllib_request_headers(
                 token=token or self.token,
-                has_json=json is not None,
+                has_json=json_body is not None,
                 has_files=files is not None,
                 additional_headers=additional_headers,
             )

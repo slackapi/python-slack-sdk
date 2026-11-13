@@ -28,6 +28,26 @@ class SimpleJsonObject(JsonObject):
         return True
 
 
+class MultipleFailingValidatorsObject(JsonObject):
+    attributes = {"some"}
+
+    def __init__(self):
+        self.some = "value"
+
+    @JsonValidator("b_check failed")
+    def b_check(self):
+        return False
+
+    @JsonValidator("a_check failed")
+    def a_check(self):
+        return False
+
+
+class OverriddenValidatorObject(SimpleJsonObject):
+    def test_valid(self):
+        return False
+
+
 class KeyValueObject(JsonObject):
     attributes = {"name", "value"}
 
@@ -142,6 +162,30 @@ class JsonObjectTests(unittest.TestCase):
         self.assertNotEqual(self.good_test_object, obj2)
 
         self.assertNotEqual(self.good_test_object, None)
+
+    def test_validators_run_in_alphabetical_order(self):
+        obj = MultipleFailingValidatorsObject()
+        for _ in range(2):
+            with self.assertRaisesRegex(SlackObjectFormationError, "a_check failed"):
+                obj.to_dict()
+
+    def test_validator_overridden_by_plain_method_is_skipped(self):
+        obj = OverriddenValidatorObject()
+        obj.test = STRING_51_CHARS
+        self.assertDictEqual(obj.to_dict(), {"some": "this is", "test": STRING_51_CHARS, "keys": "object"})
+
+    def test_validator_shadowed_by_instance_attribute_is_skipped(self):
+        self.bad_test_object.test_valid = "shadowed"
+        self.assertDictEqual(
+            self.bad_test_object.to_dict(),
+            {"some": "this is", "test": STRING_51_CHARS, "keys": "object"},
+        )
+
+    def test_validator_set_on_instance_runs(self):
+        obj = SimpleJsonObject()
+        obj.instance_check = JsonValidator("instance_check failed")(lambda: False)
+        with self.assertRaisesRegex(SlackObjectFormationError, "instance_check failed"):
+            obj.to_dict()
 
 
 class JsonValidatorTests(unittest.TestCase):
