@@ -268,7 +268,7 @@ class Connection:
                     if self.trace_enabled and disconnected_seconds > self.ping_interval:
                         message = (
                             f"{disconnected_seconds} seconds have passed "
-                            f"since this client last received a pong response from the server "
+                            f"since this client last received a pong response or sent its first ping "
                             f"(session id: {self.session_id})"
                         )
                         self.logger.debug(message)
