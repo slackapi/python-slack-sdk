@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
-from functools import wraps
-from typing import Callable, Iterable, Set, Union, Any
+from functools import lru_cache, wraps
+from typing import Callable, FrozenSet, Iterable, Set, Union, Any
 
 from slack_sdk.errors import SlackObjectFormationError
 
@@ -21,6 +21,13 @@ EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [
 ]
 
 
+@lru_cache(maxsize=None)
+def _class_validator_names(cls: type) -> FrozenSet[str]:
+    return frozenset(
+        name for name in dir(cls) if not name.startswith("__") and hasattr(getattr(cls, name, None), "validator")
+    )
+
+
 class JsonObject(BaseObject, metaclass=ABCMeta):
     """The base class for JSON serializable class objects."""
 
@@ -36,8 +43,9 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
         Raises:
             SlackObjectFormationError: if the object was not valid
         """
-        for attribute in (func for func in dir(self) if not func.startswith("__")):
-            method = getattr(self, attribute, None)
+        instance_names = (name for name in vars(self) if not name.startswith("__"))
+        for name in sorted(_class_validator_names(type(self)).union(instance_names)):
+            method = getattr(self, name, None)
             if callable(method) and hasattr(method, "validator"):
                 method()
 
