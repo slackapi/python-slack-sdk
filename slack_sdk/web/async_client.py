@@ -393,6 +393,32 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"domain_restrictions": json.dumps(domain_restrictions)})
         return await self.api_call("admin.apps.config.set", params=kwargs)
 
+    async def admin_apps_mcp_servers_list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List third-party app MCP servers approved for an organization, derived from the org's MCP server allowlist.
+
+        Entries reflect allowlist state, not install/scope liveness: servers of apps that are uninstalled (but not deleted)
+        are still listed.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.list
+
+        Args:
+            limit: The maximum number of items to return. Must be between 1 - 1000 both inclusive.
+            cursor: Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
+        """
+        kwargs.update(
+            {
+                "limit": limit,
+                "cursor": cursor,
+            }
+        )
+        return await self.api_call("admin.apps.mcp.servers.list", params=kwargs)
+
     async def admin_auth_policy_getEntities(
         self,
         *,
