@@ -425,6 +425,38 @@ class WebClient(BaseClient):
         kwargs.update({"app_id": app_id})
         return self.api_call("admin.apps.mcp.servers.permissions.list", params=kwargs)
 
+    def admin_apps_mcp_servers_permissions_set(
+        self,
+        *,
+        app_id: str,
+        server_id: str,
+        permission_type: str,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Set the access control permission for who can use an MCP server.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.set
+
+        Args:
+            app_id: Encoded ID of the app
+            server_id: Encoded ID of the MCP server
+            permission_type: The type of permission that defines who can use this MCP server
+            user_ids: List of user IDs to set for named_entities or named_entities_exclude
+            usergroup_ids: List of encoded usergroup IDs
+        """
+        kwargs.update({"app_id": app_id, "server_id": server_id, "permission_type": permission_type})
+        if isinstance(user_ids, (list, tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({"usergroup_ids": ",".join(usergroup_ids)})
+        else:
+            kwargs.update({"usergroup_ids": usergroup_ids})
+        return self.api_call("admin.apps.mcp.servers.permissions.set", params=kwargs)
+
     def admin_auth_policy_getEntities(
         self,
         *,
