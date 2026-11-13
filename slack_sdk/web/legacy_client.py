@@ -5557,6 +5557,22 @@ class LegacyWebClient(LegacyBaseClient):
             kwargs.update({"mcp_servers": mcp_servers})
         return self.api_call("slackbot.skills.create", params=kwargs)
 
+    def slackbot_skills_info(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Returns one Slackbot skill, including its instructions.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.info
+
+        Args:
+            skill_id: Skill to fetch: a canvas file ID or a `builtin:` reference.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.info", params=kwargs)
+
     def slackLists_access_delete(
         self,
         *,
