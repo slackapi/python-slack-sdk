@@ -3,7 +3,7 @@ import socket
 import ssl
 import time
 import unittest
-from unittest.mock import patch, sentinel
+from unittest.mock import MagicMock, patch, sentinel
 from threading import Thread
 
 from slack_sdk import WebClient
@@ -125,6 +125,55 @@ class TestBuiltin(unittest.TestCase):
         state.terminated = True
 
         self.assertIsNotNone(conn)
+
+    def test_check_state_disconnects_when_no_pong_arrives(self):
+        conn = Connection(url="wss://example.com", logger=self.logger, ping_interval=1)
+        sock = MagicMock()
+        conn.sock = sock
+        with patch("slack_sdk.socket_mode.builtin.connection.time") as mock_time:
+            mock_time.time.return_value = 1000.0
+            conn.check_state()
+            self.assertIsNotNone(conn.sock)
+            mock_time.time.return_value = 1005.0
+            conn.check_state()
+        self.assertIsNone(conn.sock)
+        sock.close.assert_called_once()
+        self.assertIsNone(conn.last_ping_pong_time)
+
+    def test_check_state_uses_last_pong_over_first_ping(self):
+        conn = Connection(url="wss://example.com", logger=self.logger, ping_interval=1)
+        conn.sock = MagicMock()
+        with patch("slack_sdk.socket_mode.builtin.connection.time") as mock_time:
+            mock_time.time.return_value = 1000.0
+            conn.check_state()
+            conn.last_ping_pong_time = 1003.0
+            mock_time.time.return_value = 1005.0
+            conn.check_state()
+        self.assertIsNotNone(conn.sock)
+
+    def test_concurrent_disconnect_raises_nothing(self):
+        conn = Connection(url="wss://example.com", logger=self.logger)
+        sock = MagicMock()
+        conn.sock = sock
+        errors = []
+
+        def disconnect_and_record_errors():
+            try:
+                conn.disconnect()
+            except Exception as e:
+                errors.append(e)
+
+        racer = Thread(target=disconnect_and_record_errors)
+
+        def close_while_racer_waits():
+            racer.start()
+            time.sleep(0.1)
+
+        sock.close.side_effect = close_while_racer_waits
+        conn.disconnect()
+        racer.join(timeout=1)
+        self.assertEqual(errors, [])
+        self.assertIsNone(conn.sock)
 
     # ----------------------------------
     # FrameHeader
