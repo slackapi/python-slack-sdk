@@ -516,6 +516,80 @@ el.replaceWith(d);
             kwargs.update({&#34;domain_restrictions&#34;: json.dumps(domain_restrictions)})
         return self.api_call(&#34;admin.apps.config.set&#34;, params=kwargs)
 
+    def admin_apps_mcp_servers_list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;List third-party app MCP servers approved for an organization, derived from the org&#39;s MCP server allowlist.
+
+        Entries reflect allowlist state, not install/scope liveness: servers of apps that are uninstalled (but not deleted)
+        are still listed.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.list
+
+        Args:
+            limit: The maximum number of items to return. Must be between 1 - 1000 both inclusive.
+            cursor: Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;limit&#34;: limit,
+                &#34;cursor&#34;: cursor,
+            }
+        )
+        return self.api_call(&#34;admin.apps.mcp.servers.list&#34;, params=kwargs)
+
+    def admin_apps_mcp_servers_permissions_list(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;List MCP servers for an app with their access control permissions.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.list
+
+        Args:
+            app_id: Encoded ID of the app
+        &#34;&#34;&#34;
+        kwargs.update({&#34;app_id&#34;: app_id})
+        return self.api_call(&#34;admin.apps.mcp.servers.permissions.list&#34;, params=kwargs)
+
+    def admin_apps_mcp_servers_permissions_set(
+        self,
+        *,
+        app_id: str,
+        server_id: str,
+        permission_type: str,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Set the access control permission for who can use an MCP server.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.set
+
+        Args:
+            app_id: Encoded ID of the app
+            server_id: Encoded ID of the MCP server
+            permission_type: The type of permission that defines who can use this MCP server
+            user_ids: List of user IDs to set for named_entities or named_entities_exclude
+            usergroup_ids: List of encoded usergroup IDs
+        &#34;&#34;&#34;
+        kwargs.update({&#34;app_id&#34;: app_id, &#34;server_id&#34;: server_id, &#34;permission_type&#34;: permission_type})
+        if isinstance(user_ids, (list, tuple)):
+            kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+        else:
+            kwargs.update({&#34;user_ids&#34;: user_ids})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({&#34;usergroup_ids&#34;: &#34;,&#34;.join(usergroup_ids)})
+        else:
+            kwargs.update({&#34;usergroup_ids&#34;: usergroup_ids})
+        return self.api_call(&#34;admin.apps.mcp.servers.permissions.set&#34;, params=kwargs)
+
     def admin_auth_policy_getEntities(
         self,
         *,
@@ -1187,6 +1261,24 @@ el.replaceWith(d);
         )
         return self.api_call(&#34;admin.conversations.bulkMove&#34;, params=kwargs)
 
+    def admin_conversations_bulkSetProperties(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        property: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Set properties on channels in bulk.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.bulkSetProperties
+        &#34;&#34;&#34;
+        kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        if isinstance(property, dict):
+            kwargs.update({&#34;property&#34;: json.dumps(property)})
+        else:
+            kwargs.update({&#34;property&#34;: property})
+        return self.api_call(&#34;admin.conversations.bulkSetProperties&#34;, params=kwargs)
+
     def admin_emoji_add(
         self,
         *,
@@ -1395,6 +1487,116 @@ el.replaceWith(d);
         else:
             kwargs.update({&#34;user_ids&#34;: user_ids})
         return self.api_call(&#34;admin.roles.removeAssignments&#34;, params=kwargs)
+
+    def admin_slackbot_skills_list(
+        self,
+        *,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        creator_ids: Optional[Union[str, Sequence[str]]] = None,
+        publish_status: Optional[str] = None,
+        auto_enabled_status: Optional[str] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Lists metadata for skills owned by the organization, including invite-only skills.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.list
+
+        Args:
+            category: Only return skills in this category.
+            cursor: Continuation from the previous page. Keep all filters and sorting unchanged. Pages can be empty while a
+              continuation remains; continue until next_cursor is empty. Changes during traversal may move results;
+              pagination is not a snapshot.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+            creator_ids: Only return skills created by these users. Accepts U or W user IDs.
+            publish_status: Filter by publication to the org catalog.
+            auto_enabled_status: Filter by org deployment, independently of publication.
+            sort: Sort across the inventory. Name uses case-insensitive ordering. Unedited skills use their creation date
+              for date_updated sorting.
+            sort_dir: Sort direction; file ID breaks ties.
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;category&#34;: category,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+                &#34;publish_status&#34;: publish_status,
+                &#34;auto_enabled_status&#34;: auto_enabled_status,
+                &#34;sort&#34;: sort,
+                &#34;sort_dir&#34;: sort_dir,
+            }
+        )
+        if isinstance(creator_ids, (list, tuple)):
+            kwargs.update({&#34;creator_ids&#34;: &#34;,&#34;.join(creator_ids)})
+        else:
+            kwargs.update({&#34;creator_ids&#34;: creator_ids})
+        return self.api_call(&#34;admin.slackbot.skills.list&#34;, params=kwargs)
+
+    def admin_slackbot_skills_publish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Publishes Slackbot skills to an organization&#39;s catalog.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.publish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        &#34;&#34;&#34;
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({&#34;skill_ids&#34;: &#34;,&#34;.join(skill_ids)})
+        else:
+            kwargs.update({&#34;skill_ids&#34;: skill_ids})
+        return self.api_call(&#34;admin.slackbot.skills.publish&#34;, params=kwargs)
+
+    def admin_slackbot_skills_setAutoEnabled(
+        self,
+        *,
+        skill_id: str,
+        permission_type: str,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Sets who a Slackbot skill is automatically turned on for.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled
+
+        Args:
+            skill_id: Canvas skill to deploy.
+            permission_type: Deployment audience.
+            usergroup_ids: One to 100 user groups for named_entities. Duplicates count toward the input limit and are
+              stored once. Omit for other permission types.
+        &#34;&#34;&#34;
+        kwargs.update({&#34;skill_id&#34;: skill_id, &#34;permission_type&#34;: permission_type})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({&#34;usergroup_ids&#34;: &#34;,&#34;.join(usergroup_ids)})
+        else:
+            kwargs.update({&#34;usergroup_ids&#34;: usergroup_ids})
+        return self.api_call(&#34;admin.slackbot.skills.setAutoEnabled&#34;, params=kwargs)
+
+    def admin_slackbot_skills_unpublish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Removes Slackbot skills from the org catalog, preserving access, libraries, and deployments.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.unpublish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        &#34;&#34;&#34;
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({&#34;skill_ids&#34;: &#34;,&#34;.join(skill_ids)})
+        else:
+            kwargs.update({&#34;skill_ids&#34;: skill_ids})
+        return self.api_call(&#34;admin.slackbot.skills.unpublish&#34;, params=kwargs)
 
     def admin_users_session_reset(
         self,
@@ -5695,6 +5897,186 @@ el.replaceWith(d);
         )
         return self.api_call(&#34;search.messages&#34;, http_verb=&#34;GET&#34;, params=kwargs)
 
+    def slackbot_skills_create(
+        self,
+        *,
+        display_name: str,
+        instructions: Optional[str] = None,
+        canvas_id: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.create
+
+        Args:
+            display_name: Human-readable label. Max 255 characters; not unique.
+            instructions: Markdown body of the skill. Send exactly one of `instructions` or `canvas_id`.
+            canvas_id: Canvas the caller owns to turn into a skill. Send exactly one of `instructions` or `canvas_id`.
+            description: When Slackbot should use the skill. Max 400 characters.
+            category: One of the skill categories.
+            example_prompt: Max 200 characters. May contain `{skill}`, which becomes the skill mention.
+            mcp_servers: Apps the skill needs, capped at the caller&#39;s MCP server limit. Declaring an app doesn&#39;t grant
+              access to it.
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;display_name&#34;: display_name,
+                &#34;instructions&#34;: instructions,
+                &#34;canvas_id&#34;: canvas_id,
+                &#34;description&#34;: description,
+                &#34;category&#34;: category,
+                &#34;example_prompt&#34;: example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({&#34;mcp_servers&#34;: json.dumps(mcp_servers)})
+        else:
+            kwargs.update({&#34;mcp_servers&#34;: mcp_servers})
+        return self.api_call(&#34;slackbot.skills.create&#34;, params=kwargs)
+
+    def slackbot_skills_delete(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Deletes a Slackbot skill and its canvas, and removes it from every library, skill set, and the org catalog.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.delete
+
+        Args:
+            skill_id: Skill to delete.
+        &#34;&#34;&#34;
+        kwargs.update({&#34;skill_id&#34;: skill_id})
+        return self.api_call(&#34;slackbot.skills.delete&#34;, params=kwargs)
+
+    def slackbot_skills_info(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Returns one Slackbot skill, including its instructions.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.info
+
+        Args:
+            skill_id: Skill to fetch: a canvas file ID or a `builtin:` reference.
+        &#34;&#34;&#34;
+        kwargs.update({&#34;skill_id&#34;: skill_id})
+        return self.api_call(&#34;slackbot.skills.info&#34;, params=kwargs)
+
+    def slackbot_skills_library_add(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Turns a skill on in the caller&#39;s personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.add
+
+        Args:
+            skill_id: Skill to turn on for the caller.
+        &#34;&#34;&#34;
+        kwargs.update({&#34;skill_id&#34;: skill_id})
+        return self.api_call(&#34;slackbot.skills.library.add&#34;, params=kwargs)
+
+    def slackbot_skills_library_remove(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Turns a skill off in the caller&#39;s personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.remove
+
+        Args:
+            skill_id: Skill to turn off for the caller.
+        &#34;&#34;&#34;
+        kwargs.update({&#34;skill_id&#34;: skill_id})
+        return self.api_call(&#34;slackbot.skills.library.remove&#34;, params=kwargs)
+
+    def slackbot_skills_list(
+        self,
+        *,
+        filter: Optional[str] = None,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Lists Slackbot skills from the caller&#39;s point of view. Instructions are not included.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.list
+
+        Args:
+            filter: `library`: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
+              `owned`: skills the caller created. `catalog`: the organization&#39;s official skills.
+            category: Only return skills in this category.
+            cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
+              returned by a previous request&#39;s `response_metadata`. Must be used with the same `filter` and `category`.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;filter&#34;: filter,
+                &#34;category&#34;: category,
+                &#34;cursor&#34;: cursor,
+                &#34;limit&#34;: limit,
+            }
+        )
+        return self.api_call(&#34;slackbot.skills.list&#34;, params=kwargs)
+
+    def slackbot_skills_update(
+        self,
+        *,
+        skill_id: str,
+        display_name: Optional[str] = None,
+        instructions: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -&gt; SlackResponse:
+        &#34;&#34;&#34;Changes a Slackbot skill&#39;s instructions or metadata.
+
+        Only the inputs you send are changed; a call that changes nothing succeeds without writing.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.update
+
+        Args:
+            skill_id: Skill to change.
+            display_name: Human-readable label. Max 255 characters.
+            instructions: Markdown that replaces the whole document.
+            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
+            category: One of the skill categories. Send an empty string to clear.
+            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
+            mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
+        &#34;&#34;&#34;
+        kwargs.update(
+            {
+                &#34;skill_id&#34;: skill_id,
+                &#34;display_name&#34;: display_name,
+                &#34;instructions&#34;: instructions,
+                &#34;description&#34;: description,
+                &#34;category&#34;: category,
+                &#34;example_prompt&#34;: example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({&#34;mcp_servers&#34;: json.dumps(mcp_servers)})
+        else:
+            kwargs.update({&#34;mcp_servers&#34;: mcp_servers})
+        return self.api_call(&#34;slackbot.skills.update&#34;, params=kwargs)
+
     def slackLists_access_delete(
         self,
         *,
@@ -7101,6 +7483,143 @@ or by the admin.apps.requests.list method.
 <div class="desc"><p>Set the app config for a connector.</p>
 <p><a href="https://docs.slack.dev/reference/methods/admin.apps.config.set">https://docs.slack.dev/reference/methods/admin.apps.config.set</a></p></div>
 </dd>
+<dt id="slack_sdk.WebClient.admin_apps_mcp_servers_list"><code class="name flex">
+<span>def <span class="ident">admin_apps_mcp_servers_list</span></span>(<span>self, *, limit: int | None = None, cursor: str | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_apps_mcp_servers_list(
+    self,
+    *,
+    limit: Optional[int] = None,
+    cursor: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;List third-party app MCP servers approved for an organization, derived from the org&#39;s MCP server allowlist.
+
+    Entries reflect allowlist state, not install/scope liveness: servers of apps that are uninstalled (but not deleted)
+    are still listed.
+
+    https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.list
+
+    Args:
+        limit: The maximum number of items to return. Must be between 1 - 1000 both inclusive.
+        cursor: Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;limit&#34;: limit,
+            &#34;cursor&#34;: cursor,
+        }
+    )
+    return self.api_call(&#34;admin.apps.mcp.servers.list&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>List third-party app MCP servers approved for an organization, derived from the org's MCP server allowlist.</p>
+<p>Entries reflect allowlist state, not install/scope liveness: servers of apps that are uninstalled (but not deleted)
+are still listed.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.list">https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.list</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>limit</code></strong></dt>
+<dd>The maximum number of items to return. Must be between 1 - 1000 both inclusive.</dd>
+<dt><strong><code>cursor</code></strong></dt>
+<dd>Set <code>cursor</code> to <code>next_cursor</code> returned by the previous call to list items in the next page</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.admin_apps_mcp_servers_permissions_list"><code class="name flex">
+<span>def <span class="ident">admin_apps_mcp_servers_permissions_list</span></span>(<span>self, *, app_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_apps_mcp_servers_permissions_list(
+    self,
+    *,
+    app_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;List MCP servers for an app with their access control permissions.
+
+    https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.list
+
+    Args:
+        app_id: Encoded ID of the app
+    &#34;&#34;&#34;
+    kwargs.update({&#34;app_id&#34;: app_id})
+    return self.api_call(&#34;admin.apps.mcp.servers.permissions.list&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>List MCP servers for an app with their access control permissions.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.list">https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.list</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>app_id</code></strong></dt>
+<dd>Encoded ID of the app</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.admin_apps_mcp_servers_permissions_set"><code class="name flex">
+<span>def <span class="ident">admin_apps_mcp_servers_permissions_set</span></span>(<span>self,<br>*,<br>app_id: str,<br>server_id: str,<br>permission_type: str,<br>user_ids: str | Sequence[str] | None = None,<br>usergroup_ids: str | Sequence[str] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_apps_mcp_servers_permissions_set(
+    self,
+    *,
+    app_id: str,
+    server_id: str,
+    permission_type: str,
+    user_ids: Optional[Union[str, Sequence[str]]] = None,
+    usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Set the access control permission for who can use an MCP server.
+
+    https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.set
+
+    Args:
+        app_id: Encoded ID of the app
+        server_id: Encoded ID of the MCP server
+        permission_type: The type of permission that defines who can use this MCP server
+        user_ids: List of user IDs to set for named_entities or named_entities_exclude
+        usergroup_ids: List of encoded usergroup IDs
+    &#34;&#34;&#34;
+    kwargs.update({&#34;app_id&#34;: app_id, &#34;server_id&#34;: server_id, &#34;permission_type&#34;: permission_type})
+    if isinstance(user_ids, (list, tuple)):
+        kwargs.update({&#34;user_ids&#34;: &#34;,&#34;.join(user_ids)})
+    else:
+        kwargs.update({&#34;user_ids&#34;: user_ids})
+    if isinstance(usergroup_ids, (list, tuple)):
+        kwargs.update({&#34;usergroup_ids&#34;: &#34;,&#34;.join(usergroup_ids)})
+    else:
+        kwargs.update({&#34;usergroup_ids&#34;: usergroup_ids})
+    return self.api_call(&#34;admin.apps.mcp.servers.permissions.set&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Set the access control permission for who can use an MCP server.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.set">https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.set</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>app_id</code></strong></dt>
+<dd>Encoded ID of the app</dd>
+<dt><strong><code>server_id</code></strong></dt>
+<dd>Encoded ID of the MCP server</dd>
+<dt><strong><code>permission_type</code></strong></dt>
+<dd>The type of permission that defines who can use this MCP server</dd>
+<dt><strong><code>user_ids</code></strong></dt>
+<dd>List of user IDs to set for named_entities or named_entities_exclude</dd>
+<dt><strong><code>usergroup_ids</code></strong></dt>
+<dd>List of encoded usergroup IDs</dd>
+</dl></div>
+</dd>
 <dt id="slack_sdk.WebClient.admin_apps_requests_cancel"><code class="name flex">
 <span>def <span class="ident">admin_apps_requests_cancel</span></span>(<span>self,<br>*,<br>request_id: str,<br>enterprise_id: str | None = None,<br>team_id: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -7598,6 +8117,35 @@ via the app_requested event, or by the admin.apps.requests.list method.
 </details>
 <div class="desc"><p>Move public or private channels in bulk.</p>
 <p><a href="https://docs.slack.dev/reference/methods/admin.conversations.bulkMove">https://docs.slack.dev/reference/methods/admin.conversations.bulkMove</a></p></div>
+</dd>
+<dt id="slack_sdk.WebClient.admin_conversations_bulkSetProperties"><code class="name flex">
+<span>def <span class="ident">admin_conversations_bulkSetProperties</span></span>(<span>self, *, channel_ids: str | Sequence[str], property: str | Dict[str, Any], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_conversations_bulkSetProperties(
+    self,
+    *,
+    channel_ids: Union[Sequence[str], str],
+    property: Union[str, Dict[str, Any]],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Set properties on channels in bulk.
+
+    https://docs.slack.dev/reference/methods/admin.conversations.bulkSetProperties
+    &#34;&#34;&#34;
+    kwargs.update({&#34;channel_ids&#34;: &#34;,&#34;.join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+    if isinstance(property, dict):
+        kwargs.update({&#34;property&#34;: json.dumps(property)})
+    else:
+        kwargs.update({&#34;property&#34;: property})
+    return self.api_call(&#34;admin.conversations.bulkSetProperties&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Set properties on channels in bulk.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.conversations.bulkSetProperties">https://docs.slack.dev/reference/methods/admin.conversations.bulkSetProperties</a></p></div>
 </dd>
 <dt id="slack_sdk.WebClient.admin_conversations_convertToPrivate"><code class="name flex">
 <span>def <span class="ident">admin_conversations_convertToPrivate</span></span>(<span>self, *, channel_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
@@ -8799,6 +9347,206 @@ via the app_requested event, or by the admin.apps.requests.list method.
 </details>
 <div class="desc"><p>Removes a set of users from a role for the given scopes and entities.</p>
 <p><a href="https://docs.slack.dev/reference/methods/admin.roles.removeAssignments">https://docs.slack.dev/reference/methods/admin.roles.removeAssignments</a></p></div>
+</dd>
+<dt id="slack_sdk.WebClient.admin_slackbot_skills_list"><code class="name flex">
+<span>def <span class="ident">admin_slackbot_skills_list</span></span>(<span>self,<br>*,<br>category: str | None = None,<br>cursor: str | None = None,<br>limit: int | None = None,<br>creator_ids: str | Sequence[str] | None = None,<br>publish_status: str | None = None,<br>auto_enabled_status: str | None = None,<br>sort: str | None = None,<br>sort_dir: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_slackbot_skills_list(
+    self,
+    *,
+    category: Optional[str] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    creator_ids: Optional[Union[str, Sequence[str]]] = None,
+    publish_status: Optional[str] = None,
+    auto_enabled_status: Optional[str] = None,
+    sort: Optional[str] = None,
+    sort_dir: Optional[str] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Lists metadata for skills owned by the organization, including invite-only skills.
+
+    https://docs.slack.dev/reference/methods/admin.slackbot.skills.list
+
+    Args:
+        category: Only return skills in this category.
+        cursor: Continuation from the previous page. Keep all filters and sorting unchanged. Pages can be empty while a
+          continuation remains; continue until next_cursor is empty. Changes during traversal may move results;
+          pagination is not a snapshot.
+        limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+        creator_ids: Only return skills created by these users. Accepts U or W user IDs.
+        publish_status: Filter by publication to the org catalog.
+        auto_enabled_status: Filter by org deployment, independently of publication.
+        sort: Sort across the inventory. Name uses case-insensitive ordering. Unedited skills use their creation date
+          for date_updated sorting.
+        sort_dir: Sort direction; file ID breaks ties.
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;category&#34;: category,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+            &#34;publish_status&#34;: publish_status,
+            &#34;auto_enabled_status&#34;: auto_enabled_status,
+            &#34;sort&#34;: sort,
+            &#34;sort_dir&#34;: sort_dir,
+        }
+    )
+    if isinstance(creator_ids, (list, tuple)):
+        kwargs.update({&#34;creator_ids&#34;: &#34;,&#34;.join(creator_ids)})
+    else:
+        kwargs.update({&#34;creator_ids&#34;: creator_ids})
+    return self.api_call(&#34;admin.slackbot.skills.list&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Lists metadata for skills owned by the organization, including invite-only skills.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.slackbot.skills.list">https://docs.slack.dev/reference/methods/admin.slackbot.skills.list</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>category</code></strong></dt>
+<dd>Only return skills in this category.</dd>
+<dt><strong><code>cursor</code></strong></dt>
+<dd>Continuation from the previous page. Keep all filters and sorting unchanged. Pages can be empty while a
+continuation remains; continue until next_cursor is empty. Changes during traversal may move results;
+pagination is not a snapshot.</dd>
+<dt><strong><code>limit</code></strong></dt>
+<dd>The maximum number of skills to return. Fewer may be returned even when more remain.</dd>
+<dt><strong><code>creator_ids</code></strong></dt>
+<dd>Only return skills created by these users. Accepts U or W user IDs.</dd>
+<dt><strong><code>publish_status</code></strong></dt>
+<dd>Filter by publication to the org catalog.</dd>
+<dt><strong><code>auto_enabled_status</code></strong></dt>
+<dd>Filter by org deployment, independently of publication.</dd>
+<dt><strong><code>sort</code></strong></dt>
+<dd>Sort across the inventory. Name uses case-insensitive ordering. Unedited skills use their creation date
+for date_updated sorting.</dd>
+<dt><strong><code>sort_dir</code></strong></dt>
+<dd>Sort direction; file ID breaks ties.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.admin_slackbot_skills_publish"><code class="name flex">
+<span>def <span class="ident">admin_slackbot_skills_publish</span></span>(<span>self, *, skill_ids: str | Sequence[str], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_slackbot_skills_publish(
+    self,
+    *,
+    skill_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Publishes Slackbot skills to an organization&#39;s catalog.
+
+    https://docs.slack.dev/reference/methods/admin.slackbot.skills.publish
+
+    Args:
+        skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+    &#34;&#34;&#34;
+    if isinstance(skill_ids, (list, tuple)):
+        kwargs.update({&#34;skill_ids&#34;: &#34;,&#34;.join(skill_ids)})
+    else:
+        kwargs.update({&#34;skill_ids&#34;: skill_ids})
+    return self.api_call(&#34;admin.slackbot.skills.publish&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Publishes Slackbot skills to an organization's catalog.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.slackbot.skills.publish">https://docs.slack.dev/reference/methods/admin.slackbot.skills.publish</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_ids</code></strong></dt>
+<dd>One to 50 skill IDs. Successful items are not rolled back if other items fail.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.admin_slackbot_skills_setAutoEnabled"><code class="name flex">
+<span>def <span class="ident">admin_slackbot_skills_setAutoEnabled</span></span>(<span>self,<br>*,<br>skill_id: str,<br>permission_type: str,<br>usergroup_ids: str | Sequence[str] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_slackbot_skills_setAutoEnabled(
+    self,
+    *,
+    skill_id: str,
+    permission_type: str,
+    usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Sets who a Slackbot skill is automatically turned on for.
+
+    https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled
+
+    Args:
+        skill_id: Canvas skill to deploy.
+        permission_type: Deployment audience.
+        usergroup_ids: One to 100 user groups for named_entities. Duplicates count toward the input limit and are
+          stored once. Omit for other permission types.
+    &#34;&#34;&#34;
+    kwargs.update({&#34;skill_id&#34;: skill_id, &#34;permission_type&#34;: permission_type})
+    if isinstance(usergroup_ids, (list, tuple)):
+        kwargs.update({&#34;usergroup_ids&#34;: &#34;,&#34;.join(usergroup_ids)})
+    else:
+        kwargs.update({&#34;usergroup_ids&#34;: usergroup_ids})
+    return self.api_call(&#34;admin.slackbot.skills.setAutoEnabled&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Sets who a Slackbot skill is automatically turned on for.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled">https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_id</code></strong></dt>
+<dd>Canvas skill to deploy.</dd>
+<dt><strong><code>permission_type</code></strong></dt>
+<dd>Deployment audience.</dd>
+<dt><strong><code>usergroup_ids</code></strong></dt>
+<dd>One to 100 user groups for named_entities. Duplicates count toward the input limit and are
+stored once. Omit for other permission types.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.admin_slackbot_skills_unpublish"><code class="name flex">
+<span>def <span class="ident">admin_slackbot_skills_unpublish</span></span>(<span>self, *, skill_ids: str | Sequence[str], **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admin_slackbot_skills_unpublish(
+    self,
+    *,
+    skill_ids: Union[str, Sequence[str]],
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Removes Slackbot skills from the org catalog, preserving access, libraries, and deployments.
+
+    https://docs.slack.dev/reference/methods/admin.slackbot.skills.unpublish
+
+    Args:
+        skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+    &#34;&#34;&#34;
+    if isinstance(skill_ids, (list, tuple)):
+        kwargs.update({&#34;skill_ids&#34;: &#34;,&#34;.join(skill_ids)})
+    else:
+        kwargs.update({&#34;skill_ids&#34;: skill_ids})
+    return self.api_call(&#34;admin.slackbot.skills.unpublish&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Removes Slackbot skills from the org catalog, preserving access, libraries, and deployments.</p>
+<p><a href="https://docs.slack.dev/reference/methods/admin.slackbot.skills.unpublish">https://docs.slack.dev/reference/methods/admin.slackbot.skills.unpublish</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_ids</code></strong></dt>
+<dd>One to 50 skill IDs. Successful items are not rolled back if other items fail.</dd>
+</dl></div>
 </dd>
 <dt id="slack_sdk.WebClient.admin_teams_admins_list"><code class="name flex">
 <span>def <span class="ident">admin_teams_admins_list</span></span>(<span>self, *, team_id: str, cursor: str | None = None, limit: int | None = None, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
@@ -15793,6 +16541,339 @@ and <a href="https://docs.slack.dev/reference/methods/files.info">https://docs.s
 <div class="desc"><p>Update a List.</p>
 <p><a href="https://docs.slack.dev/reference/methods/slackLists.update">https://docs.slack.dev/reference/methods/slackLists.update</a></p></div>
 </dd>
+<dt id="slack_sdk.WebClient.slackbot_skills_create"><code class="name flex">
+<span>def <span class="ident">slackbot_skills_create</span></span>(<span>self,<br>*,<br>display_name: str,<br>instructions: str | None = None,<br>canvas_id: str | None = None,<br>description: str | None = None,<br>category: str | None = None,<br>example_prompt: str | None = None,<br>mcp_servers: str | Sequence[Dict[str, Any]] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def slackbot_skills_create(
+    self,
+    *,
+    display_name: str,
+    instructions: Optional[str] = None,
+    canvas_id: Optional[str] = None,
+    description: Optional[str] = None,
+    category: Optional[str] = None,
+    example_prompt: Optional[str] = None,
+    mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.
+
+    https://docs.slack.dev/reference/methods/slackbot.skills.create
+
+    Args:
+        display_name: Human-readable label. Max 255 characters; not unique.
+        instructions: Markdown body of the skill. Send exactly one of `instructions` or `canvas_id`.
+        canvas_id: Canvas the caller owns to turn into a skill. Send exactly one of `instructions` or `canvas_id`.
+        description: When Slackbot should use the skill. Max 400 characters.
+        category: One of the skill categories.
+        example_prompt: Max 200 characters. May contain `{skill}`, which becomes the skill mention.
+        mcp_servers: Apps the skill needs, capped at the caller&#39;s MCP server limit. Declaring an app doesn&#39;t grant
+          access to it.
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;display_name&#34;: display_name,
+            &#34;instructions&#34;: instructions,
+            &#34;canvas_id&#34;: canvas_id,
+            &#34;description&#34;: description,
+            &#34;category&#34;: category,
+            &#34;example_prompt&#34;: example_prompt,
+        }
+    )
+    if isinstance(mcp_servers, (list, tuple)):
+        kwargs.update({&#34;mcp_servers&#34;: json.dumps(mcp_servers)})
+    else:
+        kwargs.update({&#34;mcp_servers&#34;: mcp_servers})
+    return self.api_call(&#34;slackbot.skills.create&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.</p>
+<p><a href="https://docs.slack.dev/reference/methods/slackbot.skills.create">https://docs.slack.dev/reference/methods/slackbot.skills.create</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>display_name</code></strong></dt>
+<dd>Human-readable label. Max 255 characters; not unique.</dd>
+<dt><strong><code>instructions</code></strong></dt>
+<dd>Markdown body of the skill. Send exactly one of <code>instructions</code> or <code>canvas_id</code>.</dd>
+<dt><strong><code>canvas_id</code></strong></dt>
+<dd>Canvas the caller owns to turn into a skill. Send exactly one of <code>instructions</code> or <code>canvas_id</code>.</dd>
+<dt><strong><code>description</code></strong></dt>
+<dd>When Slackbot should use the skill. Max 400 characters.</dd>
+<dt><strong><code>category</code></strong></dt>
+<dd>One of the skill categories.</dd>
+<dt><strong><code>example_prompt</code></strong></dt>
+<dd>Max 200 characters. May contain <code>{skill}</code>, which becomes the skill mention.</dd>
+<dt><strong><code>mcp_servers</code></strong></dt>
+<dd>Apps the skill needs, capped at the caller's MCP server limit. Declaring an app doesn't grant
+access to it.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.slackbot_skills_delete"><code class="name flex">
+<span>def <span class="ident">slackbot_skills_delete</span></span>(<span>self, *, skill_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def slackbot_skills_delete(
+    self,
+    *,
+    skill_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Deletes a Slackbot skill and its canvas, and removes it from every library, skill set, and the org catalog.
+
+    https://docs.slack.dev/reference/methods/slackbot.skills.delete
+
+    Args:
+        skill_id: Skill to delete.
+    &#34;&#34;&#34;
+    kwargs.update({&#34;skill_id&#34;: skill_id})
+    return self.api_call(&#34;slackbot.skills.delete&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Deletes a Slackbot skill and its canvas, and removes it from every library, skill set, and the org catalog.</p>
+<p><a href="https://docs.slack.dev/reference/methods/slackbot.skills.delete">https://docs.slack.dev/reference/methods/slackbot.skills.delete</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_id</code></strong></dt>
+<dd>Skill to delete.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.slackbot_skills_info"><code class="name flex">
+<span>def <span class="ident">slackbot_skills_info</span></span>(<span>self, *, skill_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def slackbot_skills_info(
+    self,
+    *,
+    skill_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Returns one Slackbot skill, including its instructions.
+
+    https://docs.slack.dev/reference/methods/slackbot.skills.info
+
+    Args:
+        skill_id: Skill to fetch: a canvas file ID or a `builtin:` reference.
+    &#34;&#34;&#34;
+    kwargs.update({&#34;skill_id&#34;: skill_id})
+    return self.api_call(&#34;slackbot.skills.info&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Returns one Slackbot skill, including its instructions.</p>
+<p><a href="https://docs.slack.dev/reference/methods/slackbot.skills.info">https://docs.slack.dev/reference/methods/slackbot.skills.info</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_id</code></strong></dt>
+<dd>Skill to fetch: a canvas file ID or a <code>builtin:</code> reference.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.slackbot_skills_library_add"><code class="name flex">
+<span>def <span class="ident">slackbot_skills_library_add</span></span>(<span>self, *, skill_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def slackbot_skills_library_add(
+    self,
+    *,
+    skill_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Turns a skill on in the caller&#39;s personal library.
+
+    https://docs.slack.dev/reference/methods/slackbot.skills.library.add
+
+    Args:
+        skill_id: Skill to turn on for the caller.
+    &#34;&#34;&#34;
+    kwargs.update({&#34;skill_id&#34;: skill_id})
+    return self.api_call(&#34;slackbot.skills.library.add&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Turns a skill on in the caller's personal library.</p>
+<p><a href="https://docs.slack.dev/reference/methods/slackbot.skills.library.add">https://docs.slack.dev/reference/methods/slackbot.skills.library.add</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_id</code></strong></dt>
+<dd>Skill to turn on for the caller.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.slackbot_skills_library_remove"><code class="name flex">
+<span>def <span class="ident">slackbot_skills_library_remove</span></span>(<span>self, *, skill_id: str, **kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def slackbot_skills_library_remove(
+    self,
+    *,
+    skill_id: str,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Turns a skill off in the caller&#39;s personal library.
+
+    https://docs.slack.dev/reference/methods/slackbot.skills.library.remove
+
+    Args:
+        skill_id: Skill to turn off for the caller.
+    &#34;&#34;&#34;
+    kwargs.update({&#34;skill_id&#34;: skill_id})
+    return self.api_call(&#34;slackbot.skills.library.remove&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Turns a skill off in the caller's personal library.</p>
+<p><a href="https://docs.slack.dev/reference/methods/slackbot.skills.library.remove">https://docs.slack.dev/reference/methods/slackbot.skills.library.remove</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_id</code></strong></dt>
+<dd>Skill to turn off for the caller.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.slackbot_skills_list"><code class="name flex">
+<span>def <span class="ident">slackbot_skills_list</span></span>(<span>self,<br>*,<br>filter: str | None = None,<br>category: str | None = None,<br>cursor: str | None = None,<br>limit: int | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def slackbot_skills_list(
+    self,
+    *,
+    filter: Optional[str] = None,
+    category: Optional[str] = None,
+    cursor: Optional[str] = None,
+    limit: Optional[int] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Lists Slackbot skills from the caller&#39;s point of view. Instructions are not included.
+
+    https://docs.slack.dev/reference/methods/slackbot.skills.list
+
+    Args:
+        filter: `library`: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
+          `owned`: skills the caller created. `catalog`: the organization&#39;s official skills.
+        category: Only return skills in this category.
+        cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
+          returned by a previous request&#39;s `response_metadata`. Must be used with the same `filter` and `category`.
+        limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;filter&#34;: filter,
+            &#34;category&#34;: category,
+            &#34;cursor&#34;: cursor,
+            &#34;limit&#34;: limit,
+        }
+    )
+    return self.api_call(&#34;slackbot.skills.list&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Lists Slackbot skills from the caller's point of view. Instructions are not included.</p>
+<p><a href="https://docs.slack.dev/reference/methods/slackbot.skills.list">https://docs.slack.dev/reference/methods/slackbot.skills.list</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>filter</code></strong></dt>
+<dd><code>library</code>: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
+<code>owned</code>: skills the caller created. <code>catalog</code>: the organization's official skills.</dd>
+<dt><strong><code>category</code></strong></dt>
+<dd>Only return skills in this category.</dd>
+<dt><strong><code>cursor</code></strong></dt>
+<dd>Paginate through collections of data by setting the <code>cursor</code> parameter to a <code>next_cursor</code> attribute
+returned by a previous request's <code>response_metadata</code>. Must be used with the same <code>filter</code> and <code>category</code>.</dd>
+<dt><strong><code>limit</code></strong></dt>
+<dd>The maximum number of skills to return. Fewer may be returned even when more remain.</dd>
+</dl></div>
+</dd>
+<dt id="slack_sdk.WebClient.slackbot_skills_update"><code class="name flex">
+<span>def <span class="ident">slackbot_skills_update</span></span>(<span>self,<br>*,<br>skill_id: str,<br>display_name: str | None = None,<br>instructions: str | None = None,<br>description: str | None = None,<br>category: str | None = None,<br>example_prompt: str | None = None,<br>mcp_servers: str | Sequence[Dict[str, Any]] | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def slackbot_skills_update(
+    self,
+    *,
+    skill_id: str,
+    display_name: Optional[str] = None,
+    instructions: Optional[str] = None,
+    description: Optional[str] = None,
+    category: Optional[str] = None,
+    example_prompt: Optional[str] = None,
+    mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+    **kwargs,
+) -&gt; SlackResponse:
+    &#34;&#34;&#34;Changes a Slackbot skill&#39;s instructions or metadata.
+
+    Only the inputs you send are changed; a call that changes nothing succeeds without writing.
+
+    https://docs.slack.dev/reference/methods/slackbot.skills.update
+
+    Args:
+        skill_id: Skill to change.
+        display_name: Human-readable label. Max 255 characters.
+        instructions: Markdown that replaces the whole document.
+        description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
+        category: One of the skill categories. Send an empty string to clear.
+        example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
+        mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
+    &#34;&#34;&#34;
+    kwargs.update(
+        {
+            &#34;skill_id&#34;: skill_id,
+            &#34;display_name&#34;: display_name,
+            &#34;instructions&#34;: instructions,
+            &#34;description&#34;: description,
+            &#34;category&#34;: category,
+            &#34;example_prompt&#34;: example_prompt,
+        }
+    )
+    if isinstance(mcp_servers, (list, tuple)):
+        kwargs.update({&#34;mcp_servers&#34;: json.dumps(mcp_servers)})
+    else:
+        kwargs.update({&#34;mcp_servers&#34;: mcp_servers})
+    return self.api_call(&#34;slackbot.skills.update&#34;, params=kwargs)</code></pre>
+</details>
+<div class="desc"><p>Changes a Slackbot skill's instructions or metadata.</p>
+<p>Only the inputs you send are changed; a call that changes nothing succeeds without writing.</p>
+<p><a href="https://docs.slack.dev/reference/methods/slackbot.skills.update">https://docs.slack.dev/reference/methods/slackbot.skills.update</a></p>
+<dl>
+<dt>Args</dt>
+<dt>-----=</dt>
+<dt><strong><code>skill_id</code></strong></dt>
+<dd>Skill to change.</dd>
+<dt><strong><code>display_name</code></strong></dt>
+<dd>Human-readable label. Max 255 characters.</dd>
+<dt><strong><code>instructions</code></strong></dt>
+<dd>Markdown that replaces the whole document.</dd>
+<dt><strong><code>description</code></strong></dt>
+<dd>When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.</dd>
+<dt><strong><code>category</code></strong></dt>
+<dd>One of the skill categories. Send an empty string to clear.</dd>
+<dt><strong><code>example_prompt</code></strong></dt>
+<dd>Max 200 characters. May contain <code>{skill}</code>. Send an empty string to clear.</dd>
+<dt><strong><code>mcp_servers</code></strong></dt>
+<dd>Apps the skill needs. Replaces the whole list; send <code>[]</code> to clear.</dd>
+</dl></div>
+</dd>
 <dt id="slack_sdk.WebClient.stars_add"><code class="name flex">
 <span>def <span class="ident">stars_add</span></span>(<span>self,<br>*,<br>channel: str | None = None,<br>file: str | None = None,<br>file_comment: str | None = None,<br>timestamp: str | None = None,<br>**kwargs) ‑> <a title="slack_sdk.web.slack_response.SlackResponse" href="web/slack_response.html#slack_sdk.web.slack_response.SlackResponse">SlackResponse</a></span>
 </code></dt>
@@ -17632,6 +18713,9 @@ Webhook response</p></div>
 <li><code><a title="slack_sdk.WebClient.admin_apps_clearResolution" href="#slack_sdk.WebClient.admin_apps_clearResolution">admin_apps_clearResolution</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_apps_config_lookup" href="#slack_sdk.WebClient.admin_apps_config_lookup">admin_apps_config_lookup</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_apps_config_set" href="#slack_sdk.WebClient.admin_apps_config_set">admin_apps_config_set</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_apps_mcp_servers_list" href="#slack_sdk.WebClient.admin_apps_mcp_servers_list">admin_apps_mcp_servers_list</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_apps_mcp_servers_permissions_list" href="#slack_sdk.WebClient.admin_apps_mcp_servers_permissions_list">admin_apps_mcp_servers_permissions_list</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_apps_mcp_servers_permissions_set" href="#slack_sdk.WebClient.admin_apps_mcp_servers_permissions_set">admin_apps_mcp_servers_permissions_set</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_apps_requests_cancel" href="#slack_sdk.WebClient.admin_apps_requests_cancel">admin_apps_requests_cancel</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_apps_requests_list" href="#slack_sdk.WebClient.admin_apps_requests_list">admin_apps_requests_list</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_apps_restrict" href="#slack_sdk.WebClient.admin_apps_restrict">admin_apps_restrict</a></code></li>
@@ -17648,6 +18732,7 @@ Webhook response</p></div>
 <li><code><a title="slack_sdk.WebClient.admin_conversations_bulkArchive" href="#slack_sdk.WebClient.admin_conversations_bulkArchive">admin_conversations_bulkArchive</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_conversations_bulkDelete" href="#slack_sdk.WebClient.admin_conversations_bulkDelete">admin_conversations_bulkDelete</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_conversations_bulkMove" href="#slack_sdk.WebClient.admin_conversations_bulkMove">admin_conversations_bulkMove</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_conversations_bulkSetProperties" href="#slack_sdk.WebClient.admin_conversations_bulkSetProperties">admin_conversations_bulkSetProperties</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_conversations_convertToPrivate" href="#slack_sdk.WebClient.admin_conversations_convertToPrivate">admin_conversations_convertToPrivate</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_conversations_convertToPublic" href="#slack_sdk.WebClient.admin_conversations_convertToPublic">admin_conversations_convertToPublic</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_conversations_create" href="#slack_sdk.WebClient.admin_conversations_create">admin_conversations_create</a></code></li>
@@ -17688,6 +18773,10 @@ Webhook response</p></div>
 <li><code><a title="slack_sdk.WebClient.admin_roles_addAssignments" href="#slack_sdk.WebClient.admin_roles_addAssignments">admin_roles_addAssignments</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_roles_listAssignments" href="#slack_sdk.WebClient.admin_roles_listAssignments">admin_roles_listAssignments</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_roles_removeAssignments" href="#slack_sdk.WebClient.admin_roles_removeAssignments">admin_roles_removeAssignments</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_slackbot_skills_list" href="#slack_sdk.WebClient.admin_slackbot_skills_list">admin_slackbot_skills_list</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_slackbot_skills_publish" href="#slack_sdk.WebClient.admin_slackbot_skills_publish">admin_slackbot_skills_publish</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_slackbot_skills_setAutoEnabled" href="#slack_sdk.WebClient.admin_slackbot_skills_setAutoEnabled">admin_slackbot_skills_setAutoEnabled</a></code></li>
+<li><code><a title="slack_sdk.WebClient.admin_slackbot_skills_unpublish" href="#slack_sdk.WebClient.admin_slackbot_skills_unpublish">admin_slackbot_skills_unpublish</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_teams_admins_list" href="#slack_sdk.WebClient.admin_teams_admins_list">admin_teams_admins_list</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_teams_create" href="#slack_sdk.WebClient.admin_teams_create">admin_teams_create</a></code></li>
 <li><code><a title="slack_sdk.WebClient.admin_teams_list" href="#slack_sdk.WebClient.admin_teams_list">admin_teams_list</a></code></li>
@@ -17918,6 +19007,13 @@ Webhook response</p></div>
 <li><code><a title="slack_sdk.WebClient.slackLists_items_list" href="#slack_sdk.WebClient.slackLists_items_list">slackLists_items_list</a></code></li>
 <li><code><a title="slack_sdk.WebClient.slackLists_items_update" href="#slack_sdk.WebClient.slackLists_items_update">slackLists_items_update</a></code></li>
 <li><code><a title="slack_sdk.WebClient.slackLists_update" href="#slack_sdk.WebClient.slackLists_update">slackLists_update</a></code></li>
+<li><code><a title="slack_sdk.WebClient.slackbot_skills_create" href="#slack_sdk.WebClient.slackbot_skills_create">slackbot_skills_create</a></code></li>
+<li><code><a title="slack_sdk.WebClient.slackbot_skills_delete" href="#slack_sdk.WebClient.slackbot_skills_delete">slackbot_skills_delete</a></code></li>
+<li><code><a title="slack_sdk.WebClient.slackbot_skills_info" href="#slack_sdk.WebClient.slackbot_skills_info">slackbot_skills_info</a></code></li>
+<li><code><a title="slack_sdk.WebClient.slackbot_skills_library_add" href="#slack_sdk.WebClient.slackbot_skills_library_add">slackbot_skills_library_add</a></code></li>
+<li><code><a title="slack_sdk.WebClient.slackbot_skills_library_remove" href="#slack_sdk.WebClient.slackbot_skills_library_remove">slackbot_skills_library_remove</a></code></li>
+<li><code><a title="slack_sdk.WebClient.slackbot_skills_list" href="#slack_sdk.WebClient.slackbot_skills_list">slackbot_skills_list</a></code></li>
+<li><code><a title="slack_sdk.WebClient.slackbot_skills_update" href="#slack_sdk.WebClient.slackbot_skills_update">slackbot_skills_update</a></code></li>
 <li><code><a title="slack_sdk.WebClient.stars_add" href="#slack_sdk.WebClient.stars_add">stars_add</a></code></li>
 <li><code><a title="slack_sdk.WebClient.stars_list" href="#slack_sdk.WebClient.stars_list">stars_list</a></code></li>
 <li><code><a title="slack_sdk.WebClient.stars_remove" href="#slack_sdk.WebClient.stars_remove">stars_remove</a></code></li>
