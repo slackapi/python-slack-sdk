@@ -151,6 +151,30 @@ class TestBuiltin(unittest.TestCase):
             conn.check_state()
         self.assertIsNotNone(conn.sock)
 
+    def test_concurrent_disconnect_raises_nothing(self):
+        conn = Connection(url="wss://example.com", logger=self.logger)
+        sock = MagicMock()
+        conn.sock = sock
+        errors = []
+
+        def disconnect_and_record_errors():
+            try:
+                conn.disconnect()
+            except Exception as e:
+                errors.append(e)
+
+        racer = Thread(target=disconnect_and_record_errors)
+
+        def close_while_racer_waits():
+            racer.start()
+            time.sleep(0.1)
+
+        sock.close.side_effect = close_while_racer_waits
+        conn.disconnect()
+        racer.join(timeout=1)
+        self.assertEqual(errors, [])
+        self.assertIsNone(conn.sock)
+
     # ----------------------------------
     # FrameHeader
 

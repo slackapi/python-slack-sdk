@@ -185,13 +185,11 @@ class Connection:
             self.disconnect()
 
     def disconnect(self) -> None:
-        if self.sock is not None:
-            with self.sock_send_lock:
-                with self.sock_receive_lock:
-                    # Synchronize before closing this instance's socket
+        with self.sock_send_lock:
+            with self.sock_receive_lock:
+                if self.sock is not None:
                     self.sock.close()
                     self.sock = None
-                    # After this, all operations using self.sock will be skipped
 
         self.logger.info(f"The connection has been closed (session id: {self.session_id})")
 
