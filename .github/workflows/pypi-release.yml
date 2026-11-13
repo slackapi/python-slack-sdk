@@ -85,3 +85,22 @@ jobs:
         # Using OIDC for PyPI publishing (no API tokens needed)
         # See: https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-pypi
         uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+
+  notify:
+    runs-on: ubuntu-latest
+    needs:
+      - pypi-publish
+    if: github.event_name == 'release' && !github.event.release.prerelease && github.repository == 'slackapi/python-slack-sdk'
+    permissions:
+      contents: read
+
+    steps:
+      - name: Notify Slack
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
+        with:
+          webhook: ${{ secrets.SLACK_RELEASE_ANNOUNCEMENTS_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          payload: |
+            action_url: "${{ github.event.release.html_url }}"
+            message: "python-slack-sdk ${{ github.event.release.tag_name }}"
+            repository: "${{ github.repository }}"
