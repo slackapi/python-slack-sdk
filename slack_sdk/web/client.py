@@ -1281,6 +1281,116 @@ class WebClient(BaseClient):
             kwargs.update({"user_ids": user_ids})
         return self.api_call("admin.roles.removeAssignments", params=kwargs)
 
+    def admin_slackbot_skills_list(
+        self,
+        *,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        creator_ids: Optional[Union[str, Sequence[str]]] = None,
+        publish_status: Optional[str] = None,
+        auto_enabled_status: Optional[str] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists metadata for skills owned by the organization, including invite-only skills.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.list
+
+        Args:
+            category: Only return skills in this category.
+            cursor: Continuation from the previous page. Keep all filters and sorting unchanged. Pages can be empty while a
+              continuation remains; continue until next_cursor is empty. Changes during traversal may move results;
+              pagination is not a snapshot.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+            creator_ids: Only return skills created by these users. Accepts U or W user IDs.
+            publish_status: Filter by publication to the org catalog.
+            auto_enabled_status: Filter by org deployment, independently of publication.
+            sort: Sort across the inventory. Name uses case-insensitive ordering. Unedited skills use their creation date
+              for date_updated sorting.
+            sort_dir: Sort direction; file ID breaks ties.
+        """
+        kwargs.update(
+            {
+                "category": category,
+                "cursor": cursor,
+                "limit": limit,
+                "publish_status": publish_status,
+                "auto_enabled_status": auto_enabled_status,
+                "sort": sort,
+                "sort_dir": sort_dir,
+            }
+        )
+        if isinstance(creator_ids, (list, tuple)):
+            kwargs.update({"creator_ids": ",".join(creator_ids)})
+        else:
+            kwargs.update({"creator_ids": creator_ids})
+        return self.api_call("admin.slackbot.skills.list", params=kwargs)
+
+    def admin_slackbot_skills_publish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Publishes Slackbot skills to an organization's catalog.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.publish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        """
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return self.api_call("admin.slackbot.skills.publish", params=kwargs)
+
+    def admin_slackbot_skills_setAutoEnabled(
+        self,
+        *,
+        skill_id: str,
+        permission_type: str,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Sets who a Slackbot skill is automatically turned on for.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled
+
+        Args:
+            skill_id: Canvas skill to deploy.
+            permission_type: Deployment audience.
+            usergroup_ids: One to 100 user groups for named_entities. Duplicates count toward the input limit and are
+              stored once. Omit for other permission types.
+        """
+        kwargs.update({"skill_id": skill_id, "permission_type": permission_type})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({"usergroup_ids": ",".join(usergroup_ids)})
+        else:
+            kwargs.update({"usergroup_ids": usergroup_ids})
+        return self.api_call("admin.slackbot.skills.setAutoEnabled", params=kwargs)
+
+    def admin_slackbot_skills_unpublish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Removes Slackbot skills from the org catalog, preserving access, libraries, and deployments.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.unpublish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        """
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return self.api_call("admin.slackbot.skills.unpublish", params=kwargs)
+
     def admin_users_session_reset(
         self,
         *,
@@ -5579,6 +5689,186 @@ class WebClient(BaseClient):
             }
         )
         return self.api_call("search.messages", http_verb="GET", params=kwargs)
+
+    def slackbot_skills_create(
+        self,
+        *,
+        display_name: str,
+        instructions: Optional[str] = None,
+        canvas_id: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.create
+
+        Args:
+            display_name: Human-readable label. Max 255 characters; not unique.
+            instructions: Markdown body of the skill. Send exactly one of `instructions` or `canvas_id`.
+            canvas_id: Canvas the caller owns to turn into a skill. Send exactly one of `instructions` or `canvas_id`.
+            description: When Slackbot should use the skill. Max 400 characters.
+            category: One of the skill categories.
+            example_prompt: Max 200 characters. May contain `{skill}`, which becomes the skill mention.
+            mcp_servers: Apps the skill needs, capped at the caller's MCP server limit. Declaring an app doesn't grant
+              access to it.
+        """
+        kwargs.update(
+            {
+                "display_name": display_name,
+                "instructions": instructions,
+                "canvas_id": canvas_id,
+                "description": description,
+                "category": category,
+                "example_prompt": example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return self.api_call("slackbot.skills.create", params=kwargs)
+
+    def slackbot_skills_delete(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Deletes a Slackbot skill and its canvas, and removes it from every library, skill set, and the org catalog.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.delete
+
+        Args:
+            skill_id: Skill to delete.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.delete", params=kwargs)
+
+    def slackbot_skills_info(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Returns one Slackbot skill, including its instructions.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.info
+
+        Args:
+            skill_id: Skill to fetch: a canvas file ID or a `builtin:` reference.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.info", params=kwargs)
+
+    def slackbot_skills_library_add(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Turns a skill on in the caller's personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.add
+
+        Args:
+            skill_id: Skill to turn on for the caller.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.library.add", params=kwargs)
+
+    def slackbot_skills_library_remove(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Turns a skill off in the caller's personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.remove
+
+        Args:
+            skill_id: Skill to turn off for the caller.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return self.api_call("slackbot.skills.library.remove", params=kwargs)
+
+    def slackbot_skills_list(
+        self,
+        *,
+        filter: Optional[str] = None,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists Slackbot skills from the caller's point of view. Instructions are not included.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.list
+
+        Args:
+            filter: `library`: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
+              `owned`: skills the caller created. `catalog`: the organization's official skills.
+            category: Only return skills in this category.
+            cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
+              returned by a previous request's `response_metadata`. Must be used with the same `filter` and `category`.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+        """
+        kwargs.update(
+            {
+                "filter": filter,
+                "category": category,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        return self.api_call("slackbot.skills.list", params=kwargs)
+
+    def slackbot_skills_update(
+        self,
+        *,
+        skill_id: str,
+        display_name: Optional[str] = None,
+        instructions: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Changes a Slackbot skill's instructions or metadata.
+
+        Only the inputs you send are changed; a call that changes nothing succeeds without writing.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.update
+
+        Args:
+            skill_id: Skill to change.
+            display_name: Human-readable label. Max 255 characters.
+            instructions: Markdown that replaces the whole document.
+            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
+            category: One of the skill categories. Send an empty string to clear.
+            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
+            mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
+        """
+        kwargs.update(
+            {
+                "skill_id": skill_id,
+                "display_name": display_name,
+                "instructions": instructions,
+                "description": description,
+                "category": category,
+                "example_prompt": example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return self.api_call("slackbot.skills.update", params=kwargs)
 
     def slackLists_access_delete(
         self,
