@@ -82,6 +82,7 @@ class Connection:
         self.all_message_trace_enabled = all_message_trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.last_ping_pong_time = None
+        self.connection_start_time = None
         self.consecutive_check_state_error_count = 0
         self.sock = None
         # To avoid ssl.SSLError: [SSL: BAD_LENGTH] bad length
@@ -152,6 +153,8 @@ class Connection:
                     # set this successfully connected socket
                     self.sock = sock
                     self.ping(f"{self.session_id}:{time.time()}")
+                    # Set connection start time when connection is established
+                    self.connection_start_time = time.time()
                 else:
                     message = (
                         f"Received an unexpected response for handshake "
@@ -258,8 +261,16 @@ class Connection:
                     self.disconnect()
                     return
 
+                # Check if connection is stale
+                # If we have received at least one pong, use last_ping_pong_time
+                # Otherwise, use connection_start_time as baseline
                 if self.last_ping_pong_time is not None:
-                    disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                    baseline_time = self.last_ping_pong_time
+                else:
+                    baseline_time = self.connection_start_time
+                
+                if baseline_time is not None:
+                    disconnected_seconds = int(time.time() - baseline_time)
                     if self.trace_enabled and disconnected_seconds > self.ping_interval:
                         message = (
                             f"{disconnected_seconds} seconds have passed "
