@@ -5664,6 +5664,22 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"skill_id": skill_id})
         return await self.api_call("slackbot.skills.library.add", params=kwargs)
 
+    async def slackbot_skills_library_remove(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Turns a skill off in the caller's personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.remove
+
+        Args:
+            skill_id: Skill to turn off for the caller.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return await self.api_call("slackbot.skills.library.remove", params=kwargs)
+
     async def slackbot_skills_list(
         self,
         *,
