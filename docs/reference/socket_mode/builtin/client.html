@@ -231,14 +231,14 @@ el.replaceWith(d);
             self.current_session.close()
 
     def send_message(self, message: str) -&gt; None:
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;)
         try:
             self.current_session.send(message)  # type: ignore[union-attr]
         except SlackClientNotConnectedError as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
-            if self.logger.level &lt;= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f&#34;Failed to send a message (session id: {self.session_id()}, error: {e}, message: {message})&#34;
                     &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
@@ -255,10 +255,13 @@ el.replaceWith(d);
                     )
                     raise e
 
-    def close(self):
+    def close(self) -&gt; None:
         self.closed = True
         self.auto_reconnect_enabled = False
+        self.current_session_state.terminated = True
         self.disconnect()
+        if self.current_session_runner.is_alive():
+            self.current_session_runner.shutdown()
         if self.current_app_monitor.is_alive():
             self.current_app_monitor.shutdown()
         if self.message_processor.is_alive():
@@ -266,7 +269,7 @@ el.replaceWith(d);
         self.message_workers.shutdown()
 
     def _on_message(self, message: str):
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;on_message invoked: (message: {debug_redacted_message_string(message)})&#34;)
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
@@ -285,7 +288,7 @@ el.replaceWith(d);
             listener(error)
 
     def _on_close(self, code: int, reason: Optional[str] = None):
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f&#34;on_close invoked (session id: {self.session_id()})&#34;)
         if self.auto_reconnect_enabled:
             self.logger.info(f&#34;Received CLOSE event. Reconnecting... (session id: {self.session_id()})&#34;)
@@ -417,17 +420,20 @@ el.replaceWith(d);
 <h3>Methods</h3>
 <dl>
 <dt id="slack_sdk.socket_mode.builtin.client.SocketModeClient.close"><code class="name flex">
-<span>def <span class="ident">close</span></span>(<span>self)</span>
+<span>def <span class="ident">close</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def close(self):
+<pre><code class="python">def close(self) -&gt; None:
     self.closed = True
     self.auto_reconnect_enabled = False
+    self.current_session_state.terminated = True
     self.disconnect()
+    if self.current_session_runner.is_alive():
+        self.current_session_runner.shutdown()
     if self.current_app_monitor.is_alive():
         self.current_app_monitor.shutdown()
     if self.message_processor.is_alive():
@@ -521,14 +527,14 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def send_message(self, message: str) -&gt; None:
-    if self.logger.level &lt;= logging.DEBUG:
+    if self.logger.isEnabledFor(logging.DEBUG):
         self.logger.debug(f&#34;Sending a message (session id: {self.session_id()}, message: {message})&#34;)
     try:
         self.current_session.send(message)  # type: ignore[union-attr]
     except SlackClientNotConnectedError as e:
         # We rarely get this exception while replacing the underlying WebSocket connections.
         # We can do one more try here as the self.current_session should be ready now.
-        if self.logger.level &lt;= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(
                 f&#34;Failed to send a message (session id: {self.session_id()}, error: {e}, message: {message})&#34;
                 &#34; as the underlying connection was replaced. Retrying the same request only one time...&#34;
