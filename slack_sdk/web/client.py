@@ -409,6 +409,22 @@ class WebClient(BaseClient):
         )
         return self.api_call("admin.apps.mcp.servers.list", params=kwargs)
 
+    def admin_apps_mcp_servers_permissions_list(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """List MCP servers for an app with their access control permissions.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.list
+
+        Args:
+            app_id: Encoded ID of the app
+        """
+        kwargs.update({"app_id": app_id})
+        return self.api_call("admin.apps.mcp.servers.permissions.list", params=kwargs)
+
     def admin_auth_policy_getEntities(
         self,
         *,
