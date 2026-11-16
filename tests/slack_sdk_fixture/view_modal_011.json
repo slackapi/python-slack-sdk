@@ -1,0 +1,176 @@
+{
+  "id": "VMHU10V26",
+  "team_id": "T8N4K1JN",
+  "type": "modal",
+  "blocks": [
+    {
+      "type": "input",
+      "block_id": "datetime_block",
+      "label": {
+        "type": "plain_text",
+        "text": "Date and time",
+        "emoji": true
+      },
+      "optional": false,
+      "dispatch_action": false,
+      "element": {
+        "type": "datetimepicker",
+        "action_id": "datetime_action"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "time_block",
+      "label": {
+        "type": "plain_text",
+        "text": "Time",
+        "emoji": true
+      },
+      "optional": false,
+      "dispatch_action": false,
+      "element": {
+        "type": "timepicker",
+        "action_id": "time_action",
+        "timezone": "America/Toronto"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "rich_text_block",
+      "label": {
+        "type": "plain_text",
+        "text": "Rich text",
+        "emoji": true
+      },
+      "optional": false,
+      "dispatch_action": false,
+      "element": {
+        "type": "rich_text_input",
+        "action_id": "rich_text_action"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "file_block",
+      "label": {
+        "type": "plain_text",
+        "text": "File",
+        "emoji": true
+      },
+      "optional": false,
+      "dispatch_action": false,
+      "element": {
+        "type": "file_input",
+        "action_id": "file_action",
+        "max_files": 1
+      }
+    }
+  ],
+  "callback_id": "capture_view",
+  "state": {
+    "values": {
+      "datetime_block": {
+        "datetime_action": {
+          "type": "datetimepicker",
+          "selected_date_time": 1794941340
+        }
+      },
+      "time_block": {
+        "time_action": {
+          "type": "timepicker",
+          "selected_time": "02:00",
+          "timezone": "America/Toronto"
+        }
+      },
+      "rich_text_block": {
+        "rich_text_action": {
+          "type": "rich_text_input",
+          "rich_text_value": {
+            "type": "rich_text",
+            "elements": [
+              {
+                "type": "rich_text_section",
+                "elements": [
+                  {
+                    "type": "text",
+                    "text": "hello there friend"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "file_block": {
+        "file_action": {
+          "type": "file_input",
+          "files": [
+            {
+              "id": "F0000000001",
+              "created": 1700000000,
+              "timestamp": 1700000000,
+              "mimetype": "image/gif",
+              "filetype": "gif",
+              "pretty_type": "GIF",
+              "user": "U0000000001",
+              "user_team": "E0000000001",
+              "editable": false,
+              "size": 125649,
+              "mode": "hosted",
+              "is_external": false,
+              "external_type": "",
+              "is_public": false,
+              "public_url_shared": false,
+              "display_as_bot": false,
+              "username": "",
+              "name": "sample.gif",
+              "title": "sample.gif",
+              "is_modified_by_ai": false,
+              "url_private": "https://files.slack.com/files-pri/T0000000001-F0000000001/sample.gif",
+              "url_private_download": "https://files.slack.com/files-pri/T0000000001-F0000000001/download/sample.gif",
+              "media_display_type": "unknown",
+              "thumb_64": "https://files.slack.com/files-tmb/T0000000001-F0000000001-0123456789/sample_64.png",
+              "thumb_80": "https://files.slack.com/files-tmb/T0000000001-F0000000001-0123456789/sample_80.png",
+              "thumb_360": "https://files.slack.com/files-tmb/T0000000001-F0000000001-0123456789/sample_360.png",
+              "thumb_360_w": 82,
+              "thumb_360_h": 82,
+              "thumb_160": "https://files.slack.com/files-tmb/T0000000001-F0000000001-0123456789/sample_160.png",
+              "thumb_360_gif": "https://files.slack.com/files-tmb/T0000000001-F0000000001-0123456789/sample_360.gif",
+              "original_w": 82,
+              "original_h": 82,
+              "deanimate": "https://files.slack.com/files-tmb/T0000000001-F0000000001-0123456789/sample_deanimate.png",
+              "deanimate_gif": "https://files.slack.com/files-tmb/T0000000001-F0000000001-0123456789/sample_deanimate_gif.png",
+              "thumb_tiny": "AwAwADDMp6nIKnv0plORdzgVQCAHPSt",
+              "permalink": "https://example.enterprise.slack.com/files/U0000000001/F0000000001/sample.gif",
+              "permalink_public": "https://slack-files.com/T0000000001-F0000000001-abcdef0123",
+              "comments_count": 0,
+              "shares": {},
+              "channels": [],
+              "groups": [],
+              "ims": [],
+              "has_more_shares": false,
+              "has_rich_preview": false,
+              "file_access": "visible"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "hash": "156772938.1827395",
+  "title": {
+    "type": "plain_text",
+    "text": "Capture view state",
+    "emoji": true
+  },
+  "clear_on_close": false,
+  "notify_on_close": false,
+  "submit": {
+    "type": "plain_text",
+    "text": "Submit",
+    "emoji": true
+  },
+  "root_view_id": "VMHU10V26",
+  "app_id": "AA4928AQ",
+  "bot_id": "BA13894H"
+}

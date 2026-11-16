@@ -3,7 +3,7 @@ import logging
 from typing import Optional, Union, Dict, Sequence
 
 from slack_sdk.models.basic_objects import JsonObject, JsonValidator
-from slack_sdk.models.blocks import Block, TextObject, PlainTextObject, Option
+from slack_sdk.models.blocks import Block, TextObject, PlainTextObject, Option, RichTextBlock
 
 
 class View(JsonObject):
@@ -191,6 +191,10 @@ class ViewStateValue(JsonObject):
         "selected_channels",
         "selected_users",
         "selected_options",
+        "selected_date_time",
+        "timezone",
+        "rich_text_value",
+        "files",
     }
 
     def __init__(
@@ -208,6 +212,10 @@ class ViewStateValue(JsonObject):
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
         selected_options: Optional[Sequence[Union[dict, Option]]] = None,
+        selected_date_time: Optional[int] = None,
+        timezone: Optional[str] = None,
+        rich_text_value: Optional[Union[dict, RichTextBlock]] = None,
+        files: Optional[Sequence[dict]] = None,
         **kwargs,
     ):
         self.type = type
@@ -221,6 +229,10 @@ class ViewStateValue(JsonObject):
         self.selected_conversations = selected_conversations
         self.selected_channels = selected_channels
         self.selected_users = selected_users
+        self.selected_date_time = selected_date_time
+        self.timezone = timezone
+        self.rich_text_value = rich_text_value
+        self.files = files
 
         if isinstance(selected_options, list):
             self.selected_options = []
