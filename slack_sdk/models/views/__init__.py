@@ -208,6 +208,7 @@ class ViewStateValue(JsonObject):
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
         selected_options: Optional[Sequence[Union[dict, Option]]] = None,
+        **kwargs,
     ):
         self.type = type
         self.value = value
@@ -230,3 +231,4 @@ class ViewStateValue(JsonObject):
                     self.selected_options.append(Option(**option))
         else:
             self.selected_options = selected_options  # type: ignore[assignment]
+        self.additional_attributes = kwargs

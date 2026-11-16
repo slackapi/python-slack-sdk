@@ -359,6 +359,22 @@ class ViewTests(unittest.TestCase):
 
         self.assertDictEqual(expected, ViewStateValue(**input).to_dict())
 
+    def test_view_state_value_with_unknown_keys(self):
+        input = {"type": "datetimepicker", "selected_date_time": 1700000000}
+
+        view_state_value = ViewStateValue(**input)
+        self.assertDictEqual({"selected_date_time": 1700000000}, view_state_value.additional_attributes)
+        self.assertDictEqual({"type": "datetimepicker"}, view_state_value.to_dict())
+
+    def test_view_with_unknown_state_value_keys(self):
+        view = View(
+            type="modal",
+            title="Schedule",
+            blocks=[],
+            state={"values": {"b1": {"a1": {"type": "datetimepicker", "selected_date_time": 1700000000}}}},
+        )
+        self.assertIsInstance(view.state.values["b1"]["a1"], ViewStateValue)
+
     def test_load_modal_view_001(self):
         with open("tests/slack_sdk_fixture/view_modal_001.json") as file:
             self.verify_loaded_view_object(file)
