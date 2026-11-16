@@ -189,6 +189,30 @@ class TestAiohttp(unittest.TestCase):
             await client.disconnect()
             await client.close()
 
+    @async_test
+    async def test_send_message_leaves_a_lock_held_by_another_task(self):
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+            auto_reconnect_enabled=False,
+        )
+
+        async def send_str(message):
+            raise ConnectionError("the connection was replaced")
+
+        client.current_session = MagicMock()
+        client.current_session.send_str = send_str
+        await client.connect_operation_lock.acquire()
+        try:
+            with self.assertRaises(asyncio.TimeoutError):
+                await asyncio.wait_for(client.send_message("hello"), timeout=0.1)
+            self.assertTrue(client.connect_operation_lock.locked())
+        finally:
+            if client.connect_operation_lock.locked():
+                client.connect_operation_lock.release()
+            client.current_session = None
+            await client.close()
+
 
 async def listener(self, message, raw_message):
     pass
