@@ -397,9 +397,12 @@ def _build_data_frame_for_sending(
     if payload_length <= 125:
         b2 = masked << 7 | payload_length
         header += bytes([b2])
-    else:
+    elif payload_length <= 65535:
         b2 = masked << 7 | 126
         header += struct.pack("!BH", b2, payload_length)
+    else:
+        b2 = masked << 7 | 127
+        header += struct.pack("!BQ", b2, payload_length)
 
     mask_key: List[int] = random.choices(range(256), k=4)
     header += bytes(mask_key)
