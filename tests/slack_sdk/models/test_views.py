@@ -144,6 +144,20 @@ class ViewTests(unittest.TestCase):
         self.assertDictEqual(expected, ViewState(**expected).to_dict())
         self.assertDictEqual(expected, state.to_dict())
 
+    def test_state_values_skip_unknown_action_value(self):
+        with self.assertLogs("slack_sdk.models.views", level="WARNING") as logs:
+            state = ViewState(values={"b1": {"a1": 123, "a2": {"type": "plain_text_input", "value": "Title"}}})
+        self.assertIn("builtins.int", logs.output[0])
+        self.assertDictEqual({"values": {"b1": {"a2": {"type": "plain_text_input", "value": "Title"}}}}, state.to_dict())
+
+    def test_state_values_skip_unknown_block_actions(self):
+        with self.assertLogs("slack_sdk.models.views", level="WARNING") as logs:
+            state = ViewState(values={"b2": {"a2": {"type": "plain_text_input", "value": "Title"}}, "b1": "oops"})
+        self.assertIn("builtins.str", logs.output[0])
+        self.assertDictEqual({"values": {"b2": {"a2": {"type": "plain_text_input", "value": "Title"}}}}, state.to_dict())
+        with self.assertLogs("slack_sdk.models.views", level="WARNING"):
+            self.assertDictEqual({"values": {}}, ViewState(values={"b1": "oops"}).to_dict())
+
     def test_all_state_values(self):
         # Testing with
         # {"type":"modal","title":{"type":"plain_text","text":"My App","emoji":true},"submit":{"type":"plain_text","text":"Submit","emoji":true},"close":{"type":"plain_text","text":"Cancel","emoji":true},"blocks":[{"type":"input","element":{"type":"plain_text_input"},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"plain_text_input","multiline":true},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"datepicker","initial_date":"1990-04-28","placeholder":{"type":"plain_text","text":"Select a date","emoji":true}},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"users_select","placeholder":{"type":"plain_text","text":"Select a user","emoji":true}},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"multi_static_select","placeholder":{"type":"plain_text","text":"Select options","emoji":true},"options":[{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-0"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-1"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-2"}]},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"checkboxes","options":[{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-0"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-1"},{"text":{"type":"plain_text","text":"*this is plain_text text*","emoji":true},"value":"value-2"}]},"label":{"type":"plain_text","text":"Label","emoji":true}},{"type":"input","element":{"type":"radio_buttons","initial_option":{"text":{"type":"plain_text","text":"Option 1"},"value":"option 1","description":{"type":"plain_text","text":"Description for option 1"}},"options":[{"text":{"type":"plain_text","text":"Option 1"},"value":"option 1","description":{"type":"plain_text","text":"Description for option 1"}},{"text":{"type":"plain_text","text":"Option 2"},"value":"option 2","description":{"type":"plain_text","text":"Description for option 2"}},{"text":{"type":"plain_text","text":"Option 3"},"value":"option 3","description":{"type":"plain_text","text":"Description for option 3"}}]},"label":{"type":"plain_text","text":"Label","emoji":true}}]}
