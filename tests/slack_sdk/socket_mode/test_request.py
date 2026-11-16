@@ -43,3 +43,7 @@ class TestRequest(unittest.TestCase):
         self.assertEqual(actual.type, expected.type)
         self.assertEqual(actual.envelope_id, expected.envelope_id)
         self.assertEqual(actual.payload, expected.payload)
+
+    def test_unsupported_payload_type(self):
+        with self.assertRaises(ValueError):
+            SocketModeRequest(type="slash_commands", envelope_id="abc-123", payload=123)
