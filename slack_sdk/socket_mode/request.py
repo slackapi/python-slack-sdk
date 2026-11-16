@@ -30,7 +30,7 @@ class SocketModeRequest:
         elif isinstance(payload, str):
             self.payload = {"text": payload}
         else:
-            unexpected_payload_type = type(payload)
+            unexpected_payload_type = payload.__class__
             raise ValueError(f"Unsupported payload data type ({unexpected_payload_type})")
 
         self.accepts_response_payload = accepts_response_payload or False
