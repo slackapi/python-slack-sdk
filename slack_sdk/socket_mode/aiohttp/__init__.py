@@ -438,16 +438,12 @@ class SocketModeClient(AsyncBaseSocketModeClient):
                 )
             # Although acquiring self.connect_operation_lock also for the first method call is the safest way,
             # we avoid synchronizing a lot for better performance. That's why we are doing a retry here.
-            try:
-                await self.connect_operation_lock.acquire()
+            async with self.connect_operation_lock:
                 if await self.is_connected():
                     await self.current_session.send_str(message)  # type: ignore[union-attr]
                 else:
                     self.logger.warning(f"The current session ({session_id}) is no longer active. Failed to send a message")
                     raise e
-            finally:
-                if self.connect_operation_lock.locked() is True:
-                    self.connect_operation_lock.release()
 
     async def close(self):
         self.closed = True
