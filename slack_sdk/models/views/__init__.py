@@ -148,7 +148,7 @@ class ViewState(JsonObject):
                 if actions is None:
                     continue
                 elif isinstance(actions, dict):
-                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
+                    new_actions: Dict[str, ViewStateValue] = {}
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)
@@ -159,9 +159,9 @@ class ViewState(JsonObject):
                             self._show_warning_about_unknown(v)
                             continue
                         new_actions[action_id] = value_object
-                    value_objects[block_id] = new_actions  # type: ignore[assignment]
+                    value_objects[block_id] = new_actions
                 else:
-                    self._show_warning_about_unknown(v)
+                    self._show_warning_about_unknown(actions)
         self.values = value_objects
 
     def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:
@@ -208,6 +208,7 @@ class ViewStateValue(JsonObject):
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
         selected_options: Optional[Sequence[Union[dict, Option]]] = None,
+        **kwargs,
     ):
         self.type = type
         self.value = value
@@ -230,3 +231,4 @@ class ViewStateValue(JsonObject):
                     self.selected_options.append(Option(**option))
         else:
             self.selected_options = selected_options  # type: ignore[assignment]
+        self.additional_attributes = kwargs
