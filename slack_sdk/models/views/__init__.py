@@ -3,7 +3,7 @@ import logging
 from typing import Optional, Union, Dict, Sequence
 
 from slack_sdk.models.basic_objects import JsonObject, JsonValidator
-from slack_sdk.models.blocks import Block, TextObject, PlainTextObject, Option
+from slack_sdk.models.blocks import Block, TextObject, PlainTextObject, Option, RichTextBlock
 
 
 class View(JsonObject):
@@ -148,7 +148,7 @@ class ViewState(JsonObject):
                 if actions is None:
                     continue
                 elif isinstance(actions, dict):
-                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
+                    new_actions: Dict[str, ViewStateValue] = {}
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)
@@ -159,9 +159,9 @@ class ViewState(JsonObject):
                             self._show_warning_about_unknown(v)
                             continue
                         new_actions[action_id] = value_object
-                    value_objects[block_id] = new_actions  # type: ignore[assignment]
+                    value_objects[block_id] = new_actions
                 else:
-                    self._show_warning_about_unknown(v)
+                    self._show_warning_about_unknown(actions)
         self.values = value_objects
 
     def to_dict(self, *args) -> Dict[str, Dict[str, Dict[str, dict]]]:
@@ -191,6 +191,10 @@ class ViewStateValue(JsonObject):
         "selected_channels",
         "selected_users",
         "selected_options",
+        "selected_date_time",
+        "timezone",
+        "rich_text_value",
+        "files",
     }
 
     def __init__(
@@ -208,6 +212,11 @@ class ViewStateValue(JsonObject):
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
         selected_options: Optional[Sequence[Union[dict, Option]]] = None,
+        selected_date_time: Optional[int] = None,
+        timezone: Optional[str] = None,
+        rich_text_value: Optional[Union[dict, RichTextBlock]] = None,
+        files: Optional[Sequence[dict]] = None,
+        **kwargs,
     ):
         self.type = type
         self.value = value
@@ -220,6 +229,10 @@ class ViewStateValue(JsonObject):
         self.selected_conversations = selected_conversations
         self.selected_channels = selected_channels
         self.selected_users = selected_users
+        self.selected_date_time = selected_date_time
+        self.timezone = timezone
+        self.rich_text_value = rich_text_value
+        self.files = files
 
         if isinstance(selected_options, list):
             self.selected_options = []
@@ -230,3 +243,4 @@ class ViewStateValue(JsonObject):
                     self.selected_options.append(Option(**option))
         else:
             self.selected_options = selected_options  # type: ignore[assignment]
+        self.additional_attributes = kwargs

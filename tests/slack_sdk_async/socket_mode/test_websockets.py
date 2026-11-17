@@ -1,4 +1,8 @@
+import asyncio
 import unittest
+from unittest.mock import MagicMock
+
+from websockets.exceptions import WebSocketException
 
 from slack_sdk.socket_mode.websockets import SocketModeClient
 from slack_sdk.web.async_client import AsyncWebClient
@@ -68,6 +72,29 @@ class TestAiohttp(unittest.TestCase):
             )
             await client.process_message()
         finally:
+            await client.close()
+
+    @async_test
+    async def test_send_message_leaves_a_lock_held_by_another_task(self):
+        client = SocketModeClient(
+            app_token="xapp-A111-222-xyz",
+            web_client=self.web_client,
+        )
+
+        async def send(message):
+            raise WebSocketException("the connection was replaced")
+
+        client.current_session = MagicMock()
+        client.current_session.send = send
+        await client.connect_operation_lock.acquire()
+        try:
+            with self.assertRaises(asyncio.TimeoutError):
+                await asyncio.wait_for(client.send_message("hello"), timeout=0.1)
+            self.assertTrue(client.connect_operation_lock.locked())
+        finally:
+            if client.connect_operation_lock.locked():
+                client.connect_operation_lock.release()
+            client.current_session = None
             await client.close()
 
 
