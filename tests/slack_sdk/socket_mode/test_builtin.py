@@ -1,6 +1,8 @@
+import itertools
 import logging
 import socket
 import ssl
+import struct
 import time
 import unittest
 from unittest.mock import MagicMock, patch, sentinel
@@ -197,6 +199,20 @@ class TestBuiltin(unittest.TestCase):
         res = _build_data_frame_for_sending("hello!", FrameHeader.OPCODE_TEXT)
         self.assertIsNotNone(res)
 
+    def test_build_data_frame_for_sending_with_16_bit_length(self):
+        payload = b"a" * 65535
+        frame = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
+        self.assertEqual(frame[1], 0b10000000 | 126)
+        self.assertEqual(struct.unpack("!H", frame[2:4])[0], 65535)
+        self.assertEqual(_unmask(mask_key=frame[4:8], data=frame[8:]), payload)
+
+    def test_build_data_frame_for_sending_with_64_bit_length(self):
+        payload = b"a" * 65536
+        frame = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
+        self.assertEqual(frame[1], 0b10000000 | 127)
+        self.assertEqual(struct.unpack("!Q", frame[2:10])[0], 65536)
+        self.assertEqual(_unmask(mask_key=frame[10:14], data=frame[14:]), payload)
+
     def test_parse_connect_response(self):
         sock = socket.socket()
         try:
@@ -215,3 +231,7 @@ class TestBuiltin(unittest.TestCase):
     def test_using_supplied_ssl_context(self):
         ssl_context = _use_or_create_ssl_context(sentinel.ssl_context)
         self.assertEqual(ssl_context, sentinel.ssl_context)
+
+
+def _unmask(mask_key: bytes, data: bytes) -> bytes:
+    return bytes(byte ^ mask for byte, mask in zip(data, itertools.cycle(mask_key)))

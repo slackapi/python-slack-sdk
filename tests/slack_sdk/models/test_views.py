@@ -17,6 +17,7 @@ from slack_sdk.models.blocks import (
     PlainTextObject,
     Option,
     MarkdownTextObject,
+    RichTextBlock,
 )
 from slack_sdk.models.views import View, ViewState, ViewStateValue
 
@@ -143,6 +144,20 @@ class ViewTests(unittest.TestCase):
         )
         self.assertDictEqual(expected, ViewState(**expected).to_dict())
         self.assertDictEqual(expected, state.to_dict())
+
+    def test_state_values_skip_unknown_action_value(self):
+        with self.assertLogs("slack_sdk.models.views", level="WARNING") as logs:
+            state = ViewState(values={"b1": {"a1": 123, "a2": {"type": "plain_text_input", "value": "Title"}}})
+        self.assertIn("builtins.int", logs.output[0])
+        self.assertDictEqual({"values": {"b1": {"a2": {"type": "plain_text_input", "value": "Title"}}}}, state.to_dict())
+
+    def test_state_values_skip_unknown_block_actions(self):
+        with self.assertLogs("slack_sdk.models.views", level="WARNING") as logs:
+            state = ViewState(values={"b2": {"a2": {"type": "plain_text_input", "value": "Title"}}, "b1": "oops"})
+        self.assertIn("builtins.str", logs.output[0])
+        self.assertDictEqual({"values": {"b2": {"a2": {"type": "plain_text_input", "value": "Title"}}}}, state.to_dict())
+        with self.assertLogs("slack_sdk.models.views", level="WARNING"):
+            self.assertDictEqual({"values": {}}, ViewState(values={"b1": "oops"}).to_dict())
 
     def test_all_state_values(self):
         # Testing with
@@ -345,6 +360,56 @@ class ViewTests(unittest.TestCase):
 
         self.assertDictEqual(expected, ViewStateValue(**input).to_dict())
 
+    def test_view_state_value_with_unknown_keys(self):
+        input = {"type": "plain_text_input", "value": "Title", "value_changed": True}
+
+        view_state_value = ViewStateValue(**input)
+        self.assertDictEqual({"value_changed": True}, view_state_value.additional_attributes)
+        self.assertDictEqual({"type": "plain_text_input", "value": "Title"}, view_state_value.to_dict())
+
+    def test_view_with_unknown_state_value_keys(self):
+        view = View(
+            type="modal",
+            title="Schedule",
+            blocks=[],
+            state={"values": {"b1": {"a1": {"type": "plain_text_input", "value_changed": True}}}},
+        )
+        self.assertIsInstance(view.state.values["b1"]["a1"], ViewStateValue)
+
+    def test_view_state_value_with_selected_date_time(self):
+        input = {"type": "datetimepicker", "selected_date_time": 1700000000}
+
+        view_state_value = ViewStateValue(**input)
+        self.assertEqual(1700000000, view_state_value.selected_date_time)
+        self.assertDictEqual(input, view_state_value.to_dict())
+
+    def test_view_state_value_with_timezone(self):
+        input = {"type": "timepicker", "selected_time": "13:37", "timezone": "America/Toronto"}
+
+        view_state_value = ViewStateValue(**input)
+        self.assertEqual("America/Toronto", view_state_value.timezone)
+        self.assertDictEqual(input, view_state_value.to_dict())
+
+    def test_view_state_value_with_rich_text_value(self):
+        rich_text = {
+            "type": "rich_text",
+            "elements": [{"type": "rich_text_section", "elements": [{"type": "text", "text": "Hello"}]}],
+        }
+        input = {"type": "rich_text_input", "rich_text_value": rich_text}
+
+        self.assertDictEqual(input, ViewStateValue(**input).to_dict())
+        self.assertDictEqual(
+            input,
+            ViewStateValue(type="rich_text_input", rich_text_value=RichTextBlock(**rich_text)).to_dict(),
+        )
+
+    def test_view_state_value_with_files(self):
+        input = {"type": "file_input", "files": [{"id": "F111", "name": "notes.txt", "filetype": "text"}]}
+
+        view_state_value = ViewStateValue(**input)
+        self.assertEqual("F111", view_state_value.files[0]["id"])
+        self.assertDictEqual(input, view_state_value.to_dict())
+
     def test_load_modal_view_001(self):
         with open("tests/slack_sdk_fixture/view_modal_001.json") as file:
             self.verify_loaded_view_object(file)
@@ -383,6 +448,10 @@ class ViewTests(unittest.TestCase):
 
     def test_load_modal_view_010(self):
         with open("tests/slack_sdk_fixture/view_modal_010.json") as file:
+            self.verify_loaded_view_object(file)
+
+    def test_load_modal_view_011(self):
+        with open("tests/slack_sdk_fixture/view_modal_011.json") as file:
             self.verify_loaded_view_object(file)
 
     # --------------------------------
