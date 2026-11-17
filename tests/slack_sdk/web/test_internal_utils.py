@@ -154,14 +154,14 @@ class TestInternalUtils(unittest.TestCase):
         with patch("os.path.getsize", return_value=1_073_741_825):
             with self.assertRaises(SlackRequestError) as ctx:
                 _to_v2_file_upload_item({"file": "tests/slack_sdk/web/test_internal_utils.py"})
-            self.assertIn("Maximum upload file size is 1GB", str(ctx.exception))
+            self.assertIn("Maximum upload file size is 1073741824 bytes", str(ctx.exception))
             self.assertIn("1073741825 bytes", str(ctx.exception))
 
     def test_to_v2_file_upload_item_raises_when_content_exceeds_1gb(self):
         with patch("slack_sdk.web.internal_utils.MAX_V2_FILE_SIZE", 10):
             with self.assertRaises(SlackRequestError) as ctx:
                 _to_v2_file_upload_item({"content": "this content is longer than 10 bytes", "filename": "test.txt"})
-            self.assertIn("Maximum upload file size is 1GB", str(ctx.exception))
+            self.assertIn("Maximum upload file size is 10 bytes", str(ctx.exception))
             self.assertIn("test.txt", str(ctx.exception))
 
     def test_next_cursor_is_present(self):

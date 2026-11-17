@@ -345,7 +345,8 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
             if file_size > MAX_V2_FILE_SIZE:
                 filename = upload_file.get("filename") or os.path.basename(os.fspath(file))
                 raise SlackRequestError(
-                    f"Maximum upload file size is 1GB (file size: {file_size} bytes for filename: {filename})"
+                    f"Maximum upload file size is {MAX_V2_FILE_SIZE} bytes "
+                    f"(file size: {file_size} bytes for filename: {filename})"
                 )
             with open(os.fsencode(file), "rb") as readable:
                 data = readable.read()
@@ -378,7 +379,9 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
         raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
 
     if len(data) > MAX_V2_FILE_SIZE:
-        raise SlackRequestError(f"Maximum upload file size is 1GB (file size: {len(data)} bytes for filename: {filename})")
+        raise SlackRequestError(
+            f"Maximum upload file size is {MAX_V2_FILE_SIZE} bytes (file size: {len(data)} bytes for filename: {filename})"
+        )
 
     if title is None:
         title = filename  # to be consistent with files.upload API
