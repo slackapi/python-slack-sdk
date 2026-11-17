@@ -1,11 +1,26 @@
 import os
+import tempfile
 import unittest
 
 from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.installation_store.cacheable_installation_store import (
     CacheableInstallationStore,
 )
+from slack_sdk.oauth.installation_store.file import FileInstallationStore
 from slack_sdk.oauth.installation_store.sqlite3 import SQLite3InstallationStore
+
+
+def build_installation(*, user_id: str, bot_token: str) -> Installation:
+    return Installation(
+        app_id="A111",
+        enterprise_id="E111",
+        team_id="T111",
+        user_id=user_id,
+        bot_id="B111",
+        bot_token=bot_token,
+        bot_scopes=["chat:write"],
+        bot_user_id="UB111",
+    )
 
 
 class TestCacheable(unittest.TestCase):
@@ -135,3 +150,23 @@ class TestCacheable(unittest.TestCase):
         self.assertIsNone(i)
         bot = store.find_bot(enterprise_id="E111", team_id="T222")
         self.assertIsNone(bot)
+
+    def test_save_evicts_stale_installations(self):
+        base_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(base_dir.cleanup)
+        file_store = FileInstallationStore(base_dir=base_dir.name, client_id="111.222")
+        store = CacheableInstallationStore(file_store)
+
+        store.save(build_installation(user_id="U111", bot_token="xoxb-initial"))
+        store.find_installation(enterprise_id="E111", team_id="T111")
+        store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+
+        store.save(build_installation(user_id="U111", bot_token="xoxb-refreshed"))
+        i = store.find_installation(enterprise_id="E111", team_id="T111")
+        self.assertEqual(i.bot_token, "xoxb-refreshed")
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertEqual(i.bot_token, "xoxb-refreshed")
+
+        store.save(build_installation(user_id="U222", bot_token="xoxb-u222"))
+        i = store.find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertEqual(i.bot_token, "xoxb-u222")
