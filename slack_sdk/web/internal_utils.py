@@ -378,9 +378,7 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
         raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
 
     if len(data) > MAX_V2_FILE_SIZE:
-        raise SlackRequestError(
-            f"Maximum upload file size is 1GB (file size: {len(data)} bytes for filename: {filename})"
-        )
+        raise SlackRequestError(f"Maximum upload file size is 1GB (file size: {len(data)} bytes for filename: {filename})")
 
     if title is None:
         title = filename  # to be consistent with files.upload API
