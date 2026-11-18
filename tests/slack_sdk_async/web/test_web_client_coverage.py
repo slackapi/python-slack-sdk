@@ -83,8 +83,16 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(method(date="2020-09-01", type="member")["method"])
                 await async_method(date="2020-09-01", type="member")
             elif method_name == "admin_analytics_members_activity":
-                self.api_methods_to_call.remove(method(date="2026-09-30", user_ids=["U111", "U222"])["method"])
-                await async_method(date="2026-09-30", user_ids=["U111", "U222"])
+                self.api_methods_to_call.remove(
+                    method(date="2026-09-30", member_types=["regular_members", "org_admins"], user_ids=["U111", "U222"])[
+                        "method"
+                    ]
+                )
+                method(member_types="regular_members", user_ids="U111")
+                await async_method(
+                    date="2026-09-30", member_types=["regular_members", "org_admins"], user_ids=["U111", "U222"]
+                )
+                await async_method(member_types="regular_members", user_ids="U111")
             elif method_name == "admin_apps_approve":
                 self.api_methods_to_call.remove(method(app_id="AID123", request_id="RID123")["method"])
                 await async_method(app_id="AID123", request_id="RID123")
