@@ -2563,6 +2563,8 @@ class WebClient(BaseClient):
             file: File contents via `multipart/form-data`
             url: URL of a publicly hosted image
         """
+        if file is None and url is None:
+            raise e.SlackRequestError("Either file or url must be provided.")
         kwargs.update({"app_id": app_id, "url": url})
         if file is not None:
             return self.api_call("apps.icon.set", files={"file": file}, data=kwargs)
