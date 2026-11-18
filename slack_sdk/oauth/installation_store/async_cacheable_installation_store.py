@@ -31,9 +31,10 @@ class AsyncCacheableInstallationStore(AsyncInstallationStore):
         key = f"{installation.enterprise_id or ''}-{installation.team_id or ''}"
         if key in self.cached_bots:
             self.cached_bots.pop(key)
-        key = f"{installation.enterprise_id or ''}-{installation.team_id or ''}-{installation.user_id or ''}"
-        if key in self.cached_installations:
-            self.cached_installations.pop(key)
+        key_prefix = f"{installation.enterprise_id or ''}-{installation.team_id or ''}-"
+        for key in list(self.cached_installations.keys()):
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)
         return await self.underlying.async_save(installation)
 
     async def async_save_bot(self, bot: Bot):
