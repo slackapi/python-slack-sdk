@@ -110,6 +110,47 @@ class WebClient(BaseClient):
             kwargs.update({"metadata_only": metadata_only})
         return self.api_call("admin.analytics.getFile", params=kwargs)
 
+    def admin_analytics_members_activity(
+        self,
+        *,
+        date: Optional[str] = None,
+        team_id: Optional[str] = None,
+        member_types: Optional[Union[str, Sequence[str]]] = None,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Retrieves activity metrics for each member of an organization or workspace for one day.
+
+        https://docs.slack.dev/reference/methods/admin.analytics.members.activity
+
+        Args:
+            date: The day to report on, as `YYYY-MM-DD` in UTC. Defaults to the most recent day with data.
+            team_id: Workspace ID to scope the results to.
+            member_types: Comma-separated list of member types to include.
+            user_ids: Comma-separated list of user IDs to return.
+            cursor: Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
+            limit: Maximum number of members to return. Max allowed is 500.
+        """
+        kwargs.update(
+            {
+                "date": date,
+                "team_id": team_id,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        if isinstance(member_types, (list, tuple)):
+            kwargs.update({"member_types": ",".join(member_types)})
+        else:
+            kwargs.update({"member_types": member_types})
+        if isinstance(user_ids, (list, tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        return self.api_call("admin.analytics.members.activity", params=kwargs)
+
     def admin_apps_approve(
         self,
         *,
