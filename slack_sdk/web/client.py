@@ -151,6 +151,45 @@ class WebClient(BaseClient):
             kwargs.update({"user_ids": user_ids})
         return self.api_call("admin.analytics.members.activity", params=kwargs)
 
+    def admin_analytics_members_metadata(
+        self,
+        *,
+        include_deactivated_since: Optional[str] = None,
+        team_id: Optional[str] = None,
+        member_types: Optional[Union[str, Sequence[str]]] = None,
+        query: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Retrieves profile metadata for each member of an organization or workspace.
+
+        https://docs.slack.dev/reference/methods/admin.analytics.members.metadata
+
+        Args:
+            include_deactivated_since: Also return members deactivated on or after this day, as `YYYY-MM-DD` in UTC.
+            team_id: Workspace ID to scope the results to.
+            member_types: Comma-separated list of member types to include.
+            query: Space-delimited search terms matched against member names, and against email addresses when the
+                organization shows them.
+            cursor: Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
+            limit: Maximum number of members to return. Max allowed is 500.
+        """
+        kwargs.update(
+            {
+                "include_deactivated_since": include_deactivated_since,
+                "team_id": team_id,
+                "query": query,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        if isinstance(member_types, (list, tuple)):
+            kwargs.update({"member_types": ",".join(member_types)})
+        else:
+            kwargs.update({"member_types": member_types})
+        return self.api_call("admin.analytics.members.metadata", params=kwargs)
+
     def admin_apps_approve(
         self,
         *,
