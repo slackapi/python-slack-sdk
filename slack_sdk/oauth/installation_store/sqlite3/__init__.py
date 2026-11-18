@@ -583,7 +583,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             and
                             team_id = ?
                         """,
-                        [self.client_id, enterprise_id or "", team_id],
+                        [self.client_id, enterprise_id or "", team_id or ""],
                     )
                 else:
                     conn.execute(
@@ -600,7 +600,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             and
                             user_id = ?
                         """,
-                        [self.client_id, enterprise_id or "", team_id, user_id],
+                        [self.client_id, enterprise_id or "", team_id or "", user_id],
                     )
                 conn.commit()
         except Exception as e:
