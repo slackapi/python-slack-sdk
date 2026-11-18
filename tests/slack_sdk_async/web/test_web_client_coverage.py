@@ -86,7 +86,9 @@ class TestWebClientCoverage(unittest.TestCase):
                 self.api_methods_to_call.remove(
                     method(query="alex", member_types=["regular_members", "single_channel_guests"])["method"]
                 )
+                method(member_types="regular_members")
                 await async_method(query="alex", member_types=["regular_members", "single_channel_guests"])
+                await async_method(member_types="regular_members")
             elif method_name == "admin_apps_approve":
                 self.api_methods_to_call.remove(method(app_id="AID123", request_id="RID123")["method"])
                 await async_method(app_id="AID123", request_id="RID123")
