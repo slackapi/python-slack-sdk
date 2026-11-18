@@ -43,6 +43,11 @@ class MockHandler(SimpleHTTPRequestHandler):
                     self.set_common_headers()
                     self.wfile.write("""{"ok": false, "error": "ratelimited"}""".encode("utf-8"))
                     return
+                if "server_error" in pattern:
+                    self.send_response(HTTPStatus.INTERNAL_SERVER_ERROR)
+                    self.set_common_headers()
+                    self.wfile.close()
+                    return
 
             if self.is_valid_token() and self.is_valid_user_agent():
                 self.send_response(HTTPStatus.OK)
