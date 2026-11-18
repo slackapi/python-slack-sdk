@@ -2715,6 +2715,16 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"refresh_token": refresh_token})
         return await self.api_call("tooling.tokens.rotate", params=kwargs)
 
+    async def assistant_search_info(
+        self,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Returns search capabilities on a given team.
+
+        https://docs.slack.dev/reference/methods/assistant.search.info
+        """
+        return await self.api_call("assistant.search.info", params=kwargs)
+
     async def assistant_threads_setStatus(
         self,
         *,
