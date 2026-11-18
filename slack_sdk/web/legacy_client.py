@@ -4380,6 +4380,32 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"include_categories": include_categories})
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
+    def entity_acknowledgeCommentAction(
+        self,
+        *,
+        trigger_id: str,
+        comment: Optional[Dict[str, Any]] = None,
+        error: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Acknowledge a comment post, edit, or delete on a Work Object.
+
+        Apps call this method to confirm they have processed a comment action.
+        https://docs.slack.dev/reference/methods/entity.acknowledgeCommentAction
+
+        Args:
+            trigger_id: A reference to the original user action that initiated the comment mutation
+            comment: The full comment data. Required for edit and post actions.
+            error: Error message if the action failed in the app. When present, signals that the mutation could not be
+                completed.
+        """
+        kwargs.update({"trigger_id": trigger_id})
+        if comment is not None:
+            kwargs.update({"comment": comment})
+        if error is not None:
+            kwargs.update({"error": error})
+        return self.api_call("entity.acknowledgeCommentAction", json=kwargs)
+
     def entity_presentComments(
         self,
         *,
