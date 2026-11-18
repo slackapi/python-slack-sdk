@@ -2570,6 +2570,25 @@ class WebClient(BaseClient):
             return self.api_call("apps.icon.set", files={"file": file}, data=kwargs)
         return self.api_call("apps.icon.set", params=kwargs)
 
+    def apps_managed_permissions_set(
+        self,
+        *,
+        app_id: str,
+        permissions: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Set who can interact with a managed app.
+
+        https://docs.slack.dev/reference/methods/apps.managed.permissions.set
+
+        Args:
+            app_id: Encoded ID of the managed app to configure
+            permissions: Who can interact with the app. Use everyone to allow all members, or app_owner to restrict access
+                to the app's owner.
+        """
+        kwargs.update({"app_id": app_id, "permissions": permissions})
+        return self.api_call("apps.managed.permissions.set", params=kwargs)
+
     def apps_uninstall(
         self,
         *,
