@@ -138,19 +138,24 @@ class TestSQLite3(unittest.TestCase):
         self.assertIsNone(i)
 
         # delete installations
-        store.delete_installation(enterprise_id="E111", team_id=None)
-        i = store.find_installation(enterprise_id="E111", team_id=None)
+        store.delete_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
+        i = store.find_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
+        self.assertIsNone(i)
+
+        store.save(installation)
+        store.delete_installation(enterprise_id="EO111", team_id=None)
+        i = store.find_installation(enterprise_id="EO111", team_id=None)
         self.assertIsNone(i)
 
         # delete all
         store.save(installation)
-        store.delete_all(enterprise_id="E111", team_id=None)
+        store.delete_all(enterprise_id="EO111", team_id=None)
 
-        i = store.find_installation(enterprise_id="E111", team_id=None)
+        i = store.find_installation(enterprise_id="EO111", team_id=None)
         self.assertIsNone(i)
-        i = store.find_installation(enterprise_id="E111", team_id=None, user_id="U111")
+        i = store.find_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
         self.assertIsNone(i)
-        bot = store.find_bot(enterprise_id=None, team_id="T222")
+        bot = store.find_bot(enterprise_id="EO111", team_id=None)
         self.assertIsNone(bot)
 
     def test_save_and_find_token_rotation(self):
