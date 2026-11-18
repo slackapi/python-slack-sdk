@@ -2556,6 +2556,30 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"event_context": event_context, "cursor": cursor, "limit": limit})
         return await self.api_call("apps.event.authorizations.list", params=kwargs)
 
+    async def apps_icon_set(
+        self,
+        *,
+        app_id: str,
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        url: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Sets the app icon.
+
+        https://docs.slack.dev/reference/methods/apps.icon.set
+
+        Args:
+            app_id: The ID of the app whose icon you want to set.
+            file: File contents via `multipart/form-data`
+            url: URL of a publicly hosted image
+        """
+        if file is None and url is None:
+            raise e.SlackRequestError("Either file or url must be provided.")
+        kwargs.update({"app_id": app_id, "url": url})
+        if file is not None:
+            return await self.api_call("apps.icon.set", files={"file": file}, data=kwargs)
+        return await self.api_call("apps.icon.set", params=kwargs)
+
     async def apps_managed_permissions_set(
         self,
         *,
