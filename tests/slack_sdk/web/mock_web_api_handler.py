@@ -72,7 +72,7 @@ class MockHandler(SimpleHTTPRequestHandler):
             # put_nowait is common between Queue & asyncio.Queue, it does not need to be awaited
             self.server.queue.put_nowait(self.path)
 
-            if self.path in {"/oauth.access", "/oauth.v2.access"}:
+            if self.path in {"/oauth.access", "/oauth.v2.access", "/oauth.v2.user.access"}:
                 self.send_response(200)
                 self.set_common_headers()
                 if self.headers["authorization"] == "Basic MTExLjIyMjpzZWNyZXQ=":

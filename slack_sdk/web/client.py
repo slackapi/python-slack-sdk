@@ -5379,6 +5379,49 @@ class WebClient(BaseClient):
         kwargs.update({"client_id": client_id, "client_secret": client_secret, "token": token})
         return self.api_call("oauth.v2.exchange", params=kwargs)
 
+    def oauth_v2_user_access(
+        self,
+        *,
+        client_id: str,
+        client_secret: str,
+        code: Optional[str] = None,
+        code_verifier: Optional[str] = None,
+        redirect_uri: Optional[str] = None,
+        grant_type: Optional[str] = None,
+        refresh_token: Optional[str] = None,
+        assertion: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Exchanges a temporary OAuth verifier code for a user access token.
+
+        https://docs.slack.dev/reference/methods/oauth.v2.user.access
+
+        Args:
+            client_id: Issued when you created your application.
+            client_secret: Issued when you created your application.
+            code: The `code` param returned via the OAuth callback.
+            code_verifier: The code_verifier param used to generate the code_challenge originally. Used for PKCE.
+            redirect_uri: This must match the originally submitted URI (if one was sent).
+            grant_type: The `grant_type` param as described in the OAuth spec.
+            refresh_token: The `refresh_token` param as described in the OAuth spec.
+            assertion: Identity assertion JWT authorization grant.
+        """
+        kwargs.update(
+            {
+                "code": code,
+                "code_verifier": code_verifier,
+                "redirect_uri": redirect_uri,
+                "grant_type": grant_type,
+                "refresh_token": refresh_token,
+                "assertion": assertion,
+            }
+        )
+        return self.api_call(
+            "oauth.v2.user.access",
+            data=kwargs,
+            auth={"client_id": client_id, "client_secret": client_secret},
+        )
+
     def openid_connect_token(
         self,
         client_id: str,
