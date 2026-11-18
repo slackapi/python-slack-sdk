@@ -5384,6 +5384,29 @@ class WebClient(BaseClient):
         kwargs.update({"client_id": client_id, "client_secret": client_secret, "token": token})
         return self.api_call("oauth.v2.beginShortTokenRotation", params=kwargs)
 
+    def oauth_v2_completeShortTokenRotation(
+        self,
+        *,
+        client_id: str,
+        client_secret: str,
+        token: str,
+        new_token: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Finishes rotating the secret on an API token with a short secret.
+
+        https://docs.slack.dev/reference/methods/oauth.v2.completeShortTokenRotation
+
+        Args:
+            client_id: Issued when you created your application. Must be the app the token being rotated was issued to.
+            client_secret: Issued when you created your application.
+            token: The original short xoxp token being rotated (the one passed to oauth.v2.beginShortTokenRotation).
+                Authenticates the request.
+            new_token: The new xoxp token returned by oauth.v2.beginShortTokenRotation.
+        """
+        kwargs.update({"client_id": client_id, "client_secret": client_secret, "token": token, "new_token": new_token})
+        return self.api_call("oauth.v2.completeShortTokenRotation", params=kwargs)
+
     def oauth_v2_exchange(
         self,
         *,
