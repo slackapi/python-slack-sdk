@@ -1,3 +1,4 @@
+import json
 import re
 import socket
 import unittest
@@ -265,3 +266,27 @@ class TestWebClient(unittest.TestCase):
             self.client.api_call("chat.postMessage", json={"channel": "C111", "text": "hi"})
         headers = transport.call_args[1]["args"]["headers"]
         self.assertEqual("application/json;charset=utf-8", headers["Content-Type"])
+
+    def test_api_calls_parse_the_response_body_once(self):
+        response = {"status": 200, "headers": {}, "body": '{"ok": true}'}
+        with patch.object(self.client, "_perform_urllib_http_request_internal", return_value=response):
+            with patch("slack_sdk.web.base_client.json.loads", wraps=json.loads) as loads:
+                self.client.api_test()
+        self.assertEqual(1, loads.call_count)
+
+    def test_pagination_parses_each_page_body_once(self):
+        pages = [
+            {"status": 200, "headers": {}, "body": '{"ok": true, "response_metadata": {"next_cursor": "page-2"}}'},
+            {"status": 200, "headers": {}, "body": '{"ok": true}'},
+        ]
+        with patch.object(self.client, "_perform_urllib_http_request_internal", side_effect=pages):
+            with patch("slack_sdk.web.base_client.json.loads", wraps=json.loads) as loads:
+                self.assertEqual(2, len(list(self.client.conversations_list())))
+        self.assertEqual(2, loads.call_count)
+
+    def test_non_json_response_body_raises_api_error(self):
+        response = {"status": 200, "headers": {}, "body": "<!DOCTYPE html><html></html>"}
+        with patch.object(self.client, "_perform_urllib_http_request_internal", return_value=response):
+            with self.assertRaises(err.SlackApiError) as raised:
+                self.client.api_test()
+        self.assertTrue(raised.exception.response["error"].startswith("Received a response in a non-JSON format"))
