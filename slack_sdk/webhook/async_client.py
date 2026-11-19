@@ -207,7 +207,7 @@ class AsyncWebhookClient:
                                 headers=res.headers,  # type: ignore[arg-type]
                             )
 
-                        if res.status == 429:
+                        if res.status >= 400:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
@@ -217,7 +217,7 @@ class AsyncWebhookClient:
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
                                             f"A retry handler found: {type(handler).__name__} "
-                                            f"for POST {self.url} - rate_limited"
+                                            f"for POST {self.url} - status: {res.status}"
                                         )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,

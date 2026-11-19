@@ -2557,6 +2557,49 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"event_context": event_context, "cursor": cursor, "limit": limit})
         return self.api_call("apps.event.authorizations.list", params=kwargs)
 
+    def apps_icon_set(
+        self,
+        *,
+        app_id: str,
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        url: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Sets the app icon.
+
+        https://docs.slack.dev/reference/methods/apps.icon.set
+
+        Args:
+            app_id: The ID of the app whose icon you want to set.
+            file: File contents via `multipart/form-data`
+            url: URL of a publicly hosted image
+        """
+        if file is None and url is None:
+            raise e.SlackRequestError("Either file or url must be provided.")
+        kwargs.update({"app_id": app_id, "url": url})
+        if file is not None:
+            return self.api_call("apps.icon.set", files={"file": file}, data=kwargs)
+        return self.api_call("apps.icon.set", params=kwargs)
+
+    def apps_managed_permissions_set(
+        self,
+        *,
+        app_id: str,
+        permissions: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set who can interact with a managed app.
+
+        https://docs.slack.dev/reference/methods/apps.managed.permissions.set
+
+        Args:
+            app_id: Encoded ID of the managed app to configure
+            permissions: Who can interact with the app. Use everyone to allow all members, or app_owner to restrict access
+                to the app's owner.
+        """
+        kwargs.update({"app_id": app_id, "permissions": permissions})
+        return self.api_call("apps.managed.permissions.set", params=kwargs)
+
     def apps_uninstall(
         self,
         *,
