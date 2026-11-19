@@ -2758,6 +2758,68 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"refresh_token": refresh_token})
         return await self.api_call("tooling.tokens.rotate", params=kwargs)
 
+    async def assistant_search_context(
+        self,
+        *,
+        query: str,
+        action_token: Optional[str] = None,
+        channel_types: Optional[Union[str, Sequence[str]]] = None,
+        content_types: Optional[Union[str, Sequence[str]]] = None,
+        include_bots: Optional[bool] = None,
+        include_deleted_users: Optional[bool] = None,
+        before: Optional[int] = None,
+        after: Optional[int] = None,
+        include_context_messages: Optional[bool] = None,
+        context_channel_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        include_message_blocks: Optional[bool] = None,
+        highlight: Optional[bool] = None,
+        term_clauses: Optional[Sequence[str]] = None,
+        modifiers: Optional[str] = None,
+        include_archived_channels: Optional[bool] = None,
+        disable_semantic_search: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Searches messages, files, channels and users across your Slack organization.
+
+        https://docs.slack.dev/reference/methods/assistant.search.context
+        """
+        kwargs.update(
+            {
+                "query": query,
+                "action_token": action_token,
+                "include_bots": include_bots,
+                "include_deleted_users": include_deleted_users,
+                "before": before,
+                "after": after,
+                "include_context_messages": include_context_messages,
+                "context_channel_id": context_channel_id,
+                "cursor": cursor,
+                "limit": limit,
+                "sort": sort,
+                "sort_dir": sort_dir,
+                "include_message_blocks": include_message_blocks,
+                "highlight": highlight,
+                "modifiers": modifiers,
+                "include_archived_channels": include_archived_channels,
+                "disable_semantic_search": disable_semantic_search,
+            }
+        )
+        if isinstance(channel_types, (list, tuple)):
+            kwargs.update({"channel_types": ",".join(channel_types)})
+        else:
+            kwargs.update({"channel_types": channel_types})
+        if isinstance(content_types, (list, tuple)):
+            kwargs.update({"content_types": ",".join(content_types)})
+        else:
+            kwargs.update({"content_types": content_types})
+        if term_clauses is not None:
+            kwargs.update({"term_clauses": json.dumps(term_clauses)})
+        return await self.api_call("assistant.search.context", params=kwargs)
+
     async def assistant_threads_setStatus(
         self,
         *,
