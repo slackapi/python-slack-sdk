@@ -4,7 +4,7 @@
 #
 #  1) Modify slack_sdk/web/client.py
 #  2) Run `python scripts/codegen.py`
-#  3) Run `black slack_sdk/`
+#  3) Run `ruff format slack_sdk/`
 #
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -14,29 +14,32 @@ import json
 import os
 import warnings
 from io import IOBase
-from typing import Union, Sequence, Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 import slack_sdk.errors as e
+from slack_sdk.models.messages.chunk import Chunk
 from slack_sdk.models.views import View
+from slack_sdk.web.async_chat_stream import AsyncChatStream
+
+from ..models.attachments import Attachment
+from ..models.blocks import Block, RichTextBlock
+from ..models.metadata import EntityMetadata, EventAndEntityMetadata, Metadata
 from .async_base_client import AsyncBaseClient, AsyncSlackResponse
 from .internal_utils import (
     _parse_web_class_objects,
-    _update_call_participants,
-    _warn_if_text_or_attachment_fallback_is_missing,
+    _print_files_upload_v2_suggestion,
     _remove_none_values,
     _to_v2_file_upload_item,
+    _update_call_participants,
     _validate_for_legacy_client,
-    _print_files_upload_v2_suggestion,
+    _warn_if_message_text_content_is_missing,
 )
-from ..models.attachments import Attachment
-from ..models.blocks import Block
-from ..models.metadata import Metadata
 
 
 class AsyncWebClient(AsyncBaseClient):
     """A WebClient allows apps to communicate with the Slack Platform's Web API.
 
-    https://api.slack.com/methods
+    https://docs.slack.dev/reference/methods
 
     The Slack Web API is an interface for querying information from
     and enacting change in a Slack workspace.
@@ -106,8 +109,9 @@ class AsyncWebClient(AsyncBaseClient):
         metadata_only: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Retrieve analytics data for a given date, presented as a compressed JSON file
-        https://api.slack.com/methods/admin.analytics.getFile
+        """Retrieve analytics data for a given date, presented as a compressed JSON file.
+
+        https://docs.slack.dev/reference/methods/admin.analytics.getFile
         """
         kwargs.update({"type": type})
         if date is not None:
@@ -126,10 +130,11 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Approve an app for installation on a workspace.
+
         Either app_id or request_id is required.
         These IDs can be obtained either directly via the app_requested event,
         or by the admin.apps.requests.list method.
-        https://api.slack.com/methods/admin.apps.approve
+        https://docs.slack.dev/reference/methods/admin.apps.approve
         """
         if app_id:
             kwargs.update({"app_id": app_id})
@@ -156,7 +161,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List approved apps for an org or workspace.
-        https://api.slack.com/methods/admin.apps.approved.list
+
+        https://docs.slack.dev/reference/methods/admin.apps.approved.list
         """
         kwargs.update(
             {
@@ -176,8 +182,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Clear an app resolution
-        https://api.slack.com/methods/admin.apps.clearResolution
+        """Clear an app resolution.
+
+        https://docs.slack.dev/reference/methods/admin.apps.clearResolution
         """
         kwargs.update(
             {
@@ -197,7 +204,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List app requests for a team/workspace.
-        https://api.slack.com/methods/admin.apps.requests.cancel
+
+        https://docs.slack.dev/reference/methods/admin.apps.requests.cancel
         """
         kwargs.update(
             {
@@ -217,7 +225,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List app requests for a team/workspace.
-        https://api.slack.com/methods/admin.apps.requests.list
+
+        https://docs.slack.dev/reference/methods/admin.apps.requests.list
         """
         kwargs.update(
             {
@@ -238,10 +247,11 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Restrict an app for installation on a workspace.
+
         Exactly one of the team_id or enterprise_id arguments is required, not both.
         Either app_id or request_id is required. These IDs can be obtained either directly
         via the app_requested event, or by the admin.apps.requests.list method.
-        https://api.slack.com/methods/admin.apps.restrict
+        https://docs.slack.dev/reference/methods/admin.apps.restrict
         """
         if app_id:
             kwargs.update({"app_id": app_id})
@@ -268,7 +278,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List restricted apps for an org or workspace.
-        https://api.slack.com/methods/admin.apps.restricted.list
+
+        https://docs.slack.dev/reference/methods/admin.apps.restricted.list
         """
         kwargs.update(
             {
@@ -289,8 +300,9 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Uninstall an app from one or many workspaces, or an entire enterprise organization.
+
         With an org-level token, enterprise_id or team_ids is required.
-        https://api.slack.com/methods/admin.apps.uninstall
+        https://docs.slack.dev/reference/methods/admin.apps.uninstall
         """
         kwargs.update({"app_id": app_id})
         if enterprise_id is not None:
@@ -320,8 +332,9 @@ class AsyncWebClient(AsyncBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Get logs for a specified team/org
-        https://api.slack.com/methods/admin.apps.activities.list
+        """Get logs for a specified team/org.
+
+        https://docs.slack.dev/reference/methods/admin.apps.activities.list
         """
         kwargs.update(
             {
@@ -348,8 +361,9 @@ class AsyncWebClient(AsyncBaseClient):
         app_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Look up the app config for connectors by their IDs
-        https://api.slack.com/methods/admin.apps.config.lookup
+        """Look up the app config for connectors by their IDs.
+
+        https://docs.slack.dev/reference/methods/admin.apps.config.lookup
         """
         if isinstance(app_ids, (list, tuple)):
             kwargs.update({"app_ids": ",".join(app_ids)})
@@ -365,8 +379,9 @@ class AsyncWebClient(AsyncBaseClient):
         workflow_auth_strategy: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Set the app config for a connector
-        https://api.slack.com/methods/admin.apps.config.set
+        """Set the app config for a connector.
+
+        https://docs.slack.dev/reference/methods/admin.apps.config.set
         """
         kwargs.update(
             {
@@ -378,6 +393,80 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"domain_restrictions": json.dumps(domain_restrictions)})
         return await self.api_call("admin.apps.config.set", params=kwargs)
 
+    async def admin_apps_mcp_servers_list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List third-party app MCP servers approved for an organization, derived from the org's MCP server allowlist.
+
+        Entries reflect allowlist state, not install/scope liveness: servers of apps that are uninstalled (but not deleted)
+        are still listed.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.list
+
+        Args:
+            limit: The maximum number of items to return. Must be between 1 - 1000 both inclusive.
+            cursor: Set `cursor` to `next_cursor` returned by the previous call to list items in the next page
+        """
+        kwargs.update(
+            {
+                "limit": limit,
+                "cursor": cursor,
+            }
+        )
+        return await self.api_call("admin.apps.mcp.servers.list", params=kwargs)
+
+    async def admin_apps_mcp_servers_permissions_list(
+        self,
+        *,
+        app_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List MCP servers for an app with their access control permissions.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.list
+
+        Args:
+            app_id: Encoded ID of the app
+        """
+        kwargs.update({"app_id": app_id})
+        return await self.api_call("admin.apps.mcp.servers.permissions.list", params=kwargs)
+
+    async def admin_apps_mcp_servers_permissions_set(
+        self,
+        *,
+        app_id: str,
+        server_id: str,
+        permission_type: str,
+        user_ids: Optional[Union[str, Sequence[str]]] = None,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set the access control permission for who can use an MCP server.
+
+        https://docs.slack.dev/reference/methods/admin.apps.mcp.servers.permissions.set
+
+        Args:
+            app_id: Encoded ID of the app
+            server_id: Encoded ID of the MCP server
+            permission_type: The type of permission that defines who can use this MCP server
+            user_ids: List of user IDs to set for named_entities or named_entities_exclude
+            usergroup_ids: List of encoded usergroup IDs
+        """
+        kwargs.update({"app_id": app_id, "server_id": server_id, "permission_type": permission_type})
+        if isinstance(user_ids, (list, tuple)):
+            kwargs.update({"user_ids": ",".join(user_ids)})
+        else:
+            kwargs.update({"user_ids": user_ids})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({"usergroup_ids": ",".join(usergroup_ids)})
+        else:
+            kwargs.update({"usergroup_ids": usergroup_ids})
+        return await self.api_call("admin.apps.mcp.servers.permissions.set", params=kwargs)
+
     async def admin_auth_policy_getEntities(
         self,
         *,
@@ -388,7 +477,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Fetch all the entities assigned to a particular authentication policy by name.
-        https://api.slack.com/methods/admin.auth.policy.getEntities
+
+        https://docs.slack.dev/reference/methods/admin.auth.policy.getEntities
         """
         kwargs.update({"policy_name": policy_name})
         if cursor is not None:
@@ -408,7 +498,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Assign entities to a particular authentication policy.
-        https://api.slack.com/methods/admin.auth.policy.assignEntities
+
+        https://docs.slack.dev/reference/methods/admin.auth.policy.assignEntities
         """
         if isinstance(entity_ids, (list, tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
@@ -427,7 +518,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove specified entities from a specified authentication policy.
-        https://api.slack.com/methods/admin.auth.policy.removeEntities
+
+        https://docs.slack.dev/reference/methods/admin.auth.policy.removeEntities
         """
         if isinstance(entity_ids, (list, tuple)):
             kwargs.update({"entity_ids": ",".join(entity_ids)})
@@ -437,6 +529,63 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"entity_type": entity_type})
         return await self.api_call("admin.auth.policy.removeEntities", http_verb="POST", params=kwargs)
 
+    async def admin_conversations_createForObjects(
+        self,
+        *,
+        object_id: str,
+        salesforce_org_id: str,
+        invite_object_team: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Create a Salesforce channel for the corresponding object provided.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.createForObjects
+        """
+        kwargs.update(
+            {"object_id": object_id, "salesforce_org_id": salesforce_org_id, "invite_object_team": invite_object_team}
+        )
+        return await self.api_call("admin.conversations.createForObjects", params=kwargs)
+
+    async def admin_conversations_linkObjects(
+        self,
+        *,
+        channel: str,
+        record_id: str,
+        salesforce_org_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Link a Salesforce record to a channel.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.linkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "record_id": record_id,
+                "salesforce_org_id": salesforce_org_id,
+            }
+        )
+        return await self.api_call("admin.conversations.linkObjects", params=kwargs)
+
+    async def admin_conversations_unlinkObjects(
+        self,
+        *,
+        channel: str,
+        new_name: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Unlink a Salesforce record from a channel.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.unlinkObjects
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "new_name": new_name,
+            }
+        )
+        return await self.api_call("admin.conversations.unlinkObjects", params=kwargs)
+
     async def admin_barriers_create(
         self,
         *,
@@ -445,8 +594,9 @@ class AsyncWebClient(AsyncBaseClient):
         restricted_subjects: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Create an Information Barrier
-        https://api.slack.com/methods/admin.barriers.create
+        """Create an Information Barrier.
+
+        https://docs.slack.dev/reference/methods/admin.barriers.create
         """
         kwargs.update({"primary_usergroup_id": primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, tuple)):
@@ -465,8 +615,9 @@ class AsyncWebClient(AsyncBaseClient):
         barrier_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Delete an existing Information Barrier
-        https://api.slack.com/methods/admin.barriers.delete
+        """Delete an existing Information Barrier.
+
+        https://docs.slack.dev/reference/methods/admin.barriers.delete
         """
         kwargs.update({"barrier_id": barrier_id})
         return await self.api_call("admin.barriers.delete", http_verb="POST", params=kwargs)
@@ -480,8 +631,9 @@ class AsyncWebClient(AsyncBaseClient):
         restricted_subjects: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Update an existing Information Barrier
-        https://api.slack.com/methods/admin.barriers.update
+        """Update an existing Information Barrier.
+
+        https://docs.slack.dev/reference/methods/admin.barriers.update
         """
         kwargs.update({"barrier_id": barrier_id, "primary_usergroup_id": primary_usergroup_id})
         if isinstance(barriered_from_usergroup_ids, (list, tuple)):
@@ -501,8 +653,10 @@ class AsyncWebClient(AsyncBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Get all Information Barriers for your organization
-        https://api.slack.com/methods/admin.barriers.list"""
+        """Get all Information Barriers for your organization.
+
+        https://docs.slack.dev/reference/methods/admin.barriers.list
+        """
         kwargs.update(
             {
                 "cursor": cursor,
@@ -522,7 +676,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create a public or private channel-based conversation.
-        https://api.slack.com/methods/admin.conversations.create
+
+        https://docs.slack.dev/reference/methods/admin.conversations.create
         """
         kwargs.update(
             {
@@ -542,7 +697,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Delete a public or private channel.
-        https://api.slack.com/methods/admin.conversations.delete
+
+        https://docs.slack.dev/reference/methods/admin.conversations.delete
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.delete", params=kwargs)
@@ -555,7 +711,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Invite a user to a public or private channel.
-        https://api.slack.com/methods/admin.conversations.invite
+
+        https://docs.slack.dev/reference/methods/admin.conversations.invite
         """
         kwargs.update({"channel_id": channel_id})
         if isinstance(user_ids, (list, tuple)):
@@ -572,7 +729,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Archive a public or private channel.
-        https://api.slack.com/methods/admin.conversations.archive
+
+        https://docs.slack.dev/reference/methods/admin.conversations.archive
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.archive", params=kwargs)
@@ -584,7 +742,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Unarchive a public or private channel.
-        https://api.slack.com/methods/admin.conversations.archive
+
+        https://docs.slack.dev/reference/methods/admin.conversations.archive
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.unarchive", params=kwargs)
@@ -597,7 +756,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Rename a public or private channel.
-        https://api.slack.com/methods/admin.conversations.rename
+
+        https://docs.slack.dev/reference/methods/admin.conversations.rename
         """
         kwargs.update({"channel_id": channel_id, "name": name})
         return await self.api_call("admin.conversations.rename", params=kwargs)
@@ -615,7 +775,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Search for public or private channels in an Enterprise organization.
-        https://api.slack.com/methods/admin.conversations.search
+
+        https://docs.slack.dev/reference/methods/admin.conversations.search
         """
         kwargs.update(
             {
@@ -646,7 +807,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Convert a public channel to a private channel.
-        https://api.slack.com/methods/admin.conversations.convertToPrivate
+
+        https://docs.slack.dev/reference/methods/admin.conversations.convertToPrivate
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.convertToPrivate", params=kwargs)
@@ -658,7 +820,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Convert a privte channel to a public channel.
-        https://api.slack.com/methods/admin.conversations.convertToPublic
+
+        https://docs.slack.dev/reference/methods/admin.conversations.convertToPublic
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.convertToPublic", params=kwargs)
@@ -671,7 +834,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set the posting permissions for a public or private channel.
-        https://api.slack.com/methods/admin.conversations.setConversationPrefs
+
+        https://docs.slack.dev/reference/methods/admin.conversations.setConversationPrefs
         """
         kwargs.update({"channel_id": channel_id})
         if isinstance(prefs, dict):
@@ -687,7 +851,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Get conversation preferences for a public or private channel.
-        https://api.slack.com/methods/admin.conversations.getConversationPrefs
+
+        https://docs.slack.dev/reference/methods/admin.conversations.getConversationPrefs
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.getConversationPrefs", params=kwargs)
@@ -700,7 +865,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Disconnect a connected channel from one or more workspaces.
-        https://api.slack.com/methods/admin.conversations.disconnectShared
+
+        https://docs.slack.dev/reference/methods/admin.conversations.disconnectShared
         """
         kwargs.update({"channel_id": channel_id})
         if isinstance(leaving_team_ids, (list, tuple)):
@@ -720,7 +886,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Returns channels on the given team using the filters.
-        https://api.slack.com/methods/admin.conversations.lookup
+
+        https://docs.slack.dev/reference/methods/admin.conversations.lookup
         """
         kwargs.update(
             {
@@ -745,10 +912,10 @@ class AsyncWebClient(AsyncBaseClient):
         team_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """List all disconnected channels—i.e.,
-        channels that were once connected to other workspaces and then disconnected—and
-        the corresponding original channel IDs for key revocation with EKM.
-        https://api.slack.com/methods/admin.conversations.ekm.listOriginalConnectedChannelInfo
+        """List all disconnected channels and the corresponding original channel IDs for key revocation with EKM.
+
+        Disconnected channels are those that were once connected to other workspaces and then disconnected.
+        https://docs.slack.dev/reference/methods/admin.conversations.ekm.listOriginalConnectedChannelInfo
         """
         kwargs.update(
             {
@@ -775,7 +942,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add an allowlist of IDP groups for accessing a channel.
-        https://api.slack.com/methods/admin.conversations.restrictAccess.addGroup
+
+        https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.addGroup
         """
         kwargs.update(
             {
@@ -798,7 +966,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List all IDP Groups linked to a channel.
-        https://api.slack.com/methods/admin.conversations.restrictAccess.listGroups
+
+        https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.listGroups
         """
         kwargs.update(
             {
@@ -821,7 +990,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove a linked IDP group linked from a private channel.
-        https://api.slack.com/methods/admin.conversations.restrictAccess.removeGroup
+
+        https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.removeGroup
         """
         kwargs.update(
             {
@@ -846,7 +1016,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set the workspaces in an Enterprise grid org that connect to a public or private channel.
-        https://api.slack.com/methods/admin.conversations.setTeams
+
+        https://docs.slack.dev/reference/methods/admin.conversations.setTeams
         """
         kwargs.update(
             {
@@ -870,7 +1041,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set the workspaces in an Enterprise grid org that connect to a channel.
-        https://api.slack.com/methods/admin.conversations.getTeams
+
+        https://docs.slack.dev/reference/methods/admin.conversations.getTeams
         """
         kwargs.update(
             {
@@ -887,8 +1059,9 @@ class AsyncWebClient(AsyncBaseClient):
         channel_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Get a channel's retention policy
-        https://api.slack.com/methods/admin.conversations.getCustomRetention
+        """Get a channel's retention policy.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.getCustomRetention
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.getCustomRetention", params=kwargs)
@@ -899,8 +1072,9 @@ class AsyncWebClient(AsyncBaseClient):
         channel_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Remove a channel's retention policy
-        https://api.slack.com/methods/admin.conversations.removeCustomRetention
+        """Remove a channel's retention policy.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.removeCustomRetention
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("admin.conversations.removeCustomRetention", params=kwargs)
@@ -912,8 +1086,9 @@ class AsyncWebClient(AsyncBaseClient):
         duration_days: int,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Set a channel's retention policy
-        https://api.slack.com/methods/admin.conversations.setCustomRetention
+        """Set a channel's retention policy.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.setCustomRetention
         """
         kwargs.update({"channel_id": channel_id, "duration_days": duration_days})
         return await self.api_call("admin.conversations.setCustomRetention", params=kwargs)
@@ -925,7 +1100,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Archive public or private channels in bulk.
-        https://api.slack.com/methods/admin.conversations.bulkArchive
+
+        https://docs.slack.dev/reference/methods/admin.conversations.bulkArchive
         """
         kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
         return await self.api_call("admin.conversations.bulkArchive", params=kwargs)
@@ -937,6 +1113,7 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Delete public or private channels in bulk.
+
         https://slack.com/api/admin.conversations.bulkDelete
         """
         kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
@@ -950,7 +1127,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Move public or private channels in bulk.
-        https://api.slack.com/methods/admin.conversations.bulkMove
+
+        https://docs.slack.dev/reference/methods/admin.conversations.bulkMove
         """
         kwargs.update(
             {
@@ -960,6 +1138,24 @@ class AsyncWebClient(AsyncBaseClient):
         )
         return await self.api_call("admin.conversations.bulkMove", params=kwargs)
 
+    async def admin_conversations_bulkSetProperties(
+        self,
+        *,
+        channel_ids: Union[Sequence[str], str],
+        property: Union[str, Dict[str, Any]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set properties on channels in bulk.
+
+        https://docs.slack.dev/reference/methods/admin.conversations.bulkSetProperties
+        """
+        kwargs.update({"channel_ids": ",".join(channel_ids) if isinstance(channel_ids, (list, tuple)) else channel_ids})
+        if isinstance(property, dict):
+            kwargs.update({"property": json.dumps(property)})
+        else:
+            kwargs.update({"property": property})
+        return await self.api_call("admin.conversations.bulkSetProperties", params=kwargs)
+
     async def admin_emoji_add(
         self,
         *,
@@ -968,7 +1164,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add an emoji.
-        https://api.slack.com/methods/admin.emoji.add
+
+        https://docs.slack.dev/reference/methods/admin.emoji.add
         """
         kwargs.update({"name": name, "url": url})
         return await self.api_call("admin.emoji.add", http_verb="GET", params=kwargs)
@@ -981,7 +1178,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add an emoji alias.
-        https://api.slack.com/methods/admin.emoji.addAlias
+
+        https://docs.slack.dev/reference/methods/admin.emoji.addAlias
         """
         kwargs.update({"alias_for": alias_for, "name": name})
         return await self.api_call("admin.emoji.addAlias", http_verb="GET", params=kwargs)
@@ -994,7 +1192,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List emoji for an Enterprise Grid organization.
-        https://api.slack.com/methods/admin.emoji.list
+
+        https://docs.slack.dev/reference/methods/admin.emoji.list
         """
         kwargs.update({"cursor": cursor, "limit": limit})
         return await self.api_call("admin.emoji.list", http_verb="GET", params=kwargs)
@@ -1006,7 +1205,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove an emoji across an Enterprise Grid organization.
-        https://api.slack.com/methods/admin.emoji.remove
+
+        https://docs.slack.dev/reference/methods/admin.emoji.remove
         """
         kwargs.update({"name": name})
         return await self.api_call("admin.emoji.remove", http_verb="GET", params=kwargs)
@@ -1019,7 +1219,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Rename an emoji.
-        https://api.slack.com/methods/admin.emoji.rename
+
+        https://docs.slack.dev/reference/methods/admin.emoji.rename
         """
         kwargs.update({"name": name, "new_name": new_name})
         return await self.api_call("admin.emoji.rename", http_verb="GET", params=kwargs)
@@ -1033,8 +1234,9 @@ class AsyncWebClient(AsyncBaseClient):
         limit: Optional[int] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Look up functions by a set of apps
-        https://api.slack.com/methods/admin.functions.list
+        """Look up functions by a set of apps.
+
+        https://docs.slack.dev/reference/methods/admin.functions.list
         """
         if isinstance(app_ids, (list, tuple)):
             kwargs.update({"app_ids": ",".join(app_ids)})
@@ -1055,9 +1257,10 @@ class AsyncWebClient(AsyncBaseClient):
         function_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Lookup the visibility of multiple Slack functions
-        and include the users if it is limited to particular named entities.
-        https://api.slack.com/methods/admin.functions.permissions.lookup
+        """Lookup the visibility of multiple Slack functions.
+
+        Include the users if the visibility is limited to particular named entities.
+        https://docs.slack.dev/reference/methods/admin.functions.permissions.lookup
         """
         if isinstance(function_ids, (list, tuple)):
             kwargs.update({"function_ids": ",".join(function_ids)})
@@ -1073,9 +1276,9 @@ class AsyncWebClient(AsyncBaseClient):
         user_ids: Optional[Union[str, Sequence[str]]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Set the visibility of a Slack function
-        and define the users or workspaces if it is set to named_entities
-        https://api.slack.com/methods/admin.functions.permissions.set
+        """Set the visibility of a Slack function and define the users or workspaces if it is set to named_entities.
+
+        https://docs.slack.dev/reference/methods/admin.functions.permissions.set
         """
         kwargs.update(
             {
@@ -1098,8 +1301,9 @@ class AsyncWebClient(AsyncBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Adds members to the specified role with the specified scopes
-        https://api.slack.com/methods/admin.roles.addAssignments
+        """Adds members to the specified role with the specified scopes.
+
+        https://docs.slack.dev/reference/methods/admin.roles.addAssignments
         """
         kwargs.update({"role_id": role_id})
         if isinstance(entity_ids, (list, tuple)):
@@ -1123,8 +1327,9 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists assignments for all roles across entities.
+
             Options to scope results by any combination of roles or entities
-        https://api.slack.com/methods/admin.roles.listAssignments
+        https://docs.slack.dev/reference/methods/admin.roles.listAssignments
         """
         kwargs.update({"cursor": cursor, "limit": limit, "sort_dir": sort_dir})
         if isinstance(entity_ids, (list, tuple)):
@@ -1145,8 +1350,9 @@ class AsyncWebClient(AsyncBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Removes a set of users from a role for the given scopes and entities
-        https://api.slack.com/methods/admin.roles.removeAssignments
+        """Removes a set of users from a role for the given scopes and entities.
+
+        https://docs.slack.dev/reference/methods/admin.roles.removeAssignments
         """
         kwargs.update({"role_id": role_id})
         if isinstance(entity_ids, (list, tuple)):
@@ -1159,6 +1365,116 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"user_ids": user_ids})
         return await self.api_call("admin.roles.removeAssignments", params=kwargs)
 
+    async def admin_slackbot_skills_list(
+        self,
+        *,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        creator_ids: Optional[Union[str, Sequence[str]]] = None,
+        publish_status: Optional[str] = None,
+        auto_enabled_status: Optional[str] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Lists metadata for skills owned by the organization, including invite-only skills.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.list
+
+        Args:
+            category: Only return skills in this category.
+            cursor: Continuation from the previous page. Keep all filters and sorting unchanged. Pages can be empty while a
+              continuation remains; continue until next_cursor is empty. Changes during traversal may move results;
+              pagination is not a snapshot.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+            creator_ids: Only return skills created by these users. Accepts U or W user IDs.
+            publish_status: Filter by publication to the org catalog.
+            auto_enabled_status: Filter by org deployment, independently of publication.
+            sort: Sort across the inventory. Name uses case-insensitive ordering. Unedited skills use their creation date
+              for date_updated sorting.
+            sort_dir: Sort direction; file ID breaks ties.
+        """
+        kwargs.update(
+            {
+                "category": category,
+                "cursor": cursor,
+                "limit": limit,
+                "publish_status": publish_status,
+                "auto_enabled_status": auto_enabled_status,
+                "sort": sort,
+                "sort_dir": sort_dir,
+            }
+        )
+        if isinstance(creator_ids, (list, tuple)):
+            kwargs.update({"creator_ids": ",".join(creator_ids)})
+        else:
+            kwargs.update({"creator_ids": creator_ids})
+        return await self.api_call("admin.slackbot.skills.list", params=kwargs)
+
+    async def admin_slackbot_skills_publish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Publishes Slackbot skills to an organization's catalog.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.publish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        """
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return await self.api_call("admin.slackbot.skills.publish", params=kwargs)
+
+    async def admin_slackbot_skills_setAutoEnabled(
+        self,
+        *,
+        skill_id: str,
+        permission_type: str,
+        usergroup_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Sets who a Slackbot skill is automatically turned on for.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.setAutoEnabled
+
+        Args:
+            skill_id: Canvas skill to deploy.
+            permission_type: Deployment audience.
+            usergroup_ids: One to 100 user groups for named_entities. Duplicates count toward the input limit and are
+              stored once. Omit for other permission types.
+        """
+        kwargs.update({"skill_id": skill_id, "permission_type": permission_type})
+        if isinstance(usergroup_ids, (list, tuple)):
+            kwargs.update({"usergroup_ids": ",".join(usergroup_ids)})
+        else:
+            kwargs.update({"usergroup_ids": usergroup_ids})
+        return await self.api_call("admin.slackbot.skills.setAutoEnabled", params=kwargs)
+
+    async def admin_slackbot_skills_unpublish(
+        self,
+        *,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Removes Slackbot skills from the org catalog, preserving access, libraries, and deployments.
+
+        https://docs.slack.dev/reference/methods/admin.slackbot.skills.unpublish
+
+        Args:
+            skill_ids: One to 50 skill IDs. Successful items are not rolled back if other items fail.
+        """
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return await self.api_call("admin.slackbot.skills.unpublish", params=kwargs)
+
     async def admin_users_session_reset(
         self,
         *,
@@ -1168,7 +1484,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Wipes all valid sessions on all devices for a given user.
-        https://api.slack.com/methods/admin.users.session.reset
+
+        https://docs.slack.dev/reference/methods/admin.users.session.reset
         """
         kwargs.update(
             {
@@ -1187,8 +1504,9 @@ class AsyncWebClient(AsyncBaseClient):
         web_only: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users
-        https://api.slack.com/methods/admin.users.session.resetBulk
+        """Enqueues an asynchronous job to wipe all valid sessions on all devices for a given list of users.
+
+        https://docs.slack.dev/reference/methods/admin.users.session.resetBulk
         """
         if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
@@ -1210,7 +1528,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Invalidate a single session for a user by session_id.
-        https://api.slack.com/methods/admin.users.session.invalidate
+
+        https://docs.slack.dev/reference/methods/admin.users.session.invalidate
         """
         kwargs.update({"session_id": session_id, "team_id": team_id})
         return await self.api_call("admin.users.session.invalidate", params=kwargs)
@@ -1224,8 +1543,9 @@ class AsyncWebClient(AsyncBaseClient):
         user_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Lists all active user sessions for an organization
-        https://api.slack.com/methods/admin.users.session.list
+        """Lists all active user sessions for an organization.
+
+        https://docs.slack.dev/reference/methods/admin.users.session.list
         """
         kwargs.update(
             {
@@ -1245,7 +1565,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set the default channels of a workspace.
-        https://api.slack.com/methods/admin.teams.settings.setDefaultChannels
+
+        https://docs.slack.dev/reference/methods/admin.teams.settings.setDefaultChannels
         """
         kwargs.update({"team_id": team_id})
         if isinstance(channel_ids, (list, tuple)):
@@ -1260,9 +1581,10 @@ class AsyncWebClient(AsyncBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Get user-specific session settings—the session duration
-        and what happens when the client closes—given a list of users.
-        https://api.slack.com/methods/admin.users.session.getSettings
+        """Get user-specific session settings for a given list of users.
+
+        The settings include the session duration and what happens when the client closes.
+        https://docs.slack.dev/reference/methods/admin.users.session.getSettings
         """
         if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
@@ -1278,9 +1600,10 @@ class AsyncWebClient(AsyncBaseClient):
         duration: Optional[int] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Configure the user-level session settings—the session duration
-        and what happens when the client closes—for one or more users.
-        https://api.slack.com/methods/admin.users.session.setSettings
+        """Configure the user-level session settings for one or more users.
+
+        The settings include the session duration and what happens when the client closes.
+        https://docs.slack.dev/reference/methods/admin.users.session.setSettings
         """
         if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
@@ -1300,9 +1623,10 @@ class AsyncWebClient(AsyncBaseClient):
         user_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Clear user-specific session settings—the session duration
-        and what happens when the client closes—for a list of users.
-        https://api.slack.com/methods/admin.users.session.clearSettings
+        """Clear user-specific session settings for a list of users.
+
+        The settings include the session duration and what happens when the client closes.
+        https://docs.slack.dev/reference/methods/admin.users.session.clearSettings
         """
         if isinstance(user_ids, (list, tuple)):
             kwargs.update({"user_ids": ",".join(user_ids)})
@@ -1317,9 +1641,10 @@ class AsyncWebClient(AsyncBaseClient):
         date_sessions_started: Optional[Union[str, int]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Ask Slackbot to send you an export listing all workspace members using unsupported software,
-        presented as a zipped CSV file.
-        https://api.slack.com/methods/admin.users.unsupportedVersions.export
+        """Ask Slackbot to send you an export listing all workspace members using unsupported software.
+
+        The export is presented as a zipped CSV file.
+        https://docs.slack.dev/reference/methods/admin.users.unsupportedVersions.export
         """
         kwargs.update(
             {
@@ -1337,7 +1662,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Approve a workspace invite request.
-        https://api.slack.com/methods/admin.inviteRequests.approve
+
+        https://docs.slack.dev/reference/methods/admin.inviteRequests.approve
         """
         kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
         return await self.api_call("admin.inviteRequests.approve", params=kwargs)
@@ -1351,7 +1677,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List all approved workspace invite requests.
-        https://api.slack.com/methods/admin.inviteRequests.approved.list
+
+        https://docs.slack.dev/reference/methods/admin.inviteRequests.approved.list
         """
         kwargs.update(
             {
@@ -1371,7 +1698,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List all denied workspace invite requests.
-        https://api.slack.com/methods/admin.inviteRequests.denied.list
+
+        https://docs.slack.dev/reference/methods/admin.inviteRequests.denied.list
         """
         kwargs.update(
             {
@@ -1390,7 +1718,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deny a workspace invite request.
-        https://api.slack.com/methods/admin.inviteRequests.deny
+
+        https://docs.slack.dev/reference/methods/admin.inviteRequests.deny
         """
         kwargs.update({"invite_request_id": invite_request_id, "team_id": team_id})
         return await self.api_call("admin.inviteRequests.deny", params=kwargs)
@@ -1411,7 +1740,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List all of the admins on a given workspace.
-        https://api.slack.com/methods/admin.inviteRequests.list
+
+        https://docs.slack.dev/reference/methods/admin.inviteRequests.list
         """
         kwargs.update(
             {
@@ -1432,7 +1762,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Create an Enterprise team.
-        https://api.slack.com/methods/admin.teams.create
+
+        https://docs.slack.dev/reference/methods/admin.teams.create
         """
         kwargs.update(
             {
@@ -1452,7 +1783,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List all teams on an Enterprise organization.
-        https://api.slack.com/methods/admin.teams.list
+
+        https://docs.slack.dev/reference/methods/admin.teams.list
         """
         kwargs.update({"cursor": cursor, "limit": limit})
         return await self.api_call("admin.teams.list", params=kwargs)
@@ -1466,7 +1798,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List all of the admins on a given workspace.
-        https://api.slack.com/methods/admin.teams.owners.list
+
+        https://docs.slack.dev/reference/methods/admin.teams.owners.list
         """
         kwargs.update({"team_id": team_id, "cursor": cursor, "limit": limit})
         return await self.api_call("admin.teams.owners.list", http_verb="GET", params=kwargs)
@@ -1477,8 +1810,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Fetch information about settings in a workspace
-        https://api.slack.com/methods/admin.teams.settings.info
+        """Fetch information about settings in a workspace.
+
+        https://docs.slack.dev/reference/methods/admin.teams.settings.info
         """
         kwargs.update({"team_id": team_id})
         return await self.api_call("admin.teams.settings.info", params=kwargs)
@@ -1491,7 +1825,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set the description of a given workspace.
-        https://api.slack.com/methods/admin.teams.settings.setDescription
+
+        https://docs.slack.dev/reference/methods/admin.teams.settings.setDescription
         """
         kwargs.update({"team_id": team_id, "description": description})
         return await self.api_call("admin.teams.settings.setDescription", params=kwargs)
@@ -1504,7 +1839,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sets the icon of a workspace.
-        https://api.slack.com/methods/admin.teams.settings.setDiscoverability
+
+        https://docs.slack.dev/reference/methods/admin.teams.settings.setDiscoverability
         """
         kwargs.update({"team_id": team_id, "discoverability": discoverability})
         return await self.api_call("admin.teams.settings.setDiscoverability", params=kwargs)
@@ -1517,7 +1853,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sets the icon of a workspace.
-        https://api.slack.com/methods/admin.teams.settings.setIcon
+
+        https://docs.slack.dev/reference/methods/admin.teams.settings.setIcon
         """
         kwargs.update({"team_id": team_id, "image_url": image_url})
         return await self.api_call("admin.teams.settings.setIcon", http_verb="GET", params=kwargs)
@@ -1530,7 +1867,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sets the icon of a workspace.
-        https://api.slack.com/methods/admin.teams.settings.setName
+
+        https://docs.slack.dev/reference/methods/admin.teams.settings.setName
         """
         kwargs.update({"team_id": team_id, "name": name})
         return await self.api_call("admin.teams.settings.setName", params=kwargs)
@@ -1544,7 +1882,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add one or more default channels to an IDP group.
-        https://api.slack.com/methods/admin.usergroups.addChannels
+
+        https://docs.slack.dev/reference/methods/admin.usergroups.addChannels
         """
         kwargs.update({"team_id": team_id, "usergroup_id": usergroup_id})
         if isinstance(channel_ids, (list, tuple)):
@@ -1562,7 +1901,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Associate one or more default workspaces with an organization-wide IDP group.
-        https://api.slack.com/methods/admin.usergroups.addTeams
+
+        https://docs.slack.dev/reference/methods/admin.usergroups.addTeams
         """
         kwargs.update({"usergroup_id": usergroup_id, "auto_provision": auto_provision})
         if isinstance(team_ids, (list, tuple)):
@@ -1580,7 +1920,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add one or more default channels to an IDP group.
-        https://api.slack.com/methods/admin.usergroups.listChannels
+
+        https://docs.slack.dev/reference/methods/admin.usergroups.listChannels
         """
         kwargs.update(
             {
@@ -1599,7 +1940,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add one or more default channels to an IDP group.
-        https://api.slack.com/methods/admin.usergroups.removeChannels
+
+        https://docs.slack.dev/reference/methods/admin.usergroups.removeChannels
         """
         kwargs.update({"usergroup_id": usergroup_id})
         if isinstance(channel_ids, (list, tuple)):
@@ -1619,7 +1961,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add an Enterprise user to a workspace.
-        https://api.slack.com/methods/admin.users.assign
+
+        https://docs.slack.dev/reference/methods/admin.users.assign
         """
         kwargs.update(
             {
@@ -1651,7 +1994,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Invite a user to a workspace.
-        https://api.slack.com/methods/admin.users.invite
+
+        https://docs.slack.dev/reference/methods/admin.users.invite
         """
         kwargs.update(
             {
@@ -1672,18 +2016,33 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"channel_ids": channel_ids})
         return await self.api_call("admin.users.invite", params=kwargs)
 
+    async def admin_users_getExpiration(
+        self,
+        *,
+        user_id: str,
+        target_team: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Fetches the expiration timestamp for a guest.
+
+        https://docs.slack.dev/reference/methods/admin.users.getExpiration
+        """
+        kwargs.update({"user_id": user_id, "target_team": target_team})
+        return await self.api_call("admin.users.getExpiration", http_verb="GET", params=kwargs)
+
     async def admin_users_list(
         self,
         *,
-        team_id: str,
+        team_id: Optional[str] = None,
         include_deactivated_user_workspaces: Optional[bool] = None,
         is_active: Optional[bool] = None,
         cursor: Optional[str] = None,
         limit: Optional[int] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """List users on a workspace
-        https://api.slack.com/methods/admin.users.list
+        """List users on a workspace.
+
+        https://docs.slack.dev/reference/methods/admin.users.list
         """
         kwargs.update(
             {
@@ -1704,7 +2063,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove a user from a workspace.
-        https://api.slack.com/methods/admin.users.remove
+
+        https://docs.slack.dev/reference/methods/admin.users.remove
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
         return await self.api_call("admin.users.remove", params=kwargs)
@@ -1717,7 +2077,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set an existing guest, regular user, or owner to be an admin user.
-        https://api.slack.com/methods/admin.users.setAdmin
+
+        https://docs.slack.dev/reference/methods/admin.users.setAdmin
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
         return await self.api_call("admin.users.setAdmin", params=kwargs)
@@ -1731,7 +2092,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set an expiration for a guest user.
-        https://api.slack.com/methods/admin.users.setExpiration
+
+        https://docs.slack.dev/reference/methods/admin.users.setExpiration
         """
         kwargs.update({"expiration_ts": expiration_ts, "team_id": team_id, "user_id": user_id})
         return await self.api_call("admin.users.setExpiration", params=kwargs)
@@ -1744,7 +2106,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set an existing guest, regular user, or admin user to be a workspace owner.
-        https://api.slack.com/methods/admin.users.setOwner
+
+        https://docs.slack.dev/reference/methods/admin.users.setOwner
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
         return await self.api_call("admin.users.setOwner", params=kwargs)
@@ -1757,7 +2120,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set an existing guest user, admin user, or owner to be a regular user.
-        https://api.slack.com/methods/admin.users.setRegular
+
+        https://docs.slack.dev/reference/methods/admin.users.setRegular
         """
         kwargs.update({"team_id": team_id, "user_id": user_id})
         return await self.api_call("admin.users.setRegular", params=kwargs)
@@ -1777,8 +2141,9 @@ class AsyncWebClient(AsyncBaseClient):
         source: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Search workflows within the team or enterprise
-        https://api.slack.com/methods/admin.workflows.search
+        """Search workflows within the team or enterprise.
+
+        https://docs.slack.dev/reference/methods/admin.workflows.search
         """
         if collaborator_ids is not None:
             if isinstance(collaborator_ids, (list, tuple)):
@@ -1807,8 +2172,9 @@ class AsyncWebClient(AsyncBaseClient):
         max_workflow_triggers: Optional[int] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Look up the permissions for a set of workflows
-        https://api.slack.com/methods/admin.workflows.permissions.lookup
+        """Look up the permissions for a set of workflows.
+
+        https://docs.slack.dev/reference/methods/admin.workflows.permissions.lookup
         """
         if isinstance(workflow_ids, (list, tuple)):
             kwargs.update({"workflow_ids": ",".join(workflow_ids)})
@@ -1828,8 +2194,9 @@ class AsyncWebClient(AsyncBaseClient):
         workflow_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Add collaborators to workflows within the team or enterprise
-        https://api.slack.com/methods/admin.workflows.collaborators.add
+        """Add collaborators to workflows within the team or enterprise.
+
+        https://docs.slack.dev/reference/methods/admin.workflows.collaborators.add
         """
         if isinstance(collaborator_ids, (list, tuple)):
             kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
@@ -1848,8 +2215,9 @@ class AsyncWebClient(AsyncBaseClient):
         workflow_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Remove collaborators from workflows within the team or enterprise
-        https://api.slack.com/methods/admin.workflows.collaborators.remove
+        """Remove collaborators from workflows within the team or enterprise.
+
+        https://docs.slack.dev/reference/methods/admin.workflows.collaborators.remove
         """
         if isinstance(collaborator_ids, (list, tuple)):
             kwargs.update({"collaborator_ids": ",".join(collaborator_ids)})
@@ -1867,14 +2235,283 @@ class AsyncWebClient(AsyncBaseClient):
         workflow_ids: Union[str, Sequence[str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Unpublish workflows within the team or enterprise
-        https://api.slack.com/methods/admin.workflows.unpublish
+        """Unpublish workflows within the team or enterprise.
+
+        https://docs.slack.dev/reference/methods/admin.workflows.unpublish
         """
         if isinstance(workflow_ids, (list, tuple)):
             kwargs.update({"workflow_ids": ",".join(workflow_ids)})
         else:
             kwargs.update({"workflow_ids": workflow_ids})
         return await self.api_call("admin.workflows.unpublish", params=kwargs)
+
+    async def agents_conversations_archive(
+        self,
+        *,
+        channel_id: str,
+        summary_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Archive a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.archive
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "summary_message_ts": summary_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.archive", json=kwargs)
+
+    async def agents_conversations_create(
+        self,
+        *,
+        name: str,
+        team_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        is_private: Optional[bool] = None,
+        origin_channel_id: Optional[str] = None,
+        origin_message_ts: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Create a dedicated code channel for an agent session.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.create
+        """
+        kwargs.update(
+            {
+                "team_id": team_id,
+                "session_id": session_id,
+                "name": name,
+                "is_private": is_private,
+                "origin_channel_id": origin_channel_id,
+                "origin_message_ts": origin_message_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.create", json=kwargs)
+
+    async def agents_conversations_getCanvas(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content_format: Optional[str] = None,
+        include_resolved: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Fetch a canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.getCanvas
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content_format": content_format,
+                "include_resolved": include_resolved,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.getCanvas", json=kwargs)
+
+    async def agents_conversations_listViews(
+        self,
+        *,
+        channel_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List the views currently attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.listViews
+        """
+        kwargs.update({"channel_id": channel_id})
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.listViews", json=kwargs)
+
+    async def agents_conversations_removeView(
+        self,
+        *,
+        channel_id: str,
+        view_key: Optional[str] = None,
+        view_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Remove a view from a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.removeView
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "view_key": view_key,
+                "view_id": view_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.removeView", json=kwargs)
+
+    async def agents_conversations_setCanvasContent(
+        self,
+        *,
+        channel: str,
+        canvas_id: str,
+        content: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Replace the full markdown content of a plan canvas attached to a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCanvasContent
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "canvas_id": canvas_id,
+                "content": content,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setCanvasContent", json=kwargs)
+
+    async def agents_conversations_setCommands(
+        self,
+        *,
+        channel_id: str,
+        commands: Sequence[Dict],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Register the set of agent-defined slash commands for the calling agent in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setCommands
+        """
+        kwargs.update(
+            {
+                "commands": commands,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setCommands", json=kwargs)
+
+    async def agents_conversations_setProperties(
+        self,
+        *,
+        channel_id: str,
+        code_channel: Optional[Dict] = None,
+        agent_resource: Optional[Dict] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set properties on a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setProperties
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "code_channel": code_channel,
+                "agent_resource": agent_resource,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setProperties", json=kwargs)
+
+    async def agents_conversations_setView(
+        self,
+        *,
+        channel_id: str,
+        type: Optional[str] = None,
+        view_key: Optional[str] = None,
+        content: Optional[str] = None,
+        blocks: Optional[Sequence[Union[Dict, Block]]] = None,
+        canvas_id: Optional[str] = None,
+        access_level: Optional[str] = None,
+        agent_content_hash: Optional[str] = None,
+        pr_url: Optional[str] = None,
+        base_branch: Optional[str] = None,
+        head_branch: Optional[str] = None,
+        name: Optional[str] = None,
+        csp: Optional[Dict] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Create or update a view in a code channel.
+
+        https://docs.slack.dev/reference/methods/agents.conversations.setView
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "type": type,
+                "view_key": view_key,
+                "content": content,
+                "blocks": blocks,
+                "canvas_id": canvas_id,
+                "access_level": access_level,
+                "agent_content_hash": agent_content_hash,
+                "pr_url": pr_url,
+                "base_branch": base_branch,
+                "head_branch": head_branch,
+                "name": name,
+                "csp": csp,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.conversations.setView", json=kwargs)
+
+    async def agents_sessions_rename(
+        self,
+        *,
+        channel_id: str,
+        title: str,
+        thread_ts: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Rename an agent session.
+
+        https://docs.slack.dev/reference/methods/agents.sessions.rename
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "title": title,
+                "thread_ts": thread_ts,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.sessions.rename", json=kwargs)
+
+    async def agents_sessions_setStatus(
+        self,
+        *,
+        channel_id: str,
+        status: str,
+        thread_ts: Optional[str] = None,
+        title: Optional[str] = None,
+        initiator_user_id: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set an agent session's lifecycle status, creating the session if needed.
+
+        https://docs.slack.dev/reference/methods/agents.sessions.setStatus
+        """
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "status": status,
+                "thread_ts": thread_ts,
+                "title": title,
+                "initiator_user_id": initiator_user_id,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("agents.sessions.setStatus", json=kwargs)
 
     async def api_test(
         self,
@@ -1883,7 +2520,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Checks API calling code.
-        https://api.slack.com/methods/api.test
+
+        https://docs.slack.dev/reference/methods/api.test
         """
         kwargs.update({"error": error})
         return await self.api_call("api.test", params=kwargs)
@@ -1894,9 +2532,10 @@ class AsyncWebClient(AsyncBaseClient):
         app_token: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Generate a temporary Socket Mode WebSocket URL that your app can connect to
-        in order to receive events and interactive payloads
-        https://api.slack.com/methods/apps.connections.open
+        """Generate a temporary Socket Mode WebSocket URL for your app.
+
+        Your app connects to this URL to receive events and interactive payloads.
+        https://docs.slack.dev/reference/methods/apps.connections.open
         """
         kwargs.update({"token": app_token})
         return await self.api_call("apps.connections.open", http_verb="POST", params=kwargs)
@@ -1910,11 +2549,55 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Get a list of authorizations for the given event context.
+
         Each authorization represents an app installation that the event is visible to.
-        https://api.slack.com/methods/apps.event.authorizations.list
+        https://docs.slack.dev/reference/methods/apps.event.authorizations.list
         """
         kwargs.update({"event_context": event_context, "cursor": cursor, "limit": limit})
         return await self.api_call("apps.event.authorizations.list", params=kwargs)
+
+    async def apps_icon_set(
+        self,
+        *,
+        app_id: str,
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        url: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Sets the app icon.
+
+        https://docs.slack.dev/reference/methods/apps.icon.set
+
+        Args:
+            app_id: The ID of the app whose icon you want to set.
+            file: File contents via `multipart/form-data`
+            url: URL of a publicly hosted image
+        """
+        if file is None and url is None:
+            raise e.SlackRequestError("Either file or url must be provided.")
+        kwargs.update({"app_id": app_id, "url": url})
+        if file is not None:
+            return await self.api_call("apps.icon.set", files={"file": file}, data=kwargs)
+        return await self.api_call("apps.icon.set", params=kwargs)
+
+    async def apps_managed_permissions_set(
+        self,
+        *,
+        app_id: str,
+        permissions: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set who can interact with a managed app.
+
+        https://docs.slack.dev/reference/methods/apps.managed.permissions.set
+
+        Args:
+            app_id: Encoded ID of the managed app to configure
+            permissions: Who can interact with the app. Use everyone to allow all members, or app_owner to restrict access
+                to the app's owner.
+        """
+        kwargs.update({"app_id": app_id, "permissions": permissions})
+        return await self.api_call("apps.managed.permissions.set", params=kwargs)
 
     async def apps_uninstall(
         self,
@@ -1924,7 +2607,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Uninstalls your app from a workspace.
-        https://api.slack.com/methods/apps.uninstall
+
+        https://docs.slack.dev/reference/methods/apps.uninstall
         """
         kwargs.update({"client_id": client_id, "client_secret": client_secret})
         return await self.api_call("apps.uninstall", params=kwargs)
@@ -1935,8 +2619,9 @@ class AsyncWebClient(AsyncBaseClient):
         manifest: Union[str, Dict[str, Any]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Create an app from an app manifest
-        https://api.slack.com/methods/apps.manifest.create
+        """Create an app from an app manifest.
+
+        https://docs.slack.dev/reference/methods/apps.manifest.create
         """
         if isinstance(manifest, str):
             kwargs.update({"manifest": manifest})
@@ -1950,8 +2635,9 @@ class AsyncWebClient(AsyncBaseClient):
         app_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Permanently deletes an app created through app manifests
-        https://api.slack.com/methods/apps.manifest.delete
+        """Permanently deletes an app created through app manifests.
+
+        https://docs.slack.dev/reference/methods/apps.manifest.delete
         """
         kwargs.update({"app_id": app_id})
         return await self.api_call("apps.manifest.delete", params=kwargs)
@@ -1962,8 +2648,9 @@ class AsyncWebClient(AsyncBaseClient):
         app_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Export an app manifest from an existing app
-        https://api.slack.com/methods/apps.manifest.export
+        """Export an app manifest from an existing app.
+
+        https://docs.slack.dev/reference/methods/apps.manifest.export
         """
         kwargs.update({"app_id": app_id})
         return await self.api_call("apps.manifest.export", params=kwargs)
@@ -1975,8 +2662,9 @@ class AsyncWebClient(AsyncBaseClient):
         manifest: Union[str, Dict[str, Any]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Update an app from an app manifest
-        https://api.slack.com/methods/apps.manifest.update
+        """Update an app from an app manifest.
+
+        https://docs.slack.dev/reference/methods/apps.manifest.update
         """
         if isinstance(manifest, str):
             kwargs.update({"manifest": manifest})
@@ -1992,8 +2680,9 @@ class AsyncWebClient(AsyncBaseClient):
         app_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Validate an app manifest
-        https://api.slack.com/methods/apps.manifest.validate
+        """Validate an app manifest.
+
+        https://docs.slack.dev/reference/methods/apps.manifest.validate
         """
         if isinstance(manifest, str):
             kwargs.update({"manifest": manifest})
@@ -2002,14 +2691,69 @@ class AsyncWebClient(AsyncBaseClient):
         kwargs.update({"app_id": app_id})
         return await self.api_call("apps.manifest.validate", params=kwargs)
 
+    async def apps_user_connection_update(
+        self,
+        *,
+        user_id: str,
+        status: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Updates the connection status between a user and an app.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.update
+        """
+        kwargs.update({"user_id": user_id, "status": status})
+        return await self.api_call("apps.user.connection.update", params=kwargs)
+
+    async def apps_user_connection_bulkUpdate(
+        self,
+        *,
+        connected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        disconnected_user_ids: Optional[Union[str, Sequence[str]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Updates the connection status between an app and many users in one call, for backfilling an existing user base.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.bulkUpdate
+        """
+        if isinstance(connected_user_ids, (list, tuple)):
+            kwargs.update({"connected_user_ids": ",".join(connected_user_ids)})
+        else:
+            kwargs.update({"connected_user_ids": connected_user_ids})
+        if isinstance(disconnected_user_ids, (list, tuple)):
+            kwargs.update({"disconnected_user_ids": ",".join(disconnected_user_ids)})
+        else:
+            kwargs.update({"disconnected_user_ids": disconnected_user_ids})
+        return await self.api_call("apps.user.connection.bulkUpdate", params=kwargs)
+
+    async def apps_user_connection_requestAuth(
+        self,
+        *,
+        primary_provider: Union[str, Dict[str, Any]],
+        trigger_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Opens or updates a standardized authentication modal for the calling app.
+
+        https://docs.slack.dev/reference/methods/apps.user.connection.requestAuth
+        """
+        kwargs.update({"trigger_id": trigger_id, "user_id": user_id})
+        if isinstance(primary_provider, str):
+            kwargs.update({"primary_provider": primary_provider})
+        else:
+            kwargs.update({"primary_provider": json.dumps(primary_provider)})
+        return await self.api_call("apps.user.connection.requestAuth", params=kwargs)
+
     async def tooling_tokens_rotate(
         self,
         *,
         refresh_token: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Exchanges a refresh token for a new app configuration token
-        https://api.slack.com/methods/tooling.tokens.rotate
+        """Exchanges a refresh token for a new app configuration token.
+
+        https://docs.slack.dev/reference/methods/tooling.tokens.rotate
         """
         kwargs.update({"refresh_token": refresh_token})
         return await self.api_call("tooling.tokens.rotate", params=kwargs)
@@ -2059,13 +2803,29 @@ class AsyncWebClient(AsyncBaseClient):
         channel_id: str,
         thread_ts: str,
         status: str,
+        loading_messages: Optional[List[str]] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Revokes a token.
-        https://api.slack.com/methods/assistant.threads.setStatus
+        """Set the status for an AI assistant thread.
+
+        https://docs.slack.dev/reference/methods/assistant.threads.setStatus
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "status": status})
-        return await self.api_call("assistant.threads.setStatus", params=kwargs)
+        kwargs.update(
+            {
+                "channel_id": channel_id,
+                "thread_ts": thread_ts,
+                "status": status,
+                "loading_messages": loading_messages,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("assistant.threads.setStatus", json=kwargs)
 
     async def assistant_threads_setTitle(
         self,
@@ -2075,8 +2835,9 @@ class AsyncWebClient(AsyncBaseClient):
         title: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Revokes a token.
-        https://api.slack.com/methods/assistant.threads.setTitle
+        """Set the title for the given assistant thread.
+
+        https://docs.slack.dev/reference/methods/assistant.threads.setTitle
         """
         kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "title": title})
         return await self.api_call("assistant.threads.setTitle", params=kwargs)
@@ -2085,15 +2846,18 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         channel_id: str,
-        thread_ts: str,
+        thread_ts: Optional[str] = None,
         title: Optional[str] = None,
         prompts: List[Dict[str, str]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Revokes a token.
-        https://api.slack.com/methods/assistant.threads.setSuggestedPrompts
+        """Set suggested prompts for the given assistant thread.
+
+        https://docs.slack.dev/reference/methods/assistant.threads.setSuggestedPrompts
         """
-        kwargs.update({"channel_id": channel_id, "thread_ts": thread_ts, "prompts": prompts})
+        kwargs.update({"channel_id": channel_id, "prompts": prompts})
+        if thread_ts is not None:
+            kwargs.update({"thread_ts": thread_ts})
         if title is not None:
             kwargs.update({"title": title})
         return await self.api_call("assistant.threads.setSuggestedPrompts", json=kwargs)
@@ -2105,7 +2869,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Revokes a token.
-        https://api.slack.com/methods/auth.revoke
+
+        https://docs.slack.dev/reference/methods/auth.revoke
         """
         kwargs.update({"test": test})
         return await self.api_call("auth.revoke", http_verb="GET", params=kwargs)
@@ -2115,7 +2880,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Checks authentication & identity.
-        https://api.slack.com/methods/auth.test
+
+        https://docs.slack.dev/reference/methods/auth.test
         """
         return await self.api_call("auth.test", params=kwargs)
 
@@ -2127,10 +2893,38 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List the workspaces a token can access.
-        https://api.slack.com/methods/auth.teams.list
+
+        https://docs.slack.dev/reference/methods/auth.teams.list
         """
         kwargs.update({"cursor": cursor, "limit": limit, "include_icon": include_icon})
         return await self.api_call("auth.teams.list", params=kwargs)
+
+    async def blocks_validate(
+        self,
+        *,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        message: Optional[Union[str, Dict]] = None,
+        view: Optional[Union[str, Dict, View]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Validates an array of blocks, or a message or view payload.
+
+        Provide exactly one of ``blocks``, ``message``, or ``view``.
+        https://docs.slack.dev/reference/methods/blocks.validate
+        """
+        if blocks is not None:
+            if isinstance(blocks, str):
+                kwargs.update({"blocks": blocks})
+            else:
+                kwargs.update({"blocks": json.dumps([b.to_dict() if isinstance(b, Block) else b for b in blocks])})
+        if message is not None:
+            kwargs.update({"message": message if isinstance(message, str) else json.dumps(message)})
+        if view is not None:
+            if isinstance(view, View):
+                kwargs.update({"view": json.dumps(view.to_dict())})
+            else:
+                kwargs.update({"view": view if isinstance(view, str) else json.dumps(view)})
+        return await self.api_call("blocks.validate", params=kwargs)
 
     async def bookmarks_add(
         self,
@@ -2145,7 +2939,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Add bookmark to a channel.
-        https://api.slack.com/methods/bookmarks.add
+
+        https://docs.slack.dev/reference/methods/bookmarks.add
         """
         kwargs.update(
             {
@@ -2171,7 +2966,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Edit bookmark.
-        https://api.slack.com/methods/bookmarks.edit
+
+        https://docs.slack.dev/reference/methods/bookmarks.edit
         """
         kwargs.update(
             {
@@ -2191,7 +2987,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List bookmark for the channel.
-        https://api.slack.com/methods/bookmarks.list
+
+        https://docs.slack.dev/reference/methods/bookmarks.list
         """
         kwargs.update({"channel_id": channel_id})
         return await self.api_call("bookmarks.list", http_verb="POST", params=kwargs)
@@ -2204,7 +3001,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove bookmark from the channel.
-        https://api.slack.com/methods/bookmarks.remove
+
+        https://docs.slack.dev/reference/methods/bookmarks.remove
         """
         kwargs.update({"bookmark_id": bookmark_id, "channel_id": channel_id})
         return await self.api_call("bookmarks.remove", http_verb="POST", params=kwargs)
@@ -2217,7 +3015,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets information about a bot user.
-        https://api.slack.com/methods/bots.info
+
+        https://docs.slack.dev/reference/methods/bots.info
         """
         kwargs.update({"bot": bot, "team_id": team_id})
         return await self.api_call("bots.info", http_verb="GET", params=kwargs)
@@ -2236,7 +3035,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Registers a new Call.
-        https://api.slack.com/methods/calls.add
+
+        https://docs.slack.dev/reference/methods/calls.add
         """
         kwargs.update(
             {
@@ -2263,7 +3063,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Ends a Call.
-        https://api.slack.com/methods/calls.end
+
+        https://docs.slack.dev/reference/methods/calls.end
         """
         kwargs.update({"id": id, "duration": duration})
         return await self.api_call("calls.end", http_verb="POST", params=kwargs)
@@ -2275,7 +3076,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Returns information about a Call.
-        https://api.slack.com/methods/calls.info
+
+        https://docs.slack.dev/reference/methods/calls.info
         """
         kwargs.update({"id": id})
         return await self.api_call("calls.info", http_verb="POST", params=kwargs)
@@ -2288,7 +3090,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Registers new participants added to a Call.
-        https://api.slack.com/methods/calls.participants.add
+
+        https://docs.slack.dev/reference/methods/calls.participants.add
         """
         kwargs.update({"id": id})
         _update_call_participants(kwargs, users)
@@ -2302,7 +3105,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Registers participants removed from a Call.
-        https://api.slack.com/methods/calls.participants.remove
+
+        https://docs.slack.dev/reference/methods/calls.participants.remove
         """
         kwargs.update({"id": id})
         _update_call_participants(kwargs, users)
@@ -2318,7 +3122,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Updates information about a Call.
-        https://api.slack.com/methods/calls.update
+
+        https://docs.slack.dev/reference/methods/calls.update
         """
         kwargs.update(
             {
@@ -2334,13 +3139,22 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         *,
         title: Optional[str] = None,
-        document_content: Dict[str, str],
+        document_content: Optional[Dict[str, str]] = None,
+        channel_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Create Canvas for a user
-        https://api.slack.com/methods/canvases.create
+        """Create Canvas for a user.
+
+        https://docs.slack.dev/reference/methods/canvases.create
         """
-        kwargs.update({"title": title, "document_content": document_content})
+        kwargs.update(
+            {
+                "title": title,
+                "document_content": document_content,
+                "channel_id": channel_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
         return await self.api_call("canvases.create", json=kwargs)
 
     async def canvases_edit(
@@ -2350,8 +3164,9 @@ class AsyncWebClient(AsyncBaseClient):
         changes: Sequence[Dict[str, Any]],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Update an existing canvas
-        https://api.slack.com/methods/canvases.edit
+        """Update an existing canvas.
+
+        https://docs.slack.dev/reference/methods/canvases.edit
         """
         kwargs.update({"canvas_id": canvas_id, "changes": changes})
         return await self.api_call("canvases.edit", json=kwargs)
@@ -2362,11 +3177,26 @@ class AsyncWebClient(AsyncBaseClient):
         canvas_id: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Deletes a canvas
-        https://api.slack.com/methods/canvases.delete
+        """Deletes a canvas.
+
+        https://docs.slack.dev/reference/methods/canvases.delete
         """
         kwargs.update({"canvas_id": canvas_id})
         return await self.api_call("canvases.delete", params=kwargs)
+
+    async def canvases_getContent(
+        self,
+        *,
+        canvas_id: str,
+        content_type: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Get the content of a canvas as markdown (default) or HTML.
+
+        https://docs.slack.dev/reference/methods/canvases.getContent
+        """
+        kwargs.update({"canvas_id": canvas_id, "content_type": content_type})
+        return await self.api_call("canvases.getContent", params=kwargs)
 
     async def canvases_access_set(
         self,
@@ -2377,8 +3207,9 @@ class AsyncWebClient(AsyncBaseClient):
         user_ids: Optional[Union[Sequence[str], str]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Sets the access level to a canvas for specified entities
-        https://api.slack.com/methods/canvases.access.set
+        """Sets the access level to a canvas for specified entities.
+
+        https://docs.slack.dev/reference/methods/canvases.access.set
         """
         kwargs.update({"canvas_id": canvas_id, "access_level": access_level})
         if channel_ids is not None:
@@ -2402,8 +3233,9 @@ class AsyncWebClient(AsyncBaseClient):
         user_ids: Optional[Union[Sequence[str], str]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Create a Channel Canvas for a channel
-        https://api.slack.com/methods/canvases.access.delete
+        """Create a Channel Canvas for a channel.
+
+        https://docs.slack.dev/reference/methods/canvases.access.delete
         """
         kwargs.update({"canvas_id": canvas_id})
         if channel_ids is not None:
@@ -2425,8 +3257,9 @@ class AsyncWebClient(AsyncBaseClient):
         criteria: Dict[str, Any],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Find sections matching the provided criteria
-        https://api.slack.com/methods/canvases.sections.lookup
+        """Find sections matching the provided criteria.
+
+        https://docs.slack.dev/reference/methods/canvases.sections.lookup
         """
         kwargs.update({"canvas_id": canvas_id, "criteria": json.dumps(criteria)})
         return await self.api_call("canvases.sections.lookup", params=kwargs)
@@ -2434,7 +3267,7 @@ class AsyncWebClient(AsyncBaseClient):
     # --------------------------
     # Deprecated: channels.*
     # You can use conversations.* APIs instead.
-    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/
     # --------------------------
 
     async def channels_archive(
@@ -2563,7 +3396,7 @@ class AsyncWebClient(AsyncBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Retrieve a thread of messages posted to a channel"""
+        """Retrieve a thread of messages posted to a channel."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return await self.api_call("channels.replies", http_verb="GET", params=kwargs)
 
@@ -2604,6 +3437,31 @@ class AsyncWebClient(AsyncBaseClient):
 
     # --------------------------
 
+    async def chat_appendStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Appends text to an existing streaming conversation.
+
+        https://docs.slack.dev/reference/methods/chat.appendStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "chunks": chunks,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.appendStream", json=kwargs)
+
     async def chat_delete(
         self,
         *,
@@ -2613,7 +3471,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deletes a message.
-        https://api.slack.com/methods/chat.delete
+
+        https://docs.slack.dev/reference/methods/chat.delete
         """
         kwargs.update({"channel": channel, "ts": ts, "as_user": as_user})
         return await self.api_call("chat.delete", params=kwargs)
@@ -2627,7 +3486,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deletes a scheduled message.
-        https://api.slack.com/methods/chat.deleteScheduledMessage
+
+        https://docs.slack.dev/reference/methods/chat.deleteScheduledMessage
         """
         kwargs.update(
             {
@@ -2645,8 +3505,9 @@ class AsyncWebClient(AsyncBaseClient):
         message_ts: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Retrieve a permalink URL for a specific extant message
-        https://api.slack.com/methods/chat.getPermalink
+        """Retrieve a permalink URL for a specific extant message.
+
+        https://docs.slack.dev/reference/methods/chat.getPermalink
         """
         kwargs.update({"channel": channel, "message_ts": message_ts})
         return await self.api_call("chat.getPermalink", http_verb="GET", params=kwargs)
@@ -2659,7 +3520,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Share a me message into a channel.
-        https://api.slack.com/methods/chat.meMessage
+
+        https://docs.slack.dev/reference/methods/chat.meMessage
         """
         kwargs.update({"channel": channel, "text": text})
         return await self.api_call("chat.meMessage", params=kwargs)
@@ -2679,10 +3541,12 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sends an ephemeral message to a user in a channel.
-        https://api.slack.com/methods/chat.postEphemeral
+
+        https://docs.slack.dev/reference/methods/chat.postEphemeral
         """
         kwargs.update(
             {
@@ -2698,11 +3562,12 @@ class AsyncWebClient(AsyncBaseClient):
                 "link_names": link_names,
                 "username": username,
                 "parse": parse,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.postEphemeral", kwargs)
+        _warn_if_message_text_content_is_missing("chat.postEphemeral", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return await self.api_call("chat.postEphemeral", json=kwargs)
 
@@ -2725,11 +3590,13 @@ class AsyncWebClient(AsyncBaseClient):
         link_names: Optional[bool] = None,
         username: Optional[str] = None,
         parse: Optional[str] = None,  # none, full
-        metadata: Optional[Union[Dict, Metadata]] = None,
+        metadata: Optional[Union[Dict, Metadata, EventAndEntityMetadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sends a message to a channel.
-        https://api.slack.com/methods/chat.postMessage
+
+        https://docs.slack.dev/reference/methods/chat.postMessage
         """
         kwargs.update(
             {
@@ -2750,11 +3617,12 @@ class AsyncWebClient(AsyncBaseClient):
                 "username": username,
                 "parse": parse,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.postMessage", kwargs)
+        _warn_if_message_text_content_is_missing("chat.postMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return await self.api_call("chat.postMessage", json=kwargs)
 
@@ -2763,7 +3631,7 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         channel: str,
         post_at: Union[str, int],
-        text: str,
+        text: Optional[str] = None,
         as_user: Optional[bool] = None,
         attachments: Optional[Union[str, Sequence[Union[Dict, Attachment]]]] = None,
         blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
@@ -2774,10 +3642,12 @@ class AsyncWebClient(AsyncBaseClient):
         unfurl_media: Optional[bool] = None,
         link_names: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Schedules a message.
-        https://api.slack.com/methods/chat.scheduleMessage
+
+        https://docs.slack.dev/reference/methods/chat.scheduleMessage
         """
         kwargs.update(
             {
@@ -2794,13 +3664,185 @@ class AsyncWebClient(AsyncBaseClient):
                 "unfurl_media": unfurl_media,
                 "link_names": link_names,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.scheduleMessage", kwargs)
+        _warn_if_message_text_content_is_missing("chat.scheduleMessage", kwargs)
         # NOTE: intentionally using json over params for the API methods using blocks/attachments
         return await self.api_call("chat.scheduleMessage", json=kwargs)
+
+    async def chat_scheduledMessages_list(
+        self,
+        *,
+        channel: Optional[str] = None,
+        cursor: Optional[str] = None,
+        latest: Optional[str] = None,
+        limit: Optional[int] = None,
+        oldest: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Lists all scheduled messages.
+
+        https://docs.slack.dev/reference/methods/chat.scheduledMessages.list
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "cursor": cursor,
+                "latest": latest,
+                "limit": limit,
+                "oldest": oldest,
+                "team_id": team_id,
+            }
+        )
+        return await self.api_call("chat.scheduledMessages.list", params=kwargs)
+
+    async def chat_startStream(
+        self,
+        *,
+        channel: str,
+        thread_ts: str,
+        markdown_text: Optional[str] = None,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        task_display_mode: Optional[str] = None,  # timeline, plan
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Starts a new streaming conversation.
+
+        https://docs.slack.dev/reference/methods/chat.startStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "thread_ts": thread_ts,
+                "markdown_text": markdown_text,
+                "recipient_team_id": recipient_team_id,
+                "recipient_user_id": recipient_user_id,
+                "chunks": chunks,
+                "task_display_mode": task_display_mode,
+                "icon_emoji": icon_emoji,
+                "icon_url": icon_url,
+                "username": username,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.startStream", json=kwargs)
+
+    async def chat_stopStream(
+        self,
+        *,
+        channel: str,
+        ts: str,
+        markdown_text: Optional[str] = None,
+        blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
+        metadata: Optional[Union[Dict, Metadata]] = None,
+        chunks: Optional[Sequence[Union[Dict, Chunk]]] = None,
+        session_status: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Stops a streaming conversation.
+
+        https://docs.slack.dev/reference/methods/chat.stopStream
+        """
+        kwargs.update(
+            {
+                "channel": channel,
+                "ts": ts,
+                "markdown_text": markdown_text,
+                "blocks": blocks,
+                "metadata": metadata,
+                "chunks": chunks,
+                "session_status": session_status,
+            }
+        )
+        _parse_web_class_objects(kwargs)
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("chat.stopStream", json=kwargs)
+
+    async def chat_stream(
+        self,
+        *,
+        buffer_size: int = 256,
+        channel: str,
+        thread_ts: str,
+        recipient_team_id: Optional[str] = None,
+        recipient_user_id: Optional[str] = None,
+        task_display_mode: Optional[str] = None,
+        icon_emoji: Optional[str] = None,
+        icon_url: Optional[str] = None,
+        username: Optional[str] = None,
+        **kwargs,
+    ) -> AsyncChatStream:
+        """Stream markdown text into a conversation.
+
+        This method starts a new chat stream in a conversation that can be appended to. After appending an entire message,
+        the stream can be stopped with concluding arguments such as "blocks" for gathering feedback.
+
+        The following methods are used:
+
+        - chat.startStream: Starts a new streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.startStream).
+        - chat.appendStream: Appends text to an existing streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.appendStream).
+        - chat.stopStream: Stops a streaming conversation.
+          [Reference](https://docs.slack.dev/reference/methods/chat.stopStream).
+
+        Args:
+            buffer_size: The length of markdown_text to buffer in-memory before calling a stream method. Increasing this
+              value decreases the number of method calls made for the same amount of text, which is useful to avoid rate
+              limits. Default: 256.
+            channel: An encoded ID that represents a channel, private group, or DM.
+            thread_ts: Provide another message's ts value to reply to. Streamed messages should always be replies to a user
+              request.
+            recipient_team_id: The encoded ID of the team the user receiving the streaming text belongs to. Required when
+              streaming to channels.
+            recipient_user_id: The encoded ID of the user to receive the streaming text. Required when streaming to channels.
+            task_display_mode: Specifies how tasks are displayed in the message. A "timeline" displays individual tasks
+              with text and "plan" displays all tasks together.
+            icon_emoji: Emoji to use as the icon for this message. Overrides icon_url.
+            icon_url: Image URL to use as the icon for this message.
+            username: The bot's username to display.
+            **kwargs: Additional arguments passed to the underlying API calls.
+
+        Returns:
+            ChatStream instance for managing the stream
+
+        Example:
+            ```python
+            streamer = await client.chat_stream(
+                channel="C0123456789",
+                thread_ts="1700000001.123456",
+                recipient_team_id="T0123456789",
+                recipient_user_id="U0123456789",
+            )
+            await streamer.append(markdown_text="**hello wo")
+            await streamer.append(markdown_text="rld!**")
+            await streamer.stop()
+            ```
+        """
+        return AsyncChatStream(
+            self,
+            logger=self._logger,
+            channel=channel,
+            thread_ts=thread_ts,
+            recipient_team_id=recipient_team_id,
+            recipient_user_id=recipient_user_id,
+            task_display_mode=task_display_mode,
+            icon_emoji=icon_emoji,
+            icon_url=icon_url,
+            username=username,
+            buffer_size=buffer_size,
+            **kwargs,
+        )
 
     async def chat_unfurl(
         self,
@@ -2810,6 +3852,7 @@ class AsyncWebClient(AsyncBaseClient):
         source: Optional[str] = None,
         unfurl_id: Optional[str] = None,
         unfurls: Optional[Dict[str, Dict]] = None,  # or user_auth_*
+        metadata: Optional[Union[Dict, EventAndEntityMetadata]] = None,
         user_auth_blocks: Optional[Union[str, Sequence[Union[Dict, Block]]]] = None,
         user_auth_message: Optional[str] = None,
         user_auth_required: Optional[bool] = None,
@@ -2817,7 +3860,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Provide custom unfurl behavior for user-posted URLs.
-        https://api.slack.com/methods/chat.unfurl
+
+        https://docs.slack.dev/reference/methods/chat.unfurl
         """
         kwargs.update(
             {
@@ -2826,6 +3870,7 @@ class AsyncWebClient(AsyncBaseClient):
                 "source": source,
                 "unfurl_id": unfurl_id,
                 "unfurls": unfurls,
+                "metadata": metadata,
                 "user_auth_blocks": user_auth_blocks,
                 "user_auth_message": user_auth_message,
                 "user_auth_required": user_auth_required,
@@ -2851,10 +3896,12 @@ class AsyncWebClient(AsyncBaseClient):
         parse: Optional[str] = None,  # none, full
         reply_broadcast: Optional[bool] = None,
         metadata: Optional[Union[Dict, Metadata]] = None,
+        markdown_text: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Updates a message in a channel.
-        https://api.slack.com/methods/chat.update
+
+        https://docs.slack.dev/reference/methods/chat.update
         """
         kwargs.update(
             {
@@ -2868,6 +3915,7 @@ class AsyncWebClient(AsyncBaseClient):
                 "parse": parse,
                 "reply_broadcast": reply_broadcast,
                 "metadata": metadata,
+                "markdown_text": markdown_text,
             }
         )
         if isinstance(file_ids, (list, tuple)):
@@ -2876,35 +3924,9 @@ class AsyncWebClient(AsyncBaseClient):
             kwargs.update({"file_ids": file_ids})
         _parse_web_class_objects(kwargs)
         kwargs = _remove_none_values(kwargs)
-        _warn_if_text_or_attachment_fallback_is_missing("chat.update", kwargs)
+        _warn_if_message_text_content_is_missing("chat.update", kwargs)
         # NOTE: intentionally using json over params for API methods using blocks/attachments
         return await self.api_call("chat.update", json=kwargs)
-
-    async def chat_scheduledMessages_list(
-        self,
-        *,
-        channel: Optional[str] = None,
-        cursor: Optional[str] = None,
-        latest: Optional[str] = None,
-        limit: Optional[int] = None,
-        oldest: Optional[str] = None,
-        team_id: Optional[str] = None,
-        **kwargs,
-    ) -> AsyncSlackResponse:
-        """Lists all scheduled messages.
-        https://api.slack.com/methods/chat.scheduledMessages.list
-        """
-        kwargs.update(
-            {
-                "channel": channel,
-                "cursor": cursor,
-                "latest": latest,
-                "limit": limit,
-                "oldest": oldest,
-                "team_id": team_id,
-            }
-        )
-        return await self.api_call("chat.scheduledMessages.list", params=kwargs)
 
     async def conversations_acceptSharedInvite(
         self,
@@ -2918,7 +3940,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Accepts an invitation to a Slack Connect channel.
-        https://api.slack.com/methods/conversations.acceptSharedInvite
+
+        https://docs.slack.dev/reference/methods/conversations.acceptSharedInvite
         """
         if channel_id is None and invite_id is None:
             raise e.SlackRequestError("Either channel_id or invite_id must be provided.")
@@ -2942,7 +3965,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Approves an invitation to a Slack Connect channel.
-        https://api.slack.com/methods/conversations.approveSharedInvite
+
+        https://docs.slack.dev/reference/methods/conversations.approveSharedInvite
         """
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return await self.api_call("conversations.approveSharedInvite", http_verb="POST", params=kwargs)
@@ -2954,7 +3978,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Archives a conversation.
-        https://api.slack.com/methods/conversations.archive
+
+        https://docs.slack.dev/reference/methods/conversations.archive
         """
         kwargs.update({"channel": channel})
         return await self.api_call("conversations.archive", params=kwargs)
@@ -2966,7 +3991,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Closes a direct message or multi-person direct message.
-        https://api.slack.com/methods/conversations.close
+
+        https://docs.slack.dev/reference/methods/conversations.close
         """
         kwargs.update({"channel": channel})
         return await self.api_call("conversations.close", params=kwargs)
@@ -2979,8 +4005,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Initiates a public or private channel-based conversation
-        https://api.slack.com/methods/conversations.create
+        """Initiates a public or private channel-based conversation.
+
+        https://docs.slack.dev/reference/methods/conversations.create
         """
         kwargs.update({"name": name, "is_private": is_private, "team_id": team_id})
         return await self.api_call("conversations.create", params=kwargs)
@@ -2993,7 +4020,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Declines a Slack Connect channel invite.
-        https://api.slack.com/methods/conversations.declineSharedInvite
+
+        https://docs.slack.dev/reference/methods/conversations.declineSharedInvite
         """
         kwargs.update({"invite_id": invite_id, "target_team": target_team})
         return await self.api_call("conversations.declineSharedInvite", http_verb="GET", params=kwargs)
@@ -3002,7 +4030,8 @@ class AsyncWebClient(AsyncBaseClient):
         self, *, action: str, channel: str, target_team: str, **kwargs
     ) -> AsyncSlackResponse:
         """Sets a team in a shared External Limited channel to a shared Slack Connect channel or vice versa.
-        https://api.slack.com/methods/conversations.externalInvitePermissions.set
+
+        https://docs.slack.dev/reference/methods/conversations.externalInvitePermissions.set
         """
         kwargs.update(
             {
@@ -3026,7 +4055,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Fetches a conversation's history of messages and events.
-        https://api.slack.com/methods/conversations.history
+
+        https://docs.slack.dev/reference/methods/conversations.history
         """
         kwargs.update(
             {
@@ -3050,7 +4080,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieve information about a conversation.
-        https://api.slack.com/methods/conversations.info
+
+        https://docs.slack.dev/reference/methods/conversations.info
         """
         kwargs.update(
             {
@@ -3070,7 +4101,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Invites users to a channel.
-        https://api.slack.com/methods/conversations.invite
+
+        https://docs.slack.dev/reference/methods/conversations.invite
         """
         kwargs.update(
             {
@@ -3093,7 +4125,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sends an invitation to a Slack Connect channel.
-        https://api.slack.com/methods/conversations.inviteShared
+
+        https://docs.slack.dev/reference/methods/conversations.inviteShared
         """
         if emails is None and user_ids is None:
             raise e.SlackRequestError("Either emails or user ids must be provided.")
@@ -3115,7 +4148,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Joins an existing conversation.
-        https://api.slack.com/methods/conversations.join
+
+        https://docs.slack.dev/reference/methods/conversations.join
         """
         kwargs.update({"channel": channel})
         return await self.api_call("conversations.join", params=kwargs)
@@ -3128,7 +4162,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Removes a user from a conversation.
-        https://api.slack.com/methods/conversations.kick
+
+        https://docs.slack.dev/reference/methods/conversations.kick
         """
         kwargs.update({"channel": channel, "user": user})
         return await self.api_call("conversations.kick", params=kwargs)
@@ -3140,7 +4175,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Leaves a conversation.
-        https://api.slack.com/methods/conversations.leave
+
+        https://docs.slack.dev/reference/methods/conversations.leave
         """
         kwargs.update({"channel": channel})
         return await self.api_call("conversations.leave", params=kwargs)
@@ -3156,7 +4192,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists all channels in a Slack team.
-        https://api.slack.com/methods/conversations.list
+
+        https://docs.slack.dev/reference/methods/conversations.list
         """
         kwargs.update(
             {
@@ -3180,9 +4217,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """List shared channel invites that have been generated
-        or received but have not yet been approved by all parties.
-        https://api.slack.com/methods/conversations.listConnectInvites
+        """List shared channel invites that have been generated or received but have not yet been approved by all parties.
+
+        https://docs.slack.dev/reference/methods/conversations.listConnectInvites
         """
         kwargs.update({"count": count, "cursor": cursor, "team_id": team_id})
         return await self.api_call("conversations.listConnectInvites", params=kwargs)
@@ -3195,7 +4232,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sets the read cursor in a channel.
-        https://api.slack.com/methods/conversations.mark
+
+        https://docs.slack.dev/reference/methods/conversations.mark
         """
         kwargs.update({"channel": channel, "ts": ts})
         return await self.api_call("conversations.mark", params=kwargs)
@@ -3209,7 +4247,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieve members of a conversation.
-        https://api.slack.com/methods/conversations.members
+
+        https://docs.slack.dev/reference/methods/conversations.members
         """
         kwargs.update({"channel": channel, "cursor": cursor, "limit": limit})
         return await self.api_call("conversations.members", http_verb="GET", params=kwargs)
@@ -3223,7 +4262,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Opens or resumes a direct message or multi-person direct message.
-        https://api.slack.com/methods/conversations.open
+
+        https://docs.slack.dev/reference/methods/conversations.open
         """
         if channel is None and users is None:
             raise e.SlackRequestError("Either channel or users must be provided.")
@@ -3242,7 +4282,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Renames a conversation.
-        https://api.slack.com/methods/conversations.rename
+
+        https://docs.slack.dev/reference/methods/conversations.rename
         """
         kwargs.update({"channel": channel, "name": name})
         return await self.api_call("conversations.rename", params=kwargs)
@@ -3260,8 +4301,9 @@ class AsyncWebClient(AsyncBaseClient):
         oldest: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Retrieve a thread of messages posted to a conversation
-        https://api.slack.com/methods/conversations.replies
+        """Retrieve a thread of messages posted to a conversation.
+
+        https://docs.slack.dev/reference/methods/conversations.replies
         """
         kwargs.update(
             {
@@ -3287,7 +4329,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Approve a request to add an external user to a channel. This also sends them a Slack Connect invite.
-        https://api.slack.com/methods/conversations.requestSharedInvite.approve
+
+        https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.approve
         """
         kwargs.update(
             {
@@ -3308,7 +4351,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deny a request to invite an external user to a channel.
-        https://api.slack.com/methods/conversations.requestSharedInvite.deny
+
+        https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.deny
         """
         kwargs.update({"invite_id": invite_id, "message": message})
         return await self.api_call("conversations.requestSharedInvite.deny", params=kwargs)
@@ -3326,7 +4370,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists requests to add external users to channels with ability to filter.
-        https://api.slack.com/methods/conversations.requestSharedInvite.list
+
+        https://docs.slack.dev/reference/methods/conversations.requestSharedInvite.list
         """
         kwargs.update(
             {
@@ -3353,7 +4398,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sets the purpose for a conversation.
-        https://api.slack.com/methods/conversations.setPurpose
+
+        https://docs.slack.dev/reference/methods/conversations.setPurpose
         """
         kwargs.update({"channel": channel, "purpose": purpose})
         return await self.api_call("conversations.setPurpose", params=kwargs)
@@ -3366,7 +4412,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Sets the topic for a conversation.
-        https://api.slack.com/methods/conversations.setTopic
+
+        https://docs.slack.dev/reference/methods/conversations.setTopic
         """
         kwargs.update({"channel": channel, "topic": topic})
         return await self.api_call("conversations.setTopic", params=kwargs)
@@ -3378,7 +4425,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Reverses conversation archival.
-        https://api.slack.com/methods/conversations.unarchive
+
+        https://docs.slack.dev/reference/methods/conversations.unarchive
         """
         kwargs.update({"channel": channel})
         return await self.api_call("conversations.unarchive", params=kwargs)
@@ -3390,8 +4438,9 @@ class AsyncWebClient(AsyncBaseClient):
         document_content: Dict[str, str],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Create a Channel Canvas for a channel
-        https://api.slack.com/methods/conversations.canvases.create
+        """Create a Channel Canvas for a channel.
+
+        https://docs.slack.dev/reference/methods/conversations.canvases.create
         """
         kwargs.update({"channel_id": channel_id, "document_content": document_content})
         return await self.api_call("conversations.canvases.create", json=kwargs)
@@ -3404,7 +4453,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Open a dialog with a user.
-        https://api.slack.com/methods/dialog.open
+
+        https://docs.slack.dev/reference/methods/dialog.open
         """
         kwargs.update({"dialog": dialog, "trigger_id": trigger_id})
         kwargs = _remove_none_values(kwargs)
@@ -3416,7 +4466,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Ends the current user's Do Not Disturb session immediately.
-        https://api.slack.com/methods/dnd.endDnd
+
+        https://docs.slack.dev/reference/methods/dnd.endDnd
         """
         return await self.api_call("dnd.endDnd", params=kwargs)
 
@@ -3425,7 +4476,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Ends the current user's snooze mode immediately.
-        https://api.slack.com/methods/dnd.endSnooze
+
+        https://docs.slack.dev/reference/methods/dnd.endSnooze
         """
         return await self.api_call("dnd.endSnooze", params=kwargs)
 
@@ -3437,7 +4489,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieves a user's current Do Not Disturb status.
-        https://api.slack.com/methods/dnd.info
+
+        https://docs.slack.dev/reference/methods/dnd.info
         """
         kwargs.update({"team_id": team_id, "user": user})
         return await self.api_call("dnd.info", http_verb="GET", params=kwargs)
@@ -3449,7 +4502,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Turns on Do Not Disturb mode for the current user, or changes its duration.
-        https://api.slack.com/methods/dnd.setSnooze
+
+        https://docs.slack.dev/reference/methods/dnd.setSnooze
         """
         kwargs.update({"num_minutes": num_minutes})
         return await self.api_call("dnd.setSnooze", http_verb="GET", params=kwargs)
@@ -3461,7 +4515,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieves the Do Not Disturb status for users on a team.
-        https://api.slack.com/methods/dnd.teamInfo
+
+        https://docs.slack.dev/reference/methods/dnd.teamInfo
         """
         if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
@@ -3476,10 +4531,36 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists custom emoji for a team.
-        https://api.slack.com/methods/emoji.list
+
+        https://docs.slack.dev/reference/methods/emoji.list
         """
         kwargs.update({"include_categories": include_categories})
         return await self.api_call("emoji.list", http_verb="GET", params=kwargs)
+
+    async def entity_presentDetails(
+        self,
+        trigger_id: str,
+        metadata: Optional[Union[Dict, EntityMetadata]] = None,
+        user_auth_required: Optional[bool] = None,
+        user_auth_url: Optional[str] = None,
+        error: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Provides entity details for the flexpane.
+
+        https://docs.slack.dev/reference/methods/entity.presentDetails/
+        """
+        kwargs.update({"trigger_id": trigger_id})
+        if metadata is not None:
+            kwargs.update({"metadata": metadata})
+        if user_auth_required is not None:
+            kwargs.update({"user_auth_required": user_auth_required})
+        if user_auth_url is not None:
+            kwargs.update({"user_auth_url": user_auth_url})
+        if error is not None:
+            kwargs.update({"error": error})
+        _parse_web_class_objects(kwargs)
+        return await self.api_call("entity.presentDetails", json=kwargs)
 
     async def files_comments_delete(
         self,
@@ -3489,7 +4570,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deletes an existing comment on a file.
-        https://api.slack.com/methods/files.comments.delete
+
+        https://docs.slack.dev/reference/methods/files.comments.delete
         """
         kwargs.update({"file": file, "id": id})
         return await self.api_call("files.comments.delete", params=kwargs)
@@ -3501,7 +4583,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deletes a file.
-        https://api.slack.com/methods/files.delete
+
+        https://docs.slack.dev/reference/methods/files.delete
         """
         kwargs.update({"file": file})
         return await self.api_call("files.delete", params=kwargs)
@@ -3517,7 +4600,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets information about a team file.
-        https://api.slack.com/methods/files.info
+
+        https://docs.slack.dev/reference/methods/files.info
         """
         kwargs.update(
             {
@@ -3545,7 +4629,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists & filters team files.
-        https://api.slack.com/methods/files.list
+
+        https://docs.slack.dev/reference/methods/files.list
         """
         kwargs.update(
             {
@@ -3573,7 +4658,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieve information about a remote file added to Slack.
-        https://api.slack.com/methods/files.remote.info
+
+        https://docs.slack.dev/reference/methods/files.remote.info
         """
         kwargs.update({"external_id": external_id, "file": file})
         return await self.api_call("files.remote.info", http_verb="GET", params=kwargs)
@@ -3589,7 +4675,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieve information about a remote file added to Slack.
-        https://api.slack.com/methods/files.remote.list
+
+        https://docs.slack.dev/reference/methods/files.remote.list
         """
         kwargs.update(
             {
@@ -3614,7 +4701,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Adds a file from a remote service.
-        https://api.slack.com/methods/files.remote.add
+
+        https://docs.slack.dev/reference/methods/files.remote.add
         """
         kwargs.update(
             {
@@ -3653,7 +4741,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Updates an existing remote file.
-        https://api.slack.com/methods/files.remote.update
+
+        https://docs.slack.dev/reference/methods/files.remote.update
         """
         kwargs.update(
             {
@@ -3688,7 +4777,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Remove a remote file.
-        https://api.slack.com/methods/files.remote.remove
+
+        https://docs.slack.dev/reference/methods/files.remote.remove
         """
         kwargs.update({"external_id": external_id, "file": file})
         return await self.api_call("files.remote.remove", http_verb="POST", params=kwargs)
@@ -3702,7 +4792,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Share a remote file into a channel.
-        https://api.slack.com/methods/files.remote.share
+
+        https://docs.slack.dev/reference/methods/files.remote.share
         """
         if external_id is None and file is None:
             raise e.SlackRequestError("Either external_id or file must be provided.")
@@ -3719,8 +4810,9 @@ class AsyncWebClient(AsyncBaseClient):
         file: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Revokes public/external sharing access for a file
-        https://api.slack.com/methods/files.revokePublicURL
+        """Revokes public/external sharing access for a file.
+
+        https://docs.slack.dev/reference/methods/files.revokePublicURL
         """
         kwargs.update({"file": file})
         return await self.api_call("files.revokePublicURL", params=kwargs)
@@ -3732,7 +4824,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Enables a file for public/external sharing.
-        https://api.slack.com/methods/files.sharedPublicURL
+
+        https://docs.slack.dev/reference/methods/files.sharedPublicURL
         """
         kwargs.update({"file": file})
         return await self.api_call("files.sharedPublicURL", params=kwargs)
@@ -3751,7 +4844,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Uploads or creates a file.
-        https://api.slack.com/methods/files.upload
+
+        https://docs.slack.dev/reference/methods/files.upload
         """
         _print_files_upload_v2_suggestion()
 
@@ -3788,10 +4882,11 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         # for sending a single file
         filename: Optional[str] = None,  # you can skip this only when sending along with content parameter
-        file: Optional[Union[str, bytes, IOBase]] = None,
+        file: Optional[Union[str, bytes, IOBase, os.PathLike]] = None,
         content: Optional[Union[str, bytes]] = None,
         title: Optional[str] = None,
         alt_txt: Optional[str] = None,
+        highlight_type: Optional[str] = None,
         snippet_type: Optional[str] = None,
         # To upload multiple files at a time
         file_uploads: Optional[List[Dict[str, Any]]] = None,
@@ -3802,14 +4897,14 @@ class AsyncWebClient(AsyncBaseClient):
         request_file_info: bool = True,  # since v3.23, this flag is no longer necessary
         **kwargs,
     ) -> AsyncSlackResponse:
-        """This wrapper method provides an easy way to upload files using the following endpoints:
+        """Provide an easy way to upload files using the following endpoints.
 
-        - step1: https://api.slack.com/methods/files.getUploadURLExternal
+        - step1: https://docs.slack.dev/reference/methods/files.getUploadURLExternal
 
         - step2: "https://files.slack.com/upload/v1/..." URLs returned from files.getUploadURLExternal API
 
-        - step3: https://api.slack.com/methods/files.completeUploadExternal
-            and https://api.slack.com/methods/files.info
+        - step3: https://docs.slack.dev/reference/methods/files.completeUploadExternal
+            and https://docs.slack.dev/reference/methods/files.info
 
         """
         if file is None and content is None and file_uploads is None:
@@ -3836,6 +4931,7 @@ class AsyncWebClient(AsyncBaseClient):
                     "content": content,
                     "title": title,
                     "alt_txt": alt_txt,
+                    "highlight_type": highlight_type,
                     "snippet_type": snippet_type,
                 }
             )
@@ -3874,7 +4970,7 @@ class AsyncWebClient(AsyncBaseClient):
 
         # step3: files.completeUploadExternal with all the sets of (file_id + title)
         completion = await self.files_completeUploadExternal(
-            files=[{"id": f["file_id"], "title": f["title"]} for f in files],
+            files=[{"id": f["file_id"], "title": f["title"], "highlight_type": f.get("highlight_type")} for f in files],
             channel_id=channel,
             channels=channels,
             initial_comment=initial_comment,
@@ -3895,7 +4991,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets a URL for an edge external upload.
-        https://api.slack.com/methods/files.getUploadURLExternal
+
+        https://docs.slack.dev/reference/methods/files.getUploadURLExternal
         """
         kwargs.update(
             {
@@ -3910,7 +5007,7 @@ class AsyncWebClient(AsyncBaseClient):
     async def files_completeUploadExternal(
         self,
         *,
-        files: List[Dict[str, str]],
+        files: List[Dict[str, Optional[str]]],
         channel_id: Optional[str] = None,
         channels: Optional[List[str]] = None,
         initial_comment: Optional[str] = None,
@@ -3918,7 +5015,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Finishes an upload started with files.getUploadURLExternal.
-        https://api.slack.com/methods/files.completeUploadExternal
+
+        https://docs.slack.dev/reference/methods/files.completeUploadExternal
         """
         _files = [{k: v for k, v in f.items() if v is not None} for f in files]
         kwargs.update(
@@ -3940,8 +5038,9 @@ class AsyncWebClient(AsyncBaseClient):
         outputs: Dict[str, Any],
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Signal the successful completion of a function
-        https://api.slack.com/methods/functions.completeSuccess
+        """Signal the successful completion of a function.
+
+        https://docs.slack.dev/reference/methods/functions.completeSuccess
         """
         kwargs.update({"function_execution_id": function_execution_id, "outputs": json.dumps(outputs)})
         return await self.api_call("functions.completeSuccess", params=kwargs)
@@ -3953,8 +5052,9 @@ class AsyncWebClient(AsyncBaseClient):
         error: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Signal the failure to execute a function
-        https://api.slack.com/methods/functions.completeError
+        """Signal the failure to execute a function.
+
+        https://docs.slack.dev/reference/methods/functions.completeError
         """
         kwargs.update({"function_execution_id": function_execution_id, "error": error})
         return await self.api_call("functions.completeError", params=kwargs)
@@ -3962,7 +5062,7 @@ class AsyncWebClient(AsyncBaseClient):
     # --------------------------
     # Deprecated: groups.*
     # You can use conversations.* APIs instead.
-    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/
     # --------------------------
 
     async def groups_archive(
@@ -4101,7 +5201,7 @@ class AsyncWebClient(AsyncBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Retrieve a thread of messages posted to a private channel"""
+        """Retrieve a thread of messages posted to a private channel."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return await self.api_call("groups.replies", http_verb="GET", params=kwargs)
 
@@ -4143,7 +5243,7 @@ class AsyncWebClient(AsyncBaseClient):
     # --------------------------
     # Deprecated: im.*
     # You can use conversations.* APIs instead.
-    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/
     # --------------------------
 
     async def im_close(
@@ -4204,7 +5304,7 @@ class AsyncWebClient(AsyncBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Retrieve a thread of messages posted to a direct message conversation"""
+        """Retrieve a thread of messages posted to a direct message conversation."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return await self.api_call("im.replies", http_verb="GET", params=kwargs)
 
@@ -4218,8 +5318,9 @@ class AsyncWebClient(AsyncBaseClient):
         to_old: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """For Enterprise Grid workspaces, map local user IDs to global user IDs
-        https://api.slack.com/methods/migration.exchange
+        """For Enterprise Grid workspaces, map local user IDs to global user IDs.
+
+        https://docs.slack.dev/reference/methods/migration.exchange
         """
         if isinstance(users, (list, tuple)):
             kwargs.update({"users": ",".join(users)})
@@ -4231,7 +5332,7 @@ class AsyncWebClient(AsyncBaseClient):
     # --------------------------
     # Deprecated: mpim.*
     # You can use conversations.* APIs instead.
-    # https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+    # https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/
     # --------------------------
 
     async def mpim_close(
@@ -4294,9 +5395,7 @@ class AsyncWebClient(AsyncBaseClient):
         thread_ts: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Retrieve a thread of messages posted to a direct message conversation from a
-        multiparty direct message.
-        """
+        """Retrieve a thread of messages posted to a direct message conversation from a multiparty direct message."""
         kwargs.update({"channel": channel, "thread_ts": thread_ts})
         return await self.api_call("mpim.replies", http_verb="GET", params=kwargs)
 
@@ -4318,7 +5417,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Exchanges a temporary OAuth verifier code for an access token.
-        https://api.slack.com/methods/oauth.v2.access
+
+        https://docs.slack.dev/reference/methods/oauth.v2.access
         """
         if redirect_uri is not None:
             kwargs.update({"redirect_uri": redirect_uri})
@@ -4344,7 +5444,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Exchanges a temporary OAuth verifier code for an access token.
-        https://api.slack.com/methods/oauth.access
+
+        https://docs.slack.dev/reference/methods/oauth.access
         """
         if redirect_uri is not None:
             kwargs.update({"redirect_uri": redirect_uri})
@@ -4363,8 +5464,9 @@ class AsyncWebClient(AsyncBaseClient):
         client_secret: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Exchanges a legacy access token for a new expiring access token and refresh token
-        https://api.slack.com/methods/oauth.v2.exchange
+        """Exchanges a legacy access token for a new expiring access token and refresh token.
+
+        https://docs.slack.dev/reference/methods/oauth.v2.exchange
         """
         kwargs.update({"client_id": client_id, "client_secret": client_secret, "token": token})
         return await self.api_call("oauth.v2.exchange", params=kwargs)
@@ -4380,7 +5482,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Exchanges a temporary OAuth verifier code for an access token for Sign in with Slack.
-        https://api.slack.com/methods/openid.connect.token
+
+        https://docs.slack.dev/reference/methods/openid.connect.token
         """
         if redirect_uri is not None:
             kwargs.update({"redirect_uri": redirect_uri})
@@ -4401,7 +5504,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Get the identity of a user who has authorized Sign in with Slack.
-        https://api.slack.com/methods/openid.connect.userInfo
+
+        https://docs.slack.dev/reference/methods/openid.connect.userInfo
         """
         return await self.api_call("openid.connect.userInfo", params=kwargs)
 
@@ -4413,7 +5517,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Pins an item to a channel.
-        https://api.slack.com/methods/pins.add
+
+        https://docs.slack.dev/reference/methods/pins.add
         """
         kwargs.update({"channel": channel, "timestamp": timestamp})
         return await self.api_call("pins.add", params=kwargs)
@@ -4425,7 +5530,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists items pinned to a channel.
-        https://api.slack.com/methods/pins.list
+
+        https://docs.slack.dev/reference/methods/pins.list
         """
         kwargs.update({"channel": channel})
         return await self.api_call("pins.list", http_verb="GET", params=kwargs)
@@ -4438,7 +5544,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Un-pins an item from a channel.
-        https://api.slack.com/methods/pins.remove
+
+        https://docs.slack.dev/reference/methods/pins.remove
         """
         kwargs.update({"channel": channel, "timestamp": timestamp})
         return await self.api_call("pins.remove", params=kwargs)
@@ -4452,7 +5559,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Adds a reaction to an item.
-        https://api.slack.com/methods/reactions.add
+
+        https://docs.slack.dev/reference/methods/reactions.add
         """
         kwargs.update({"channel": channel, "name": name, "timestamp": timestamp})
         return await self.api_call("reactions.add", params=kwargs)
@@ -4468,7 +5576,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets reactions for an item.
-        https://api.slack.com/methods/reactions.get
+
+        https://docs.slack.dev/reference/methods/reactions.get
         """
         kwargs.update(
             {
@@ -4494,7 +5603,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists reactions made by a user.
-        https://api.slack.com/methods/reactions.list
+
+        https://docs.slack.dev/reference/methods/reactions.list
         """
         kwargs.update(
             {
@@ -4520,7 +5630,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Removes a reaction from an item.
-        https://api.slack.com/methods/reactions.remove
+
+        https://docs.slack.dev/reference/methods/reactions.remove
         """
         kwargs.update(
             {
@@ -4544,7 +5655,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Creates a reminder.
-        https://api.slack.com/methods/reminders.add
+
+        https://docs.slack.dev/reference/methods/reminders.add
         """
         kwargs.update(
             {
@@ -4565,7 +5677,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Marks a reminder as complete.
-        https://api.slack.com/methods/reminders.complete
+
+        https://docs.slack.dev/reference/methods/reminders.complete
         """
         kwargs.update({"reminder": reminder, "team_id": team_id})
         return await self.api_call("reminders.complete", params=kwargs)
@@ -4578,7 +5691,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Deletes a reminder.
-        https://api.slack.com/methods/reminders.delete
+
+        https://docs.slack.dev/reference/methods/reminders.delete
         """
         kwargs.update({"reminder": reminder, "team_id": team_id})
         return await self.api_call("reminders.delete", params=kwargs)
@@ -4591,7 +5705,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets information about a reminder.
-        https://api.slack.com/methods/reminders.info
+
+        https://docs.slack.dev/reference/methods/reminders.info
         """
         kwargs.update({"reminder": reminder, "team_id": team_id})
         return await self.api_call("reminders.info", http_verb="GET", params=kwargs)
@@ -4603,7 +5718,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists all reminders created by or for a given user.
-        https://api.slack.com/methods/reminders.list
+
+        https://docs.slack.dev/reference/methods/reminders.list
         """
         kwargs.update({"team_id": team_id})
         return await self.api_call("reminders.list", http_verb="GET", params=kwargs)
@@ -4616,7 +5732,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Starts a Real Time Messaging session.
-        https://api.slack.com/methods/rtm.connect
+
+        https://docs.slack.dev/reference/methods/rtm.connect
         """
         kwargs.update({"batch_presence_aware": batch_presence_aware, "presence_sub": presence_sub})
         return await self.api_call("rtm.connect", http_verb="GET", params=kwargs)
@@ -4634,7 +5751,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Starts a Real Time Messaging session.
-        https://api.slack.com/methods/rtm.start
+
+        https://docs.slack.dev/reference/methods/rtm.start
         """
         kwargs.update(
             {
@@ -4662,7 +5780,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Searches for messages and files matching a query.
-        https://api.slack.com/methods/search.all
+
+        https://docs.slack.dev/reference/methods/search.all
         """
         kwargs.update(
             {
@@ -4690,7 +5809,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Searches for files matching a query.
-        https://api.slack.com/methods/search.files
+
+        https://docs.slack.dev/reference/methods/search.files
         """
         kwargs.update(
             {
@@ -4719,7 +5839,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Searches for messages matching a query.
-        https://api.slack.com/methods/search.messages
+
+        https://docs.slack.dev/reference/methods/search.messages
         """
         kwargs.update(
             {
@@ -4735,6 +5856,441 @@ class AsyncWebClient(AsyncBaseClient):
         )
         return await self.api_call("search.messages", http_verb="GET", params=kwargs)
 
+    async def slackbot_skills_create(
+        self,
+        *,
+        display_name: str,
+        instructions: Optional[str] = None,
+        canvas_id: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Creates a skill from markdown instructions, or turns an existing canvas the caller owns into a skill.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.create
+
+        Args:
+            display_name: Human-readable label. Max 255 characters; not unique.
+            instructions: Markdown body of the skill. Send exactly one of `instructions` or `canvas_id`.
+            canvas_id: Canvas the caller owns to turn into a skill. Send exactly one of `instructions` or `canvas_id`.
+            description: When Slackbot should use the skill. Max 400 characters.
+            category: One of the skill categories.
+            example_prompt: Max 200 characters. May contain `{skill}`, which becomes the skill mention.
+            mcp_servers: Apps the skill needs, capped at the caller's MCP server limit. Declaring an app doesn't grant
+              access to it.
+        """
+        kwargs.update(
+            {
+                "display_name": display_name,
+                "instructions": instructions,
+                "canvas_id": canvas_id,
+                "description": description,
+                "category": category,
+                "example_prompt": example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return await self.api_call("slackbot.skills.create", params=kwargs)
+
+    async def slackbot_skills_delete(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Deletes a Slackbot skill and its canvas, and removes it from every library, skill set, and the org catalog.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.delete
+
+        Args:
+            skill_id: Skill to delete.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return await self.api_call("slackbot.skills.delete", params=kwargs)
+
+    async def slackbot_skills_info(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Returns one Slackbot skill, including its instructions.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.info
+
+        Args:
+            skill_id: Skill to fetch: a canvas file ID or a `builtin:` reference.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return await self.api_call("slackbot.skills.info", params=kwargs)
+
+    async def slackbot_skills_library_add(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Turns a skill on in the caller's personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.add
+
+        Args:
+            skill_id: Skill to turn on for the caller.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return await self.api_call("slackbot.skills.library.add", params=kwargs)
+
+    async def slackbot_skills_library_remove(
+        self,
+        *,
+        skill_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Turns a skill off in the caller's personal library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.library.remove
+
+        Args:
+            skill_id: Skill to turn off for the caller.
+        """
+        kwargs.update({"skill_id": skill_id})
+        return await self.api_call("slackbot.skills.library.remove", params=kwargs)
+
+    async def slackbot_skills_list(
+        self,
+        *,
+        filter: Optional[str] = None,
+        category: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Lists Slackbot skills from the caller's point of view. Instructions are not included.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.list
+
+        Args:
+            filter: `library`: skills enabled for the caller, including auto-enabled skills and skills from skill sets.
+              `owned`: skills the caller created. `catalog`: the organization's official skills.
+            category: Only return skills in this category.
+            cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
+              returned by a previous request's `response_metadata`. Must be used with the same `filter` and `category`.
+            limit: The maximum number of skills to return. Fewer may be returned even when more remain.
+        """
+        kwargs.update(
+            {
+                "filter": filter,
+                "category": category,
+                "cursor": cursor,
+                "limit": limit,
+            }
+        )
+        return await self.api_call("slackbot.skills.list", params=kwargs)
+
+    async def slackbot_skills_update(
+        self,
+        *,
+        skill_id: str,
+        display_name: Optional[str] = None,
+        instructions: Optional[str] = None,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        example_prompt: Optional[str] = None,
+        mcp_servers: Optional[Union[str, Sequence[Dict[str, Any]]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Changes a Slackbot skill's instructions or metadata.
+
+        Only the inputs you send are changed; a call that changes nothing succeeds without writing.
+
+        https://docs.slack.dev/reference/methods/slackbot.skills.update
+
+        Args:
+            skill_id: Skill to change.
+            display_name: Human-readable label. Max 255 characters.
+            instructions: Markdown that replaces the whole document.
+            description: When Slackbot should use the skill. Max 400 characters. Send an empty string to clear.
+            category: One of the skill categories. Send an empty string to clear.
+            example_prompt: Max 200 characters. May contain `{skill}`. Send an empty string to clear.
+            mcp_servers: Apps the skill needs. Replaces the whole list; send `[]` to clear.
+        """
+        kwargs.update(
+            {
+                "skill_id": skill_id,
+                "display_name": display_name,
+                "instructions": instructions,
+                "description": description,
+                "category": category,
+                "example_prompt": example_prompt,
+            }
+        )
+        if isinstance(mcp_servers, (list, tuple)):
+            kwargs.update({"mcp_servers": json.dumps(mcp_servers)})
+        else:
+            kwargs.update({"mcp_servers": mcp_servers})
+        return await self.api_call("slackbot.skills.update", params=kwargs)
+
+    async def slackLists_access_delete(
+        self,
+        *,
+        list_id: str,
+        channel_ids: Optional[List[str]] = None,
+        user_ids: Optional[List[str]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Revoke access to a List for specified entities.
+
+        https://docs.slack.dev/reference/methods/slackLists.access.delete
+        """
+        kwargs.update({"list_id": list_id, "channel_ids": channel_ids, "user_ids": user_ids})
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.access.delete", json=kwargs)
+
+    async def slackLists_access_set(
+        self,
+        *,
+        list_id: str,
+        access_level: str,
+        channel_ids: Optional[List[str]] = None,
+        user_ids: Optional[List[str]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set the access level to a List for specified entities.
+
+        https://docs.slack.dev/reference/methods/slackLists.access.set
+        """
+        kwargs.update({"list_id": list_id, "access_level": access_level, "channel_ids": channel_ids, "user_ids": user_ids})
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.access.set", json=kwargs)
+
+    async def slackLists_create(
+        self,
+        *,
+        name: str,
+        description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
+        schema: Optional[List[Dict[str, Any]]] = None,
+        copy_from_list_id: Optional[str] = None,
+        include_copied_list_records: Optional[bool] = None,
+        todo_mode: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Creates a List.
+
+        https://docs.slack.dev/reference/methods/slackLists.create
+        """
+        kwargs.update(
+            {
+                "name": name,
+                "description_blocks": description_blocks,
+                "schema": schema,
+                "copy_from_list_id": copy_from_list_id,
+                "include_copied_list_records": include_copied_list_records,
+                "todo_mode": todo_mode,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.create", json=kwargs)
+
+    async def slackLists_download_get(
+        self,
+        *,
+        list_id: str,
+        job_id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Retrieve List download URL from an export job to download List contents.
+
+        https://docs.slack.dev/reference/methods/slackLists.download.get
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "job_id": job_id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.download.get", json=kwargs)
+
+    async def slackLists_download_start(
+        self,
+        *,
+        list_id: str,
+        include_archived: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Initiate a job to export List contents.
+
+        https://docs.slack.dev/reference/methods/slackLists.download.start
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "include_archived": include_archived,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.download.start", json=kwargs)
+
+    async def slackLists_items_create(
+        self,
+        *,
+        list_id: str,
+        duplicated_item_id: Optional[str] = None,
+        parent_item_id: Optional[str] = None,
+        initial_fields: Optional[List[Dict[str, Any]]] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Add a new item to an existing List.
+
+        https://docs.slack.dev/reference/methods/slackLists.items.create
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "duplicated_item_id": duplicated_item_id,
+                "parent_item_id": parent_item_id,
+                "initial_fields": initial_fields,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.items.create", json=kwargs)
+
+    async def slackLists_items_delete(
+        self,
+        *,
+        list_id: str,
+        id: str,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Deletes an item from an existing List.
+
+        https://docs.slack.dev/reference/methods/slackLists.items.delete
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "id": id,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.items.delete", json=kwargs)
+
+    async def slackLists_items_deleteMultiple(
+        self,
+        *,
+        list_id: str,
+        ids: List[str],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Deletes multiple items from an existing List.
+
+        https://docs.slack.dev/reference/methods/slackLists.items.deleteMultiple
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "ids": ids,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.items.deleteMultiple", json=kwargs)
+
+    async def slackLists_items_info(
+        self,
+        *,
+        list_id: str,
+        id: str,
+        include_is_subscribed: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Get a row from a List.
+
+        https://docs.slack.dev/reference/methods/slackLists.items.info
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "id": id,
+                "include_is_subscribed": include_is_subscribed,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.items.info", json=kwargs)
+
+    async def slackLists_items_list(
+        self,
+        *,
+        list_id: str,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        archived: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Get records from a List.
+
+        https://docs.slack.dev/reference/methods/slackLists.items.list
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "limit": limit,
+                "cursor": cursor,
+                "archived": archived,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.items.list", json=kwargs)
+
+    async def slackLists_items_update(
+        self,
+        *,
+        list_id: str,
+        cells: List[Dict[str, Any]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Updates cells in a List.
+
+        https://docs.slack.dev/reference/methods/slackLists.items.update
+        """
+        kwargs.update(
+            {
+                "list_id": list_id,
+                "cells": cells,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.items.update", json=kwargs)
+
+    async def slackLists_update(
+        self,
+        *,
+        id: str,
+        name: Optional[str] = None,
+        description_blocks: Optional[Union[str, Sequence[Union[Dict, RichTextBlock]]]] = None,
+        todo_mode: Optional[bool] = None,
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Update a List.
+
+        https://docs.slack.dev/reference/methods/slackLists.update
+        """
+        kwargs.update(
+            {
+                "id": id,
+                "name": name,
+                "description_blocks": description_blocks,
+                "todo_mode": todo_mode,
+            }
+        )
+        kwargs = _remove_none_values(kwargs)
+        return await self.api_call("slackLists.update", json=kwargs)
+
     async def stars_add(
         self,
         *,
@@ -4745,7 +6301,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Adds a star to an item.
-        https://api.slack.com/methods/stars.add
+
+        https://docs.slack.dev/reference/methods/stars.add
         """
         kwargs.update(
             {
@@ -4768,7 +6325,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists stars for a user.
-        https://api.slack.com/methods/stars.list
+
+        https://docs.slack.dev/reference/methods/stars.list
         """
         kwargs.update(
             {
@@ -4791,7 +6349,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Removes a star from an item.
-        https://api.slack.com/methods/stars.remove
+
+        https://docs.slack.dev/reference/methods/stars.remove
         """
         kwargs.update(
             {
@@ -4815,7 +6374,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets the access logs for the current team.
-        https://api.slack.com/methods/team.accessLogs
+
+        https://docs.slack.dev/reference/methods/team.accessLogs
         """
         kwargs.update(
             {
@@ -4837,7 +6397,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets billable users information for the current team.
-        https://api.slack.com/methods/team.billableInfo
+
+        https://docs.slack.dev/reference/methods/team.billableInfo
         """
         kwargs.update({"team_id": team_id, "user": user})
         return await self.api_call("team.billableInfo", http_verb="GET", params=kwargs)
@@ -4847,7 +6408,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Reads a workspace's billing plan information.
-        https://api.slack.com/methods/team.billing.info
+
+        https://docs.slack.dev/reference/methods/team.billing.info
         """
         return await self.api_call("team.billing.info", params=kwargs)
 
@@ -4858,7 +6420,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Disconnects an external organization.
-        https://api.slack.com/methods/team.externalTeams.disconnect
+
+        https://docs.slack.dev/reference/methods/team.externalTeams.disconnect
         """
         kwargs.update(
             {
@@ -4880,7 +6443,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Returns a list of all the external teams connected and details about the connection.
-        https://api.slack.com/methods/team.externalTeams.list
+
+        https://docs.slack.dev/reference/methods/team.externalTeams.list
         """
         kwargs.update(
             {
@@ -4908,12 +6472,14 @@ class AsyncWebClient(AsyncBaseClient):
         *,
         team: Optional[str] = None,
         domain: Optional[str] = None,
+        include_slackbot_availability: Optional[bool] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets information about the current team.
-        https://api.slack.com/methods/team.info
+
+        https://docs.slack.dev/reference/methods/team.info
         """
-        kwargs.update({"team": team, "domain": domain})
+        kwargs.update({"team": team, "domain": domain, "include_slackbot_availability": include_slackbot_availability})
         return await self.api_call("team.info", http_verb="GET", params=kwargs)
 
     async def team_integrationLogs(
@@ -4929,7 +6495,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets the integration logs for the current team.
-        https://api.slack.com/methods/team.integrationLogs
+
+        https://docs.slack.dev/reference/methods/team.integrationLogs
         """
         kwargs.update(
             {
@@ -4951,7 +6518,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieve a team's profile.
-        https://api.slack.com/methods/team.profile.get
+
+        https://docs.slack.dev/reference/methods/team.profile.get
         """
         kwargs.update({"visibility": visibility})
         return await self.api_call("team.profile.get", http_verb="GET", params=kwargs)
@@ -4961,7 +6529,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieve a list of a workspace's team preferences.
-        https://api.slack.com/methods/team.preferences.list
+
+        https://docs.slack.dev/reference/methods/team.preferences.list
         """
         return await self.api_call("team.preferences.list", params=kwargs)
 
@@ -4976,8 +6545,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Create a User Group
-        https://api.slack.com/methods/usergroups.create
+        """Create a User Group.
+
+        https://docs.slack.dev/reference/methods/usergroups.create
         """
         kwargs.update(
             {
@@ -5002,8 +6572,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Disable an existing User Group
-        https://api.slack.com/methods/usergroups.disable
+        """Disable an existing User Group.
+
+        https://docs.slack.dev/reference/methods/usergroups.disable
         """
         kwargs.update({"usergroup": usergroup, "include_count": include_count, "team_id": team_id})
         return await self.api_call("usergroups.disable", params=kwargs)
@@ -5016,8 +6587,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Enable a User Group
-        https://api.slack.com/methods/usergroups.enable
+        """Enable a User Group.
+
+        https://docs.slack.dev/reference/methods/usergroups.enable
         """
         kwargs.update({"usergroup": usergroup, "include_count": include_count, "team_id": team_id})
         return await self.api_call("usergroups.enable", params=kwargs)
@@ -5031,8 +6603,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """List all User Groups for a team
-        https://api.slack.com/methods/usergroups.list
+        """List all User Groups for a team.
+
+        https://docs.slack.dev/reference/methods/usergroups.list
         """
         kwargs.update(
             {
@@ -5056,8 +6629,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Update an existing User Group
-        https://api.slack.com/methods/usergroups.update
+        """Update an existing User Group.
+
+        https://docs.slack.dev/reference/methods/usergroups.update
         """
         kwargs.update(
             {
@@ -5083,8 +6657,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """List all users in a User Group
-        https://api.slack.com/methods/usergroups.users.list
+        """List all users in a User Group.
+
+        https://docs.slack.dev/reference/methods/usergroups.users.list
         """
         kwargs.update(
             {
@@ -5104,8 +6679,9 @@ class AsyncWebClient(AsyncBaseClient):
         team_id: Optional[str] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Update the list of users for a User Group
-        https://api.slack.com/methods/usergroups.users.update
+        """Update the list of users for a User Group.
+
+        https://docs.slack.dev/reference/methods/usergroups.users.update
         """
         kwargs.update(
             {
@@ -5132,7 +6708,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """List conversations the calling user may access.
-        https://api.slack.com/methods/users.conversations
+
+        https://docs.slack.dev/reference/methods/users.conversations
         """
         kwargs.update(
             {
@@ -5153,8 +6730,9 @@ class AsyncWebClient(AsyncBaseClient):
         self,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Delete the user profile photo
-        https://api.slack.com/methods/users.deletePhoto
+        """Delete the user profile photo.
+
+        https://docs.slack.dev/reference/methods/users.deletePhoto
         """
         return await self.api_call("users.deletePhoto", http_verb="GET", params=kwargs)
 
@@ -5165,7 +6743,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets user presence information.
-        https://api.slack.com/methods/users.getPresence
+
+        https://docs.slack.dev/reference/methods/users.getPresence
         """
         kwargs.update({"user": user})
         return await self.api_call("users.getPresence", http_verb="GET", params=kwargs)
@@ -5175,7 +6754,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Get a user's identity.
-        https://api.slack.com/methods/users.identity
+
+        https://docs.slack.dev/reference/methods/users.identity
         """
         return await self.api_call("users.identity", http_verb="GET", params=kwargs)
 
@@ -5187,7 +6767,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Gets information about a user.
-        https://api.slack.com/methods/users.info
+
+        https://docs.slack.dev/reference/methods/users.info
         """
         kwargs.update({"user": user, "include_locale": include_locale})
         return await self.api_call("users.info", http_verb="GET", params=kwargs)
@@ -5202,7 +6783,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Lists all users in a Slack team.
-        https://api.slack.com/methods/users.list
+
+        https://docs.slack.dev/reference/methods/users.list
         """
         kwargs.update(
             {
@@ -5221,7 +6803,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Find a user with an email address.
-        https://api.slack.com/methods/users.lookupByEmail
+
+        https://docs.slack.dev/reference/methods/users.lookupByEmail
         """
         kwargs.update({"email": email})
         return await self.api_call("users.lookupByEmail", http_verb="GET", params=kwargs)
@@ -5235,8 +6818,9 @@ class AsyncWebClient(AsyncBaseClient):
         crop_y: Optional[Union[int, str]] = None,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Set the user profile photo
-        https://api.slack.com/methods/users.setPhoto
+        """Set the user profile photo.
+
+        https://docs.slack.dev/reference/methods/users.setPhoto
         """
         kwargs.update({"crop_w": crop_w, "crop_x": crop_x, "crop_y": crop_y})
         return await self.api_call("users.setPhoto", files={"image": image}, data=kwargs)
@@ -5248,7 +6832,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Manually sets user presence.
-        https://api.slack.com/methods/users.setPresence
+
+        https://docs.slack.dev/reference/methods/users.setPresence
         """
         kwargs.update({"presence": presence})
         return await self.api_call("users.setPresence", params=kwargs)
@@ -5258,8 +6843,9 @@ class AsyncWebClient(AsyncBaseClient):
         email: str,
         **kwargs,
     ) -> AsyncSlackResponse:
-        """Lookup an email address to see if someone is on Slack
-        https://api.slack.com/methods/users.discoverableContacts.lookup
+        """Lookup an email address to see if someone is on Slack.
+
+        https://docs.slack.dev/reference/methods/users.discoverableContacts.lookup
         """
         kwargs.update({"email": email})
         return await self.api_call("users.discoverableContacts.lookup", params=kwargs)
@@ -5272,7 +6858,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Retrieves a user's profile information.
-        https://api.slack.com/methods/users.profile.get
+
+        https://docs.slack.dev/reference/methods/users.profile.get
         """
         kwargs.update({"user": user, "include_labels": include_labels})
         return await self.api_call("users.profile.get", http_verb="GET", params=kwargs)
@@ -5287,7 +6874,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Set the profile information for a user.
-        https://api.slack.com/methods/users.profile.set
+
+        https://docs.slack.dev/reference/methods/users.profile.set
         """
         kwargs.update(
             {
@@ -5310,8 +6898,9 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Open a view for a user.
-        https://api.slack.com/methods/views.open
-        See https://api.slack.com/surfaces/modals for details.
+
+        https://docs.slack.dev/reference/methods/views.open
+        See https://docs.slack.dev/surfaces/modals/ for details.
         """
         kwargs.update({"trigger_id": trigger_id, "interactivity_pointer": interactivity_pointer})
         if isinstance(view, View):
@@ -5331,12 +6920,13 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Push a view onto the stack of a root view.
+
         Push a new view onto the existing view stack by passing a view
         payload and a valid trigger_id generated from an interaction
         within the existing modal.
-        Read the modals documentation (https://api.slack.com/surfaces/modals)
+        Read the modals documentation (https://docs.slack.dev/surfaces/modals/)
         to learn more about the lifecycle and intricacies of views.
-        https://api.slack.com/methods/views.push
+        https://docs.slack.dev/reference/methods/views.push
         """
         kwargs.update({"trigger_id": trigger_id, "interactivity_pointer": interactivity_pointer})
         if isinstance(view, View):
@@ -5357,11 +6947,12 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Update an existing view.
+
         Update a view by passing a new view definition along with the
         view_id returned in views.open or the external_id.
-        See the modals documentation (https://api.slack.com/surfaces/modals#updating_views)
+        See the modals documentation (https://docs.slack.dev/surfaces/modals/#updating_views)
         to learn more about updating views and avoiding race conditions with the hash argument.
-        https://api.slack.com/methods/views.update
+        https://docs.slack.dev/reference/methods/views.update
         """
         if isinstance(view, View):
             kwargs.update({"view": view.to_dict()})
@@ -5387,9 +6978,10 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Publish a static view for a User.
+
         Create or update the view that comprises an
-        app's Home tab (https://api.slack.com/surfaces/tabs)
-        https://api.slack.com/methods/views.publish
+        app's Home tab (https://docs.slack.dev/surfaces/app-home/)
+        https://docs.slack.dev/reference/methods/views.publish
         """
         kwargs.update({"user_id": user_id, "hash": hash})
         if isinstance(view, View):
@@ -5400,6 +6992,76 @@ class AsyncWebClient(AsyncBaseClient):
         # NOTE: Intentionally using json for the "view" parameter
         return await self.api_call("views.publish", json=kwargs)
 
+    async def workflows_featured_add(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Add featured workflows to a channel.
+
+        https://docs.slack.dev/reference/methods/workflows.featured.add
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return await self.api_call("workflows.featured.add", params=kwargs)
+
+    async def workflows_featured_list(
+        self,
+        *,
+        channel_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """List the featured workflows for specified channels.
+
+        https://docs.slack.dev/reference/methods/workflows.featured.list
+        """
+        if isinstance(channel_ids, (list, tuple)):
+            kwargs.update({"channel_ids": ",".join(channel_ids)})
+        else:
+            kwargs.update({"channel_ids": channel_ids})
+        return await self.api_call("workflows.featured.list", params=kwargs)
+
+    async def workflows_featured_remove(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Remove featured workflows from a channel.
+
+        https://docs.slack.dev/reference/methods/workflows.featured.remove
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return await self.api_call("workflows.featured.remove", params=kwargs)
+
+    async def workflows_featured_set(
+        self,
+        *,
+        channel_id: str,
+        trigger_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> AsyncSlackResponse:
+        """Set featured workflows for a channel.
+
+        https://docs.slack.dev/reference/methods/workflows.featured.set
+        """
+        kwargs.update({"channel_id": channel_id})
+        if isinstance(trigger_ids, (list, tuple)):
+            kwargs.update({"trigger_ids": ",".join(trigger_ids)})
+        else:
+            kwargs.update({"trigger_ids": trigger_ids})
+        return await self.api_call("workflows.featured.set", params=kwargs)
+
     async def workflows_stepCompleted(
         self,
         *,
@@ -5408,7 +7070,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Indicate a successful outcome of a workflow step's execution.
-        https://api.slack.com/methods/workflows.stepCompleted
+
+        https://docs.slack.dev/reference/methods/workflows.stepCompleted
         """
         kwargs.update({"workflow_step_execute_id": workflow_step_execute_id})
         if outputs is not None:
@@ -5425,7 +7088,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Indicate an unsuccessful outcome of a workflow step's execution.
-        https://api.slack.com/methods/workflows.stepFailed
+
+        https://docs.slack.dev/reference/methods/workflows.stepFailed
         """
         kwargs.update(
             {
@@ -5446,7 +7110,8 @@ class AsyncWebClient(AsyncBaseClient):
         **kwargs,
     ) -> AsyncSlackResponse:
         """Update the configuration for a workflow extension step.
-        https://api.slack.com/methods/workflows.updateStep
+
+        https://docs.slack.dev/reference/methods/workflows.updateStep
         """
         kwargs.update({"workflow_step_edit_id": workflow_step_edit_id})
         if inputs is not None:

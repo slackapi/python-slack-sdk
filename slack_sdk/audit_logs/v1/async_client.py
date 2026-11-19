@@ -1,6 +1,6 @@
 """Audit Logs API is a set of APIs for monitoring what’s happening in your Enterprise Grid organization.
 
-Refer to https://slack.dev/python-slack-sdk/audit-logs/ for details.
+Refer to https://docs.slack.dev/tools/python-slack-sdk/audit-logs for details.
 """
 
 import json
@@ -58,8 +58,9 @@ class AsyncAuditLogsClient:
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
-        """API client for Audit Logs API
-        See https://api.slack.com/admins/audit-logs for more details
+        """API client for Audit Logs API.
+
+        See https://docs.slack.dev/admins/audit-logs-api/ for more details
 
         Args:
             token: An admin user's token, which starts with `xoxp-`
@@ -100,9 +101,9 @@ class AsyncAuditLogsClient:
         query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
-        """Returns information about the kind of objects which the Audit Logs API
-        returns as a list of all objects and a short description.
-        Authentication not required.
+        """Returns information about the kind of objects the Audit Logs API returns.
+
+        Returned as a list of all objects, each with a short description. Authentication not required.
 
         Args:
             query_params: Set any values if you want to add query params
@@ -122,9 +123,9 @@ class AsyncAuditLogsClient:
         query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
-        """Returns information about the kind of actions that the Audit Logs API
-        returns as a list of all actions and a short description of each.
-        Authentication not required.
+        """Returns information about the kind of actions the Audit Logs API returns.
+
+        Returned as a list of all actions, each with a short description. Authentication not required.
 
         Args:
             query_params: Set any values if you want to add query params
@@ -153,6 +154,7 @@ class AsyncAuditLogsClient:
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """This is the primary endpoint for retrieving actual audit events from your organization.
+
         It will return a list of actions that have occurred on the installed workspace or grid organization.
         Authentication required.
 
@@ -297,7 +299,7 @@ class AsyncAuditLogsClient:
                             message = f"Failed to parse the response body: {str(e)}"
                             raise SlackApiError(message, res)
 
-                        if res.status == 429:
+                        if res.status >= 400:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
@@ -307,7 +309,7 @@ class AsyncAuditLogsClient:
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
                                             f"A retry handler found: {type(handler).__name__} "
-                                            f"for {http_verb} {url} - rate_limited"
+                                            f"for {http_verb} {url} - status: {res.status}"
                                         )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
@@ -337,7 +339,7 @@ class AsyncAuditLogsClient:
                         ):
                             if self.logger.level <= logging.DEBUG:
                                 self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {url} - {e}"
+                                    f"A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

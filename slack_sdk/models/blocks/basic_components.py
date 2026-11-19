@@ -1,13 +1,10 @@
 import copy
 import logging
 import warnings
-from typing import List, Optional, Set, Union, Sequence, Dict, Any
+from typing import Any, Dict, List, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
-from slack_sdk.models.basic_objects import (
-    JsonObject,
-    JsonValidator,
-)
+from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 from slack_sdk.models.messages import Link
 
 ButtonStyles = {"danger", "primary"}
@@ -15,7 +12,7 @@ DynamicSelectElementTypes = {"channels", "conversations", "users"}
 
 
 class TextObject(JsonObject):
-    """The interface for text objects (types: plain_text, mrkdwn)"""
+    """The interface for text objects (types: plain_text, mrkdwn)."""
 
     attributes = {"text", "type", "emoji"}
     logger = logging.getLogger(__name__)
@@ -64,7 +61,7 @@ class TextObject(JsonObject):
         emoji: Optional[bool] = None,
         **kwargs,
     ):
-        """Super class for new text "objects" used in Block kit"""
+        """Super class for new text "objects" used in Block kit."""
         if subtype:
             self._subtype_warning()
 
@@ -74,7 +71,7 @@ class TextObject(JsonObject):
 
 
 class PlainTextObject(TextObject):
-    """plain_text typed text object"""
+    """plain_text typed text object."""
 
     type = "plain_text"
 
@@ -83,9 +80,9 @@ class PlainTextObject(TextObject):
         return super().attributes.union({"emoji"})
 
     def __init__(self, *, text: str, emoji: Optional[bool] = None):
-        """A plain text object, meaning markdown characters will not be parsed as
-        formatting information.
-        https://api.slack.com/reference/block-kit/composition-objects#text
+        """A plain text object, meaning markdown characters will not be parsed as formatting information.
+
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
             text (required): The text for the block. This field accepts any of the standard text formatting markup
@@ -102,12 +99,12 @@ class PlainTextObject(TextObject):
 
     @staticmethod
     def direct_from_string(text: str) -> Dict[str, Any]:
-        """Transforms a string into the required object shape to act as a PlainTextObject"""
+        """Transforms a string into the required object shape to act as a PlainTextObject."""
         return PlainTextObject.from_str(text).to_dict()
 
 
 class MarkdownTextObject(TextObject):
-    """mrkdwn typed text object"""
+    """mrkdwn typed text object."""
 
     type = "mrkdwn"
 
@@ -116,9 +113,9 @@ class MarkdownTextObject(TextObject):
         return super().attributes.union({"verbatim"})
 
     def __init__(self, *, text: str, verbatim: Optional[bool] = None):
-        """A Markdown text object, meaning markdown characters will be parsed as
-        formatting information.
-        https://api.slack.com/reference/block-kit/composition-objects#text
+        """A Markdown text object, meaning markdown characters will be parsed as formatting information.
+
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object
 
         Args:
             text (required): The text for the block. This field accepts any of the standard text formatting markup
@@ -133,40 +130,133 @@ class MarkdownTextObject(TextObject):
 
     @staticmethod
     def from_str(text: str) -> "MarkdownTextObject":
-        """Transforms a string into the required object shape to act as a MarkdownTextObject"""
+        """Transforms a string into the required object shape to act as a MarkdownTextObject."""
         return MarkdownTextObject(text=text)
 
     @staticmethod
     def direct_from_string(text: str) -> Dict[str, Any]:
-        """Transforms a string into the required object shape to act as a MarkdownTextObject"""
+        """Transforms a string into the required object shape to act as a MarkdownTextObject."""
         return MarkdownTextObject.from_str(text).to_dict()
 
     @staticmethod
     def from_link(link: Link, title: str = "") -> "MarkdownTextObject":
-        """
-        Transform a Link object directly into the required object shape
-        to act as a MarkdownTextObject
-        """
+        """Transform a Link object directly into the required object shape to act as a MarkdownTextObject."""
         if title:
             title = f": {title}"
         return MarkdownTextObject(text=f"{link}{title}")
 
     @staticmethod
     def direct_from_link(link: Link, title: str = "") -> Dict[str, Any]:
-        """
-        Transform a Link object directly into the required object shape
-        to act as a MarkdownTextObject
-        """
+        """Transform a Link object directly into the required object shape to act as a MarkdownTextObject."""
         return MarkdownTextObject.from_link(link, title).to_dict()
 
 
+class RawNumberObject(JsonObject):
+    """raw_number typed object."""
+
+    type = "raw_number"
+    attributes = {"value", "text", "type"}
+    logger = logging.getLogger(__name__)
+
+    def __init__(self, *, value: Union[int, float], text: str):
+        """Defines an object containing a numeric value.
+
+        Args:
+            value (required): The numeric value.
+            text (required): The text used to display the value. The minimum length is 1 character.
+        """
+        self.value = value
+        self.text = text
+
+    @JsonValidator("text attribute must have at least 1 character")
+    def _validate_text_min_length(self):
+        return len(self.text) >= 1
+
+
+class RawTextObject(TextObject):
+    """raw_text typed text object."""
+
+    type = "raw_text"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return {"text", "type"}
+
+    def __init__(self, *, text: str):
+        """A raw text object used in table block cells.
+
+        https://docs.slack.dev/reference/block-kit/composition-objects/text-object/
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            text (required): The text content for the table block cell.
+        """
+        super().__init__(text=text, type=self.type)
+
+    @staticmethod
+    def from_str(text: str) -> "RawTextObject":
+        """Transforms a string into a RawTextObject."""
+        return RawTextObject(text=text)
+
+    @staticmethod
+    def direct_from_string(text: str) -> Dict[str, Any]:
+        """Transforms a string into the required object shape to act as a RawTextObject."""
+        return RawTextObject.from_str(text).to_dict()
+
+    @JsonValidator("text attribute must have at least 1 character")
+    def _validate_text_min_length(self):
+        return len(self.text) >= 1
+
+
+class TableBlockColumnSettings(JsonObject):
+    """Column settings for TableBlock columns."""
+
+    @property
+    def attributes(self) -> Set[str]:
+        return {"align", "is_wrapped"}
+
+    def __init__(
+        self,
+        *,
+        align: Optional[str] = None,
+        is_wrapped: Optional[bool] = None,
+        **others: dict,
+    ):
+        """Settings for a single column in a table block.
+
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            align: The alignment for items in this column. Can be "left", "center", or "right".
+                Defaults to "left" if not defined.
+            is_wrapped: Whether the contents of this column should be wrapped or not.
+                Defaults to false if not defined.
+        """
+        show_unknown_key_warning(self, others)
+        self.align = align
+        self.is_wrapped = is_wrapped
+
+    @classmethod
+    def parse(
+        cls, settings: Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]
+    ) -> Optional["TableBlockColumnSettings"]:
+        if settings is None:
+            return None
+        if isinstance(settings, TableBlockColumnSettings):
+            return settings
+        if isinstance(settings, dict):
+            return TableBlockColumnSettings(**settings)
+        return None
+
+
 class Option(JsonObject):
-    """Option object used in dialogs, legacy message actions (interactivity in attachments),
-    and blocks. JSON must be retrieved with an explicit option_type - the Slack API has
+    """Option object used in dialogs, legacy message actions (interactivity in attachments), and blocks.
+
+    JSON must be retrieved with an explicit option_type - the Slack API has
     different required formats in different situations
     """
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     logger = logging.getLogger(__name__)
 
     label_max_length = 75
@@ -182,19 +272,19 @@ class Option(JsonObject):
         url: Optional[str] = None,
         **others: Dict[str, Any],
     ):
-        """
-        An object that represents a single selectable item in a block element (
-        SelectElement, OverflowMenuElement) or dialog element
-        (StaticDialogSelectElement)
+        """An object that represents a single selectable item in a block or dialog element.
+
+        Usable in a block element (SelectElement, OverflowMenuElement) or a dialog element
+        (StaticDialogSelectElement).
 
         Blocks:
-        https://api.slack.com/reference/block-kit/composition-objects#option
+        https://docs.slack.dev/reference/block-kit/composition-objects/option-object
 
         Dialogs:
-        https://api.slack.com/dialogs#select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
 
         Legacy interactive attachments:
-        https://api.slack.com/legacy/interactive-message-field-guide#option_fields
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_fields
 
         Args:
             label: A short, user-facing string to label this option to users.
@@ -274,9 +364,9 @@ class Option(JsonObject):
         return option_objects
 
     def to_dict(self, option_type: str = "block") -> Dict[str, Any]:
-        """
-        Different parent classes must call this with a valid value from OptionTypes -
-        either "dialog", "action", or "block", so that JSON is returned in the
+        """Different parent classes must call this with a valid value from OptionTypes.
+
+        It must be either "dialog", "action", or "block", so that JSON is returned in the
         correct shape.
         """
         self.validate_json()
@@ -303,17 +393,17 @@ class Option(JsonObject):
 
     @staticmethod
     def from_single_value(value_and_label: str):
-        """Creates a simple Option instance with the same value and label"""
+        """Creates a simple Option instance with the same value and label."""
         return Option(value=value_and_label, label=value_and_label)
 
 
 class OptionGroup(JsonObject):
-    """
-    JSON must be retrieved with an explicit option_type - the Slack API has
-    different required formats in different situations
+    """JSON must be retrieved with an explicit option_type.
+
+    The Slack API has different required formats in different situations.
     """
 
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
     label_max_length = 75
     options_max_length = 100
     logger = logging.getLogger(__name__)
@@ -325,18 +415,18 @@ class OptionGroup(JsonObject):
         options: Sequence[Union[Dict[str, Any], Option]],
         **others: Dict[str, Any],
     ):
-        """
-        Create a group of Option objects - pass in a label (that will be part of the
-        UI) and a list of Option objects.
+        """Create a group of Option objects.
+
+        Pass in a label (that will be part of the UI) and a list of Option objects.
 
         Blocks:
-        https://api.slack.com/reference/block-kit/composition-objects#option-group
+        https://docs.slack.dev/reference/block-kit/composition-objects/option-group-object
 
         Dialogs:
-        https://api.slack.com/dialogs#select_elements
+        https://docs.slack.dev/legacy/legacy-dialogs/#select_elements
 
         Legacy interactive attachments:
-        https://api.slack.com/legacy/interactive-message-field-guide#option_groups_to_place_within_message_menu_actions
+        https://docs.slack.dev/legacy/legacy-messaging/legacy-interactive-message-field-guide/#option_groups
 
         Args:
             label: Text to display at the top of this group of options.
@@ -395,7 +485,7 @@ class OptionGroup(JsonObject):
 
 
 class ConfirmObject(JsonObject):
-    attributes = {}  # type: ignore[assignment] # no attributes because to_dict has unique implementations
+    attributes: Set[str] = set()
 
     title_max_length = 100
     text_max_length = 300
@@ -423,11 +513,11 @@ class ConfirmObject(JsonObject):
         deny: Union[str, Dict[str, Any], PlainTextObject] = "No",
         style: Optional[str] = None,
     ):
-        """
-        An object that defines a dialog that provides a confirmation step to any
-        interactive element. This dialog will ask the user to confirm their action by
+        """An object that defines a dialog that provides a confirmation step to any interactive element.
+
+        This dialog will ask the user to confirm their action by
         offering a confirm and deny button.
-        https://api.slack.com/reference/block-kit/composition-objects#confirm
+        https://docs.slack.dev/reference/block-kit/composition-objects/confirmation-dialog-object/
         """
         self._title = TextObject.parse(title, default_type=PlainTextObject.type)
         self._text = TextObject.parse(text, default_type=MarkdownTextObject.type)
@@ -512,9 +602,9 @@ class DispatchActionConfig(JsonObject):
         *,
         trigger_actions_on: Optional[List[Any]] = None,
     ):
-        """
-        Determines when a plain-text input element will return a block_actions interaction payload.
-        https://api.slack.com/reference/block-kit/composition-objects#dispatch_action_config
+        """Determines when a plain-text input element will return a block_actions interaction payload.
+
+        https://docs.slack.dev/reference/block-kit/composition-objects/dispatch-action-configuration-object
         """
         self._trigger_actions_on = trigger_actions_on or []
 
@@ -523,6 +613,67 @@ class DispatchActionConfig(JsonObject):
         json = {}
         if self._trigger_actions_on:
             json["trigger_actions_on"] = self._trigger_actions_on
+        return json
+
+
+class FeedbackButtonObject(JsonObject):
+    attributes: Set[str] = set()
+
+    text_max_length = 75
+    value_max_length = 2000
+
+    @classmethod
+    def parse(cls, feedback_button: Union["FeedbackButtonObject", Dict[str, Any]]):
+        if feedback_button:
+            if isinstance(feedback_button, FeedbackButtonObject):
+                return feedback_button
+            elif isinstance(feedback_button, dict):
+                return FeedbackButtonObject(**feedback_button)
+            else:
+                # Not yet implemented: show some warning here
+                return None
+        return None
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, Dict[str, Any], PlainTextObject],
+        accessibility_label: Optional[str] = None,
+        value: str,
+        **others: Dict[str, Any],
+    ):
+        """A feedback button element object for either positive or negative feedback.
+
+        https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element#button-object-fields
+
+        Args:
+            text (required): An object containing some text. Maximum length for this field is 75 characters.
+            accessibility_label: A label for longer descriptive text about a button element. This label will be read out by
+                screen readers instead of the button `text` object.
+            value (required): The button value. Maximum length for this field is 2000 characters.
+        """
+        self._text: Optional[TextObject] = PlainTextObject.parse(text, default_type=PlainTextObject.type)
+        self._accessibility_label: Optional[str] = accessibility_label
+        self._value: Optional[str] = value
+        show_unknown_key_warning(self, others)
+
+    @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
+    def text_length(self) -> bool:
+        return self._text is None or len(self._text.text) <= self.text_max_length
+
+    @JsonValidator(f"value attribute cannot exceed {value_max_length} characters")
+    def value_length(self) -> bool:
+        return self._value is None or len(self._value) <= self.value_max_length
+
+    def to_dict(self) -> Dict[str, Any]:
+        self.validate_json()
+        json: Dict[str, Union[str, dict]] = {}
+        if self._text:
+            json["text"] = self._text.to_dict()
+        if self._accessibility_label:
+            json["accessibility_label"] = self._accessibility_label
+        if self._value:
+            json["value"] = self._value
         return json
 
 
@@ -571,7 +722,8 @@ class SlackFile(JsonObject):
         url: Optional[str] = None,
     ):
         """An object containing Slack file information to be used in an image block or image element.
-        https://api.slack.com/reference/block-kit/composition-objects#slack_file
+
+        https://docs.slack.dev/reference/block-kit/composition-objects/slack-file-object
 
         Args:
             id: Slack ID of the file.

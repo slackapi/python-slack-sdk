@@ -1,5 +1,8 @@
 import asyncio
+import copy
 import os
+import sys
+from typing import Any
 
 
 def async_test(coro):
@@ -24,3 +27,19 @@ def remove_os_env_temporarily() -> dict:
 
 def restore_os_env(old_env: dict) -> None:
     os.environ.update(old_env)
+
+
+def create_copy(original: Any) -> Any:
+    if sys.version_info.major == 3 and sys.version_info.minor <= 6:
+        # NOTE: Unfortunately, copy.deepcopy doesn't work in Python 3.6.5.
+        # --------------------
+        # >     rv = reductor(4)
+        # E     TypeError: can't pickle _thread.RLock objects
+        # ../../.pyenv/versions/3.6.10/lib/python3.6/copy.py:169: TypeError
+        # --------------------
+        # As a workaround, this operation uses shallow copies in Python 3.6.
+        # If your code modifies the shared data in threads / async functions, race conditions may arise.
+        # Please consider upgrading Python major version to 3.7+ if you encounter some issues due to this.
+        return copy.copy(original)
+    else:
+        return copy.deepcopy(original)

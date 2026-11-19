@@ -1,18 +1,21 @@
 import json
 import unittest
 from io import BytesIO
-from typing import Dict, Sequence, Union
+from pathlib import Path
+from typing import Dict
+from unittest.mock import patch
 
-import pytest
+from slack_sdk.errors import SlackRequestError
 
 from slack_sdk.models.attachments import Attachment
 from slack_sdk.models.blocks import Block, DividerBlock
+from slack_sdk.models.messages.chunk import MarkdownTextChunk, PlanUpdateChunk, TaskUpdateChunk
 from slack_sdk.web.internal_utils import (
     _build_unexpected_body_error_message,
+    _get_url,
+    _next_cursor_is_present,
     _parse_web_class_objects,
     _to_v2_file_upload_item,
-    _next_cursor_is_present,
-    _get_url,
 )
 
 
@@ -56,6 +59,25 @@ class TestInternalUtils(unittest.TestCase):
             for attachment in kwargs["attachments"]:
                 assert isinstance(attachment, Dict)
 
+    def test_can_parse_sequence_of_chunks(self):
+        for chunks in [
+            [
+                MarkdownTextChunk(text="fiz"),
+                PlanUpdateChunk(title="fuz"),
+                TaskUpdateChunk(id="001", title="baz", status="complete"),
+            ],  # list
+            (
+                MarkdownTextChunk(text="fiz"),
+                PlanUpdateChunk(title="fuz"),
+                TaskUpdateChunk(id="001", title="baz", status="complete"),
+            ),  # tuple
+        ]:
+            kwargs = {"chunks": chunks}
+            _parse_web_class_objects(kwargs)
+            assert kwargs["chunks"]
+            for chunks in kwargs["chunks"]:
+                assert isinstance(chunks, Dict)
+
     def test_can_parse_str_blocks(self):
         input = json.dumps([Block(block_id="42").to_dict(), Block(block_id="24").to_dict()])
         kwargs = {"blocks": input}
@@ -69,6 +91,19 @@ class TestInternalUtils(unittest.TestCase):
         _parse_web_class_objects(kwargs)
         assert isinstance(kwargs["attachments"], str)
         assert input == kwargs["attachments"]
+
+    def test_can_parse_str_chunks(self):
+        input = json.dumps(
+            [
+                MarkdownTextChunk(text="fiz").to_dict(),
+                PlanUpdateChunk(title="fuz").to_dict(),
+                TaskUpdateChunk(id="001", title="baz", status="complete").to_dict(),
+            ]
+        )
+        kwargs = {"chunks": input}
+        _parse_web_class_objects(kwargs)
+        assert isinstance(kwargs["chunks"], str)
+        assert input == kwargs["chunks"]
 
     def test_can_parse_user_auth_blocks(self):
         kwargs = {
@@ -100,6 +135,40 @@ class TestInternalUtils(unittest.TestCase):
         assert file_io_item.get("filename") == "Uploaded file"
         file_io_item = _to_v2_file_upload_item({"file": file_io, "filename": "foo.txt"})
         assert file_io_item.get("filename") == "foo.txt"
+
+    def test_to_v2_file_upload_item_passes_through_highlight_type(self):
+        item = _to_v2_file_upload_item({"content": "test", "filename": "image.png", "highlight_type": "png"})
+        assert item.get("highlight_type") == "png"
+
+        item_without = _to_v2_file_upload_item({"content": "test", "filename": "image.png"})
+        assert item_without.get("highlight_type") is None
+
+    def test_to_v2_file_upload_item_can_accept_file_as_path(self):
+        filepath = "tests/slack_sdk/web/test_internal_utils.py"
+        upload_item_str = _to_v2_file_upload_item({"file": filepath})
+        upload_item_path = _to_v2_file_upload_item({"file": Path(filepath)})
+        assert upload_item_path == upload_item_str
+        assert upload_item_str.get("filename") == "test_internal_utils.py"
+
+    def test_to_v2_file_upload_item_raises_when_file_path_exceeds_max_size(self):
+        with patch("slack_sdk.web.internal_utils.MAX_V2_FILE_SIZE", 10), patch("os.path.getsize", return_value=11):
+            with self.assertRaises(SlackRequestError) as ctx:
+                _to_v2_file_upload_item({"file": "tests/slack_sdk/web/test_internal_utils.py"})
+            self.assertIn("Maximum upload file size is 10 bytes", str(ctx.exception))
+            self.assertIn("file size: 11 bytes", str(ctx.exception))
+
+    def test_to_v2_file_upload_item_raises_when_content_exceeds_max_size(self):
+        with patch("slack_sdk.web.internal_utils.MAX_V2_FILE_SIZE", 10):
+            with self.assertRaises(SlackRequestError) as ctx:
+                _to_v2_file_upload_item({"content": "x" * 11, "filename": "test.txt"})
+            self.assertIn("Maximum upload file size is 10 bytes", str(ctx.exception))
+            self.assertIn("file size: 11 bytes", str(ctx.exception))
+            self.assertIn("test.txt", str(ctx.exception))
+
+    def test_to_v2_file_upload_item_accepts_content_at_max_size(self):
+        with patch("slack_sdk.web.internal_utils.MAX_V2_FILE_SIZE", 10):
+            item = _to_v2_file_upload_item({"content": "x" * 10, "filename": "test.txt"})
+            self.assertEqual(item["length"], 10)
 
     def test_next_cursor_is_present(self):
         assert _next_cursor_is_present({"next_cursor": "next-page"}) is True

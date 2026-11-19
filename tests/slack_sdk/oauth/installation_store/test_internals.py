@@ -1,6 +1,9 @@
+import os
 import sys
+import time
 import unittest
 from datetime import datetime, timezone
+from unittest import mock
 
 import pytest
 
@@ -38,8 +41,18 @@ def test_timestamp_to_type(ts, target_type, expected_result):
     assert result == expected_result
 
 
+@pytest.mark.skipif(not hasattr(time, "tzset"), reason="time.tzset is not available on this platform")
+def test_timestamp_to_type_naive_datetime_is_utc():
+    try:
+        with mock.patch.dict(os.environ, {"TZ": "America/New_York"}):
+            time.tzset()
+            assert _timestamp_to_type(datetime(2023, 11, 28, 22, 9, 7), int) == 1701209347
+    finally:
+        time.tzset()
+
+
 def test_timestamp_to_type_invalid_str():
-    match = "Invalid isoformat string" if sys.version_info[:2] > (3, 6) else "time data .* does not match format"
+    match = "Invalid isoformat string"
     with pytest.raises(ValueError, match=match):
         _timestamp_to_type("not-a-timestamp", int)
 

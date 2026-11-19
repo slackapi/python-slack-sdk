@@ -1,6 +1,6 @@
 """Audit Logs API is a set of APIs for monitoring what’s happening in your Enterprise Grid organization.
 
-Refer to https://slack.dev/python-slack-sdk/audit-logs/ for details.
+Refer to https://docs.slack.dev/tools/python-slack-sdk/audit-logs for details.
 """
 
 import json
@@ -53,8 +53,9 @@ class AuditLogsClient:
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[RetryHandler]] = None,
     ):
-        """API client for Audit Logs API
-        See https://api.slack.com/admins/audit-logs for more details
+        """API client for Audit Logs API.
+
+        See https://docs.slack.dev/admins/audit-logs-api/ for more details
 
         Args:
             token: An admin user's token, which starts with `xoxp-`
@@ -89,9 +90,9 @@ class AuditLogsClient:
         query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
-        """Returns information about the kind of objects which the Audit Logs API
-        returns as a list of all objects and a short description.
-        Authentication not required.
+        """Returns information about the kind of objects the Audit Logs API returns.
+
+        Returned as a list of all objects, each with a short description. Authentication not required.
 
         Args:
             query_params: Set any values if you want to add query params
@@ -111,9 +112,9 @@ class AuditLogsClient:
         query_params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
-        """Returns information about the kind of actions that the Audit Logs API
-        returns as a list of all actions and a short description of each.
-        Authentication not required.
+        """Returns information about the kind of actions the Audit Logs API returns.
+
+        Returned as a list of all actions, each with a short description. Authentication not required.
 
         Args:
             query_params: Set any values if you want to add query params
@@ -142,6 +143,7 @@ class AuditLogsClient:
         headers: Optional[Dict[str, str]] = None,
     ) -> AuditLogsResponse:
         """This is the primary endpoint for retrieving actual audit events from your organization.
+
         It will return a list of actions that have occurred on the installed workspace or grid organization.
         Authentication required.
 

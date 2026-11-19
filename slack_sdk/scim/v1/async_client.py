@@ -72,8 +72,9 @@ class AsyncSCIMClient:
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[AsyncRetryHandler]] = None,
     ):
-        """API client for SCIM API
-        See https://api.slack.com/scim for more details
+        """API client for SCIM API.
+
+        See https://docs.slack.dev/admins/scim-api/ for more details
 
         Args:
             token: An admin user's token, which starts with `xoxp-`
@@ -149,9 +150,9 @@ class AsyncSCIMClient:
             await self.api_call(
                 http_verb="PATCH",
                 path=f"Users/{quote(id)}",
-                body_params=partial_user.to_dict()
-                if isinstance(partial_user, User)
-                else _to_dict_without_not_given(partial_user),
+                body_params=(
+                    partial_user.to_dict() if isinstance(partial_user, User) else _to_dict_without_not_given(partial_user)
+                ),
             )
         )
 
@@ -214,9 +215,11 @@ class AsyncSCIMClient:
             await self.api_call(
                 http_verb="PATCH",
                 path=f"Groups/{quote(id)}",
-                body_params=partial_group.to_dict()
-                if isinstance(partial_group, Group)
-                else _to_dict_without_not_given(partial_group),
+                body_params=(
+                    partial_group.to_dict()
+                    if isinstance(partial_group, Group)
+                    else _to_dict_without_not_given(partial_group)
+                ),
             )
         )
 
@@ -338,7 +341,7 @@ class AsyncSCIMClient:
                                 headers=res.headers,
                             )
 
-                        if res.status == 429:
+                        if res.status >= 400:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
@@ -348,7 +351,7 @@ class AsyncSCIMClient:
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
                                             f"A retry handler found: {type(handler).__name__} "
-                                            f"for {http_verb} {url} - rate_limited"
+                                            f"for {http_verb} {url} - status: {res.status}"
                                         )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
@@ -378,7 +381,7 @@ class AsyncSCIMClient:
                         ):
                             if self.logger.level <= logging.DEBUG:
                                 self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} " f"for {http_verb} {url} - {e}"
+                                    f"A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,

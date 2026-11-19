@@ -1,7 +1,7 @@
 import os
 import warnings
 
-# https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+# https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/
 deprecated_method_prefixes_2020_01 = [
     "channels.",
     "groups.",
@@ -16,8 +16,7 @@ deprecated_method_prefixes_2024_09 = ["workflows.stepCompleted", "workflows.upda
 
 
 def show_deprecation_warning_if_any(method_name: str):
-    """Prints a warning if the given method is deprecated"""
-
+    """Prints a warning if the given method is deprecated."""
     skip_deprecation = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION")  # for unit tests etc.
     if skip_deprecation:
         return
@@ -30,7 +29,7 @@ def show_deprecation_warning_if_any(method_name: str):
         message = (
             f"{method_name} is deprecated. Please use the Conversations API instead. "
             "For more info, go to "
-            "https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api"
+            "https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/"
         )
         warnings.warn(message)
 
@@ -39,7 +38,7 @@ def show_deprecation_warning_if_any(method_name: str):
     if len(matched_prefixes) > 0:
         message = (
             f"{method_name} is deprecated. For more info, go to "
-            "https://api.slack.com/changelog/2023-07-its-later-already-for-stars-and-reminders"
+            "https://docs.slack.dev/changelog/2023-07-its-later-already-for-stars-and-reminders/"
         )
         warnings.warn(message)
 
@@ -48,6 +47,6 @@ def show_deprecation_warning_if_any(method_name: str):
     if len(matched_prefixes) > 0:
         message = (
             f"{method_name} is deprecated. For more info, go to "
-            "https://api.slack.com/changelog/2023-08-workflow-steps-from-apps-step-back"
+            "https://docs.slack.dev/changelog/2023-08-workflow-steps-from-apps-step-back/"
         )
         warnings.warn(message)

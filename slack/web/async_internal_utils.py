@@ -46,6 +46,7 @@ def _get_headers(
     request_specific_headers: Optional[dict],
 ) -> Dict[str, str]:
     """Constructs the headers need for a request.
+
     Args:
         has_json (bool): Whether or not the request has json.
         has_files (bool): Whether or not the request has files.
@@ -56,7 +57,7 @@ def _get_headers(
             e.g. {
                 'Content-Type': 'application/json;charset=utf-8',
                 'Authorization': 'Bearer xoxb-1234-1243',
-                'User-Agent': 'Python/3.6.8 slack/2.1.0 Darwin/17.7.0'
+                'User-Agent': 'Python/3.7.17 slack/2.1.0 Darwin/17.7.0'
             }
     """
     final_headers = {
@@ -163,6 +164,7 @@ async def _request_with_session(
     req_args: dict,
 ) -> Dict[str, any]:
     """Submit the HTTP request with the running session or a new session.
+
     Returns:
         A dictionary of the response data.
     """

@@ -71,15 +71,22 @@ class AsyncBaseSocketModeClient:
 
     async def connect_to_new_endpoint(self, force: bool = False):
         session_id = await self.session_id()
+        acquired = False
         try:
-            await self.connect_operation_lock.acquire()
+            try:
+                acquired = await asyncio.wait_for(self.connect_operation_lock.acquire(), timeout=5)
+            except asyncio.TimeoutError:
+                acquired = False
             if self.trace_enabled:
-                self.logger.debug(f"For reconnection, the connect_operation_lock was acquired (session: {session_id})")
-            if force or not await self.is_connected():
+                self.logger.debug(
+                    f"Attempted to acquire the connect_operation_lock for reconnection "
+                    f"(acquired={acquired}, session={session_id})"
+                )
+            if force or (acquired and not await self.is_connected()):
                 self.wss_uri = await self.issue_new_wss_url()
                 await self.connect()
         finally:
-            if self.connect_operation_lock.locked() is True:
+            if acquired:
                 self.connect_operation_lock.release()
                 if self.trace_enabled:
                     self.logger.debug(f"The connect_operation_lock for reconnection was released (session: {session_id})")
@@ -99,7 +106,7 @@ class AsyncBaseSocketModeClient:
 
     async def enqueue_message(self, message: str):
         await self.message_queue.put(message)
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             queue_size = self.message_queue.qsize()
             session_id = await self.session_id()
             self.logger.debug(f"A new message enqueued (current queue size: {queue_size}, session: {session_id})")
@@ -133,7 +140,7 @@ class AsyncBaseSocketModeClient:
     async def run_message_listeners(self, message: dict, raw_message: str) -> None:
         session_id = await self.session_id()
         type, envelope_id = message.get("type"), message.get("envelope_id")
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(
                 f"Message processing started (type: {type}, envelope_id: {envelope_id}, session: {session_id})"
             )
@@ -159,10 +166,7 @@ class AsyncBaseSocketModeClient:
         except Exception as e:
             self.logger.exception(f"Failed to run message listeners: {e}, session: {session_id}")
         finally:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
-                    f"Message processing completed ("
-                    f"type: {type}, "
-                    f"envelope_id: {envelope_id}, "
-                    f"session: {session_id})"
+                    f"Message processing completed (type: {type}, envelope_id: {envelope_id}, session: {session_id})"
                 )

@@ -1,20 +1,70 @@
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-name: CI Build
+name: Python CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+env:
+  LATEST_SUPPORTED_PY: "3.15"
 
 jobs:
-  build:
-    # Avoiding -latest due to https://github.com/actions/setup-python/issues/162
-    runs-on: ubuntu-20.04
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
+      - name: Run lint verification
+        run: ./scripts/lint.sh
+      - name: Verify generated web clients match codegen
+        run: |
+          python scripts/codegen.py --path .
+          ./scripts/format.sh --no-install
+          if ! git diff --exit-code; then
+            echo "::error::Generated web clients are out of date. Run 'python scripts/codegen.py --path .' and './scripts/format.sh', then commit the changes."
+            exit 1
+          fi
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
+      - name: Run mypy verification
+        run: ./scripts/run_mypy.sh
+
+  unittest:
+    name: Unit tests
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         python-version:
+          - "3.15"
+          - "3.14"
           - "3.13"
           - "3.12"
           - "3.11"
@@ -22,38 +72,122 @@ jobs:
           - "3.9"
           - "3.8"
           - "3.7"
-          - "3.6"
           - "pypy3.10"
+          - "pypy3.11"
+    permissions:
+      contents: read
     env:
       CI_LARGE_SOCKET_MODE_PAYLOAD_TESTING_DISABLED: "1"
       FORCE_COLOR: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Install dependencies
         run: |
-          pip install -U pip setuptools wheel
+          pip install -U pip
           pip install -r requirements/testing.txt
           pip install -r requirements/optional.txt
-      - name: Run validation (black/flake8/pytest)
+      - name: Run tests
         run: |
-          black --check slack/ slack_sdk/ tests/ integration_tests/
-          flake8 slack/ slack_sdk/
-          PYTHONPATH=$PWD:$PYTHONPATH pytest --cov-report=xml --cov=slack_sdk/ tests/
+          PYTHONPATH=$PWD:$PYTHONPATH pytest --cov-report=xml --cov=slack_sdk/ --junitxml=reports/test_report.xml tests/
       - name: Run tests for SQLAlchemy v1.4 (backward-compatibility)
         run: |
           # Install v1.4 for testing
           pip install "SQLAlchemy>=1.4,<2"
           PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
           PYTHONPATH=$PWD:$PYTHONPATH pytest tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
-      - name: Run codecov (only with latest supported version)
-        if: startsWith(matrix.python-version, '3.13')
-        uses: codecov/codecov-action@v5
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
+          directory: ./reports/
+          fail_ci_if_error: false
+          flags: ${{ matrix.python-version }}
+          report_type: test_results
           token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+      - name: Upload test coverage to Codecov (only with latest supported version)
+        if: startsWith(matrix.python-version, env.LATEST_SUPPORTED_PY)
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          fail_ci_if_error: true
           # Run validation generates the coverage file
           files: ./coverage.xml
+          report_type: coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+
+  databases:
+    # TODO: Add MySQL and other database testing when possible
+    name: Database Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres@sha256:e4842c8a99ca99339e1693e6fe5fe62c7becb31991f066f989047dfb2fbf47af # 16
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python ${{ env.LATEST_SUPPORTED_PY }}
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ env.LATEST_SUPPORTED_PY }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install -U pip
+          pip install -r requirements/testing.txt
+          pip install -r requirements/optional.txt
+          pip install -r requirements/databases.txt
+      - name: Run sync tests (PostgreSQL)
+        env:
+          TEST_DATABASE_URL: postgresql+psycopg://test_user:password@localhost/test
+        run: |
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/installation_store/test_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/state_store/test_sqlalchemy.py
+      - name: Run async tests (PostgreSQL)
+        env:
+          ASYNC_TEST_DATABASE_URL: postgresql+asyncpg://test_user:password@localhost/test
+        run: |
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/installation_store/test_async_sqlalchemy.py
+          PYTHONPATH=$PWD:$PYTHONPATH pytest -s tests/slack_sdk/oauth/state_store/test_async_sqlalchemy.py
+
+  notifications:
+    name: Regression notifications
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - typecheck
+      - unittest
+      - databases
+    if: ${{ !success() && github.ref == 'refs/heads/main' && github.event_name != 'workflow_dispatch' }}
+    steps:
+      - name: Send notifications of failing tests
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
+        with:
+          errors: true
+          webhook: ${{ secrets.SLACK_REGRESSION_FAILURES_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          payload: |
+            action_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            repository: "${{ github.repository }}"

@@ -10,7 +10,7 @@ assignees: ""
 
 ### The page URLs
 
-- https://slack.dev/python-slack-sdk/
+- https://docs.slack.dev/tools/python-slack-sdk/
 
 ### Requirements
 

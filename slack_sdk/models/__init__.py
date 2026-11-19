@@ -1,4 +1,4 @@
-"""Classes for constructing Slack-specific data structure"""
+"""Classes for constructing Slack-specific data structure."""
 
 import logging
 from typing import Union, Dict, Any, Sequence, List
@@ -13,9 +13,9 @@ from .basic_objects import JsonValidator
 def extract_json(
     item_or_items: Union[JsonObject, Sequence[JsonObject]], *format_args
 ) -> Union[Dict[Any, Any], List[Dict[Any, Any]], Sequence[JsonObject]]:
-    """
-    Given a sequence (or single item), attempt to call the to_dict() method on each
-    item and return a plain list. If item is not the expected type, return it
+    """Given a sequence (or single item), attempt to call the to_dict() method on each item and return a plain list.
+
+    If item is not the expected type, return it
     unmodified, in case it's already a plain dict or some other user created class.
 
     Args:

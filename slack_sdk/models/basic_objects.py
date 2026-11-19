@@ -1,12 +1,12 @@
 from abc import ABCMeta, abstractmethod
-from functools import wraps
-from typing import Callable, Iterable, Set, Union, Any
+from functools import lru_cache, wraps
+from typing import Callable, FrozenSet, Iterable, Set, Union, Any
 
 from slack_sdk.errors import SlackObjectFormationError
 
 
 class BaseObject:
-    """The base class for all model objects in this module"""
+    """The base class for all model objects in this module."""
 
     def __str__(self):
         return f"<slack_sdk.{self.__class__.__name__}>"
@@ -21,30 +21,42 @@ EMPTY_ALLOWED_TYPE_AND_PROPERTY_LIST = [
 ]
 
 
+def _is_validator(value: Any) -> bool:
+    return callable(value) and hasattr(value, "validator")
+
+
+@lru_cache(maxsize=None)
+def _class_validator_names(cls: type) -> FrozenSet[str]:
+    return frozenset(name for name in dir(cls) if not name.startswith("__") and _is_validator(getattr(cls, name, None)))
+
+
 class JsonObject(BaseObject, metaclass=ABCMeta):
-    """The base class for JSON serializable class objects"""
+    """The base class for JSON serializable class objects."""
 
     @property
     @abstractmethod
     def attributes(self) -> Set[str]:
-        """Provide a set of attributes of this object that will make up its JSON structure"""
+        """Provide a set of attributes of this object that will make up its JSON structure."""
         return set()
 
     def validate_json(self) -> None:
-        """
+        """Validate this object against its attribute validators.
+
         Raises:
-          SlackObjectFormationError if the object was not valid
+            SlackObjectFormationError: if the object was not valid
         """
-        for attribute in (func for func in dir(self) if not func.startswith("__")):
-            method = getattr(self, attribute, None)
-            if callable(method) and hasattr(method, "validator"):
-                method()
+        instance_attribute_names = (name for name in vars(self) if not name.startswith("__"))
+        candidate_names = _class_validator_names(type(self)).union(instance_attribute_names)
+        for name in sorted(candidate_names):
+            attribute: Any = getattr(self, name, None)
+            if _is_validator(attribute):
+                attribute()
+
+    def get_object_attribute(self, key: str):
+        return getattr(self, key, None)
 
     def get_non_null_attributes(self) -> dict:
-        """
-        Construct a dictionary out of non-null keys (from attributes property)
-        present on this object
-        """
+        """Construct a dictionary out of non-null keys (from attributes property) present on this object."""
 
         def to_dict_compatible(value: Union[dict, list, object, tuple]) -> Union[dict, list, Any]:
             if isinstance(value, (list, tuple)):
@@ -57,7 +69,7 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
                     return value
 
         def is_not_empty(self, key: str) -> bool:
-            value = getattr(self, key, None)
+            value = self.get_object_attribute(key)
             if value is None:
                 return False
 
@@ -75,12 +87,13 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
                 return value is not None
 
         return {
-            key: to_dict_compatible(getattr(self, key, None)) for key in sorted(self.attributes) if is_not_empty(self, key)
+            key: to_dict_compatible(value=self.get_object_attribute(key))
+            for key in sorted(self.attributes)
+            if is_not_empty(self, key)
         }
 
     def to_dict(self, *args) -> dict:
-        """
-        Extract this object as a JSON-compatible, Slack-API-valid dictionary
+        """Extract this object as a JSON-compatible, Slack-API-valid dictionary.
 
         Args:
           *args: Any specific formatting args (rare; generally not required)
@@ -106,9 +119,9 @@ class JsonObject(BaseObject, metaclass=ABCMeta):
 
 class JsonValidator:
     def __init__(self, message: str):
-        """
-        Decorate a method on a class to mark it as a JSON validator. Validation
-            functions should return true if valid, false if not.
+        """Decorate a method on a class to mark it as a JSON validator.
+
+        Validation functions should return true if valid, false if not.
 
         Args:
             message: Message to be attached to the thrown SlackObjectFormationError
@@ -127,4 +140,4 @@ class JsonValidator:
 
 class EnumValidator(JsonValidator):
     def __init__(self, attribute: str, enum: Iterable[str]):
-        super().__init__(f"{attribute} attribute must be one of the following values: " f"{', '.join(enum)}")
+        super().__init__(f"{attribute} attribute must be one of the following values: {', '.join(enum)}")

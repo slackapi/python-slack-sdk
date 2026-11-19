@@ -48,8 +48,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
 
     def create_tables(self):
         with sqlite3.connect(database=self.database) as conn:
-            conn.execute(
-                """
+            conn.execute("""
             create table slack_installations (
                 id integer primary key autoincrement,
                 client_id text not null,
@@ -78,10 +77,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 token_type text,
                 installed_at datetime not null default current_timestamp
             );
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
             create index slack_installations_idx on slack_installations (
                 client_id,
                 enterprise_id,
@@ -89,10 +86,8 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 user_id,
                 installed_at
             );
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
             create table slack_bots (
                 id integer primary key autoincrement,
                 client_id text not null,
@@ -110,18 +105,15 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 is_enterprise_install boolean not null default 0,
                 installed_at datetime not null default current_timestamp
             );
-            """
-            )
-            conn.execute(
-                """
+            """)
+            conn.execute("""
             create index slack_bots_idx on slack_bots (
                 client_id,
                 enterprise_id,
                 team_id,
                 installed_at
             );
-            """
-            )
+            """)
             self.logger.debug(f"Tables have been created (database: {self.database})")
             conn.commit()
 
@@ -225,7 +217,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
 
     def save_bot(self, bot: Bot):
         if bot.bot_token is None:
-            self.logger.debug("Skipped saving a new row because of the absense of bot token in it")
+            self.logger.debug("Skipped saving a new row because of the absence of bot token in it")
             return
 
         with self.connect() as conn:
@@ -494,7 +486,10 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         installed_at=row[23],
                     )
 
-                    if user_id is not None:
+                    has_user_installation = user_id is not None and installation is not None
+                    no_bot_token_installation = installation is not None and installation.bot_token is None
+                    should_find_bot_installation = has_user_installation or no_bot_token_installation
+                    if should_find_bot_installation:
                         # Retrieve the latest bot token, just in case
                         # See also: https://github.com/slackapi/bolt-python/issues/664
                         cur = conn.execute(
@@ -522,12 +517,13 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             [self.client_id, enterprise_id or "", team_id],
                         )
                         row = cur.fetchone()
-                        installation.bot_token = row[0]
-                        installation.bot_id = row[1]
-                        installation.bot_user_id = row[2]
-                        installation.bot_scopes = row[3]
-                        installation.bot_refresh_token = row[4]
-                        installation.bot_token_expires_at = row[5]
+                        if row is not None:
+                            installation.bot_token = row[0]
+                            installation.bot_id = row[1]
+                            installation.bot_user_id = row[2]
+                            installation.bot_scopes = row[3]
+                            installation.bot_refresh_token = row[4]
+                            installation.bot_token_expires_at = row[5]
 
                     return installation
                 return None
@@ -539,6 +535,9 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             else:
                 self.logger.warning(message)
             return None
+
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
+        return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
 
     def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         try:
@@ -565,6 +564,15 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             else:
                 self.logger.warning(message)
 
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        return self.delete_installation(enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
+
     def delete_installation(
         self,
         *,
@@ -587,7 +595,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             and
                             team_id = ?
                         """,
-                        [self.client_id, enterprise_id or "", team_id],
+                        [self.client_id, enterprise_id or "", team_id or ""],
                     )
                 else:
                     conn.execute(
@@ -604,7 +612,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             and
                             user_id = ?
                         """,
-                        [self.client_id, enterprise_id or "", team_id, user_id],
+                        [self.client_id, enterprise_id or "", team_id or "", user_id],
                     )
                 conn.commit()
         except Exception as e:

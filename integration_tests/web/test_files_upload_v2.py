@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 import unittest
 from io import BytesIO
 
@@ -53,6 +54,18 @@ class TestWebClient_FilesUploads_V2(unittest.TestCase):
             channels=self.channel_id,
             file=BytesIO(bytearray("This is a test!", "utf-8")),
             filename="test.txt",
+            title="Test code",
+        )
+        self.assertIsNotNone(upload)
+        self.assertIsNotNone(upload.get("files")[0].get("id"))
+        self.assertIsNotNone(upload.get("files")[0].get("title"))
+
+    def test_uploading_text_files_path(self):
+        client = self.sync_client
+        file = __file__
+        upload = client.files_upload_v2(
+            channel=self.channel_id,
+            file=Path(file),
             title="Test code",
         )
         self.assertIsNotNone(upload)

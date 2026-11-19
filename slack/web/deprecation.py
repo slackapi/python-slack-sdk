@@ -1,7 +1,7 @@
 import os
 import warnings
 
-# https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api
+# https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/
 deprecated_method_prefixes_2020_01 = [
     "channels.",
     "groups.",
@@ -12,8 +12,7 @@ deprecated_method_prefixes_2020_01 = [
 
 
 def show_2020_01_deprecation(method_name: str):
-    """Prints a warning if the given method is deprecated"""
-
+    """Prints a warning if the given method is deprecated."""
     skip_deprecation = os.environ.get("SLACKCLIENT_SKIP_DEPRECATION")  # for unit tests etc.
     if skip_deprecation:
         return
@@ -25,6 +24,6 @@ def show_2020_01_deprecation(method_name: str):
         message = (
             f"{method_name} is deprecated. Please use the Conversations API instead. "
             "For more info, go to "
-            "https://api.slack.com/changelog/2020-01-deprecating-antecedents-to-the-conversations-api"
+            "https://docs.slack.dev/changelog/2020-01-deprecating-antecedents-to-the-conversations-api/"
         )
         warnings.warn(message)

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from time import time
 from typing import Optional, Union, Dict, Any, Sequence
 
@@ -100,10 +100,12 @@ class Bot:
             "bot_scopes": ",".join(self.bot_scopes) if self.bot_scopes else None,
             "bot_refresh_token": self.bot_refresh_token,
             "bot_token_expires_at": (
-                datetime.utcfromtimestamp(self.bot_token_expires_at) if self.bot_token_expires_at is not None else None
+                datetime.fromtimestamp(self.bot_token_expires_at, tz=timezone.utc)
+                if self.bot_token_expires_at is not None
+                else None
             ),
             "is_enterprise_install": self.is_enterprise_install,
-            "installed_at": datetime.utcfromtimestamp(self.installed_at),
+            "installed_at": datetime.fromtimestamp(self.installed_at, tz=timezone.utc),
         }
 
     def to_dict_for_copying(self) -> Dict[str, Any]:

@@ -81,7 +81,7 @@ def start_onboarding(user_id: str, channel: str, client: WebClient):
 
 ### Responding to events in Slack
 
-When events occur in Slack there are two primary ways to be notified about them. We can send you an [HTTP Request through our Events API](https://api.slack.com/apis/connections/events-api), or you can stream events through a WebSocket connection with our [Socket Mode](https://api.slack.com/apis/connections/socket) API. If you're behind a firewall and cannot receive incoming web requests from Slack, we recommend going with Socket Mode.
+When events occur in Slack there are two primary ways to be notified about them. We can send you an [HTTP Request through our Events API](https://docs.slack.dev/apis/events-api/), or you can stream events through a WebSocket connection with our [Socket Mode](https://docs.slack.dev/apis/events-api/using-socket-mode/) API. If you're behind a firewall and cannot receive incoming web requests from Slack, we recommend going with Socket Mode.
 
 In this tutorial we'll be using the Events API and the [Bolt for Python](https://github.com/slackapi/bolt-python).
 
@@ -96,7 +96,7 @@ Back to our application, it's time to link our onboarding functionality to Slack
 
 # Note: Bolt provides a WebClient instance as an argument to the listener function
 # we've defined here, which we then use to access Slack Web API methods like conversations_open.
-# For more info, checkout: https://slack.dev/bolt-python/concepts#message-listening
+# For more info, checkout: https://docs.slack.dev/tools/bolt-python/concepts/message-listening
 @app.event("team_join")
 def onboarding_message(event, client):
     """Create and send an onboarding welcome message to new users. Save the

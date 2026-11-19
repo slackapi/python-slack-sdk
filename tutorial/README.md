@@ -21,14 +21,14 @@ As you complete each task you'll see the message update with a green checkmark.
 1. A Slack team.
 Before anything else you'll need a Slack team. You can [Sign into an existing Slack workspace](https://get.slack.help/hc/en-us/articles/212681477-Sign-in-to-Slack) or you can [create a new Slack workspace](https://get.slack.help/hc/en-us/articles/206845317-Create-a-Slack-workspace) to test your app first.
 
-2. A terminal with Python 3.6+ installed.
+2. A terminal with Python 3.7+ installed.
 Check your installation by running the following command in your terminal:
 ```
 $ python3 --version
--> Python 3.6.7
+-> Python 3.7.17
 ```
 
-You'll need to install Python 3.6 if you receive the following error:
+You'll need to install Python 3.7 if you receive the following error:
 ```
 -> bash: python3: command not found
 ```
@@ -54,7 +54,6 @@ Open up your new project folder "PythOnBoardingBot" in your text editor.
 ## Coming up next
 - Add tests to your app.
 - Add starring a message as an onboarding task.
-- Run this app on [Glitch](https://glitch.com/).
 - Creating a Slack "MessageBuilder" object. This would aid in the creation of complex messages.
 - Running this app from the command line with [`$ click_`](https://click.palletsprojects.com/en/7.x/).
 - How to run this app on multiple teams.

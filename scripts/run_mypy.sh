@@ -6,8 +6,8 @@ set -e
 script_dir=$(dirname $0)
 cd ${script_dir}/..
 
-pip install -U pip setuptools wheel
-pip install -r requirements/testing.txt \
-  -r requirements/optional.txt
+if [[ "$1" != "--no-install" ]]; then
+    ./scripts/install.sh
+fi
 
 mypy --config-file pyproject.toml

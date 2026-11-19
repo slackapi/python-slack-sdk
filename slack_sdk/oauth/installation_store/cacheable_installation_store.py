@@ -24,25 +24,26 @@ class CacheableInstallationStore(InstallationStore):
     def logger(self) -> Logger:
         return self.underlying.logger
 
-    def save(self, installation: Installation):  # type: ignore[explicit-override]
+    def save(self, installation: Installation):
         # Invalidate cache data for update operations
         key = f"{installation.enterprise_id or ''}-{installation.team_id or ''}"
         if key in self.cached_bots:
             self.cached_bots.pop(key)
-        key = f"{installation.enterprise_id or ''}-{installation.team_id or ''}-{installation.user_id or ''}"
-        if key in self.cached_installations:
-            self.cached_installations.pop(key)
+        key_prefix = f"{installation.enterprise_id or ''}-{installation.team_id or ''}-"
+        for key in list(self.cached_installations.keys()):
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)
 
         return self.underlying.save(installation)
 
-    def save_bot(self, bot: Bot):  # type: ignore[explicit-override]
+    def save_bot(self, bot: Bot):
         # Invalidate cache data for update operations
         key = f"{bot.enterprise_id or ''}-{bot.team_id or ''}"
         if key in self.cached_bots:
             self.cached_bots.pop(key)
         return self.underlying.save_bot(bot)
 
-    def find_bot(  # type: ignore[explicit-override]
+    def find_bot(
         self,
         *,
         enterprise_id: Optional[str],
@@ -63,7 +64,7 @@ class CacheableInstallationStore(InstallationStore):
             self.cached_bots[key] = bot
         return bot
 
-    def find_installation(  # type: ignore[explicit-override]
+    def find_installation(
         self,
         *,
         enterprise_id: Optional[str],

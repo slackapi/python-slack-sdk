@@ -1,9 +1,11 @@
+import itertools
 import logging
 import socket
 import ssl
+import struct
 import time
 import unittest
-from unittest.mock import sentinel
+from unittest.mock import MagicMock, patch, sentinel
 from threading import Thread
 
 from slack_sdk import WebClient
@@ -46,6 +48,23 @@ class TestBuiltin(unittest.TestCase):
             self.assertFalse(client.is_connected())
             self.assertIsNone(client.session_id())  # not yet connected
         finally:
+            client.close()
+
+    def test_debug_message_follows_the_effective_log_level(self):
+        parent = logging.getLogger(f"{__name__}.debug_guard")
+        logger = logging.getLogger(f"{__name__}.debug_guard.client")
+        client = SocketModeClient(app_token="xapp-A111-222-xyz", logger=logger)
+        try:
+            with patch("slack_sdk.socket_mode.builtin.client.debug_redacted_message_string") as redact:
+                parent.setLevel(logging.INFO)
+                client._on_message("{}")
+                redact.assert_not_called()
+
+                parent.setLevel(logging.DEBUG)
+                client._on_message("{}")
+                redact.assert_called_once_with("{}")
+        finally:
+            parent.setLevel(logging.NOTSET)
             client.close()
 
     def test_issue_new_wss_url(self):
@@ -109,6 +128,55 @@ class TestBuiltin(unittest.TestCase):
 
         self.assertIsNotNone(conn)
 
+    def test_check_state_disconnects_when_no_pong_arrives(self):
+        conn = Connection(url="wss://example.com", logger=self.logger, ping_interval=1)
+        sock = MagicMock()
+        conn.sock = sock
+        with patch("slack_sdk.socket_mode.builtin.connection.time") as mock_time:
+            mock_time.time.return_value = 1000.0
+            conn.check_state()
+            self.assertIsNotNone(conn.sock)
+            mock_time.time.return_value = 1005.0
+            conn.check_state()
+        self.assertIsNone(conn.sock)
+        sock.close.assert_called_once()
+        self.assertIsNone(conn.last_ping_pong_time)
+
+    def test_check_state_uses_last_pong_over_first_ping(self):
+        conn = Connection(url="wss://example.com", logger=self.logger, ping_interval=1)
+        conn.sock = MagicMock()
+        with patch("slack_sdk.socket_mode.builtin.connection.time") as mock_time:
+            mock_time.time.return_value = 1000.0
+            conn.check_state()
+            conn.last_ping_pong_time = 1003.0
+            mock_time.time.return_value = 1005.0
+            conn.check_state()
+        self.assertIsNotNone(conn.sock)
+
+    def test_concurrent_disconnect_raises_nothing(self):
+        conn = Connection(url="wss://example.com", logger=self.logger)
+        sock = MagicMock()
+        conn.sock = sock
+        errors = []
+
+        def disconnect_and_record_errors():
+            try:
+                conn.disconnect()
+            except Exception as e:
+                errors.append(e)
+
+        racer = Thread(target=disconnect_and_record_errors)
+
+        def close_while_racer_waits():
+            racer.start()
+            time.sleep(0.1)
+
+        sock.close.side_effect = close_while_racer_waits
+        conn.disconnect()
+        racer.join(timeout=1)
+        self.assertEqual(errors, [])
+        self.assertIsNone(conn.sock)
+
     # ----------------------------------
     # FrameHeader
 
@@ -131,6 +199,20 @@ class TestBuiltin(unittest.TestCase):
         res = _build_data_frame_for_sending("hello!", FrameHeader.OPCODE_TEXT)
         self.assertIsNotNone(res)
 
+    def test_build_data_frame_for_sending_with_16_bit_length(self):
+        payload = b"a" * 65535
+        frame = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
+        self.assertEqual(frame[1], 0b10000000 | 126)
+        self.assertEqual(struct.unpack("!H", frame[2:4])[0], 65535)
+        self.assertEqual(_unmask(mask_key=frame[4:8], data=frame[8:]), payload)
+
+    def test_build_data_frame_for_sending_with_64_bit_length(self):
+        payload = b"a" * 65536
+        frame = _build_data_frame_for_sending(payload, FrameHeader.OPCODE_TEXT)
+        self.assertEqual(frame[1], 0b10000000 | 127)
+        self.assertEqual(struct.unpack("!Q", frame[2:10])[0], 65536)
+        self.assertEqual(_unmask(mask_key=frame[10:14], data=frame[14:]), payload)
+
     def test_parse_connect_response(self):
         sock = socket.socket()
         try:
@@ -149,3 +231,7 @@ class TestBuiltin(unittest.TestCase):
     def test_using_supplied_ssl_context(self):
         ssl_context = _use_or_create_ssl_context(sentinel.ssl_context)
         self.assertEqual(ssl_context, sentinel.ssl_context)
+
+
+def _unmask(mask_key: bytes, data: bytes) -> bytes:
+    return bytes(byte ^ mask for byte, mask in zip(data, itertools.cycle(mask_key)))

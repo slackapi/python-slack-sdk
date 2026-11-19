@@ -1,7 +1,7 @@
-"""websocket-client bassd Socket Mode client
+"""websocket-client based Socket Mode client.
 
-* https://api.slack.com/apis/connections/socket
-* https://slack.dev/python-slack-sdk/socket-mode/
+* https://docs.slack.dev/apis/events-api/using-socket-mode/
+* https://docs.slack.dev/tools/python-slack-sdk/socket-mode/
 * https://pypi.org/project/websocket-client/
 
 """
@@ -11,7 +11,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from logging import Logger
 from queue import Queue
 from threading import Lock
-from typing import Union, Optional, List, Callable, Tuple
+from typing import Callable, List, Optional, Tuple, Union
 
 import websocket
 from websocket import WebSocketApp, WebSocketException
@@ -58,7 +58,7 @@ class SocketModeClient(BaseSocketModeClient):
     auto_reconnect_enabled: bool
     default_auto_reconnect_enabled: bool
 
-    close: bool  # type: ignore[assignment]
+    closed: bool
     connect_operation_lock: Lock
 
     on_open_listeners: List[Callable[[WebSocketApp], None]]
@@ -84,7 +84,7 @@ class SocketModeClient(BaseSocketModeClient):
         on_error_listeners: Optional[List[Callable[[WebSocketApp, Exception], None]]] = None,
         on_close_listeners: Optional[List[Callable[[WebSocketApp], None]]] = None,
     ):
-        """
+        """Socket Mode client implementation built with the websocket-client library.
 
         Args:
             app_token: App-level token
@@ -143,13 +143,13 @@ class SocketModeClient(BaseSocketModeClient):
 
     def connect(self) -> None:
         def on_open(ws: WebSocketApp):
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug("on_open invoked")
             for listener in self.on_open_listeners:
                 listener(ws)
 
         def on_message(ws: WebSocketApp, message: str):
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"on_message invoked: (message: {debug_redacted_message_string(message)})")
             self.enqueue_message(message)
             for listener in self.on_message_listeners:
@@ -165,7 +165,7 @@ class SocketModeClient(BaseSocketModeClient):
             close_status_code: Optional[int] = None,
             close_msg: Optional[str] = None,
         ):
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"on_close invoked: (code: {close_status_code}, message: {close_msg})")
             if self.auto_reconnect_enabled:
                 self.logger.info("Received CLOSE event. Reconnecting...")
@@ -180,10 +180,10 @@ class SocketModeClient(BaseSocketModeClient):
 
         self.current_session = websocket.WebSocketApp(
             self.wss_uri,
-            on_open=on_open,  # type: ignore[arg-type]
-            on_message=on_message,  # type: ignore[arg-type]
-            on_error=on_error,  # type: ignore[arg-type]
-            on_close=on_close,  # type: ignore[arg-type]
+            on_open=on_open,
+            on_message=on_message,
+            on_error=on_error,
+            on_close=on_close,
         )
         self.auto_reconnect_enabled = self.default_auto_reconnect_enabled
 
@@ -201,14 +201,14 @@ class SocketModeClient(BaseSocketModeClient):
             self.current_session.close()
 
     def send_message(self, message: str) -> None:
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"Sending a message: {message}")
         try:
             self.current_session.send(message)  # type: ignore[union-attr]
         except WebSocketException as e:
             # We rarely get this exception while replacing the underlying WebSocket connections.
             # We can do one more try here as the self.current_session should be ready now.
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(
                     f"Failed to send a message (error: {e}, message: {message})"
                     " as the underlying connection was replaced. Retrying the same request only one time..."
@@ -225,10 +225,11 @@ class SocketModeClient(BaseSocketModeClient):
                     )
                     raise e
 
-    def close(self) -> None:  # type: ignore[explicit-override, no-redef]
+    def close(self) -> None:
         self.closed = True
         self.auto_reconnect_enabled = False
         self.disconnect()
+        self.current_session_runner.shutdown()
         self.current_app_monitor.shutdown()
         self.message_processor.shutdown()
         self.message_workers.shutdown()

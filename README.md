@@ -1,8 +1,8 @@
 <h1 align="center">Python Slack SDK</h1>
 
 <p align="center">
-    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml">
-        <img alt="CI Build" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml"></a>
+    <a href="https://github.com/slackapi/python-slack-sdk/actions/workflows/ci-build.yml?query=branch%3Amain">
+        <img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/slackapi/python-slack-sdk/ci-build.yml"></a>
     <a href="https://codecov.io/gh/slackapi/python-slack-sdk">
         <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/python-slack-sdk"></a>
     <a href="https://pepy.tech/project/slack-sdk">
@@ -12,13 +12,13 @@
         <img alt="PyPI - Version" src="https://img.shields.io/pypi/v/slack-sdk"></a>
     <a href="https://pypi.org/project/slack-sdk/">
         <img alt="Python Versions" src="https://img.shields.io/pypi/pyversions/slack-sdk.svg"></a>
-    <a href="https://tools.slack.dev/python-slack-sdk/">
+    <a href="https://docs.slack.dev/tools/python-slack-sdk/">
         <img alt="Documentation" src="https://img.shields.io/badge/dev-docs-yellow"></a>
 </p>
 
 The Slack platform offers several APIs to build apps. Each Slack API delivers part of the capabilities from the platform, so that you can pick just those that fit for your needs. This SDK offers a corresponding package for each of Slack’s APIs. They are small and powerful when used independently, and work seamlessly when used together, too.
 
-**Comprehensive documentation on using the Slack Python can be found at [https://tools.slack.dev/python-slack-sdk/](https://tools.slack.dev/python-slack-sdk/)**
+**Comprehensive documentation on using the Slack Python can be found at [https://docs.slack.dev/tools/python-slack-sdk/](https://docs.slack.dev/tools/python-slack-sdk/)**
 
 ---
 
@@ -27,20 +27,20 @@ Whether you're building a custom app for your team, or integrating a third party
 The **Python Slack SDK** allows interaction with:
 
 - `slack_sdk.web`: for calling the [Web API methods][api-methods]
-- `slack_sdk.webhook`: for utilizing the [Incoming Webhooks](https://api.slack.com/messaging/webhooks) and [`response_url`s in payloads](https://api.slack.com/interactivity/handling#message_responses)
-- `slack_sdk.signature`: for [verifying incoming requests from the Slack API server](https://api.slack.com/authentication/verifying-requests-from-slack)
-- `slack_sdk.socket_mode`: for receiving and sending messages over [Socket Mode](https://api.slack.com/socket-mode) connections
-- `slack_sdk.audit_logs`: for utilizing [Audit Logs APIs](https://api.slack.com/admins/audit-logs)
-- `slack_sdk.scim`: for utilizing [SCIM APIs](https://api.slack.com/admins/scim)
-- `slack_sdk.oauth`: for implementing the [Slack OAuth flow](https://api.slack.com/authentication/oauth-v2)
-- `slack_sdk.models`: for constructing [Block Kit](https://api.slack.com/block-kit) UI components using easy-to-use builders
+- `slack_sdk.webhook`: for utilizing the [Incoming Webhooks](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/) and [`response_url`s in payloads](https://docs.slack.dev/interactivity/handling-user-interaction/#message_responses)
+- `slack_sdk.signature`: for [verifying incoming requests from the Slack API server](https://docs.slack.dev/authentication/verifying-requests-from-slack/)
+- `slack_sdk.socket_mode`: for receiving and sending messages over [Socket Mode](https://docs.slack.dev/apis/events-api/using-socket-mode/) connections
+- `slack_sdk.audit_logs`: for utilizing [Audit Logs APIs](https://docs.slack.dev/admins/audit-logs-api/)
+- `slack_sdk.scim`: for utilizing [SCIM APIs](https://docs.slack.dev/admins/scim-api/)
+- `slack_sdk.oauth`: for implementing the [Slack OAuth flow](https://docs.slack.dev/authentication/installing-with-oauth/)
+- `slack_sdk.models`: for constructing [Block Kit](https://docs.slack.dev/block-kit/) UI components using easy-to-use builders
 - `slack_sdk.rtm`: for utilizing the [RTM API][rtm-docs]
 
-If you want to use our [Events API][events-docs] and Interactivity features, please check the [Bolt for Python][bolt-python] library. Details on the Tokens and Authentication can be found in our [Auth Guide](https://tools.slack.dev/python-slack-sdk/installation/).
+If you want to use our [Events API][events-docs] and Interactivity features, please check the [Bolt for Python][bolt-python] library. Details on the Tokens and Authentication can be found in our [Auth Guide](https://docs.slack.dev/tools/python-slack-sdk/installation/).
 
 ## slackclient is in maintenance mode
 
-Are you looking for [slackclient](https://pypi.org/project/slackclient/)? The website is live [here](https://tools.slack.dev/python-slackclient/) just like before. However, the slackclient project is in maintenance mode now and this [`slack_sdk`](https://pypi.org/project/slack-sdk/) is the successor. If you have time to make a migration to slack_sdk v3, please follow [our migration guide](https://tools.slack.dev/python-slack-sdk/v3-migration/) to ensure your app continues working after updating.
+Are you looking for [slackclient](https://pypi.org/project/slackclient/)? The slackclient project is in maintenance mode now and this [`slack_sdk`](https://pypi.org/project/slack-sdk/) is the successor. If you have time to make a migration to slack_sdk v3, please follow [our migration guide](https://docs.slack.dev/tools/python-slack-sdk/v3-migration/) to ensure your app continues working after updating.
 
 ## Table of contents
 
@@ -66,7 +66,7 @@ Are you looking for [slackclient](https://pypi.org/project/slackclient/)? The we
 
 ---
 
-This library requires Python 3.6 and above. If you require Python 2, please use our [SlackClient - v1.x][slackclientv1]. If you're unsure how to check what version of Python you're on, you can check it using the following:
+This library requires Python 3.7 and above. If you're unsure how to check what version of Python you're on, you can check it using the following:
 
 > **Note:** You may need to use `python3` before your commands to ensure you use the correct Python path. e.g. `python3 --version`
 
@@ -98,7 +98,7 @@ We've created this [tutorial](https://github.com/slackapi/python-slack-sdk/tree/
 
 ---
 
-Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in [our guide](https://tools.slack.dev/python-slack-sdk/web/).
+Slack provide a Web API that gives you the ability to build applications that interact with Slack in a variety of ways. This Development Kit is a module based wrapper that makes interaction with that API easier. We have a basic example here with some of the more common uses but a full list of the available methods are available [here][api-methods]. More detailed examples can be found in [our guide](https://docs.slack.dev/tools/python-slack-sdk/web/).
 
 #### Sending a message to Slack
 
@@ -267,7 +267,7 @@ print(response)
 
 If you're migrating from slackclient v2.x of slack_sdk to v3.x, Please follow our migration guide to ensure your app continues working after updating.
 
-**[Check out the Migration Guide here!](https://tools.slack.dev/python-slack-sdk/v3-migration/)**
+**[Check out the Migration Guide here!](https://docs.slack.dev/tools/python-slack-sdk/v3-migration/)**
 
 ### Migrating from v1
 
@@ -293,12 +293,13 @@ helpful and collaborative way.
 <!-- Markdown links -->
 
 [slackclientv1]: https://github.com/slackapi/python-slackclient/tree/v1
-[api-methods]: https://api.slack.com/methods
-[rtm-docs]: https://api.slack.com/rtm
-[events-docs]: https://api.slack.com/events-api
+[api-methods]: https://docs.slack.dev/reference/methods
+[rtm-docs]: https://docs.slack.dev/legacy/legacy-rtm-api/
+[events-docs]: https://docs.slack.dev/apis/events-api/
 [bolt-python]: https://github.com/slackapi/bolt-python
 [pypi]: https://pypi.org/
 [gh-issues]: https://github.com/slackapi/python-slack-sdk/issues
 [slack-community]: https://slackcommunity.com/
 [files_upload_v2]: https://github.com/slackapi/python-slack-sdk/releases/tag/v3.19.0
 [aiohttp]: https://aiohttp.readthedocs.io/
+

@@ -1,5 +1,6 @@
 import re
 import unittest
+from unittest.mock import patch
 
 import slack_sdk.errors as err
 from slack_sdk.models.blocks import DividerBlock
@@ -50,6 +51,11 @@ class TestAsyncWebClient(unittest.TestCase):
     async def test_json_can_only_be_sent_with_post_requests(self):
         with self.assertRaises(err.SlackRequestError):
             await self.client.api_call("fake.method", http_verb="GET", json={})
+
+    @async_test
+    async def test_apps_icon_set_requires_file_or_url(self):
+        with self.assertRaises(err.SlackRequestError):
+            await self.client.apps_icon_set(app_id="A111")
 
     @async_test
     async def test_slack_api_error_is_raised_on_unsuccessful_responses(self):
@@ -167,3 +173,20 @@ class TestAsyncWebClient(unittest.TestCase):
             user_auth_blocks=[DividerBlock(), DividerBlock()],
         )
         self.assertIsNone(new_message.get("error"))
+
+    @async_test
+    async def test_upload_file_reports_the_response_body(self):
+        async def fake_request(**kwargs):
+            return {"status_code": 500, "data": "upload failed", "headers": {}}
+
+        with patch("slack_sdk.web.async_base_client._request_with_session", new=fake_request):
+            result = await self.client._upload_file(
+                url="https://files.slack.com/upload/v1/abc",
+                data=b"hello",
+                logger=self.client._logger,
+                timeout=30,
+                proxy=None,
+                ssl=None,
+            )
+        self.assertEqual(500, result.status)
+        self.assertEqual("upload failed", result.body)

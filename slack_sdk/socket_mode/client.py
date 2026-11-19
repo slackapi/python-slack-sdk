@@ -70,15 +70,17 @@ class BaseSocketModeClient:
         raise NotImplementedError()
 
     def connect_to_new_endpoint(self, force: bool = False):
+        acquired = False
         try:
-            self.connect_operation_lock.acquire(blocking=True, timeout=5)
-            if force or not self.is_connected():
+            acquired = self.connect_operation_lock.acquire(blocking=True, timeout=5)
+            if force or (acquired and not self.is_connected()):
                 self.logger.info("Connecting to a new endpoint...")
                 self.wss_uri = self.issue_new_wss_url()
                 self.connect()
                 self.logger.info("Connected to a new endpoint...")
         finally:
-            self.connect_operation_lock.release()
+            if acquired:
+                self.connect_operation_lock.release()
 
     def close(self) -> None:
         self.closed = True
@@ -95,13 +97,13 @@ class BaseSocketModeClient:
 
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new message enqueued (current queue size: {self.message_queue.qsize()})")
 
     def process_message(self):
         try:
             raw_message = self.message_queue.get(timeout=1)
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"A message dequeued (current queue size: {self.message_queue.qsize()})")
 
             if raw_message is not None:
@@ -121,7 +123,7 @@ class BaseSocketModeClient:
 
     def run_message_listeners(self, message: dict, raw_message: str) -> None:
         type, envelope_id = message.get("type"), message.get("envelope_id")
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"Message processing started (type: {type}, envelope_id: {envelope_id})")
         try:
             # just in case, adding the same logic to reconnect here
@@ -131,7 +133,7 @@ class BaseSocketModeClient:
 
             for listener in self.message_listeners:
                 try:
-                    listener(self, message, raw_message)  # type: ignore[call-arg, arg-type]
+                    listener(self, message, raw_message)  # type: ignore[call-arg, arg-type, misc]
                 except Exception as e:
                     self.logger.exception(f"Failed to run a message listener: {e}")
 
@@ -146,7 +148,7 @@ class BaseSocketModeClient:
         except Exception as e:
             self.logger.exception(f"Failed to run message listeners: {e}")
         finally:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"Message processing completed (type: {type}, envelope_id: {envelope_id})")
 
     def process_messages(self) -> None:

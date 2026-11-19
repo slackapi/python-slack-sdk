@@ -1,0 +1,10 @@
+# pip install -r requirements/databases.txt
+# Database drivers for CI testing.
+
+# psycopg
+# Note: postgreSQL driver (sync).
+psycopg[binary]>=3.3.6,<4
+
+# asyncpg
+# Note: postgreSQL driver (async).
+asyncpg>=0.32.0,<1

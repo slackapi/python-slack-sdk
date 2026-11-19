@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>slack_sdk.scim.v1.user API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.scim.v1.user</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.scim.v1.user.User"><code class="flex name class">
+<span>class <span class="ident">User</span></span>
+<span>(</span><span>*,<br>active: bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>addresses: List[<a title="slack_sdk.scim.v1.user.UserAddress" href="#slack_sdk.scim.v1.user.UserAddress">UserAddress</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>display_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>emails: List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>external_id: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>groups: List[<a title="slack_sdk.scim.v1.user.UserGroup" href="#slack_sdk.scim.v1.user.UserGroup">UserGroup</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>id: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>meta: <a title="slack_sdk.scim.v1.user.UserMeta" href="#slack_sdk.scim.v1.user.UserMeta">UserMeta</a> | Dict[str, Any] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>name: <a title="slack_sdk.scim.v1.user.UserName" href="#slack_sdk.scim.v1.user.UserName">UserName</a> | Dict[str, Any] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>nick_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>phone_numbers: List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>photos: List[<a title="slack_sdk.scim.v1.user.UserPhoto" href="#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>profile_url: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>roles: List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a> | Dict[str, Any]] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>schemas: List[str] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>timezone: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>title: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>user_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class User:
+    active: Union[Optional[bool], DefaultArg]
+    addresses: Union[Optional[List[UserAddress]], DefaultArg]
+    display_name: Union[Optional[str], DefaultArg]
+    emails: Union[Optional[List[TypeAndValue]], DefaultArg]
+    external_id: Union[Optional[str], DefaultArg]
+    groups: Union[Optional[List[UserGroup]], DefaultArg]
+    id: Union[Optional[str], DefaultArg]
+    meta: Union[Optional[UserMeta], DefaultArg]
+    name: Union[Optional[UserName], DefaultArg]
+    nick_name: Union[Optional[str], DefaultArg]
+    phone_numbers: Union[Optional[List[TypeAndValue]], DefaultArg]
+    photos: Union[Optional[List[UserPhoto]], DefaultArg]
+    profile_url: Union[Optional[str], DefaultArg]
+    roles: Union[Optional[List[TypeAndValue]], DefaultArg]
+    schemas: Union[Optional[List[str]], DefaultArg]
+    timezone: Union[Optional[str], DefaultArg]
+    title: Union[Optional[str], DefaultArg]
+    user_name: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        active: Union[Optional[bool], DefaultArg] = NotGiven,
+        addresses: Union[Optional[List[Union[UserAddress, Dict[str, Any]]]], DefaultArg] = NotGiven,
+        display_name: Union[Optional[str], DefaultArg] = NotGiven,
+        emails: Union[Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg] = NotGiven,
+        external_id: Union[Optional[str], DefaultArg] = NotGiven,
+        groups: Union[Optional[List[Union[UserGroup, Dict[str, Any]]]], DefaultArg] = NotGiven,
+        id: Union[Optional[str], DefaultArg] = NotGiven,
+        meta: Union[Optional[Union[UserMeta, Dict[str, Any]]], DefaultArg] = NotGiven,
+        name: Union[Optional[Union[UserName, Dict[str, Any]]], DefaultArg] = NotGiven,
+        nick_name: Union[Optional[str], DefaultArg] = NotGiven,
+        phone_numbers: Union[Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg] = NotGiven,
+        photos: Union[Optional[List[Union[UserPhoto, Dict[str, Any]]]], DefaultArg] = NotGiven,
+        profile_url: Union[Optional[str], DefaultArg] = NotGiven,
+        roles: Union[Optional[List[Union[TypeAndValue, Dict[str, Any]]]], DefaultArg] = NotGiven,
+        schemas: Union[Optional[List[str]], DefaultArg] = NotGiven,
+        timezone: Union[Optional[str], DefaultArg] = NotGiven,
+        title: Union[Optional[str], DefaultArg] = NotGiven,
+        user_name: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.active = active
+        self.addresses = (
+            [a if isinstance(a, UserAddress) else UserAddress(**a) for a in addresses]  # type: ignore
+            if _is_iterable(addresses)
+            else addresses
+        )
+        self.display_name = display_name
+        self.emails = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in emails]  # type: ignore
+            if _is_iterable(emails)
+            else emails
+        )
+        self.external_id = external_id
+        self.groups = (
+            [a if isinstance(a, UserGroup) else UserGroup(**a) for a in groups]  # type: ignore
+            if _is_iterable(groups)
+            else groups
+        )
+        self.id = id
+        self.meta = UserMeta(**meta) if meta is not None and isinstance(meta, dict) else meta
+        self.name = UserName(**name) if name is not None and isinstance(name, dict) else name
+        self.nick_name = nick_name
+        self.phone_numbers = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in phone_numbers]  # type: ignore
+            if _is_iterable(phone_numbers)
+            else phone_numbers
+        )
+        self.photos = (
+            [a if isinstance(a, UserPhoto) else UserPhoto(**a) for a in photos]  # type: ignore
+            if _is_iterable(photos)
+            else photos
+        )
+        self.profile_url = profile_url
+        self.roles = (
+            [a if isinstance(a, TypeAndValue) else TypeAndValue(**a) for a in roles]  # type: ignore
+            if _is_iterable(roles)
+            else roles
+        )
+        self.schemas = schemas
+        self.timezone = timezone
+        self.title = title
+        self.user_name = user_name
+
+        self.unknown_fields = kwargs
+
+    def to_dict(self):
+        return _to_dict_without_not_given(self)
+
+    def __repr__(self):
+        return f&#34;&lt;slack_sdk.scim.{self.__class__.__name__}: {self.to_dict()}&gt;&#34;</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.User.active"><code class="name">var <span class="ident">active</span> : bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.addresses"><code class="name">var <span class="ident">addresses</span> : List[<a title="slack_sdk.scim.v1.user.UserAddress" href="#slack_sdk.scim.v1.user.UserAddress">UserAddress</a>] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.display_name"><code class="name">var <span class="ident">display_name</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.emails"><code class="name">var <span class="ident">emails</span> : List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.external_id"><code class="name">var <span class="ident">external_id</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.groups"><code class="name">var <span class="ident">groups</span> : List[<a title="slack_sdk.scim.v1.user.UserGroup" href="#slack_sdk.scim.v1.user.UserGroup">UserGroup</a>] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.id"><code class="name">var <span class="ident">id</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.meta"><code class="name">var <span class="ident">meta</span> : <a title="slack_sdk.scim.v1.user.UserMeta" href="#slack_sdk.scim.v1.user.UserMeta">UserMeta</a> | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.name"><code class="name">var <span class="ident">name</span> : <a title="slack_sdk.scim.v1.user.UserName" href="#slack_sdk.scim.v1.user.UserName">UserName</a> | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.nick_name"><code class="name">var <span class="ident">nick_name</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.phone_numbers"><code class="name">var <span class="ident">phone_numbers</span> : List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.photos"><code class="name">var <span class="ident">photos</span> : List[<a title="slack_sdk.scim.v1.user.UserPhoto" href="#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a>] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.profile_url"><code class="name">var <span class="ident">profile_url</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.roles"><code class="name">var <span class="ident">roles</span> : List[<a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a>] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.schemas"><code class="name">var <span class="ident">schemas</span> : List[str] | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.timezone"><code class="name">var <span class="ident">timezone</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.title"><code class="name">var <span class="ident">title</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.User.user_name"><code class="name">var <span class="ident">user_name</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.User.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self):
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserAddress"><code class="flex name class">
+<span>class <span class="ident">UserAddress</span></span>
+<span>(</span><span>*,<br>country: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>locality: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>postal_code: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>primary: bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>region: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>street_address: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserAddress:
+    country: Union[Optional[str], DefaultArg]
+    locality: Union[Optional[str], DefaultArg]
+    postal_code: Union[Optional[str], DefaultArg]
+    primary: Union[Optional[bool], DefaultArg]
+    region: Union[Optional[str], DefaultArg]
+    street_address: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        country: Union[Optional[str], DefaultArg] = NotGiven,
+        locality: Union[Optional[str], DefaultArg] = NotGiven,
+        postal_code: Union[Optional[str], DefaultArg] = NotGiven,
+        primary: Union[Optional[bool], DefaultArg] = NotGiven,
+        region: Union[Optional[str], DefaultArg] = NotGiven,
+        street_address: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.country = country
+        self.locality = locality
+        self.postal_code = postal_code
+        self.primary = primary
+        self.region = region
+        self.street_address = street_address
+        self.unknown_fields = kwargs
+
+    def to_dict(self) -&gt; dict:
+        return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserAddress.country"><code class="name">var <span class="ident">country</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserAddress.locality"><code class="name">var <span class="ident">locality</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserAddress.postal_code"><code class="name">var <span class="ident">postal_code</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserAddress.primary"><code class="name">var <span class="ident">primary</span> : bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserAddress.region"><code class="name">var <span class="ident">region</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserAddress.street_address"><code class="name">var <span class="ident">street_address</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserAddress.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserAddress.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; dict:
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserEmail"><code class="flex name class">
+<span>class <span class="ident">UserEmail</span></span>
+<span>(</span><span>*,<br>primary: bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>type: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>value: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserEmail(TypeAndValue):
+    pass</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.primary" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.primary">primary</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.type" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.type">type</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.unknown_fields" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.value" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.value">value</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserGroup"><code class="flex name class">
+<span>class <span class="ident">UserGroup</span></span>
+<span>(</span><span>*,<br>display: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>value: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserGroup:
+    display: Union[Optional[str], DefaultArg]
+    value: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        display: Union[Optional[str], DefaultArg] = NotGiven,
+        value: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.display = display
+        self.value = value
+        self.unknown_fields = kwargs
+
+    def to_dict(self) -&gt; dict:
+        return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserGroup.display"><code class="name">var <span class="ident">display</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserGroup.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserGroup.value"><code class="name">var <span class="ident">value</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserGroup.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; dict:
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserMeta"><code class="flex name class">
+<span>class <span class="ident">UserMeta</span></span>
+<span>(</span><span>created: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>location: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserMeta:
+    created: Union[Optional[str], DefaultArg]
+    location: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        created: Union[Optional[str], DefaultArg] = NotGiven,
+        location: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.created = created
+        self.location = location
+        self.unknown_fields = kwargs
+
+    def to_dict(self) -&gt; dict:
+        return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserMeta.created"><code class="name">var <span class="ident">created</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserMeta.location"><code class="name">var <span class="ident">location</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserMeta.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserMeta.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; dict:
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserName"><code class="flex name class">
+<span>class <span class="ident">UserName</span></span>
+<span>(</span><span>family_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>given_name: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserName:
+    family_name: Union[Optional[str], DefaultArg]
+    given_name: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        family_name: Union[Optional[str], DefaultArg] = NotGiven,
+        given_name: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.family_name = family_name
+        self.given_name = given_name
+        self.unknown_fields = kwargs
+
+    def to_dict(self) -&gt; dict:
+        return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserName.family_name"><code class="name">var <span class="ident">family_name</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserName.given_name"><code class="name">var <span class="ident">given_name</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserName.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserName.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; dict:
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserPhoneNumber"><code class="flex name class">
+<span>class <span class="ident">UserPhoneNumber</span></span>
+<span>(</span><span>*,<br>primary: bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>type: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>value: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserPhoneNumber(TypeAndValue):
+    pass</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.primary" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.primary">primary</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.type" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.type">type</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.unknown_fields" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.value" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.value">value</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserPhoto"><code class="flex name class">
+<span>class <span class="ident">UserPhoto</span></span>
+<span>(</span><span>type: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>value: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserPhoto:
+    type: Union[Optional[str], DefaultArg]
+    value: Union[Optional[str], DefaultArg]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        type: Union[Optional[str], DefaultArg] = NotGiven,
+        value: Union[Optional[str], DefaultArg] = NotGiven,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.value = value
+        self.unknown_fields = kwargs
+
+    def to_dict(self) -&gt; dict:
+        return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserPhoto.type"><code class="name">var <span class="ident">type</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserPhoto.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserPhoto.value"><code class="name">var <span class="ident">value</span> : str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="slack_sdk.scim.v1.user.UserPhoto.to_dict"><code class="name flex">
+<span>def <span class="ident">to_dict</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_dict(self) -&gt; dict:
+    return _to_dict_without_not_given(self)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.scim.v1.user.UserRole"><code class="flex name class">
+<span>class <span class="ident">UserRole</span></span>
+<span>(</span><span>*,<br>primary: bool | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>type: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>value: str | <a title="slack_sdk.scim.v1.default_arg.DefaultArg" href="default_arg.html#slack_sdk.scim.v1.default_arg.DefaultArg">DefaultArg</a> | None = &lt;slack_sdk.scim.v1.default_arg.DefaultArg object&gt;,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UserRole(TypeAndValue):
+    pass</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="slack_sdk.scim.v1.types.TypeAndValue" href="types.html#slack_sdk.scim.v1.types.TypeAndValue">TypeAndValue</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.primary" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.primary">primary</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.type" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.type">type</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.unknown_fields" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.types.TypeAndValue.value" href="types.html#slack_sdk.scim.v1.types.TypeAndValue.value">value</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.scim.v1" href="index.html">slack_sdk.scim.v1</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.User" href="#slack_sdk.scim.v1.user.User">User</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.scim.v1.user.User.active" href="#slack_sdk.scim.v1.user.User.active">active</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.addresses" href="#slack_sdk.scim.v1.user.User.addresses">addresses</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.display_name" href="#slack_sdk.scim.v1.user.User.display_name">display_name</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.emails" href="#slack_sdk.scim.v1.user.User.emails">emails</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.external_id" href="#slack_sdk.scim.v1.user.User.external_id">external_id</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.groups" href="#slack_sdk.scim.v1.user.User.groups">groups</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.id" href="#slack_sdk.scim.v1.user.User.id">id</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.meta" href="#slack_sdk.scim.v1.user.User.meta">meta</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.name" href="#slack_sdk.scim.v1.user.User.name">name</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.nick_name" href="#slack_sdk.scim.v1.user.User.nick_name">nick_name</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.phone_numbers" href="#slack_sdk.scim.v1.user.User.phone_numbers">phone_numbers</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.photos" href="#slack_sdk.scim.v1.user.User.photos">photos</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.profile_url" href="#slack_sdk.scim.v1.user.User.profile_url">profile_url</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.roles" href="#slack_sdk.scim.v1.user.User.roles">roles</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.schemas" href="#slack_sdk.scim.v1.user.User.schemas">schemas</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.timezone" href="#slack_sdk.scim.v1.user.User.timezone">timezone</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.title" href="#slack_sdk.scim.v1.user.User.title">title</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.to_dict" href="#slack_sdk.scim.v1.user.User.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.unknown_fields" href="#slack_sdk.scim.v1.user.User.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.User.user_name" href="#slack_sdk.scim.v1.user.User.user_name">user_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserAddress" href="#slack_sdk.scim.v1.user.UserAddress">UserAddress</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.country" href="#slack_sdk.scim.v1.user.UserAddress.country">country</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.locality" href="#slack_sdk.scim.v1.user.UserAddress.locality">locality</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.postal_code" href="#slack_sdk.scim.v1.user.UserAddress.postal_code">postal_code</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.primary" href="#slack_sdk.scim.v1.user.UserAddress.primary">primary</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.region" href="#slack_sdk.scim.v1.user.UserAddress.region">region</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.street_address" href="#slack_sdk.scim.v1.user.UserAddress.street_address">street_address</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.to_dict" href="#slack_sdk.scim.v1.user.UserAddress.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserAddress.unknown_fields" href="#slack_sdk.scim.v1.user.UserAddress.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserEmail" href="#slack_sdk.scim.v1.user.UserEmail">UserEmail</a></code></h4>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserGroup" href="#slack_sdk.scim.v1.user.UserGroup">UserGroup</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.v1.user.UserGroup.display" href="#slack_sdk.scim.v1.user.UserGroup.display">display</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserGroup.to_dict" href="#slack_sdk.scim.v1.user.UserGroup.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserGroup.unknown_fields" href="#slack_sdk.scim.v1.user.UserGroup.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserGroup.value" href="#slack_sdk.scim.v1.user.UserGroup.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserMeta" href="#slack_sdk.scim.v1.user.UserMeta">UserMeta</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.v1.user.UserMeta.created" href="#slack_sdk.scim.v1.user.UserMeta.created">created</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserMeta.location" href="#slack_sdk.scim.v1.user.UserMeta.location">location</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserMeta.to_dict" href="#slack_sdk.scim.v1.user.UserMeta.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserMeta.unknown_fields" href="#slack_sdk.scim.v1.user.UserMeta.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserName" href="#slack_sdk.scim.v1.user.UserName">UserName</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.v1.user.UserName.family_name" href="#slack_sdk.scim.v1.user.UserName.family_name">family_name</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserName.given_name" href="#slack_sdk.scim.v1.user.UserName.given_name">given_name</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserName.to_dict" href="#slack_sdk.scim.v1.user.UserName.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserName.unknown_fields" href="#slack_sdk.scim.v1.user.UserName.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserPhoneNumber" href="#slack_sdk.scim.v1.user.UserPhoneNumber">UserPhoneNumber</a></code></h4>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserPhoto" href="#slack_sdk.scim.v1.user.UserPhoto">UserPhoto</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.scim.v1.user.UserPhoto.to_dict" href="#slack_sdk.scim.v1.user.UserPhoto.to_dict">to_dict</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserPhoto.type" href="#slack_sdk.scim.v1.user.UserPhoto.type">type</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserPhoto.unknown_fields" href="#slack_sdk.scim.v1.user.UserPhoto.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.scim.v1.user.UserPhoto.value" href="#slack_sdk.scim.v1.user.UserPhoto.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.scim.v1.user.UserRole" href="#slack_sdk.scim.v1.user.UserRole">UserRole</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

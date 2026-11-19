@@ -3,23 +3,24 @@ import logging
 import re
 import warnings
 from abc import ABCMeta
-from typing import Iterator, List, Optional, Set, Type, Union, Sequence, Dict, Any
+from typing import Any, Dict, Iterator, List, Optional, Sequence, Set, Type, Union
 
 from slack_sdk.models import show_unknown_key_warning
-from slack_sdk.models.basic_objects import (
-    JsonObject,
-    JsonValidator,
-    EnumValidator,
-)
-from .basic_components import ButtonStyles, Workflow, SlackFile
-from .basic_components import ConfirmObject
-from .basic_components import DispatchActionConfig
-from .basic_components import MarkdownTextObject
-from .basic_components import Option
-from .basic_components import OptionGroup
-from .basic_components import PlainTextObject
-from .basic_components import TextObject
+from slack_sdk.models.basic_objects import EnumValidator, JsonObject, JsonValidator
 
+from .basic_components import (
+    ButtonStyles,
+    ConfirmObject,
+    DispatchActionConfig,
+    FeedbackButtonObject,
+    MarkdownTextObject,
+    Option,
+    OptionGroup,
+    PlainTextObject,
+    SlackFile,
+    TextObject,
+    Workflow,
+)
 
 # -------------------------------------------------
 # Block Elements
@@ -28,7 +29,8 @@ from .basic_components import TextObject
 
 class BlockElement(JsonObject, metaclass=ABCMeta):
     """Block Elements are things that exists inside of your Blocks.
-    https://api.slack.com/reference/block-kit/block-elements
+
+    https://docs.slack.dev/reference/block-kit/block-elements/
     """
 
     attributes = {"type"}
@@ -65,7 +67,7 @@ class BlockElement(JsonObject, metaclass=ABCMeta):
                 d = copy.copy(block_element)
                 t = d.pop("type")
                 for subclass in cls._get_sub_block_elements():
-                    if t == subclass.type:
+                    if t == getattr(subclass, "type", None):
                         return subclass(**d)
                 if t == PlainTextObject.type:
                     return PlainTextObject(**d)
@@ -151,7 +153,7 @@ class InputInteractiveElement(InteractiveElement, metaclass=ABCMeta):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """InteractiveElement that is usable in input blocks
+        """InteractiveElement that is usable in input blocks.
 
         We generally recommend using the concrete subclasses for better supports of available properties.
         """
@@ -186,10 +188,23 @@ class ButtonElement(InteractiveElement):
     text_max_length = 75
     url_max_length = 3000
     value_max_length = 2000
+    agent_prompt_max_length = 4000
 
     @property
     def attributes(self) -> Set[str]:  # type: ignore[override]
-        return super().attributes.union({"text", "url", "value", "style", "confirm", "accessibility_label"})
+        return super().attributes.union(
+            {
+                "text",
+                "url",
+                "value",
+                "style",
+                "confirm",
+                "accessibility_label",
+                "agent_prompt",
+                "agent_prompt_display",
+                "visible_to_user_ids",
+            }
+        )
 
     def __init__(
         self,
@@ -201,11 +216,15 @@ class ButtonElement(InteractiveElement):
         style: Optional[str] = None,  # primary, danger
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         accessibility_label: Optional[str] = None,
+        agent_prompt: Optional[str] = None,
+        agent_prompt_display: Optional[str] = None,
+        visible_to_user_ids: Optional[List[str]] = None,
         **others: dict,
     ):
-        """An interactive element that inserts a button. The button can be a trigger for
-        anything from opening a simple link to starting a complex workflow.
-        https://api.slack.com/reference/block-kit/block-elements#button
+        """An interactive element that inserts a button.
+
+        The button can be a trigger for anything from opening a simple link to starting a complex workflow.
+        https://docs.slack.dev/reference/block-kit/block-elements/button-element/
 
         Args:
             text (required): A text object that defines the button's text.
@@ -231,6 +250,12 @@ class ButtonElement(InteractiveElement):
             accessibility_label: A label for longer descriptive text about a button element.
                 This label will be read out by screen readers instead of the button text object.
                 Maximum length for this field is 75 characters.
+            agent_prompt: A prompt sent to Slackbot when the button is clicked, if Slackbot AI is available to the user.
+                Maximum length for this field is 4000 characters.
+            agent_prompt_display: Short text shown instead of the full agent_prompt in the user's Slackbot message.
+                Only takes effect alongside agent_prompt and defaults to the button's text.
+            visible_to_user_ids: User IDs for which the button appears.
+                If not provided, the button is visible to all users.
         """
         super().__init__(action_id=action_id, type=self.type)
         show_unknown_key_warning(self, others)
@@ -242,6 +267,9 @@ class ButtonElement(InteractiveElement):
         self.style = style
         self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
         self.accessibility_label = accessibility_label
+        self.agent_prompt = agent_prompt
+        self.agent_prompt_display = agent_prompt_display
+        self.visible_to_user_ids = visible_to_user_ids
 
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def _validate_text_length(self) -> bool:
@@ -263,6 +291,10 @@ class ButtonElement(InteractiveElement):
     def _validate_accessibility_label_length(self) -> bool:
         return self.accessibility_label is None or len(self.accessibility_label) <= self.text_max_length
 
+    @JsonValidator(f"agent_prompt attribute cannot exceed {agent_prompt_max_length} characters")
+    def _validate_agent_prompt_length(self) -> bool:
+        return self.agent_prompt is None or len(self.agent_prompt) <= self.agent_prompt_max_length
+
 
 class LinkButtonElement(ButtonElement):
     def __init__(
@@ -274,10 +306,11 @@ class LinkButtonElement(ButtonElement):
         style: Optional[str] = None,
         **others: dict,
     ):
-        """A simple button that simply opens a given URL. You will still receive an
-        interaction payload and will need to send an acknowledgement response.
+        """A simple button that simply opens a given URL.
+
+        You will still receive an interaction payload and will need to send an acknowledgement response.
         This is a helper class that makes creating links simpler.
-        https://api.slack.com/reference/block-kit/block-elements#button
+        https://docs.slack.dev/reference/block-kit/block-elements/button-element/
 
         Args:
             text (required): A text object that defines the button's text.
@@ -332,7 +365,8 @@ class CheckboxesElement(InputInteractiveElement):
         **others: dict,
     ):
         """A checkbox group that allows a user to choose multiple items from a list of possible options.
-        https://api.slack.com/reference/block-kit/block-elements#checkboxes
+
+        https://docs.slack.dev/reference/block-kit/block-elements/checkboxes-element/
 
         Args:
             action_id (required): An identifier for the action triggered when the checkbox group is changed.
@@ -381,10 +415,10 @@ class DatePickerElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        An element which lets users easily select a date from a calendar style UI.
+        """An element which lets users easily select a date from a calendar style UI.
+
         Date picker elements can be used inside of SectionBlocks and ActionsBlocks.
-        https://api.slack.com/reference/block-kit/block-elements#datepicker
+        https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element
 
         Args:
             action_id (required): An identifier for the action triggered when a menu option is selected.
@@ -442,12 +476,12 @@ class TimePickerElement(InputInteractiveElement):
         timezone: Optional[str] = None,
         **others: dict,
     ):
-        """
-        An element which allows selection of a time of day.
+        """An element which allows selection of a time of day.
+
         On desktop clients, this time picker will take the form of a dropdown list
         with free-text entry for precise choices.
         On mobile clients, the time picker will use native time picker UIs.
-        https://api.slack.com/reference/block-kit/block-elements#timepicker
+        https://docs.slack.dev/reference/block-kit/block-elements/time-picker-element
 
         Args:
             action_id (required): An identifier for the action triggered when a time is selected.
@@ -503,13 +537,13 @@ class DateTimePickerElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        An element that allows the selection of a time of day formatted as a UNIX timestamp.
+        """An element that allows the selection of a time of day formatted as a UNIX timestamp.
+
         On desktop clients, this time picker will take the form of a dropdown list and the
         date picker will take the form of a dropdown calendar. Both options will have free-text
         entry for precise choices. On mobile clients, the time picker and date
         picker will use native UIs.
-        https://api.slack.com/reference/block-kit/block-elements#datetimepicker
+        https://docs.slack.dev/reference/block-kit/block-elements/date-picker-element/
 
         Args:
             action_id (required): An identifier for the action triggered when a time is selected. You can use this
@@ -540,6 +574,45 @@ class DateTimePickerElement(InputInteractiveElement):
 
 
 # -------------------------------------------------
+# Feedback Buttons Element
+# -------------------------------------------------
+
+
+class FeedbackButtonsElement(InteractiveElement):
+    type = "feedback_buttons"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"positive_button", "negative_button"})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        positive_button: Union[dict, FeedbackButtonObject],
+        negative_button: Union[dict, FeedbackButtonObject],
+        **others: dict,
+    ):
+        """Buttons to indicate positive or negative feedback.
+
+        https://docs.slack.dev/reference/block-kit/block-elements/feedback-buttons-element
+
+        Args:
+            action_id (required): An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            positive_button (required): A button to indicate positive feedback.
+            negative_button (required): A button to indicate negative feedback.
+        """
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.positive_button = FeedbackButtonObject.parse(positive_button)
+        self.negative_button = FeedbackButtonObject.parse(negative_button)
+
+
+# -------------------------------------------------
 # Image
 # -------------------------------------------------
 
@@ -561,10 +634,11 @@ class ImageElement(BlockElement):
         slack_file: Optional[Union[Dict[str, Any], SlackFile]] = None,
         **others: dict,
     ):
-        """An element to insert an image - this element can be used in section and
-        context blocks only. If you want a block with only an image in it,
+        """An element to insert an image - this element can be used in section and context blocks only.
+
+        If you want a block with only an image in it,
         you're looking for the image block.
-        https://api.slack.com/reference/block-kit/block-elements#image
+        https://docs.slack.dev/reference/block-kit/block-elements/image-element
 
         Args:
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
@@ -585,6 +659,61 @@ class ImageElement(BlockElement):
     @JsonValidator(f"alt_text attribute cannot exceed {alt_text_max_length} characters")
     def _validate_alt_text_length(self) -> bool:
         return len(self.alt_text) <= self.alt_text_max_length  # type: ignore[arg-type]
+
+
+# -------------------------------------------------
+# Icon Button Element
+# -------------------------------------------------
+
+
+class IconButtonElement(InteractiveElement):
+    type = "icon_button"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"icon", "text", "accessibility_label", "value", "visible_to_user_ids", "confirm"})
+
+    def __init__(
+        self,
+        *,
+        action_id: Optional[str] = None,
+        icon: str,
+        text: Union[str, dict, TextObject],
+        accessibility_label: Optional[str] = None,
+        value: Optional[str] = None,
+        visible_to_user_ids: Optional[List[str]] = None,
+        confirm: Optional[Union[dict, ConfirmObject]] = None,
+        **others: dict,
+    ):
+        """An icon button to perform actions.
+
+        https://docs.slack.dev/reference/block-kit/block-elements/icon-button-element
+
+        Args:
+            action_id: An identifier for this action.
+                You can use this when you receive an interaction payload to identify the source of the action.
+                Should be unique among all other action_ids in the containing block.
+                Maximum length for this field is 255 characters.
+            icon (required): The icon to show (e.g., 'trash').
+            text (required): Defines an object containing some text.
+            accessibility_label: A label for longer descriptive text about a button element.
+                This label will be read out by screen readers instead of the button text object.
+                Maximum length for this field is 75 characters.
+            value: The button value.
+                Maximum length for this field is 2000 characters.
+            visible_to_user_ids: User IDs for which the icon appears.
+                Maximum length for this field is 10 user IDs.
+            confirm: A confirm object that defines an optional confirmation dialog after the button is clicked.
+        """
+        super().__init__(action_id=action_id, type=self.type)
+        show_unknown_key_warning(self, others)
+
+        self.icon = icon
+        self.text = TextObject.parse(text, PlainTextObject.type)
+        self.accessibility_label = accessibility_label
+        self.value = value
+        self.visible_to_user_ids = visible_to_user_ids
+        self.confirm = ConfirmObject.parse(confirm) if confirm else None
 
 
 # -------------------------------------------------
@@ -614,7 +743,8 @@ class StaticSelectElement(InputInteractiveElement):
         **others: dict,
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
-        https://api.slack.com/reference/block-kit/block-elements#static_select
+
+        https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -688,9 +818,9 @@ class StaticMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This is the simplest form of select menu, with a static list of options passed in when defining the element.
-        https://api.slack.com/reference/block-kit/block-elements#static_multi_select
+        """This is the simplest form of select menu, with a static list of options passed in when defining the element.
+
+        https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#static_multi_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -768,7 +898,8 @@ class SelectElement(InputInteractiveElement):
         **others: dict,
     ):
         """This is the simplest form of select menu, with a static list of options passed in when defining the element.
-        https://api.slack.com/reference/block-kit/block-elements#static_select
+
+        https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#static_select
 
         Args:
             action_id (required): An identifier for the action triggered when a menu option is selected.
@@ -843,10 +974,9 @@ class ExternalDataSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will load its options from an external data source, allowing
-        for a dynamic list of options.
-        https://api.slack.com/reference/block-kit/block-elements#external_select
+        """This select menu will load its options from an external data source, allowing for a dynamic list of options.
+
+        https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#external_select
 
         Args:
             action_id (required): An identifier for the action triggered when a menu option is selected.
@@ -900,10 +1030,9 @@ class ExternalDataMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will load its options from an external data source, allowing
-        for a dynamic list of options.
-        https://api.slack.com/reference/block-kit/block-elements#external_multi_select
+        """This select menu will load its options from an external data source, allowing for a dynamic list of options.
+
+        https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#external_multi_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -962,10 +1091,10 @@ class UserSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of Slack users visible to
-        the current user in the active workspace.
-        https://api.slack.com/reference/block-kit/block-elements#users_select
+        """This select menu will populate its options with a list of Slack users.
+
+        The list is limited to users visible to the current user in the active workspace.
+        https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element#users_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -1010,10 +1139,10 @@ class UserMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of Slack users visible to
-        the current user in the active workspace.
-        https://api.slack.com/reference/block-kit/block-elements#users_multi_select
+        """This select menu will populate its options with a list of Slack users.
+
+        The list is limited to users visible to the current user in the active workspace.
+        https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#users_multi_select
 
         Args:
             action_id (required): An identifier for the action triggered when a menu option is selected.
@@ -1059,9 +1188,9 @@ class ConversationFilter(JsonObject):
         exclude_bot_users: Optional[bool] = None,
         exclude_external_shared_channels: Optional[bool] = None,
     ):
-        """Provides a way to filter the list of options in a conversations select menu
-        or conversations multi-select menu.
-        https://api.slack.com/reference/block-kit/composition-objects#filter_conversations
+        """Provides a way to filter the list of options in a conversations select menu or conversations multi-select menu.
+
+        https://docs.slack.dev/reference/block-kit/composition-objects/conversation-filter-object
 
         Args:
             include: Indicates which type of conversations should be included in the list.
@@ -1117,10 +1246,10 @@ class ConversationSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of public and private
-        channels, DMs, and MPIMs visible to the current user in the active workspace.
-        https://api.slack.com/reference/block-kit/block-elements#conversation_select
+        """This select menu will populate its options with a list of public and private channels, DMs, and MPIMs.
+
+        They are visible to the current user in the active workspace.
+        https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#conversations_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -1185,10 +1314,10 @@ class ConversationMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This multi-select menu will populate its options with a list of public and private channels,
-        DMs, and MPIMs visible to the current user in the active workspace.
-        https://api.slack.com/reference/block-kit/block-elements#conversation_multi_select
+        """This multi-select menu will populate its options with a list of public and private channels, DMs, and MPIMs.
+
+        These are visible to the current user in the active workspace.
+        https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element/#conversation_multi_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -1248,10 +1377,10 @@ class ChannelSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This select menu will populate its options with a list of public channels
-        visible to the current user in the active workspace.
-        https://api.slack.com/reference/block-kit/block-elements#channel_select
+        """This select menu will populate its options with a list of public channels.
+
+        The channels are visible to the current user in the active workspace.
+        https://docs.slack.dev/reference/block-kit/block-elements/select-menu-element/#channels_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -1301,10 +1430,10 @@ class ChannelMultiSelectElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        This multi-select menu will populate its options with a list of public channels visible
-        to the current user in the active workspace.
-        https://api.slack.com/reference/block-kit/block-elements#channel_multi_select
+        """This multi-select menu will populate its options with a list of public channels.
+
+        The channels are visible to the current user in the active workspace.
+        https://docs.slack.dev/reference/block-kit/block-elements/multi-select-menu-element#channel_multi_select
 
         Args:
             placeholder (required): A plain_text only text object that defines the placeholder text shown on the menu.
@@ -1349,6 +1478,8 @@ class RichTextInputElement(InputInteractiveElement):
             {
                 "initial_value",
                 "dispatch_action_config",
+                "min_lines",
+                "max_lines",
             }
         )
 
@@ -1361,6 +1492,8 @@ class RichTextInputElement(InputInteractiveElement):
         initial_value: Optional[Union[Dict[str, Any], "RichTextBlock"]] = None,  # type: ignore[name-defined] # noqa: F821
         dispatch_action_config: Optional[Union[dict, DispatchActionConfig]] = None,
         focus_on_load: Optional[bool] = None,
+        min_lines: Optional[int] = None,
+        max_lines: Optional[int] = None,
         **others: dict,
     ):
         super().__init__(
@@ -1373,6 +1506,8 @@ class RichTextInputElement(InputInteractiveElement):
 
         self.initial_value = initial_value
         self.dispatch_action_config = dispatch_action_config
+        self.min_lines = min_lines
+        self.max_lines = max_lines
 
 
 # -------------------------------------------------
@@ -1408,12 +1543,12 @@ class PlainTextInputElement(InputInteractiveElement):
         focus_on_load: Optional[bool] = None,
         **others: dict,
     ):
-        """
-        A plain-text input, similar to the HTML <input> tag, creates a field
-        where a user can enter freeform data. It can appear as a single-line
+        """A plain-text input, similar to the HTML <input> tag, creates a field where a user can enter freeform data.
+
+        It can appear as a single-line
         field or a larger textarea using the multiline flag. Plain-text input
         elements can be used inside of SectionBlocks and ActionsBlocks.
-        https://api.slack.com/reference/block-kit/block-elements#input
+        https://docs.slack.dev/reference/block-kit/block-elements/plain-text-input-element
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1476,8 +1611,7 @@ class EmailInputElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
-        """
-        https://api.slack.com/reference/block-kit/block-elements#email
+        """https://docs.slack.dev/reference/block-kit/block-elements/email-input-element.
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1531,10 +1665,10 @@ class UrlInputElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
-        """
-        A URL input element, similar to the Plain-text input element,
-        creates a single line field where a user can enter URL-encoded data.
-        https://api.slack.com/reference/block-kit/block-elements#url
+        """A URL input element, similar to the Plain-text input element.
+
+        It creates a single line field where a user can enter URL-encoded data.
+        https://docs.slack.dev/reference/block-kit/block-elements/url-input-element
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1559,6 +1693,44 @@ class UrlInputElement(InputInteractiveElement):
 
         self.initial_value = initial_value
         self.dispatch_action_config = dispatch_action_config
+
+
+# -------------------------------------------------
+# Url Source Element
+# -------------------------------------------------
+
+
+class UrlSourceElement(BlockElement):
+    type = "url"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "url",
+                "text",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        url: str,
+        text: str,
+        **others: Dict,
+    ):
+        """A URL source element that displays a URL source for referencing within a task card block.
+
+        https://docs.slack.dev/reference/block-kit/block-elements/url-source-element
+
+        Args:
+            url (required): The URL type source.
+            text (required): Display text for the URL.
+        """
+        super().__init__(type=self.type)
+        show_unknown_key_warning(self, others)
+        self.url = url
+        self.text = text
 
 
 # -------------------------------------------------
@@ -1594,8 +1766,7 @@ class NumberInputElement(InputInteractiveElement):
         placeholder: Optional[Union[str, dict, TextObject]] = None,
         **others: dict,
     ):
-        """
-        https://api.slack.com/reference/block-kit/block-elements#number
+        """https://docs.slack.dev/reference/block-kit/block-elements/number-input-element/.
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1654,8 +1825,7 @@ class FileInputElement(InputInteractiveElement):
         max_files: Optional[int] = None,
         **others: dict,
     ):
-        """
-        https://api.slack.com/reference/block-kit/block-elements#file_input
+        """https://docs.slack.dev/reference/block-kit/block-elements/file-input-element.
 
         Args:
             action_id (required): An identifier for the input value when the parent modal is submitted.
@@ -1701,7 +1871,8 @@ class RadioButtonsElement(InputInteractiveElement):
         **others: dict,
     ):
         """A radio button group that allows a user to choose one item from a list of possible options.
-        https://api.slack.com/reference/block-kit/block-elements#radio
+
+        https://docs.slack.dev/reference/block-kit/block-elements/radio-button-group-element
 
         Args:
             action_id (required): An identifier for the action triggered when the radio button group is changed.
@@ -1750,8 +1921,9 @@ class OverflowMenuElement(InteractiveElement):
         confirm: Optional[Union[dict, ConfirmObject]] = None,
         **others: dict,
     ):
-        """
-        This is like a cross between a button and a select menu - when a user clicks
+        """This is like a cross between a button and a select menu.
+
+        When a user clicks
         on this overflow button, they will be presented with a list of options to
         choose from. Unlike the select menu, there is no typeahead field, and the
         button always appears with an ellipsis ("…") rather than customisable text.
@@ -1761,7 +1933,7 @@ class OverflowMenuElement(InteractiveElement):
         buttons. You can also specify simple URL links as overflow menu options,
         instead of actions.
 
-        https://api.slack.com/reference/block-kit/block-elements#overflow
+        https://docs.slack.dev/reference/block-kit/block-elements/overflow-menu-element
 
         Args:
             action_id (required): An identifier for the action triggered when a menu option is selected.
@@ -1779,7 +1951,7 @@ class OverflowMenuElement(InteractiveElement):
         self.options = options
         self.confirm = ConfirmObject.parse(confirm)  # type: ignore[arg-type]
 
-    @JsonValidator(f"options attribute must have between {options_min_length} " f"and {options_max_length} items")
+    @JsonValidator(f"options attribute must have between {options_min_length} and {options_max_length} items")
     def _validate_options_length(self) -> bool:
         return self.options_min_length <= len(self.options) <= self.options_max_length
 
@@ -1806,10 +1978,11 @@ class WorkflowButtonElement(InteractiveElement):
         accessibility_label: Optional[str] = None,
         **others: dict,
     ):
-        """Allows users to run a link trigger with customizable inputs
+        """Allows users to run a link trigger with customizable inputs.
+
         Interactive component - but interactions with workflow button elements will not send block_actions events,
         since these are used to start new workflow runs.
-        https://api.slack.com/reference/block-kit/block-elements#workflow_button
+        https://docs.slack.dev/reference/block-kit/block-elements/workflow-button-element
 
         Args:
             text (required): A text object that defines the button's text.
@@ -1941,11 +2114,13 @@ class RichTextElementParts:
             italic: Optional[bool] = None,
             strike: Optional[bool] = None,
             code: Optional[bool] = None,
+            underline: Optional[bool] = None,
         ):
             self.bold = bold
             self.italic = italic
             self.strike = strike
             self.code = code
+            self.underline = underline
 
         def to_dict(self, *args) -> dict:
             result = {
@@ -1953,6 +2128,7 @@ class RichTextElementParts:
                 "italic": self.italic,
                 "strike": self.strike,
                 "code": self.code,
+                "underline": self.underline,
             }
             return {k: v for k, v in result.items() if v is not None}
 
@@ -2100,7 +2276,7 @@ class RichTextElementParts:
 
         @property
         def attributes(self) -> Set[str]:  # type: ignore[override]
-            return super().attributes.union({"timestamp", "format", "url", "fallback"})
+            return super().attributes.union({"timestamp", "format", "url", "fallback", "style"})
 
         def __init__(
             self,
@@ -2109,6 +2285,7 @@ class RichTextElementParts:
             format: str,
             url: Optional[str] = None,
             fallback: Optional[str] = None,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
@@ -2117,37 +2294,42 @@ class RichTextElementParts:
             self.format = format
             self.url = url
             self.fallback = fallback
+            self.style = style
 
     class Broadcast(RichTextElement):
         type = "broadcast"
 
         @property
         def attributes(self) -> Set[str]:  # type: ignore[override]
-            return super().attributes.union({"range"})
+            return super().attributes.union({"range", "style"})
 
         def __init__(
             self,
             *,
             range: str,  # channel, here, ..
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.range = range
+            self.style = style
 
     class Color(RichTextElement):
         type = "color"
 
         @property
         def attributes(self) -> Set[str]:  # type: ignore[override]
-            return super().attributes.union({"value"})
+            return super().attributes.union({"value", "style"})
 
         def __init__(
             self,
             *,
             value: str,
+            style: Optional[Union[dict, "RichTextElementParts.TextStyle"]] = None,
             **others: dict,
         ):
             super().__init__(type=self.type)
             show_unknown_key_warning(self, others)
             self.value = value
+            self.style = style

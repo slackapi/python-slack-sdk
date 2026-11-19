@@ -8,12 +8,10 @@ set -e
 script_dir=`dirname $0`
 cd ${script_dir}/..
 
-pip install -U pip
-pip install -r requirements/testing.txt \
-  -r requirements/optional.txt
+./scripts/install.sh
 
 echo "Generating code ..." && python scripts/codegen.py --path .
-echo "Running black (code formatter) ..." && black slack_sdk/
+echo "Running ruff (code formatter) ..." && ./scripts/format.sh --no-install
 
 test_target="${1:-tests/integration_tests/}"
 PYTHONPATH=$PWD:$PYTHONPATH pytest $test_target

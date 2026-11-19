@@ -1,22 +1,32 @@
 import copy
 import logging
 import warnings
-from typing import Dict, Sequence, Optional, Set, Union, Any, List
+from typing import Any, Dict, List, Optional, Sequence, Set, Union
 
 from slack_sdk.models import show_unknown_key_warning
-from slack_sdk.models.basic_objects import (
-    JsonObject,
-    JsonValidator,
-)
-from .basic_components import MarkdownTextObject, SlackFile
-from .basic_components import PlainTextObject
-from .basic_components import TextObject
-from .block_elements import BlockElement, RichTextElement
-from .block_elements import ImageElement
-from .block_elements import InputInteractiveElement
-from .block_elements import InteractiveElement
-from ...errors import SlackObjectFormationError
+from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 
+from ...errors import SlackObjectFormationError
+from .basic_components import (
+    MarkdownTextObject,
+    PlainTextObject,
+    RawNumberObject,
+    RawTextObject,
+    SlackFile,
+    TableBlockColumnSettings,
+    TextObject,
+)
+from .block_elements import (
+    BlockElement,
+    FeedbackButtonsElement,
+    IconButtonElement,
+    ImageElement,
+    InputInteractiveElement,
+    InteractiveElement,
+    OverflowMenuElement,
+    RichTextElement,
+    UrlSourceElement,
+)
 
 # -------------------------------------------------
 # Base Classes
@@ -24,9 +34,9 @@ from ...errors import SlackObjectFormationError
 
 
 class Block(JsonObject):
-    """Blocks are a series of components that can be combined
-    to create visually rich and compellingly interactive messages.
-    https://api.slack.com/reference/block-kit/blocks
+    """Blocks are a series of components that can be combined to create visually rich and compellingly interactive messages.
+
+    https://docs.slack.dev/reference/block-kit/blocks
     """
 
     attributes = {"block_id", "type"}
@@ -79,6 +89,8 @@ class Block(JsonObject):
                     return ActionsBlock(**block)
                 elif type == ContextBlock.type:
                     return ContextBlock(**block)
+                elif type == ContextActionsBlock.type:
+                    return ContextActionsBlock(**block)
                 elif type == InputBlock.type:
                     return InputBlock(**block)
                 elif type == FileBlock.type:
@@ -87,10 +99,28 @@ class Block(JsonObject):
                     return CallBlock(**block)
                 elif type == HeaderBlock.type:
                     return HeaderBlock(**block)
+                elif type == MarkdownBlock.type:
+                    return MarkdownBlock(**block)
                 elif type == VideoBlock.type:
                     return VideoBlock(**block)
                 elif type == RichTextBlock.type:
                     return RichTextBlock(**block)
+                elif type == TableBlock.type:
+                    return TableBlock(**block)
+                elif type == TaskCardBlock.type:
+                    return TaskCardBlock(**block)
+                elif type == PlanBlock.type:
+                    return PlanBlock(**block)
+                elif type == CardBlock.type:
+                    return CardBlock(**block)
+                elif type == AlertBlock.type:
+                    return AlertBlock(**block)
+                elif type == ContainerBlock.type:
+                    return ContainerBlock(**block)
+                elif type == CarouselBlock.type:
+                    return CarouselBlock(**block)
+                elif type == AuthProviderBlock.type:
+                    return AuthProviderBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -128,7 +158,8 @@ class SectionBlock(Block):
         **others: dict,
     ):
         """A section is one of the most flexible blocks available.
-        https://api.slack.com/reference/block-kit/blocks#section
+
+        https://docs.slack.dev/reference/block-kit/blocks/section-block
 
         Args:
             block_id (required): A string acting as a unique identifier for a block.
@@ -168,7 +199,7 @@ class SectionBlock(Block):
                 else:
                     field_objects.append(PlainTextObject(**d))  # type: ignore[arg-type]
             else:
-                self.logger.warning(f"Unsupported filed detected and skipped {f}")
+                self.logger.warning(f"Unsupported field detected and skipped: {f}")
         self.fields = field_objects
         self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
         self.expand = expand
@@ -196,7 +227,8 @@ class DividerBlock(Block):
         **others: dict,
     ):
         """A content divider, like an <hr>, to split up different blocks inside of a message.
-        https://api.slack.com/reference/block-kit/blocks#divider
+
+        https://docs.slack.dev/reference/block-kit/blocks/divider-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -231,7 +263,8 @@ class ImageBlock(Block):
         **others: dict,
     ):
         """A simple image block, designed to make those cat photos really pop.
-        https://api.slack.com/reference/block-kit/blocks#image
+
+        https://docs.slack.dev/reference/block-kit/blocks/image-block
 
         Args:
             alt_text (required): A plain-text summary of the image. This should not contain any markup.
@@ -298,7 +331,8 @@ class ActionsBlock(Block):
         **others: dict,
     ):
         """A block that is used to hold interactive elements.
-        https://api.slack.com/reference/block-kit/blocks#actions
+
+        https://docs.slack.dev/reference/block-kit/blocks/actions-block
 
         Args:
             elements (required): An array of interactive element objects - buttons, select menus, overflow menus,
@@ -336,7 +370,8 @@ class ContextBlock(Block):
         **others: dict,
     ):
         """Displays message context, which can include both images and text.
-        https://api.slack.com/reference/block-kit/blocks#context
+
+        https://docs.slack.dev/reference/block-kit/blocks/context-block
 
         Args:
             elements (required): An array of image elements and text objects. Maximum number of items is 10.
@@ -349,6 +384,46 @@ class ContextBlock(Block):
         show_unknown_key_warning(self, others)
 
         self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator(f"elements attribute cannot exceed {elements_max_length} elements")
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) <= self.elements_max_length
+
+
+class ContextActionsBlock(Block):
+    type = "context_actions"
+    elements_max_length = 5
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"elements"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, FeedbackButtonsElement, IconButtonElement]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays actions as contextual info, which can include both feedback buttons and icon buttons.
+
+        https://docs.slack.dev/reference/block-kit/blocks/context-actions-block
+
+        Args:
+            elements (required): An array of feedback_buttons or icon_button block elements. Maximum number of items is 5.
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = BlockElement.parse_all(elements)
+
+    @JsonValidator("elements attribute must be specified")
+    def _validate_elements(self):
+        return self.elements is None or len(self.elements) > 0
 
     @JsonValidator(f"elements attribute cannot exceed {elements_max_length} elements")
     def _validate_elements_length(self):
@@ -375,9 +450,10 @@ class InputBlock(Block):
         optional: Optional[bool] = None,
         **others: dict,
     ):
-        """A block that collects information from users - it can hold a plain-text input element,
-        a select menu element, a multi-select menu element, or a datepicker.
-        https://api.slack.com/reference/block-kit/blocks#input
+        """A block that collects information from users.
+
+        It can hold a plain-text input element, a select menu element, a multi-select menu element, or a datepicker.
+        https://docs.slack.dev/reference/block-kit/blocks/input-block
 
         Args:
             label (required): A label that appears above an input element in the form of a text object
@@ -439,7 +515,8 @@ class FileBlock(Block):
         **others: dict,
     ):
         """Displays a remote file.
-        https://api.slack.com/reference/block-kit/blocks#file
+
+        https://docs.slack.dev/reference/block-kit/blocks/file-block
 
         Args:
             external_id (required): The external unique ID for this file.
@@ -472,8 +549,9 @@ class CallBlock(Block):
         block_id: Optional[str] = None,
         **others: dict,
     ):
-        """Displays a call information
-        https://api.slack.com/reference/block-kit/blocks#call
+        """Displays a call information.
+
+        https://docs.slack.dev/reference/block-kit/blocks#call
         """
         super().__init__(type=self.type, block_id=block_id)
         show_unknown_key_warning(self, others)
@@ -499,7 +577,8 @@ class HeaderBlock(Block):
         **others: dict,
     ):
         """A header is a plain-text block that displays in a larger, bold font.
-        https://api.slack.com/reference/block-kit/blocks#header
+
+        https://docs.slack.dev/reference/block-kit/blocks/header-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -521,6 +600,46 @@ class HeaderBlock(Block):
     @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
     def _validate_alt_text_length(self):
         return self.text is None or len(self.text.text) <= self.text_max_length
+
+
+class MarkdownBlock(Block):
+    type = "markdown"
+    text_max_length = 12000
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"text"})
+
+    def __init__(
+        self,
+        *,
+        text: str,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays formatted markdown.
+
+        https://docs.slack.dev/reference/block-kit/blocks/markdown-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            text (required): The standard markdown-formatted text. Limit 12,000 characters max.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = text
+
+    @JsonValidator("text attribute must be specified")
+    def _validate_text(self):
+        return self.text != ""
+
+    @JsonValidator(f"text attribute cannot exceed {text_max_length} characters")
+    def _validate_alt_text_length(self):
+        return len(self.text) <= self.text_max_length
 
 
 class VideoBlock(Block):
@@ -559,11 +678,12 @@ class VideoBlock(Block):
         author_name: Optional[str] = None,
         **others: dict,
     ):
-        """A video block is designed to embed videos in all app surfaces
+        """A video block is designed to embed videos in all app surfaces.
+
         (e.g. link unfurls, messages, modals, App Home) —
         anywhere you can put blocks! To use the video block within your app,
         you must have the links.embed:write scope.
-        https://api.slack.com/reference/block-kit/blocks#video
+        https://docs.slack.dev/reference/block-kit/blocks/video-block
 
         Args:
             block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
@@ -635,7 +755,8 @@ class RichTextBlock(Block):
         **others: dict,
     ):
         """A block that is used to hold interactive elements.
-        https://api.slack.com/reference/block-kit/blocks#rich_text
+
+        https://docs.slack.dev/reference/block-kit/blocks/rich-text-block
 
         Args:
             elements (required): An array of rich text objects -
@@ -649,3 +770,533 @@ class RichTextBlock(Block):
         show_unknown_key_warning(self, others)
 
         self.elements = BlockElement.parse_all(elements)
+
+
+class TableBlock(Block):
+    type = "table"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"rows", "column_settings"})
+
+    def __init__(
+        self,
+        *,
+        rows: Sequence[Sequence[Union[Dict[str, Any], "RawTextObject", "RawNumberObject", "RichTextBlock"]]],
+        column_settings: Optional[Sequence[Optional[Union[Dict[str, Any], "TableBlockColumnSettings"]]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays structured information in a table.
+
+        https://docs.slack.dev/reference/block-kit/blocks/table-block
+
+        Args:
+            rows (required): An array consisting of table rows. Maximum 100 rows.
+                Each row object is an array with a max of 20 table cells.
+                Table cells can have a type of rich_text, raw_text, or raw_number.
+            column_settings: An array describing column behavior. If there are fewer items in the column_settings array
+                than there are columns in the table, then the items in the the column_settings array will describe
+                the same number of columns in the table as there are in the array itself.
+                Any additional columns will have the default behavior. Maximum 20 items.
+                See below for column settings schema.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+                You can use this block_id when you receive an interaction payload to identify the source of the action.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.rows = rows
+        self.column_settings = column_settings
+
+    @JsonValidator("rows attribute must be specified")
+    def _validate_rows(self):
+        return self.rows is not None and len(self.rows) > 0
+
+
+class TaskCardBlock(Block):
+    type = "task_card"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "task_id",
+                "title",
+                "details",
+                "output",
+                "sources",
+                "status",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        task_id: str,
+        title: str,
+        details: Optional[Union[RichTextBlock, dict]] = None,
+        output: Optional[Union[RichTextBlock, dict]] = None,
+        sources: Optional[Sequence[Union[UrlSourceElement, dict]]] = None,
+        status: str,  # pending, in_progress, complete, error
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays a single task, representing a single action.
+
+        https://docs.slack.dev/reference/block-kit/blocks/task-card-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            task_id (required): ID for the task
+            title (required): Title of the task in plain text
+            details: Details of the task in the form of a single "rich_text" entity.
+            output: Output of the task in the form of a single "rich_text" entity.
+            sources: Array of URL source elements used to generate a response.
+            status: The state of a task. Either "pending", "in_progress", "complete", or "error".
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.task_id = task_id
+        self.title = title
+        self.details = details
+        self.output = output
+        self.sources = sources
+        self.status = status
+
+    @JsonValidator("status must be an expected value (pending, in_progress, complete, or error)")
+    def _validate_rows(self):
+        return self.status in ["pending", "in_progress", "complete", "error"]
+
+
+class PlanBlock(Block):
+    type = "plan"
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "title",
+                "tasks",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        title: str,
+        tasks: Optional[Sequence[Union[Dict, TaskCardBlock]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays a collection of related tasks.
+
+        https://docs.slack.dev/reference/block-kit/blocks/plan-block/
+
+        Args:
+            block_id: A string acting as a unique identifier for a block. If not specified, one will be generated.
+                Maximum length for this field is 255 characters.
+                block_id should be unique for each message and each iteration of a message.
+                If a message is updated, use a new block_id.
+            title (required): Title of the plan in plain text
+            tasks: A sequence of task card blocks. Each task represents a single action within the plan.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.title = title
+        self.tasks = tasks
+
+
+class AlertBlock(Block):
+    type = "alert"
+    valid_levels = {"default", "info", "warning", "error", "success"}
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"text", "level"})
+
+    def __init__(
+        self,
+        *,
+        text: Union[str, dict, TextObject],
+        level: Optional[str] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays alerts, warnings, and informational messages.
+
+        https://docs.slack.dev/reference/block-kit/blocks/alert-block
+
+        Args:
+            text (required): The alert message, using plain_text or mrkdwn formatting.
+            level: One of "default", "info", "warning", "error", or "success".
+                Will be "default" if omitted.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.text = TextObject.parse(text)
+        self.level = level
+
+    @JsonValidator("text attribute must be specified")
+    def _validate_text(self):
+        return self.text is not None
+
+    @JsonValidator("level must be a valid value (default, info, warning, error, success)")
+    def _validate_level(self):
+        return self.level is None or self.level in self.valid_levels
+
+
+class CardBlock(Block):
+    type = "card"
+    title_max_length = 150
+    subtitle_max_length = 150
+    body_max_length = 200
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "hero_image",
+                "icon",
+                "title",
+                "subtitle",
+                "body",
+                "actions",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        block_id: Optional[str] = None,
+        hero_image: Optional[Union[dict, ImageElement]] = None,
+        icon: Optional[Union[dict, ImageElement]] = None,
+        title: Optional[Union[str, dict, TextObject]] = None,
+        subtitle: Optional[Union[str, dict, TextObject]] = None,
+        body: Optional[Union[str, dict, TextObject]] = None,
+        actions: Optional[Sequence[Union[dict, BlockElement]]] = None,
+        **others: dict,
+    ):
+        """Displays content in a card.
+
+        https://docs.slack.dev/reference/block-kit/blocks/card-block
+
+        Args:
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+            hero_image: Link to the top image used on the card. Max length 3000 characters.
+                The alt_text property has a max length of 2000 characters.
+            icon: Link to the small image used next to the card's title and subtitle. Max length
+                3000 characters. The alt_text property has a max length of 2000 characters.
+            title: Title of the card. 150 characters max.
+            subtitle: Subtitle of the card. 150 characters max.
+            body: Content of the card. 200 characters max.
+            actions: Action buttons shown at the bottom of the card.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.hero_image = hero_image
+        self.icon = icon
+        self.title = TextObject.parse(title, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.subtitle = TextObject.parse(subtitle, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.body = TextObject.parse(body, default_type=MarkdownTextObject.type)  # type: ignore[arg-type]
+        self.actions = BlockElement.parse_all(actions) if actions else None
+
+    @JsonValidator("At least one of hero_image, title, actions, or body is required")
+    def _validate_content(self):
+        return self.hero_image is not None or self.title is not None or self.actions is not None or self.body is not None
+
+    @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
+    def _validate_title_length(self):
+        return self.title is None or self.title.text is None or len(self.title.text) <= self.title_max_length
+
+    @JsonValidator(f"subtitle attribute cannot exceed {subtitle_max_length} characters")
+    def _validate_subtitle_length(self):
+        return self.subtitle is None or self.subtitle.text is None or len(self.subtitle.text) <= self.subtitle_max_length
+
+    @JsonValidator(f"body attribute cannot exceed {body_max_length} characters")
+    def _validate_body_length(self):
+        return self.body is None or self.body.text is None or len(self.body.text) <= self.body_max_length
+
+
+class ContainerBlock(Block):
+    type = "container"
+    title_max_length = 150
+    subtitle_max_length = 150
+    child_blocks_max_length = 10
+    valid_widths = {"narrow", "standard", "wide", "full"}
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "title",
+                "rich_text_title",
+                "subtitle",
+                "child_blocks",
+                "width",
+                "icon",
+                "is_collapsible",
+                "default_collapsed",
+                "has_header_divider",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        child_blocks: Sequence[Union[dict, "Block"]],
+        title: Optional[Union[str, dict, PlainTextObject]] = None,
+        rich_text_title: Optional[Union[dict, "RichTextBlock"]] = None,
+        subtitle: Optional[Union[str, dict, TextObject]] = None,
+        width: Optional[str] = None,
+        icon: Optional[Union[dict, ImageElement]] = None,
+        is_collapsible: Optional[bool] = None,
+        default_collapsed: Optional[bool] = None,
+        has_header_divider: Optional[bool] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """A general-purpose wrapper for grouping child blocks together, with a configurable size.
+
+        https://docs.slack.dev/reference/block-kit/blocks/container-block
+
+        Args:
+            child_blocks (required): An array of blocks. Maximum 10 blocks.
+            title: Plain text title. Maximum 150 characters. One of title or rich_text_title is required.
+            rich_text_title: Rich text title. Takes precedence over title if both are provided.
+            subtitle: Plain text or markdown subtitle. Maximum 150 characters.
+            width: Controls sizing. One of "narrow", "standard", "wide", or "full". Defaults to "standard".
+            icon: An image element displayed alongside the title and subtitle.
+            is_collapsible: Whether the container can be collapsed. Defaults to false.
+            default_collapsed: Whether the container is collapsed by default. Requires is_collapsible to be true.
+            has_header_divider: Whether to show a visible border separating header from content.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.title = TextObject.parse(title, default_type=PlainTextObject.type) if title is not None else None
+        self.rich_text_title = rich_text_title
+        self.subtitle = TextObject.parse(subtitle, default_type=PlainTextObject.type) if subtitle is not None else None
+        self.child_blocks = Block.parse_all(child_blocks)
+        self.width = width
+        self.icon = BlockElement.parse(icon) if icon is not None else None
+        self.is_collapsible = is_collapsible
+        self.default_collapsed = default_collapsed
+        self.has_header_divider = has_header_divider
+
+    @JsonValidator("title or rich_text_title attribute must be specified")
+    def _validate_title_or_rich_text_title(self):
+        return self.title is not None or self.rich_text_title is not None
+
+    @JsonValidator(f"title attribute cannot exceed {title_max_length} characters")
+    def _validate_title_length(self):
+        return self.title is None or self.title.text is None or len(self.title.text) <= self.title_max_length
+
+    @JsonValidator(f"subtitle attribute cannot exceed {subtitle_max_length} characters")
+    def _validate_subtitle_length(self):
+        return self.subtitle is None or self.subtitle.text is None or len(self.subtitle.text) <= self.subtitle_max_length
+
+    @JsonValidator("child_blocks attribute must be specified")
+    def _validate_child_blocks_present(self):
+        return self.child_blocks is not None and len(self.child_blocks) >= 1
+
+    @JsonValidator(f"child_blocks attribute cannot exceed {child_blocks_max_length} blocks")
+    def _validate_child_blocks_length(self):
+        return self.child_blocks is None or len(self.child_blocks) <= self.child_blocks_max_length
+
+    @JsonValidator("width must be a valid value (narrow, standard, wide, full)")
+    def _validate_width(self):
+        return self.width is None or self.width in self.valid_widths
+
+    @JsonValidator("has_header_divider cannot be set when is_collapsible is true")
+    def _validate_header_divider_collapsible(self):
+        return not (self.is_collapsible is True and self.has_header_divider is True)
+
+
+class CarouselBlock(Block):
+    type = "carousel"
+    elements_max_length = 10
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"elements"})
+
+    def __init__(
+        self,
+        *,
+        elements: Sequence[Union[dict, CardBlock]],
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays related card blocks in a horizontally-scrolling container.
+
+        https://docs.slack.dev/reference/block-kit/blocks/carousel-block
+
+        Args:
+            elements (required): A list of cards. Minimum 1, maximum 10 cards.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.elements = Block.parse_all(elements)
+
+    @JsonValidator("elements attribute must contain at least 1 card")
+    def _validate_elements_present(self):
+        return self.elements is not None and len(self.elements) >= 1
+
+    @JsonValidator(f"elements attribute cannot exceed {elements_max_length} cards")
+    def _validate_elements_length(self):
+        return self.elements is None or len(self.elements) <= self.elements_max_length
+
+
+class AuthProviderBlock(Block):
+    type = "auth_provider"
+    value_max_length = 150
+    name_max_length = 75
+    description_max_length = 150
+    connected_identity_max_length = 75
+    connected_context_max_length = 75
+    url_max_length = 3000
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union(
+            {
+                "value",
+                "name",
+                "is_connected",
+                "description",
+                "icon_url",
+                "auth_url",
+                "disconnect_url",
+                "connected_identity",
+                "connected_context",
+                "accessory",
+                "fallback",
+            }
+        )
+
+    def __init__(
+        self,
+        *,
+        value: str,
+        name: Union[str, dict, PlainTextObject],
+        is_connected: bool,
+        description: Optional[Union[str, dict, PlainTextObject]] = None,
+        icon_url: Optional[str] = None,
+        auth_url: Optional[str] = None,
+        disconnect_url: Optional[str] = None,
+        connected_identity: Optional[Union[str, dict, PlainTextObject]] = None,
+        connected_context: Optional[Union[str, dict, PlainTextObject]] = None,
+        accessory: Optional[Union[dict, OverflowMenuElement]] = None,
+        fallback: Optional[Sequence[Union[dict, Block]]] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays authentication provider information, including its icon, name, and connection state.
+
+        https://docs.slack.dev/reference/block-kit/blocks/auth-provider-block
+
+        Args:
+            value (required): A unique identifier for this provider within the app. Included in interaction
+                payloads and used to derive the connect button's action_id as auth_provider_connect_<value>.
+                Maximum length for this field is 150 characters.
+            name (required): The provider's display name, in the form of a plain_text text object.
+                Maximum length for the text in this field is 75 characters.
+            is_connected (required): Whether the user is connected to this provider. Slack stores this value
+                for the user, so it must be set explicitly.
+            description: A description of the provider, in the form of a plain_text text object.
+                Maximum length for the text in this field is 150 characters.
+            icon_url: An HTTPS URL for the provider's icon. Defaults to the app's avatar if omitted.
+                Maximum length for this field is 3000 characters.
+            auth_url: The HTTPS URL opened when the user clicks Connect. Its host must be listed in the
+                app manifest's features.user_connections.auth_hosts, or be a subdomain of one.
+                Maximum length for this field is 3000 characters.
+            disconnect_url: The HTTPS URL opened when the user clicks Disconnect. Its host must be listed in
+                the app manifest's features.user_connections.auth_hosts, or be a subdomain of one.
+                Maximum length for this field is 3000 characters.
+            connected_identity: The display name of the connected account, in the form of a plain_text text object.
+                Shown when is_connected is true.
+                Maximum length for the text in this field is 75 characters.
+            connected_context: Additional context about the connection, such as an organization or workspace name,
+                in the form of a plain_text text object.
+                Maximum length for the text in this field is 75 characters.
+            accessory: An overflow menu element shown when the user is connected.
+            fallback: A list of blocks rendered in place of this block by clients that don't support it.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.value = value
+        self.name = TextObject.parse(name, default_type=PlainTextObject.type)
+        self.is_connected = is_connected
+        self.description = TextObject.parse(description, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.icon_url = icon_url
+        self.auth_url = auth_url
+        self.disconnect_url = disconnect_url
+        self.connected_identity = TextObject.parse(connected_identity, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.connected_context = TextObject.parse(connected_context, default_type=PlainTextObject.type)  # type: ignore[arg-type]
+        self.accessory = BlockElement.parse(accessory)  # type: ignore[arg-type]
+        self.fallback = Block.parse_all(fallback) if fallback is not None else None
+
+    @JsonValidator("value attribute must be specified")
+    def _validate_value(self):
+        return self.value is not None and len(self.value) >= 1
+
+    @JsonValidator(f"value attribute cannot exceed {value_max_length} characters")
+    def _validate_value_length(self):
+        return self.value is None or len(self.value) <= self.value_max_length
+
+    @JsonValidator("name attribute must be specified")
+    def _validate_name(self):
+        return self.name is not None
+
+    @JsonValidator(f"name attribute cannot exceed {name_max_length} characters")
+    def _validate_name_length(self):
+        return self.name is None or len(self.name.text) <= self.name_max_length
+
+    @JsonValidator("is_connected attribute must be specified")
+    def _validate_is_connected(self):
+        return self.is_connected is not None
+
+    @JsonValidator(f"description attribute cannot exceed {description_max_length} characters")
+    def _validate_description_length(self):
+        return self.description is None or len(self.description.text) <= self.description_max_length
+
+    @JsonValidator(f"connected_identity attribute cannot exceed {connected_identity_max_length} characters")
+    def _validate_connected_identity_length(self):
+        return self.connected_identity is None or len(self.connected_identity.text) <= self.connected_identity_max_length
+
+    @JsonValidator(f"connected_context attribute cannot exceed {connected_context_max_length} characters")
+    def _validate_connected_context_length(self):
+        return self.connected_context is None or len(self.connected_context.text) <= self.connected_context_max_length
+
+    @JsonValidator(f"icon_url attribute cannot exceed {url_max_length} characters")
+    def _validate_icon_url_length(self):
+        return self.icon_url is None or len(self.icon_url) <= self.url_max_length
+
+    @JsonValidator(f"auth_url attribute cannot exceed {url_max_length} characters")
+    def _validate_auth_url_length(self):
+        return self.auth_url is None or len(self.auth_url) <= self.url_max_length
+
+    @JsonValidator(f"disconnect_url attribute cannot exceed {url_max_length} characters")
+    def _validate_disconnect_url_length(self):
+        return self.disconnect_url is None or len(self.disconnect_url) <= self.url_max_length
+
+    @JsonValidator("accessory attribute must be an overflow menu element")
+    def _validate_accessory(self):
+        return self.accessory is None or isinstance(self.accessory, OverflowMenuElement)

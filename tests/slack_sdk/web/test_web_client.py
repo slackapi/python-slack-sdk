@@ -2,6 +2,7 @@ import re
 import socket
 import unittest
 import time
+from unittest.mock import patch
 
 import slack_sdk.errors as err
 from slack_sdk import WebClient
@@ -77,6 +78,10 @@ class TestWebClient(unittest.TestCase):
         with self.assertRaises(err.SlackRequestError):
             self.client.api_call("fake.method", http_verb="GET", json={})
 
+    def test_apps_icon_set_requires_file_or_url(self):
+        with self.assertRaises(err.SlackRequestError):
+            self.client.apps_icon_set(app_id="A111")
+
     def test_slack_api_error_is_raised_on_unsuccessful_responses(self):
         self.client.token = "xoxb-api_test_false"
         with self.assertRaises(err.SlackApiError):
@@ -105,6 +110,17 @@ class TestWebClient(unittest.TestCase):
         self.client.conversations_list(exclude_archived=1)  # ok
         self.client.conversations_list(exclude_archived="true")  # ok
         self.client.conversations_list(exclude_archived=True)  # ok
+
+    def test_team_info_slackbot_availability(self):
+        self.client.token = "xoxb-coverage"
+        response = self.client.team_info(team="T123")
+        self.assertEqual({"team": "T123"}, response.req_args["params"])
+        for include, encoded in [(True, "1"), (False, "0")]:
+            response = self.client.team_info(team="T123", include_slackbot_availability=include)
+            self.assertEqual(
+                {"team": "T123", "include_slackbot_availability": encoded},
+                response.req_args["params"],
+            )
 
     def test_issue_690_oauth_v2_access(self):
         self.client.token = ""
@@ -235,3 +251,17 @@ class TestWebClient(unittest.TestCase):
     def test_base_url_preserves_trailing_slash_issue_15141(self):
         client = WebClient(base_url="http://localhost:8888/")
         self.assertEqual(client.base_url, "http://localhost:8888/")
+
+    def test_bodyless_requests_send_form_urlencoded_content_type(self):
+        response = {"status": 200, "headers": {}, "body": '{"ok": true}'}
+        with patch.object(self.client, "_perform_urllib_http_request", return_value=response) as transport:
+            self.client.api_test()
+        headers = transport.call_args[1]["args"]["headers"]
+        self.assertEqual("application/x-www-form-urlencoded", headers["Content-Type"])
+
+    def test_json_requests_send_json_content_type(self):
+        response = {"status": 200, "headers": {}, "body": '{"ok": true}'}
+        with patch.object(self.client, "_perform_urllib_http_request", return_value=response) as transport:
+            self.client.api_call("chat.postMessage", json={"channel": "C111", "text": "hi"})
+        headers = transport.call_args[1]["args"]["headers"]
+        self.assertEqual("application/json;charset=utf-8", headers["Content-Type"])

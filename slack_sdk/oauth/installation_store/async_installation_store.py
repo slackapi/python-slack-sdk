@@ -32,11 +32,11 @@ class AsyncInstallationStore:
         raise NotImplementedError()
 
     async def async_save(self, installation: Installation):
-        """Saves an installation data"""
+        """Saves an installation data."""
         raise NotImplementedError()
 
     async def async_save_bot(self, bot: Bot):
-        """Saves a bot installation data"""
+        """Saves a bot installation data."""
         raise NotImplementedError()
 
     async def async_find_bot(
@@ -46,7 +46,7 @@ class AsyncInstallationStore:
         team_id: Optional[str],
         is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Bot]:
-        """Finds a bot scope installation per workspace / org"""
+        """Finds a bot scope installation per workspace / org."""
         raise NotImplementedError()
 
     async def async_find_installation(
@@ -58,6 +58,7 @@ class AsyncInstallationStore:
         is_enterprise_install: Optional[bool] = False,
     ) -> Optional[Installation]:
         """Finds a relevant installation for the given IDs.
+
         If the user_id is absent, this method may return the latest installation in the workspace / org.
         """
         raise NotImplementedError()
@@ -68,7 +69,7 @@ class AsyncInstallationStore:
         enterprise_id: Optional[str],
         team_id: Optional[str],
     ) -> None:
-        """Deletes a bot scope installation per workspace / org"""
+        """Deletes a bot scope installation per workspace / org."""
         raise NotImplementedError()
 
     async def async_delete_installation(
@@ -78,7 +79,7 @@ class AsyncInstallationStore:
         team_id: Optional[str],
         user_id: Optional[str] = None,
     ) -> None:
-        """Deletes an installation that matches the given IDs"""
+        """Deletes an installation that matches the given IDs."""
         raise NotImplementedError()
 
     async def async_delete_all(
@@ -87,6 +88,6 @@ class AsyncInstallationStore:
         enterprise_id: Optional[str],
         team_id: Optional[str],
     ):
-        """Deletes all installation data for the given workspace / org"""
+        """Deletes all installation data for the given workspace / org."""
         await self.async_delete_bot(enterprise_id=enterprise_id, team_id=team_id)
         await self.async_delete_installation(enterprise_id=enterprise_id, team_id=team_id)

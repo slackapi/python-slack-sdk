@@ -2,10 +2,11 @@ import random
 
 
 class Jitter:
-    """Jitter interface"""
+    """Jitter interface."""
 
     def recalculate(self, duration: float) -> float:
         """Recalculate the given duration.
+
         see also: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
 
         Args:
@@ -18,7 +19,7 @@ class Jitter:
 
 
 class RandomJitter(Jitter):
-    """Random jitter implementation"""
+    """Random jitter implementation."""
 
     def recalculate(self, duration: float) -> float:
         return duration + random.random()

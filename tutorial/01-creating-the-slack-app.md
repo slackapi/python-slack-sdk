@@ -9,7 +9,7 @@
 
 ### Give your app permissions
 
-[Scopes](https://api.slack.com/scopes) give your app permission to do things (for example, post messages) in your development workspace.
+[Scopes](https://docs.slack.dev/reference/scopes) give your app permission to do things (for example, post messages) in your development workspace.
 
 - Navigate to **OAuth & Permissions** on the sidebar to add scopes to your app
 
@@ -19,8 +19,8 @@
 
 For now, we'll only use one scope.
 
-- Add the [`chat:write` scope](https://api.slack.com/scopes/chat:write) to grant your app the permission to post messages in channels it's a member of.
-- Add the [`im:write` scope](https://api.slack.com/scopes/im:write) to grant your app the permission to post messages in DMs.
+- Add the [`chat:write` scope](https://docs.slack.dev/reference/scopes/chat.write/) to grant your app the permission to post messages in channels it's a member of.
+- Add the [`im:write` scope](https://docs.slack.dev/reference/scopes/im.write/) to grant your app the permission to post messages in DMs.
 
 🎉 You should briefly see a success banner.
 

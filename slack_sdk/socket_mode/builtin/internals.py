@@ -88,7 +88,7 @@ def _establish_new_socket_connection(
         if status != 200:
             raise Exception(f"Failed to connect to the proxy (proxy: {proxy}, connect status code: {status})")
 
-        sock = ssl_context.wrap_socket(  # type: ignore[union-attr]
+        sock = ssl_context.wrap_socket(
             sock,
             do_handshake_on_connect=True,
             suppress_ragged_eofs=True,
@@ -103,7 +103,7 @@ def _establish_new_socket_connection(
         return sock
 
     sock = socket.create_connection((server_hostname, server_port), receive_timeout)
-    sock = ssl_context.wrap_socket(  # type: ignore[union-attr]
+    sock = ssl_context.wrap_socket(
         sock,
         do_handshake_on_connect=True,
         suppress_ragged_eofs=True,
@@ -145,7 +145,7 @@ def _parse_handshake_response(sock: ssl.SSLSocket) -> Tuple[Optional[int], dict,
             if len(elements) > 2:
                 status = int(elements[1])
         else:
-            elements = line.split(":")
+            elements = line.split(":", 1)
             if len(elements) == 2:
                 headers[elements[0].strip().lower()] = elements[1].strip()
         if line is None or len(line.strip()) == 0:
@@ -337,7 +337,7 @@ def _fetch_messages(
             )
         else:
             # This pattern is unexpected but set data with the expected length anyway
-            _append_message(current_header, current_data[:current_data_length])  # type: ignore[call-arg, arg-type]
+            _append_message(messages, current_header, current_data[:current_data_length])
             return messages
 
     # work in progress with the current_header/current_data
@@ -397,9 +397,12 @@ def _build_data_frame_for_sending(
     if payload_length <= 125:
         b2 = masked << 7 | payload_length
         header += bytes([b2])
-    else:
+    elif payload_length <= 65535:
         b2 = masked << 7 | 126
         header += struct.pack("!BH", b2, payload_length)
+    else:
+        b2 = masked << 7 | 127
+        header += struct.pack("!BQ", b2, payload_length)
 
     mask_key: List[int] = random.choices(range(256), k=4)
     header += bytes(mask_key)

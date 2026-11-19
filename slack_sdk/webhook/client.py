@@ -46,9 +46,9 @@ class WebhookClient:
         logger: Optional[logging.Logger] = None,
         retry_handlers: Optional[List[RetryHandler]] = None,
     ):
-        """API client for Incoming Webhooks and `response_url`
+        """API client for Incoming Webhooks and `response_url`.
 
-        https://api.slack.com/messaging/webhooks
+        https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/
 
         Args:
             url: Complete URL to send data (e.g., `https://hooks.slack.com/XXX`)
@@ -267,13 +267,13 @@ class WebhookClient:
             http_resp = opener.open(req, timeout=self.timeout)
         else:
             http_resp = urlopen(req, context=self.ssl, timeout=self.timeout)
-        charset: str = http_resp.headers.get_content_charset() or "utf-8"  # type: ignore[union-attr]
-        response_body: str = http_resp.read().decode(charset)  # type: ignore[union-attr]
+        charset: str = http_resp.headers.get_content_charset() or "utf-8"
+        response_body: str = http_resp.read().decode(charset)
         resp = WebhookResponse(
             url=url,
-            status_code=http_resp.status,  # type: ignore[union-attr]
+            status_code=http_resp.status,
             body=response_body,
-            headers=http_resp.headers,  # type: ignore[arg-type, union-attr]
+            headers=http_resp.headers,  # type: ignore[arg-type]
         )
         _debug_log_response(self.logger, resp)
         return resp

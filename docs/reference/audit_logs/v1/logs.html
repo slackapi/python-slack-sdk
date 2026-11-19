@@ -1,0 +1,3388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>slack_sdk.audit_logs.v1.logs API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>slack_sdk.audit_logs.v1.logs</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARequest"><code class="flex name class">
+<span>class <span class="ident">AAARequest</span></span>
+<span>(</span><span>*, id: str | None = None, team_id: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AAARequest:
+    id: Optional[str]
+    team_id: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.team_id = team_id</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARequest.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARequest.team_id"><code class="name">var <span class="ident">team_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule"><code class="flex name class">
+<span>class <span class="ident">AAARule</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>team_id: str | None = None,<br>title: str | None = None,<br>action: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a> | None = None,<br>condition: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AAARule:
+    id: Optional[str]
+    team_id: Optional[str]
+    title: Optional[str]
+    action: Optional[AAARuleAction]
+    condition: Optional[AAARuleCondition]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        team_id: Optional[str] = None,
+        title: Optional[str] = None,
+        action: Optional[Union[Dict[str, Any], AAARuleAction]] = None,
+        condition: Optional[Union[Dict[str, Any], AAARuleCondition]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.team_id = team_id
+        self.title = title
+        self.action = action if action is None or isinstance(action, AAARuleAction) else AAARuleAction(**action)
+        self.condition = (
+            condition if condition is None or isinstance(condition, AAARuleCondition) else AAARuleCondition(**condition)
+        )</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.action"><code class="name">var <span class="ident">action</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.condition"><code class="name">var <span class="ident">condition</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.team_id"><code class="name">var <span class="ident">team_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARule.title"><code class="name">var <span class="ident">title</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction"><code class="flex name class">
+<span>class <span class="ident">AAARuleAction</span></span>
+<span>(</span><span>*,<br>resolution: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a> | None = None,<br>notify: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AAARuleAction:
+    resolution: Optional[AAARuleActionResolution]
+    notify: Optional[List[AAARuleActionNotify]]
+
+    def __init__(
+        self,
+        *,
+        resolution: Optional[Union[Dict[str, Any], AAARuleActionResolution]] = None,
+        notify: Optional[List[Union[Dict[str, Any], AAARuleActionNotify]]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.resolution = (
+            resolution
+            if resolution is None or isinstance(resolution, AAARuleActionResolution)
+            else AAARuleActionResolution(**resolution)
+        )
+        self.notify = None
+        if notify is not None:
+            self.notify = []
+            for a in notify:
+                if isinstance(a, dict):
+                    self.notify.append(AAARuleActionNotify(**a))
+                else:
+                    self.notify.append(a)</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction.notify"><code class="name">var <span class="ident">notify</span> : List[<a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a>] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleAction.resolution"><code class="name">var <span class="ident">resolution</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify"><code class="flex name class">
+<span>class <span class="ident">AAARuleActionNotify</span></span>
+<span>(</span><span>*, entity_type: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AAARuleActionNotify:
+    entity_type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        entity_type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.entity_type = entity_type</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify.entity_type"><code class="name">var <span class="ident">entity_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution"><code class="flex name class">
+<span>class <span class="ident">AAARuleActionResolution</span></span>
+<span>(</span><span>*, value: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AAARuleActionResolution:
+    value: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        value: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.value = value</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution.value"><code class="name">var <span class="ident">value</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition"><code class="flex name class">
+<span>class <span class="ident">AAARuleCondition</span></span>
+<span>(</span><span>*,<br>datatype: str | None = None,<br>operator: str | None = None,<br>values: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a>] | None = None,<br>entity_type: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AAARuleCondition:
+    datatype: Optional[str]
+    operator: Optional[str]
+    values: Optional[List[AAARuleConditionValue]]
+    entity_type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        datatype: Optional[str] = None,
+        operator: Optional[str] = None,
+        values: Optional[List[Union[Dict[str, Any], AAARuleConditionValue]]] = None,
+        entity_type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.datatype = datatype
+        self.operator = operator
+        self.values = None
+        if values is not None:
+            self.values = []
+            for a in values:
+                if isinstance(a, dict):
+                    self.values.append(AAARuleConditionValue(**a))
+                else:
+                    self.values.append(a)
+        self.entity_type = entity_type</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.datatype"><code class="name">var <span class="ident">datatype</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.entity_type"><code class="name">var <span class="ident">entity_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.operator"><code class="name">var <span class="ident">operator</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleCondition.values"><code class="name">var <span class="ident">values</span> : List[<a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a>] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue"><code class="flex name class">
+<span>class <span class="ident">AAARuleConditionValue</span></span>
+<span>(</span><span>*,<br>field: str | None = None,<br>values: List[str] | None = None,<br>datatype: str | None = None,<br>operator: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AAARuleConditionValue:
+    field: Optional[str]
+    values: Optional[List[str]]
+    datatype: Optional[str]
+    operator: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        field: Optional[str] = None,
+        values: Optional[List[str]] = None,
+        datatype: Optional[str] = None,
+        operator: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.field = field
+        self.values = values
+        self.datatype = datatype
+        self.operator = operator</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.datatype"><code class="name">var <span class="ident">datatype</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.field"><code class="name">var <span class="ident">field</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.operator"><code class="name">var <span class="ident">operator</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.values"><code class="name">var <span class="ident">values</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole"><code class="flex name class">
+<span>class <span class="ident">AccountTypeRole</span></span>
+<span>(</span><span>*, id: str | None = None, name: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AccountTypeRole:
+    id: Optional[str]
+    name: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AccountTypeRole.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor"><code class="flex name class">
+<span>class <span class="ident">Actor</span></span>
+<span>(</span><span>type: str | None = None,<br>user: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Actor:
+    type: Optional[str]
+    user: Optional[User]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        type: Optional[str] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.user = User(**user) if isinstance(user, dict) else user
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Actor.user"><code class="name">var <span class="ident">user</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App"><code class="flex name class">
+<span>class <span class="ident">App</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>is_distributed: bool | None = None,<br>is_directory_approved: bool | None = None,<br>is_workflow_app: bool | None = None,<br>scopes: List[str] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class App:
+    id: Optional[str]
+    name: Optional[str]
+    is_distributed: Optional[bool]
+    is_directory_approved: Optional[bool]
+    is_workflow_app: Optional[bool]
+    scopes: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        is_distributed: Optional[bool] = None,
+        is_directory_approved: Optional[bool] = None,
+        is_workflow_app: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.is_distributed = is_distributed
+        self.is_directory_approved = is_directory_approved
+        self.is_workflow_app = is_workflow_app
+        self.scopes = scopes
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.App.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_directory_approved"><code class="name">var <span class="ident">is_directory_approved</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_distributed"><code class="name">var <span class="ident">is_distributed</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.is_workflow_app"><code class="name">var <span class="ident">is_workflow_app</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.scopes"><code class="name">var <span class="ident">scopes</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.App.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute"><code class="flex name class">
+<span>class <span class="ident">Attribute</span></span>
+<span>(</span><span>*,<br>name: str | None = None,<br>type: str | None = None,<br>items: <a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a> | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Attribute:
+    name: Optional[str]
+    type: Optional[str]
+    items: Optional[AttributeItems]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        type: Optional[str] = None,
+        items: Optional[AttributeItems] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.name = name
+        self.type = type
+        self.items = items</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.items"><code class="name">var <span class="ident">items</span> : <a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Attribute.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.AttributeItems"><code class="flex name class">
+<span>class <span class="ident">AttributeItems</span></span>
+<span>(</span><span>*, type: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AttributeItems:
+    type: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.AttributeItems.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel"><code class="flex name class">
+<span>class <span class="ident">Channel</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>privacy: str | None = None,<br>name: str | None = None,<br>is_shared: bool | None = None,<br>is_org_shared: bool | None = None,<br>teams_shared_with: List[str] | None = None,<br>original_connected_channel_id: str | None = None,<br>is_salesforce_channel: bool | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Channel:
+    id: Optional[str]
+    privacy: Optional[str]
+    name: Optional[str]
+    is_shared: Optional[bool]
+    is_org_shared: Optional[bool]
+    teams_shared_with: Optional[List[str]]
+    original_connected_channel_id: Optional[str]
+    is_salesforce_channel: Optional[bool]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        privacy: Optional[str] = None,
+        name: Optional[str] = None,
+        is_shared: Optional[bool] = None,
+        is_org_shared: Optional[bool] = None,
+        teams_shared_with: Optional[List[str]] = None,
+        original_connected_channel_id: Optional[str] = None,
+        is_salesforce_channel: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.privacy = privacy
+        self.name = name
+        self.is_shared = is_shared
+        self.is_org_shared = is_org_shared
+        self.teams_shared_with = teams_shared_with
+        self.original_connected_channel_id = original_connected_channel_id
+        self.is_salesforce_channel = is_salesforce_channel
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_org_shared"><code class="name">var <span class="ident">is_org_shared</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_salesforce_channel"><code class="name">var <span class="ident">is_salesforce_channel</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.is_shared"><code class="name">var <span class="ident">is_shared</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id"><code class="name">var <span class="ident">original_connected_channel_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.privacy"><code class="name">var <span class="ident">privacy</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with"><code class="name">var <span class="ident">teams_shared_with</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Channel.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context"><code class="flex name class">
+<span>class <span class="ident">Context</span></span>
+<span>(</span><span>*,<br>location: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>ua: str | None = None,<br>ip_address: str | None = None,<br>session_id: str | None = None,<br>app: <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Context:
+    location: Optional[Location]
+    ua: Optional[str]
+    ip_address: Optional[str]
+    session_id: Optional[str]
+    app: Optional[App]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        location: Optional[Union[Location, Dict[str, Any]]] = None,
+        ua: Optional[str] = None,
+        ip_address: Optional[str] = None,
+        session_id: Optional[str] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.location = Location(**location) if isinstance(location, dict) else location
+        self.ua = ua
+        self.ip_address = ip_address
+        self.session_id = session_id
+        self.app = App(**app) if isinstance(app, dict) else app
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.app"><code class="name">var <span class="ident">app</span> : <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.ip_address"><code class="name">var <span class="ident">ip_address</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.location"><code class="name">var <span class="ident">location</span> : <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.session_id"><code class="name">var <span class="ident">session_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.ua"><code class="name">var <span class="ident">ua</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Context.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.ConversationPref"><code class="flex name class">
+<span>class <span class="ident">ConversationPref</span></span>
+<span>(</span><span>*, type: List[str] | None = None, user: List[str] | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConversationPref:
+    type: Optional[List[str]]
+    user: Optional[List[str]]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[List[str]] = None,
+        user: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.user = user
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.ConversationPref.type"><code class="name">var <span class="ident">type</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.ConversationPref.user"><code class="name">var <span class="ident">user</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details"><code class="flex name class">
+<span>class <span class="ident">Details</span></span>
+<span>(</span><span>*,<br>name: str | None = None,<br>new_value: str | List[str] | Dict[str, Any] | None = None,<br>previous_value: str | List[str] | Dict[str, Any] | None = None,<br>expires_on: int | None = None,<br>mobile_only: bool | None = None,<br>web_only: bool | None = None,<br>non_sso_only: bool | None = None,<br>type: str | None = None,<br>is_workflow: bool | None = None,<br>inviter: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>kicker: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>shared_to: str | None = None,<br>reason: str | None = None,<br>origin_team: str | None = None,<br>target_team: str | None = None,<br>is_internal_integration: bool | None = None,<br>cleared_resolution: str | None = None,<br>app_owner_id: str | None = None,<br>bot_scopes: List[str] | None = None,<br>new_scopes: List[str] | None = None,<br>previous_scopes: List[str] | None = None,<br>granular_bot_token: bool | None = None,<br>scopes: List[str] | None = None,<br>scopes_bot: List[str] | None = None,<br>resolution: str | None = None,<br>app_previously_resolved: bool | None = None,<br>admin_app_id: str | None = None,<br>bot_id: str | None = None,<br>installer_user_id: str | None = None,<br>approver_id: str | None = None,<br>approval_type: str | None = None,<br>app_previously_approved: bool | None = None,<br>old_scopes: List[str] | None = None,<br>channels: List[str] | None = None,<br>permissions: List[Dict[str, Any]] | None = None,<br>new_version_id: str | None = None,<br>trigger: str | None = None,<br>export_type: str | None = None,<br>export_start_ts: str | None = None,<br>export_end_ts: str | None = None,<br>barrier_id: str | None = None,<br>primary_usergroup_id: str | None = None,<br>barriered_from_usergroup_ids: List[str] | None = None,<br>restricted_subjects: List[str] | None = None,<br>duration: int | None = None,<br>desktop_app_browser_quit: bool | None = None,<br>invite_id: str | None = None,<br>external_organization_id: str | None = None,<br>external_organization_name: str | None = None,<br>external_user_id: str | None = None,<br>external_user_email: str | None = None,<br>channel_id: str | None = None,<br>added_team_id: str | None = None,<br>is_token_rotation_enabled_app: bool | None = None,<br>old_retention_policy: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None = None,<br>new_retention_policy: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None = None,<br>who_can_post: Dict[str, List[str]] | <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None = None,<br>can_thread: Dict[str, List[str]] | <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None = None,<br>is_external_limited: bool | None = None,<br>exporting_team_id: int | None = None,<br>session_search_start: int | None = None,<br>deprecation_search_end: int | None = None,<br>is_error: bool | None = None,<br>creator: str | None = None,<br>team: str | None = None,<br>app_id: str | None = None,<br>enable_at_here: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>enable_at_channel: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>can_huddle: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None = None,<br>url_private: str | None = None,<br>shared_with: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a> | None = None,<br>initiated_by: str | None = None,<br>source_team: str | None = None,<br>destination_team: str | None = None,<br>succeeded_users: List[str] | str | None = None,<br>failed_users: List[str] | str | None = None,<br>enterprise: str | None = None,<br>subteam: str | None = None,<br>action: str | None = None,<br>idp_group_member_count: int | None = None,<br>workspace_member_count: int | None = None,<br>added_user_count: int | None = None,<br>added_user_error_count: int | None = None,<br>reactivated_user_count: int | None = None,<br>removed_user_count: int | None = None,<br>removed_user_error_count: int | None = None,<br>total_removal_count: int | None = None,<br>is_flagged: str | None = None,<br>target_user: str | None = None,<br>idp_config_id: str | None = None,<br>config_type: str | None = None,<br>idp_entity_id_hash: str | None = None,<br>label: str | None = None,<br>previous_profile: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None = None,<br>new_profile: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None = None,<br>target_user_id: str | None = None,<br>space_file_id: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a> | None = None,<br>target_entity: str | None = None,<br>target_entity_id: str | None = None,<br>changed_permissions: List[str] | None = None,<br>datastore_name: str | None = None,<br>attributes: List[Dict[str, str] | <a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>] | None = None,<br>channel: str | None = None,<br>entity_type: str | None = None,<br>actor: str | None = None,<br>access_level: str | None = None,<br>functions: List[str] | None = None,<br>workflows: List[str] | None = None,<br>datastores: List[str] | None = None,<br>permissions_updated: bool | None = None,<br>matched_rule: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a> | None = None,<br>request: Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a> | None = None,<br>rules_checked: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>] | None = None,<br>disconnecting_team: str | None = None,<br>is_channel_canvas: bool | None = None,<br>linked_channel_id: str | None = None,<br>column_id: str | None = None,<br>row_id: str | None = None,<br>cell_date_updated: int | None = None,<br>view_id: str | None = None,<br>user: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Details:
+    name: Optional[str]
+    new_value: Optional[Union[str, List[str], Dict[str, Any]]]
+    previous_value: Optional[Union[str, List[str], Dict[str, Any]]]
+    expires_on: Optional[int]
+    mobile_only: Optional[bool]
+    web_only: Optional[bool]
+    non_sso_only: Optional[bool]
+    type: Optional[str]
+    is_workflow: Optional[bool]
+    inviter: Optional[User]
+    kicker: Optional[User]
+    shared_to: Optional[str]
+    reason: Optional[str]
+    origin_team: Optional[str]
+    target_team: Optional[str]
+    is_internal_integration: Optional[bool]
+    cleared_resolution: Optional[str]
+    app_owner_id: Optional[str]
+    bot_scopes: Optional[List[str]]
+    new_scopes: Optional[List[str]]
+    previous_scopes: Optional[List[str]]
+    granular_bot_token: Optional[bool]
+    scopes: Optional[List[str]]
+    scopes_bot: Optional[List[str]]
+    resolution: Optional[str]
+    app_previously_resolved: Optional[bool]
+    admin_app_id: Optional[str]
+    bot_id: Optional[str]
+    installer_user_id: Optional[str]
+    approver_id: Optional[str]
+    approval_type: Optional[str]
+    app_previously_approved: Optional[bool]
+    old_scopes: Optional[List[str]]
+    channels: Optional[List[str]]
+    permissions: Optional[List[Dict[str, Any]]]
+    new_version_id: Optional[str]
+    trigger: Optional[str]
+    export_type: Optional[str]
+    export_start_ts: Optional[str]
+    export_end_ts: Optional[str]
+    barrier_id: Optional[str]
+    primary_usergroup_id: Optional[str]
+    barriered_from_usergroup_ids: Optional[List[str]]
+    restricted_subjects: Optional[List[str]]
+    duration: Optional[int]
+    desktop_app_browser_quit: Optional[bool]
+    invite_id: Optional[str]
+    external_organization_id: Optional[str]
+    external_organization_name: Optional[str]
+    external_user_id: Optional[str]
+    external_user_email: Optional[str]
+    channel_id: Optional[str]
+    added_team_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+    is_token_rotation_enabled_app: Optional[bool]
+    old_retention_policy: Optional[RetentionPolicy]
+    new_retention_policy: Optional[RetentionPolicy]
+    who_can_post: Optional[ConversationPref]
+    can_thread: Optional[ConversationPref]
+    is_external_limited: Optional[bool]
+    exporting_team_id: Optional[int]
+    session_search_start: Optional[int]
+    deprecation_search_end: Optional[int]
+    is_error: Optional[bool]
+    creator: Optional[str]
+    team: Optional[str]
+    app_id: Optional[str]
+    enable_at_here: Optional[FeatureEnablement]
+    enable_at_channel: Optional[FeatureEnablement]
+    can_huddle: Optional[FeatureEnablement]
+    url_private: Optional[str]
+    shared_with: Optional[SharedWith]
+    initiated_by: Optional[str]
+    source_team: Optional[str]
+    destination_team: Optional[str]
+    succeeded_users: Optional[List[str]]
+    failed_users: Optional[List[str]]
+    enterprise: Optional[str]
+    subteam: Optional[str]
+    action: Optional[str]
+    idp_group_member_count: Optional[int]
+    workspace_member_count: Optional[int]
+    added_user_count: Optional[int]
+    added_user_error_count: Optional[int]
+    reactivated_user_count: Optional[int]
+    removed_user_count: Optional[int]
+    removed_user_error_count: Optional[int]
+    total_removal_count: Optional[int]
+    is_flagged: Optional[str]
+    target_user: Optional[str]
+    idp_config_id: Optional[str]
+    config_type: Optional[str]
+    idp_entity_id_hash: Optional[str]
+    label: Optional[str]
+    previous_profile: Optional[Profile]
+    new_profile: Optional[Profile]
+    target_user_id: Optional[str]
+    space_file_id: Optional[SpaceFileId]
+    target_entity: Optional[str]
+    target_entity_id: Optional[str]
+    changed_permissions: Optional[List[str]]
+    datastore_name: Optional[str]
+    attributes: Optional[List[Attribute]]
+    channel: Optional[str]
+    entity_type: Optional[str]
+    actor: Optional[str]
+    access_level: Optional[str]
+    functions: Optional[List[str]]
+    workflows: Optional[List[str]]
+    datastores: Optional[List[str]]
+    permissions_updated: Optional[bool]
+    matched_rule: Optional[AAARule]
+    request: Optional[AAARequest]
+    rules_checked: Optional[List[AAARule]]
+    disconnecting_team: Optional[str]
+    is_channel_canvas: Optional[bool]
+    linked_channel_id: Optional[str]
+    column_id: Optional[str]
+    row_id: Optional[str]
+    cell_date_updated: Optional[int]
+    view_id: Optional[str]
+    user: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        new_value: Optional[Union[str, List[str], Dict[str, Any]]] = None,
+        previous_value: Optional[Union[str, List[str], Dict[str, Any]]] = None,
+        expires_on: Optional[int] = None,
+        mobile_only: Optional[bool] = None,
+        web_only: Optional[bool] = None,
+        non_sso_only: Optional[bool] = None,
+        type: Optional[str] = None,
+        is_workflow: Optional[bool] = None,
+        inviter: Optional[Union[Dict[str, Any], User]] = None,
+        kicker: Optional[Union[Dict[str, Any], User]] = None,
+        shared_to: Optional[str] = None,
+        reason: Optional[str] = None,
+        origin_team: Optional[str] = None,
+        target_team: Optional[str] = None,
+        is_internal_integration: Optional[bool] = None,
+        cleared_resolution: Optional[str] = None,
+        app_owner_id: Optional[str] = None,
+        bot_scopes: Optional[List[str]] = None,
+        new_scopes: Optional[List[str]] = None,
+        previous_scopes: Optional[List[str]] = None,
+        granular_bot_token: Optional[bool] = None,
+        scopes: Optional[List[str]] = None,
+        scopes_bot: Optional[List[str]] = None,
+        resolution: Optional[str] = None,
+        app_previously_resolved: Optional[bool] = None,
+        admin_app_id: Optional[str] = None,
+        bot_id: Optional[str] = None,
+        installer_user_id: Optional[str] = None,
+        approver_id: Optional[str] = None,
+        approval_type: Optional[str] = None,
+        app_previously_approved: Optional[bool] = None,
+        old_scopes: Optional[List[str]] = None,
+        channels: Optional[List[str]] = None,
+        permissions: Optional[List[Dict[str, Any]]] = None,
+        new_version_id: Optional[str] = None,
+        trigger: Optional[str] = None,
+        export_type: Optional[str] = None,
+        export_start_ts: Optional[str] = None,
+        export_end_ts: Optional[str] = None,
+        barrier_id: Optional[str] = None,
+        primary_usergroup_id: Optional[str] = None,
+        barriered_from_usergroup_ids: Optional[List[str]] = None,
+        restricted_subjects: Optional[List[str]] = None,
+        duration: Optional[int] = None,
+        desktop_app_browser_quit: Optional[bool] = None,
+        invite_id: Optional[str] = None,
+        external_organization_id: Optional[str] = None,
+        external_organization_name: Optional[str] = None,
+        external_user_id: Optional[str] = None,
+        external_user_email: Optional[str] = None,
+        channel_id: Optional[str] = None,
+        added_team_id: Optional[str] = None,
+        is_token_rotation_enabled_app: Optional[bool] = None,
+        old_retention_policy: Optional[Union[Dict[str, Any], RetentionPolicy]] = None,
+        new_retention_policy: Optional[Union[Dict[str, Any], RetentionPolicy]] = None,
+        who_can_post: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
+        can_thread: Optional[Union[Dict[str, List[str]], ConversationPref]] = None,
+        is_external_limited: Optional[bool] = None,
+        exporting_team_id: Optional[int] = None,
+        session_search_start: Optional[int] = None,
+        deprecation_search_end: Optional[int] = None,
+        is_error: Optional[bool] = None,
+        creator: Optional[str] = None,
+        team: Optional[str] = None,
+        app_id: Optional[str] = None,
+        enable_at_here: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        enable_at_channel: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        can_huddle: Optional[Union[Dict[str, Any], FeatureEnablement]] = None,
+        url_private: Optional[str] = None,
+        shared_with: Optional[Union[Dict[str, Any], SharedWith]] = None,
+        initiated_by: Optional[str] = None,
+        source_team: Optional[str] = None,
+        destination_team: Optional[str] = None,
+        succeeded_users: Optional[Union[List[str], str]] = None,
+        failed_users: Optional[Union[List[str], str]] = None,
+        enterprise: Optional[str] = None,
+        subteam: Optional[str] = None,
+        action: Optional[str] = None,
+        idp_group_member_count: Optional[int] = None,
+        workspace_member_count: Optional[int] = None,
+        added_user_count: Optional[int] = None,
+        added_user_error_count: Optional[int] = None,
+        reactivated_user_count: Optional[int] = None,
+        removed_user_count: Optional[int] = None,
+        removed_user_error_count: Optional[int] = None,
+        total_removal_count: Optional[int] = None,
+        is_flagged: Optional[str] = None,
+        target_user: Optional[str] = None,
+        idp_config_id: Optional[str] = None,
+        config_type: Optional[str] = None,
+        idp_entity_id_hash: Optional[str] = None,
+        label: Optional[str] = None,
+        previous_profile: Optional[Union[Dict[str, Any], Profile]] = None,
+        new_profile: Optional[Union[Dict[str, Any], Profile]] = None,
+        target_user_id: Optional[str] = None,
+        space_file_id: Optional[Union[Dict[str, Any], SpaceFileId]] = None,
+        target_entity: Optional[str] = None,
+        target_entity_id: Optional[str] = None,
+        changed_permissions: Optional[List[str]] = None,
+        datastore_name: Optional[str] = None,
+        attributes: Optional[List[Union[Dict[str, str], Attribute]]] = None,
+        channel: Optional[str] = None,
+        entity_type: Optional[str] = None,
+        actor: Optional[str] = None,
+        access_level: Optional[str] = None,
+        functions: Optional[List[str]] = None,
+        workflows: Optional[List[str]] = None,
+        datastores: Optional[List[str]] = None,
+        permissions_updated: Optional[bool] = None,
+        matched_rule: Optional[Union[Dict[str, Any], AAARule]] = None,
+        request: Optional[Union[Dict[str, Any], AAARequest]] = None,
+        rules_checked: Optional[List[Union[Dict[str, Any], AAARule]]] = None,
+        disconnecting_team: Optional[str] = None,
+        is_channel_canvas: Optional[bool] = None,
+        linked_channel_id: Optional[str] = None,
+        column_id: Optional[str] = None,
+        row_id: Optional[str] = None,
+        cell_date_updated: Optional[int] = None,
+        view_id: Optional[str] = None,
+        user: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.name = name
+        self.new_value = new_value
+        self.previous_value = previous_value
+        self.expires_on = expires_on
+        self.mobile_only = mobile_only
+        self.web_only = web_only
+        self.non_sso_only = non_sso_only
+        self.type = type
+        self.is_workflow = is_workflow
+        self.inviter = inviter if inviter is None or isinstance(inviter, User) else User(**inviter)
+        self.kicker = kicker if kicker is None or isinstance(kicker, User) else User(**kicker)
+        self.shared_to = shared_to
+        self.reason = reason
+        self.origin_team = origin_team
+        self.target_team = target_team
+        self.is_internal_integration = is_internal_integration
+        self.cleared_resolution = cleared_resolution
+        self.app_owner_id = app_owner_id
+        self.bot_scopes = bot_scopes
+        self.new_scopes = new_scopes
+        self.previous_scopes = previous_scopes
+        self.granular_bot_token = granular_bot_token
+        self.scopes = scopes
+        self.scopes_bot = scopes_bot
+        self.resolution = resolution
+        self.app_previously_resolved = app_previously_resolved
+        self.admin_app_id = admin_app_id
+        self.bot_id = bot_id
+        self.unknown_fields = kwargs
+        self.installer_user_id = installer_user_id
+        self.approver_id = approver_id
+        self.approval_type = approval_type
+        self.app_previously_approved = app_previously_approved
+        self.old_scopes = old_scopes
+        self.channels = channels
+        self.permissions = permissions
+        self.new_version_id = new_version_id
+        self.trigger = trigger
+        self.export_type = export_type
+        self.export_start_ts = export_start_ts
+        self.export_end_ts = export_end_ts
+        self.barrier_id = barrier_id
+        self.primary_usergroup_id = primary_usergroup_id
+        self.barriered_from_usergroup_ids = barriered_from_usergroup_ids
+        self.restricted_subjects = restricted_subjects
+        self.duration = duration
+        self.desktop_app_browser_quit = desktop_app_browser_quit
+        self.invite_id = invite_id
+        self.external_organization_id = external_organization_id
+        self.external_organization_name = external_organization_name
+        self.external_user_id = external_user_id
+        self.external_user_email = external_user_email
+        self.channel_id = channel_id
+        self.added_team_id = added_team_id
+        self.is_token_rotation_enabled_app = is_token_rotation_enabled_app
+        self.old_retention_policy = (
+            old_retention_policy
+            if old_retention_policy is None or isinstance(old_retention_policy, RetentionPolicy)
+            else RetentionPolicy(**old_retention_policy)
+        )
+        self.new_retention_policy = (
+            new_retention_policy
+            if new_retention_policy is None or isinstance(new_retention_policy, RetentionPolicy)
+            else RetentionPolicy(**new_retention_policy)
+        )
+        self.who_can_post = (
+            who_can_post
+            if who_can_post is None or isinstance(who_can_post, ConversationPref)
+            else ConversationPref(**who_can_post)
+        )
+        self.can_thread = (
+            can_thread if can_thread is None or isinstance(can_thread, ConversationPref) else ConversationPref(**can_thread)
+        )
+        self.is_external_limited = is_external_limited
+        self.exporting_team_id = exporting_team_id
+        self.session_search_start = session_search_start
+        self.deprecation_search_end = deprecation_search_end
+        self.is_error = is_error
+        self.creator = creator
+        self.team = team
+        self.app_id = app_id
+        self.enable_at_here = (
+            enable_at_here
+            if enable_at_here is None or isinstance(enable_at_here, FeatureEnablement)
+            else FeatureEnablement(**enable_at_here)
+        )
+        self.enable_at_channel = (
+            enable_at_channel
+            if enable_at_channel is None or isinstance(enable_at_channel, FeatureEnablement)
+            else FeatureEnablement(**enable_at_channel)
+        )
+        self.can_huddle = (
+            can_huddle
+            if can_huddle is None or isinstance(can_huddle, FeatureEnablement)
+            else FeatureEnablement(**can_huddle)
+        )
+        self.url_private = url_private
+        self.shared_with = (
+            shared_with if shared_with is None or isinstance(shared_with, SharedWith) else SharedWith(**shared_with)
+        )
+        self.initiated_by = initiated_by
+        self.source_team = source_team
+        self.destination_team = destination_team
+        self.succeeded_users = (
+            succeeded_users if succeeded_users is None or isinstance(succeeded_users, list) else json.loads(succeeded_users)
+        )
+        self.failed_users = (
+            failed_users if failed_users is None or isinstance(failed_users, list) else json.loads(failed_users)
+        )
+        self.enterprise = enterprise
+        self.subteam = subteam
+        self.action = action
+        self.idp_group_member_count = idp_group_member_count
+        self.workspace_member_count = workspace_member_count
+        self.added_user_count = added_user_count
+        self.added_user_error_count = added_user_error_count
+        self.reactivated_user_count = reactivated_user_count
+        self.removed_user_count = removed_user_count
+        self.removed_user_error_count = removed_user_error_count
+        self.total_removal_count = total_removal_count
+        self.is_flagged = is_flagged
+        self.target_user = target_user
+        self.idp_config_id = idp_config_id
+        self.config_type = config_type
+        self.idp_entity_id_hash = idp_entity_id_hash
+        self.label = label
+        self.previous_profile = (
+            previous_profile
+            if previous_profile is None or isinstance(previous_profile, Profile)
+            else Profile(**previous_profile)
+        )
+        self.new_profile = new_profile if new_profile is None or isinstance(new_profile, Profile) else Profile(**new_profile)
+        self.target_user_id = target_user_id
+        self.space_file_id = (
+            space_file_id
+            if space_file_id is None or isinstance(space_file_id, SpaceFileId)
+            else SpaceFileId(**space_file_id)
+        )
+        self.target_entity = target_entity
+        self.target_entity_id = target_entity_id
+        self.changed_permissions = changed_permissions
+        self.datastore_name = datastore_name
+        self.attributes = None
+        if attributes is not None:
+            self.attributes = []
+            for a in attributes:
+                if isinstance(a, dict):
+                    self.attributes.append(Attribute(**a))  # type: ignore[arg-type]
+                else:
+                    self.attributes.append(a)
+        self.channel = channel
+        self.entity_type = entity_type
+        self.actor = actor
+        self.access_level = access_level
+        self.functions = functions
+        self.workflows = workflows
+        self.datastores = datastores
+        self.permissions_updated = permissions_updated
+        self.matched_rule = (
+            matched_rule if matched_rule is None or isinstance(matched_rule, AAARule) else AAARule(**matched_rule)
+        )
+        self.request = request if request is None or isinstance(request, AAARequest) else AAARequest(**request)
+        self.rules_checked = None
+        if rules_checked is not None:
+            self.rules_checked = []
+            for a in rules_checked:  # type: ignore[assignment]
+                if isinstance(a, dict):
+                    self.rules_checked.append(AAARule(**a))  # type: ignore[arg-type]
+                else:
+                    self.rules_checked.append(a)  # type: ignore[arg-type]
+        self.disconnecting_team = disconnecting_team
+        self.is_channel_canvas = is_channel_canvas
+        self.linked_channel_id = linked_channel_id
+        self.column_id = column_id
+        self.row_id = row_id
+        self.cell_date_updated = cell_date_updated
+        self.view_id = view_id
+        self.user = user</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.access_level"><code class="name">var <span class="ident">access_level</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.action"><code class="name">var <span class="ident">action</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.actor"><code class="name">var <span class="ident">actor</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.added_team_id"><code class="name">var <span class="ident">added_team_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.added_user_count"><code class="name">var <span class="ident">added_user_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.added_user_error_count"><code class="name">var <span class="ident">added_user_error_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.admin_app_id"><code class="name">var <span class="ident">admin_app_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_id"><code class="name">var <span class="ident">app_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_owner_id"><code class="name">var <span class="ident">app_owner_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_previously_approved"><code class="name">var <span class="ident">app_previously_approved</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved"><code class="name">var <span class="ident">app_previously_resolved</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.approval_type"><code class="name">var <span class="ident">approval_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.approver_id"><code class="name">var <span class="ident">approver_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.attributes"><code class="name">var <span class="ident">attributes</span> : List[<a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a>] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.barrier_id"><code class="name">var <span class="ident">barrier_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids"><code class="name">var <span class="ident">barriered_from_usergroup_ids</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_id"><code class="name">var <span class="ident">bot_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.bot_scopes"><code class="name">var <span class="ident">bot_scopes</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.can_huddle"><code class="name">var <span class="ident">can_huddle</span> : <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.can_thread"><code class="name">var <span class="ident">can_thread</span> : <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.cell_date_updated"><code class="name">var <span class="ident">cell_date_updated</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.changed_permissions"><code class="name">var <span class="ident">changed_permissions</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.channel"><code class="name">var <span class="ident">channel</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.channel_id"><code class="name">var <span class="ident">channel_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.channels"><code class="name">var <span class="ident">channels</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.cleared_resolution"><code class="name">var <span class="ident">cleared_resolution</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.column_id"><code class="name">var <span class="ident">column_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.config_type"><code class="name">var <span class="ident">config_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.creator"><code class="name">var <span class="ident">creator</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.datastore_name"><code class="name">var <span class="ident">datastore_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.datastores"><code class="name">var <span class="ident">datastores</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end"><code class="name">var <span class="ident">deprecation_search_end</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit"><code class="name">var <span class="ident">desktop_app_browser_quit</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.destination_team"><code class="name">var <span class="ident">destination_team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.disconnecting_team"><code class="name">var <span class="ident">disconnecting_team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.duration"><code class="name">var <span class="ident">duration</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_channel"><code class="name">var <span class="ident">enable_at_channel</span> : <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enable_at_here"><code class="name">var <span class="ident">enable_at_here</span> : <a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.enterprise"><code class="name">var <span class="ident">enterprise</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.entity_type"><code class="name">var <span class="ident">entity_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.expires_on"><code class="name">var <span class="ident">expires_on</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.export_end_ts"><code class="name">var <span class="ident">export_end_ts</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.export_start_ts"><code class="name">var <span class="ident">export_start_ts</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.export_type"><code class="name">var <span class="ident">export_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.exporting_team_id"><code class="name">var <span class="ident">exporting_team_id</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_organization_id"><code class="name">var <span class="ident">external_organization_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_organization_name"><code class="name">var <span class="ident">external_organization_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_user_email"><code class="name">var <span class="ident">external_user_email</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.external_user_id"><code class="name">var <span class="ident">external_user_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.failed_users"><code class="name">var <span class="ident">failed_users</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.functions"><code class="name">var <span class="ident">functions</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.granular_bot_token"><code class="name">var <span class="ident">granular_bot_token</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_config_id"><code class="name">var <span class="ident">idp_config_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_entity_id_hash"><code class="name">var <span class="ident">idp_entity_id_hash</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.idp_group_member_count"><code class="name">var <span class="ident">idp_group_member_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.initiated_by"><code class="name">var <span class="ident">initiated_by</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.installer_user_id"><code class="name">var <span class="ident">installer_user_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.invite_id"><code class="name">var <span class="ident">invite_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.inviter"><code class="name">var <span class="ident">inviter</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_channel_canvas"><code class="name">var <span class="ident">is_channel_canvas</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_error"><code class="name">var <span class="ident">is_error</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_external_limited"><code class="name">var <span class="ident">is_external_limited</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_flagged"><code class="name">var <span class="ident">is_flagged</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_internal_integration"><code class="name">var <span class="ident">is_internal_integration</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_token_rotation_enabled_app"><code class="name">var <span class="ident">is_token_rotation_enabled_app</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.is_workflow"><code class="name">var <span class="ident">is_workflow</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.kicker"><code class="name">var <span class="ident">kicker</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.linked_channel_id"><code class="name">var <span class="ident">linked_channel_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.matched_rule"><code class="name">var <span class="ident">matched_rule</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.mobile_only"><code class="name">var <span class="ident">mobile_only</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_profile"><code class="name">var <span class="ident">new_profile</span> : <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_retention_policy"><code class="name">var <span class="ident">new_retention_policy</span> : <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_scopes"><code class="name">var <span class="ident">new_scopes</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_value"><code class="name">var <span class="ident">new_value</span> : str | List[str] | Dict[str, Any] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.new_version_id"><code class="name">var <span class="ident">new_version_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.non_sso_only"><code class="name">var <span class="ident">non_sso_only</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.old_retention_policy"><code class="name">var <span class="ident">old_retention_policy</span> : <a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.old_scopes"><code class="name">var <span class="ident">old_scopes</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.origin_team"><code class="name">var <span class="ident">origin_team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.permissions"><code class="name">var <span class="ident">permissions</span> : List[Dict[str, Any]] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.permissions_updated"><code class="name">var <span class="ident">permissions_updated</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_profile"><code class="name">var <span class="ident">previous_profile</span> : <a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_scopes"><code class="name">var <span class="ident">previous_scopes</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.previous_value"><code class="name">var <span class="ident">previous_value</span> : str | List[str] | Dict[str, Any] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.primary_usergroup_id"><code class="name">var <span class="ident">primary_usergroup_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.reactivated_user_count"><code class="name">var <span class="ident">reactivated_user_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.reason"><code class="name">var <span class="ident">reason</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.removed_user_count"><code class="name">var <span class="ident">removed_user_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.removed_user_error_count"><code class="name">var <span class="ident">removed_user_error_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.request"><code class="name">var <span class="ident">request</span> : <a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.resolution"><code class="name">var <span class="ident">resolution</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.restricted_subjects"><code class="name">var <span class="ident">restricted_subjects</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.row_id"><code class="name">var <span class="ident">row_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.rules_checked"><code class="name">var <span class="ident">rules_checked</span> : List[<a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a>] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes"><code class="name">var <span class="ident">scopes</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.scopes_bot"><code class="name">var <span class="ident">scopes_bot</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.session_search_start"><code class="name">var <span class="ident">session_search_start</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.shared_to"><code class="name">var <span class="ident">shared_to</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.shared_with"><code class="name">var <span class="ident">shared_with</span> : <a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.source_team"><code class="name">var <span class="ident">source_team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.space_file_id"><code class="name">var <span class="ident">space_file_id</span> : <a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.subteam"><code class="name">var <span class="ident">subteam</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.succeeded_users"><code class="name">var <span class="ident">succeeded_users</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity"><code class="name">var <span class="ident">target_entity</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_entity_id"><code class="name">var <span class="ident">target_entity_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_team"><code class="name">var <span class="ident">target_team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_user"><code class="name">var <span class="ident">target_user</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.target_user_id"><code class="name">var <span class="ident">target_user_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.team"><code class="name">var <span class="ident">team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.total_removal_count"><code class="name">var <span class="ident">total_removal_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.trigger"><code class="name">var <span class="ident">trigger</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.url_private"><code class="name">var <span class="ident">url_private</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.user"><code class="name">var <span class="ident">user</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.view_id"><code class="name">var <span class="ident">view_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.web_only"><code class="name">var <span class="ident">web_only</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.who_can_post"><code class="name">var <span class="ident">who_can_post</span> : <a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.workflows"><code class="name">var <span class="ident">workflows</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Details.workspace_member_count"><code class="name">var <span class="ident">workspace_member_count</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity"><code class="flex name class">
+<span>class <span class="ident">Entity</span></span>
+<span>(</span><span>*,<br>type: str | None = None,<br>user: <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | Dict[str, Any] | None = None,<br>workspace: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>enterprise: <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | Dict[str, Any] | None = None,<br>channel: <a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a> | Dict[str, Any] | None = None,<br>file: <a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a> | Dict[str, Any] | None = None,<br>app: <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | Dict[str, Any] | None = None,<br>message: <a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a> | Dict[str, Any] | None = None,<br>huddle: <a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a> | Dict[str, Any] | None = None,<br>role: <a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a> | Dict[str, Any] | None = None,<br>usergroup: <a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a> | Dict[str, Any] | None = None,<br>workflow: <a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a> | Dict[str, Any] | None = None,<br>barrier: <a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a> | Dict[str, Any] | None = None,<br>workflow_v2: <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a> | Dict[str, Any] | None = None,<br>account_type_role: <a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a> | Dict[str, Any] | None = None,<br>list: <a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Entity:
+    type: Optional[str]
+    user: Optional[User]
+    workspace: Optional[Location]
+    enterprise: Optional[Location]
+    channel: Optional[Channel]
+    file: Optional[File]
+    app: Optional[App]
+    message: Optional[Message]
+    huddle: Optional[Huddle]
+    role: Optional[Role]
+    usergroup: Optional[Usergroup]
+    workflow: Optional[Workflow]
+    barrier: Optional[InformationBarrier]
+    workflow_v2: Optional[WorkflowV2]
+    account_type_role: Optional[AccountTypeRole]
+    list: Optional[SlackList]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        user: Optional[Union[User, Dict[str, Any]]] = None,
+        workspace: Optional[Union[Location, Dict[str, Any]]] = None,
+        enterprise: Optional[Union[Location, Dict[str, Any]]] = None,
+        channel: Optional[Union[Channel, Dict[str, Any]]] = None,
+        file: Optional[Union[File, Dict[str, Any]]] = None,
+        app: Optional[Union[App, Dict[str, Any]]] = None,
+        message: Optional[Union[Message, Dict[str, Any]]] = None,
+        huddle: Optional[Union[Huddle, Dict[str, Any]]] = None,
+        role: Optional[Union[Role, Dict[str, Any]]] = None,
+        usergroup: Optional[Union[Usergroup, Dict[str, Any]]] = None,
+        workflow: Optional[Union[Workflow, Dict[str, Any]]] = None,
+        barrier: Optional[Union[InformationBarrier, Dict[str, Any]]] = None,
+        workflow_v2: Optional[Union[WorkflowV2, Dict[str, Any]]] = None,
+        account_type_role: Optional[Union[AccountTypeRole, Dict[str, Any]]] = None,
+        list: Optional[Union[SlackList, Dict[str, Any]]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.user = User(**user) if isinstance(user, dict) else user
+        self.workspace = Location(**workspace) if isinstance(workspace, dict) else workspace
+        self.enterprise = Location(**enterprise) if isinstance(enterprise, dict) else enterprise
+        self.channel = Channel(**channel) if isinstance(channel, dict) else channel
+        self.file = File(**file) if isinstance(file, dict) else file
+        self.app = App(**app) if isinstance(app, dict) else app
+        self.message = Message(**message) if isinstance(message, dict) else message
+        self.huddle = Huddle(**huddle) if isinstance(huddle, dict) else huddle
+        self.role = Role(**role) if isinstance(role, dict) else role
+        self.usergroup = Usergroup(**usergroup) if isinstance(usergroup, dict) else usergroup
+        self.workflow = Workflow(**workflow) if isinstance(workflow, dict) else workflow
+        self.barrier = InformationBarrier(**barrier) if isinstance(barrier, dict) else barrier
+        self.workflow_v2 = WorkflowV2(**workflow_v2) if isinstance(workflow_v2, dict) else workflow_v2
+        self.account_type_role = (
+            AccountTypeRole(**account_type_role) if isinstance(account_type_role, dict) else account_type_role
+        )
+        self.list = SlackList(**list) if isinstance(list, dict) else list
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.account_type_role"><code class="name">var <span class="ident">account_type_role</span> : <a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.app"><code class="name">var <span class="ident">app</span> : <a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.barrier"><code class="name">var <span class="ident">barrier</span> : <a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.channel"><code class="name">var <span class="ident">channel</span> : <a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.enterprise"><code class="name">var <span class="ident">enterprise</span> : <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.file"><code class="name">var <span class="ident">file</span> : <a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.huddle"><code class="name">var <span class="ident">huddle</span> : <a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.list"><code class="name">var <span class="ident">list</span> : <a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.message"><code class="name">var <span class="ident">message</span> : <a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.role"><code class="name">var <span class="ident">role</span> : <a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.user"><code class="name">var <span class="ident">user</span> : <a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.usergroup"><code class="name">var <span class="ident">usergroup</span> : <a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.workflow"><code class="name">var <span class="ident">workflow</span> : <a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.workflow_v2"><code class="name">var <span class="ident">workflow_v2</span> : <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entity.workspace"><code class="name">var <span class="ident">workspace</span> : <a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry"><code class="flex name class">
+<span>class <span class="ident">Entry</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>date_create: int | None = None,<br>action: str | None = None,<br>actor: <a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a> | Dict[str, Any] | None = None,<br>entity: <a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a> | Dict[str, Any] | None = None,<br>context: <a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a> | Dict[str, Any] | None = None,<br>details: <a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a> | Dict[str, Any] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Entry:
+    id: Optional[str]
+    date_create: Optional[int]
+    action: Optional[str]
+    actor: Optional[Actor]
+    entity: Optional[Entity]
+    context: Optional[Context]
+    details: Optional[Details]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        date_create: Optional[int] = None,
+        action: Optional[str] = None,
+        actor: Optional[Union[Actor, Dict[str, Any]]] = None,
+        entity: Optional[Union[Entity, Dict[str, Any]]] = None,
+        context: Optional[Union[Context, Dict[str, Any]]] = None,
+        details: Optional[Union[Details, Dict[str, Any]]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.date_create = date_create
+        self.action = action
+        self.actor = Actor(**actor) if isinstance(actor, dict) else actor
+        self.entity = Entity(**entity) if isinstance(entity, dict) else entity
+        self.context = Context(**context) if isinstance(context, dict) else context
+        self.details = Details(**details) if isinstance(details, dict) else details
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.action"><code class="name">var <span class="ident">action</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.actor"><code class="name">var <span class="ident">actor</span> : <a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.context"><code class="name">var <span class="ident">context</span> : <a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.date_create"><code class="name">var <span class="ident">date_create</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.details"><code class="name">var <span class="ident">details</span> : <a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.entity"><code class="name">var <span class="ident">entity</span> : <a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Entry.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement"><code class="flex name class">
+<span>class <span class="ident">FeatureEnablement</span></span>
+<span>(</span><span>*, enabled: bool | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FeatureEnablement:
+    enabled: Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        enabled: Optional[bool] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.enabled = enabled
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled"><code class="name">var <span class="ident">enabled</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File"><code class="flex name class">
+<span>class <span class="ident">File</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>filetype: str | None = None,<br>title: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class File:
+    id: Optional[str]
+    name: Optional[str]
+    filetype: Optional[str]
+    title: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        filetype: Optional[str] = None,
+        title: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.filetype = filetype
+        self.title = title
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.File.filetype"><code class="name">var <span class="ident">filetype</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.title"><code class="name">var <span class="ident">title</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.File.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle"><code class="flex name class">
+<span>class <span class="ident">Huddle</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>date_start: int | None = None,<br>date_end: int | None = None,<br>participants: List[str] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Huddle:
+    id: Optional[str]
+    date_start: Optional[int]
+    date_end: Optional[int]
+    participants: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        date_start: Optional[int] = None,
+        date_end: Optional[int] = None,
+        participants: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.date_start = date_start
+        self.date_end = date_end
+        self.participants = participants
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.date_end"><code class="name">var <span class="ident">date_end</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.date_start"><code class="name">var <span class="ident">date_start</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.participants"><code class="name">var <span class="ident">participants</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Huddle.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier"><code class="flex name class">
+<span>class <span class="ident">InformationBarrier</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>primary_usergroup: str | None = None,<br>barriered_from_usergroups: List[str] | None = None,<br>restricted_subjects: List[str] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InformationBarrier:
+    id: Optional[str]
+    primary_usergroup: Optional[str]
+    barriered_from_usergroups: Optional[List[str]]
+    restricted_subjects: Optional[List[str]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        primary_usergroup: Optional[str] = None,
+        barriered_from_usergroups: Optional[List[str]] = None,
+        restricted_subjects: Optional[List[str]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.primary_usergroup = primary_usergroup
+        self.barriered_from_usergroups = barriered_from_usergroups
+        self.restricted_subjects = restricted_subjects
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.barriered_from_usergroups"><code class="name">var <span class="ident">barriered_from_usergroups</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.primary_usergroup"><code class="name">var <span class="ident">primary_usergroup</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.restricted_subjects"><code class="name">var <span class="ident">restricted_subjects</span> : List[str] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.InformationBarrier.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location"><code class="flex name class">
+<span>class <span class="ident">Location</span></span>
+<span>(</span><span>*,<br>type: str | None = None,<br>id: str | None = None,<br>name: str | None = None,<br>domain: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Location:
+    type: Optional[str]
+    id: Optional[str]
+    name: Optional[str]
+    domain: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        domain: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.id = id
+        self.name = name
+        self.domain = domain
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.domain"><code class="name">var <span class="ident">domain</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Location.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse"><code class="flex name class">
+<span>class <span class="ident">LogsResponse</span></span>
+<span>(</span><span>*,<br>entries: List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a> | Dict[str, Any]] | None = None,<br>response_metadata: <a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a> | Dict[str, Any] | None = None,<br>ok: bool | None = None,<br>error: str | None = None,<br>needed: str | None = None,<br>provided: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LogsResponse:
+    entries: Optional[List[Entry]]
+    response_metadata: Optional[ResponseMetadata]
+    ok: Optional[bool]
+    error: Optional[str]
+    needed: Optional[str]
+    provided: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        entries: Optional[List[Union[Entry, Dict[str, Any]]]] = None,
+        response_metadata: Optional[Union[ResponseMetadata, Dict[str, Any]]] = None,
+        ok: Optional[bool] = None,
+        error: Optional[str] = None,
+        needed: Optional[str] = None,
+        provided: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.entries = [Entry(**e) if isinstance(e, dict) else e for e in entries]  # type: ignore[union-attr]
+        self.response_metadata = (
+            ResponseMetadata(**response_metadata) if isinstance(response_metadata, dict) else response_metadata
+        )
+        self.ok = ok
+        self.error = error
+        self.needed = needed
+        self.provided = provided
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.entries"><code class="name">var <span class="ident">entries</span> : List[<a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a>] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.error"><code class="name">var <span class="ident">error</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.needed"><code class="name">var <span class="ident">needed</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.ok"><code class="name">var <span class="ident">ok</span> : bool | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.provided"><code class="name">var <span class="ident">provided</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata"><code class="name">var <span class="ident">response_metadata</span> : <a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a> | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.LogsResponse.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Message"><code class="flex name class">
+<span>class <span class="ident">Message</span></span>
+<span>(</span><span>*,<br>channel: str | None = None,<br>team: str | None = None,<br>timestamp: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Message:
+    channel: Optional[str]
+    team: Optional[str]
+    timestamp: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        channel: Optional[str] = None,
+        team: Optional[str] = None,
+        timestamp: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.channel = channel
+        self.team = team
+        self.timestamp = timestamp
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Message.channel"><code class="name">var <span class="ident">channel</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Message.team"><code class="name">var <span class="ident">team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Message.timestamp"><code class="name">var <span class="ident">timestamp</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Message.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile"><code class="flex name class">
+<span>class <span class="ident">Profile</span></span>
+<span>(</span><span>*,<br>real_name: str | None = None,<br>first_name: str | None = None,<br>last_name: str | None = None,<br>display_name: str | None = None,<br>image_original: str | None = None,<br>image_24: str | None = None,<br>image_32: str | None = None,<br>image_48: str | None = None,<br>image_72: str | None = None,<br>image_192: str | None = None,<br>image_512: str | None = None,<br>image_1024: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Profile:
+    real_name: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    display_name: Optional[str]
+    image_original: Optional[str]
+    image_24: Optional[str]
+    image_32: Optional[str]
+    image_48: Optional[str]
+    image_72: Optional[str]
+    image_192: Optional[str]
+    image_512: Optional[str]
+    image_1024: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        real_name: Optional[str] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        display_name: Optional[str] = None,
+        image_original: Optional[str] = None,
+        image_24: Optional[str] = None,
+        image_32: Optional[str] = None,
+        image_48: Optional[str] = None,
+        image_72: Optional[str] = None,
+        image_192: Optional[str] = None,
+        image_512: Optional[str] = None,
+        image_1024: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.real_name = real_name
+        self.first_name = first_name
+        self.last_name = last_name
+        self.display_name = display_name
+        self.image_original = image_original
+        self.image_24 = image_24
+        self.image_32 = image_32
+        self.image_48 = image_48
+        self.image_72 = image_72
+        self.image_192 = image_192
+        self.image_512 = image_512
+        self.image_1024 = image_1024</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.display_name"><code class="name">var <span class="ident">display_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.first_name"><code class="name">var <span class="ident">first_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_1024"><code class="name">var <span class="ident">image_1024</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_192"><code class="name">var <span class="ident">image_192</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_24"><code class="name">var <span class="ident">image_24</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_32"><code class="name">var <span class="ident">image_32</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_48"><code class="name">var <span class="ident">image_48</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_512"><code class="name">var <span class="ident">image_512</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_72"><code class="name">var <span class="ident">image_72</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.image_original"><code class="name">var <span class="ident">image_original</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.last_name"><code class="name">var <span class="ident">last_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Profile.real_name"><code class="name">var <span class="ident">real_name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata"><code class="flex name class">
+<span>class <span class="ident">ResponseMetadata</span></span>
+<span>(</span><span>*, next_cursor: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ResponseMetadata:
+    next_cursor: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        next_cursor: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.next_cursor = next_cursor
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor"><code class="name">var <span class="ident">next_cursor</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.ResponseMetadata.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy"><code class="flex name class">
+<span>class <span class="ident">RetentionPolicy</span></span>
+<span>(</span><span>*, type: str | None = None, duration_days: int | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RetentionPolicy:
+    type: Optional[str]
+    duration_days: Optional[int]
+
+    def __init__(
+        self,
+        *,
+        type: Optional[str] = None,
+        duration_days: Optional[int] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.type = type
+        self.duration_days = duration_days
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy.duration_days"><code class="name">var <span class="ident">duration_days</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.RetentionPolicy.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Role"><code class="flex name class">
+<span>class <span class="ident">Role</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>type: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Role:
+    id: Optional[str]
+    name: Optional[str]
+    type: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        type: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.type = type
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Role.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Role.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Role.type"><code class="name">var <span class="ident">type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Role.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.SharedWith"><code class="flex name class">
+<span>class <span class="ident">SharedWith</span></span>
+<span>(</span><span>*, channel_id: str | None = None, access_level: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SharedWith:
+    channel_id: Optional[str]
+    access_level: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        channel_id: Optional[str] = None,
+        access_level: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.channel_id = channel_id
+        self.access_level = access_level
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.SharedWith.access_level"><code class="name">var <span class="ident">access_level</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.SharedWith.channel_id"><code class="name">var <span class="ident">channel_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.SlackList"><code class="flex name class">
+<span>class <span class="ident">SlackList</span></span>
+<span>(</span><span>*, id: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SlackList:
+    id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.SlackList.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.SlackList.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId"><code class="flex name class">
+<span>class <span class="ident">SpaceFileId</span></span>
+<span>(</span><span>*, payload: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SpaceFileId:
+    payload: Optional[str]
+
+    def __init__(
+        self,
+        *,
+        payload: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.payload = payload</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.SpaceFileId.payload"><code class="name">var <span class="ident">payload</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User"><code class="flex name class">
+<span>class <span class="ident">User</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>email: str | None = None,<br>team: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class User:
+    id: Optional[str]
+    name: Optional[str]
+    email: Optional[str]
+    team: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        email: Optional[str] = None,
+        team: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.email = email
+        self.team = team
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.User.email"><code class="name">var <span class="ident">email</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.team"><code class="name">var <span class="ident">team</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.User.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Usergroup"><code class="flex name class">
+<span>class <span class="ident">Usergroup</span></span>
+<span>(</span><span>*, id: str | None = None, name: str | None = None, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Usergroup:
+    id: Optional[str]
+    name: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Usergroup.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Usergroup.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Usergroup.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow"><code class="flex name class">
+<span>class <span class="ident">Workflow</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>name: str | None = None,<br>domain: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Workflow:
+    id: Optional[str]
+    name: Optional[str]
+    domain: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        domain: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.name = name
+        self.domain = domain
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow.domain"><code class="name">var <span class="ident">domain</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.Workflow.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2"><code class="flex name class">
+<span>class <span class="ident">WorkflowV2</span></span>
+<span>(</span><span>*,<br>id: str | None = None,<br>app_id: str | None = None,<br>date_updated: int | None = None,<br>callback_id: str | None = None,<br>name: str | None = None,<br>updated_by: str | None = None,<br>step_configuration: List[Dict[str, Any] | <a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a>] | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WorkflowV2:
+    id: Optional[str]
+    app_id: Optional[str]
+    date_updated: Optional[int]
+    callback_id: Optional[str]
+    name: Optional[str]
+    updated_by: Optional[str]
+    step_configuration: Optional[List[WorkflowV2StepConfiguration]]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        id: Optional[str] = None,
+        app_id: Optional[str] = None,
+        date_updated: Optional[int] = None,
+        callback_id: Optional[str] = None,
+        name: Optional[str] = None,
+        updated_by: Optional[str] = None,
+        step_configuration: Optional[List[Union[Dict[str, Any], WorkflowV2StepConfiguration]]] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.id = id
+        self.app_id = app_id
+        self.date_updated = date_updated
+        self.callback_id = callback_id
+        self.name = name
+        self.updated_by = updated_by
+        self.step_configuration = None
+        if step_configuration is not None:
+            self.step_configuration = []
+            for a in step_configuration:
+                if isinstance(a, dict):
+                    self.step_configuration.append(WorkflowV2StepConfiguration(**a))
+                else:
+                    self.step_configuration.append(a)
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.app_id"><code class="name">var <span class="ident">app_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.callback_id"><code class="name">var <span class="ident">callback_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.date_updated"><code class="name">var <span class="ident">date_updated</span> : int | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.id"><code class="name">var <span class="ident">id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.step_configuration"><code class="name">var <span class="ident">step_configuration</span> : List[<a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a>] | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2.updated_by"><code class="name">var <span class="ident">updated_by</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration"><code class="flex name class">
+<span>class <span class="ident">WorkflowV2StepConfiguration</span></span>
+<span>(</span><span>*,<br>name: str | None = None,<br>step_function_type: str | None = None,<br>step_function_app_id: str | None = None,<br>**kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WorkflowV2StepConfiguration:
+    name: Optional[str]
+    step_function_type: Optional[str]
+    step_function_app_id: Optional[str]
+    unknown_fields: Dict[str, Any]
+
+    def __init__(
+        self,
+        *,
+        name: Optional[str] = None,
+        step_function_type: Optional[str] = None,
+        step_function_app_id: Optional[str] = None,
+        **kwargs,
+    ) -&gt; None:
+        self.name = name
+        self.step_function_type = step_function_type
+        self.step_function_app_id = step_function_app_id
+        self.unknown_fields = kwargs</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Class variables</h3>
+<dl>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.name"><code class="name">var <span class="ident">name</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_app_id"><code class="name">var <span class="ident">step_function_app_id</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_type"><code class="name">var <span class="ident">step_function_type</span> : str | None</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.unknown_fields"><code class="name">var <span class="ident">unknown_fields</span> : Dict[str, Any]</code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="slack_sdk.audit_logs.v1" href="index.html">slack_sdk.audit_logs.v1</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AAARequest" href="#slack_sdk.audit_logs.v1.logs.AAARequest">AAARequest</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARequest.id" href="#slack_sdk.audit_logs.v1.logs.AAARequest.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARequest.team_id" href="#slack_sdk.audit_logs.v1.logs.AAARequest.team_id">team_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AAARule" href="#slack_sdk.audit_logs.v1.logs.AAARule">AAARule</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARule.action" href="#slack_sdk.audit_logs.v1.logs.AAARule.action">action</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARule.condition" href="#slack_sdk.audit_logs.v1.logs.AAARule.condition">condition</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARule.id" href="#slack_sdk.audit_logs.v1.logs.AAARule.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARule.team_id" href="#slack_sdk.audit_logs.v1.logs.AAARule.team_id">team_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARule.title" href="#slack_sdk.audit_logs.v1.logs.AAARule.title">title</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleAction" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction">AAARuleAction</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleAction.notify" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction.notify">notify</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleAction.resolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleAction.resolution">resolution</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify">AAARuleActionNotify</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleActionNotify.entity_type" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionNotify.entity_type">entity_type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution">AAARuleActionResolution</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleActionResolution.value" href="#slack_sdk.audit_logs.v1.logs.AAARuleActionResolution.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition">AAARuleCondition</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition.datatype" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition.datatype">datatype</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition.entity_type" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition.entity_type">entity_type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition.operator" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition.operator">operator</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleCondition.values" href="#slack_sdk.audit_logs.v1.logs.AAARuleCondition.values">values</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue">AAARuleConditionValue</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.datatype" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.datatype">datatype</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.field" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.field">field</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.operator" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.operator">operator</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.values" href="#slack_sdk.audit_logs.v1.logs.AAARuleConditionValue.values">values</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole">AccountTypeRole</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole.id" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole.name" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AccountTypeRole.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.AccountTypeRole.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Actor" href="#slack_sdk.audit_logs.v1.logs.Actor">Actor</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Actor.type" href="#slack_sdk.audit_logs.v1.logs.Actor.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Actor.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Actor.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Actor.user" href="#slack_sdk.audit_logs.v1.logs.Actor.user">user</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.App" href="#slack_sdk.audit_logs.v1.logs.App">App</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.id" href="#slack_sdk.audit_logs.v1.logs.App.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.is_directory_approved" href="#slack_sdk.audit_logs.v1.logs.App.is_directory_approved">is_directory_approved</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.is_distributed" href="#slack_sdk.audit_logs.v1.logs.App.is_distributed">is_distributed</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.is_workflow_app" href="#slack_sdk.audit_logs.v1.logs.App.is_workflow_app">is_workflow_app</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.name" href="#slack_sdk.audit_logs.v1.logs.App.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.scopes" href="#slack_sdk.audit_logs.v1.logs.App.scopes">scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.App.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.App.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Attribute" href="#slack_sdk.audit_logs.v1.logs.Attribute">Attribute</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Attribute.items" href="#slack_sdk.audit_logs.v1.logs.Attribute.items">items</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Attribute.name" href="#slack_sdk.audit_logs.v1.logs.Attribute.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Attribute.type" href="#slack_sdk.audit_logs.v1.logs.Attribute.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.AttributeItems" href="#slack_sdk.audit_logs.v1.logs.AttributeItems">AttributeItems</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.AttributeItems.type" href="#slack_sdk.audit_logs.v1.logs.AttributeItems.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Channel" href="#slack_sdk.audit_logs.v1.logs.Channel">Channel</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.id" href="#slack_sdk.audit_logs.v1.logs.Channel.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.is_org_shared" href="#slack_sdk.audit_logs.v1.logs.Channel.is_org_shared">is_org_shared</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.is_salesforce_channel" href="#slack_sdk.audit_logs.v1.logs.Channel.is_salesforce_channel">is_salesforce_channel</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.is_shared" href="#slack_sdk.audit_logs.v1.logs.Channel.is_shared">is_shared</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.name" href="#slack_sdk.audit_logs.v1.logs.Channel.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id" href="#slack_sdk.audit_logs.v1.logs.Channel.original_connected_channel_id">original_connected_channel_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.privacy" href="#slack_sdk.audit_logs.v1.logs.Channel.privacy">privacy</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with" href="#slack_sdk.audit_logs.v1.logs.Channel.teams_shared_with">teams_shared_with</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Channel.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Channel.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Context" href="#slack_sdk.audit_logs.v1.logs.Context">Context</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.app" href="#slack_sdk.audit_logs.v1.logs.Context.app">app</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.ip_address" href="#slack_sdk.audit_logs.v1.logs.Context.ip_address">ip_address</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.location" href="#slack_sdk.audit_logs.v1.logs.Context.location">location</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.session_id" href="#slack_sdk.audit_logs.v1.logs.Context.session_id">session_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.ua" href="#slack_sdk.audit_logs.v1.logs.Context.ua">ua</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Context.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Context.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.ConversationPref" href="#slack_sdk.audit_logs.v1.logs.ConversationPref">ConversationPref</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.ConversationPref.type" href="#slack_sdk.audit_logs.v1.logs.ConversationPref.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.ConversationPref.user" href="#slack_sdk.audit_logs.v1.logs.ConversationPref.user">user</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Details" href="#slack_sdk.audit_logs.v1.logs.Details">Details</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.access_level" href="#slack_sdk.audit_logs.v1.logs.Details.access_level">access_level</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.action" href="#slack_sdk.audit_logs.v1.logs.Details.action">action</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.actor" href="#slack_sdk.audit_logs.v1.logs.Details.actor">actor</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.added_team_id" href="#slack_sdk.audit_logs.v1.logs.Details.added_team_id">added_team_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.added_user_count" href="#slack_sdk.audit_logs.v1.logs.Details.added_user_count">added_user_count</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.added_user_error_count" href="#slack_sdk.audit_logs.v1.logs.Details.added_user_error_count">added_user_error_count</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.admin_app_id" href="#slack_sdk.audit_logs.v1.logs.Details.admin_app_id">admin_app_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_id" href="#slack_sdk.audit_logs.v1.logs.Details.app_id">app_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_owner_id" href="#slack_sdk.audit_logs.v1.logs.Details.app_owner_id">app_owner_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_previously_approved" href="#slack_sdk.audit_logs.v1.logs.Details.app_previously_approved">app_previously_approved</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved" href="#slack_sdk.audit_logs.v1.logs.Details.app_previously_resolved">app_previously_resolved</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.approval_type" href="#slack_sdk.audit_logs.v1.logs.Details.approval_type">approval_type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.approver_id" href="#slack_sdk.audit_logs.v1.logs.Details.approver_id">approver_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.attributes" href="#slack_sdk.audit_logs.v1.logs.Details.attributes">attributes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.barrier_id" href="#slack_sdk.audit_logs.v1.logs.Details.barrier_id">barrier_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids" href="#slack_sdk.audit_logs.v1.logs.Details.barriered_from_usergroup_ids">barriered_from_usergroup_ids</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_id" href="#slack_sdk.audit_logs.v1.logs.Details.bot_id">bot_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.bot_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.bot_scopes">bot_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.can_huddle" href="#slack_sdk.audit_logs.v1.logs.Details.can_huddle">can_huddle</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.can_thread" href="#slack_sdk.audit_logs.v1.logs.Details.can_thread">can_thread</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.cell_date_updated" href="#slack_sdk.audit_logs.v1.logs.Details.cell_date_updated">cell_date_updated</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.changed_permissions" href="#slack_sdk.audit_logs.v1.logs.Details.changed_permissions">changed_permissions</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.channel" href="#slack_sdk.audit_logs.v1.logs.Details.channel">channel</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.channel_id" href="#slack_sdk.audit_logs.v1.logs.Details.channel_id">channel_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.channels" href="#slack_sdk.audit_logs.v1.logs.Details.channels">channels</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.cleared_resolution" href="#slack_sdk.audit_logs.v1.logs.Details.cleared_resolution">cleared_resolution</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.column_id" href="#slack_sdk.audit_logs.v1.logs.Details.column_id">column_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.config_type" href="#slack_sdk.audit_logs.v1.logs.Details.config_type">config_type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.creator" href="#slack_sdk.audit_logs.v1.logs.Details.creator">creator</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.datastore_name" href="#slack_sdk.audit_logs.v1.logs.Details.datastore_name">datastore_name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.datastores" href="#slack_sdk.audit_logs.v1.logs.Details.datastores">datastores</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end" href="#slack_sdk.audit_logs.v1.logs.Details.deprecation_search_end">deprecation_search_end</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit" href="#slack_sdk.audit_logs.v1.logs.Details.desktop_app_browser_quit">desktop_app_browser_quit</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.destination_team" href="#slack_sdk.audit_logs.v1.logs.Details.destination_team">destination_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.disconnecting_team" href="#slack_sdk.audit_logs.v1.logs.Details.disconnecting_team">disconnecting_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.duration" href="#slack_sdk.audit_logs.v1.logs.Details.duration">duration</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.enable_at_channel" href="#slack_sdk.audit_logs.v1.logs.Details.enable_at_channel">enable_at_channel</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.enable_at_here" href="#slack_sdk.audit_logs.v1.logs.Details.enable_at_here">enable_at_here</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.enterprise" href="#slack_sdk.audit_logs.v1.logs.Details.enterprise">enterprise</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.entity_type" href="#slack_sdk.audit_logs.v1.logs.Details.entity_type">entity_type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.expires_on" href="#slack_sdk.audit_logs.v1.logs.Details.expires_on">expires_on</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.export_end_ts" href="#slack_sdk.audit_logs.v1.logs.Details.export_end_ts">export_end_ts</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.export_start_ts" href="#slack_sdk.audit_logs.v1.logs.Details.export_start_ts">export_start_ts</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.export_type" href="#slack_sdk.audit_logs.v1.logs.Details.export_type">export_type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.exporting_team_id" href="#slack_sdk.audit_logs.v1.logs.Details.exporting_team_id">exporting_team_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.external_organization_id" href="#slack_sdk.audit_logs.v1.logs.Details.external_organization_id">external_organization_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.external_organization_name" href="#slack_sdk.audit_logs.v1.logs.Details.external_organization_name">external_organization_name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.external_user_email" href="#slack_sdk.audit_logs.v1.logs.Details.external_user_email">external_user_email</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.external_user_id" href="#slack_sdk.audit_logs.v1.logs.Details.external_user_id">external_user_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.failed_users" href="#slack_sdk.audit_logs.v1.logs.Details.failed_users">failed_users</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.functions" href="#slack_sdk.audit_logs.v1.logs.Details.functions">functions</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.granular_bot_token" href="#slack_sdk.audit_logs.v1.logs.Details.granular_bot_token">granular_bot_token</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.idp_config_id" href="#slack_sdk.audit_logs.v1.logs.Details.idp_config_id">idp_config_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.idp_entity_id_hash" href="#slack_sdk.audit_logs.v1.logs.Details.idp_entity_id_hash">idp_entity_id_hash</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.idp_group_member_count" href="#slack_sdk.audit_logs.v1.logs.Details.idp_group_member_count">idp_group_member_count</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.initiated_by" href="#slack_sdk.audit_logs.v1.logs.Details.initiated_by">initiated_by</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.installer_user_id" href="#slack_sdk.audit_logs.v1.logs.Details.installer_user_id">installer_user_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.invite_id" href="#slack_sdk.audit_logs.v1.logs.Details.invite_id">invite_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.inviter" href="#slack_sdk.audit_logs.v1.logs.Details.inviter">inviter</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_channel_canvas" href="#slack_sdk.audit_logs.v1.logs.Details.is_channel_canvas">is_channel_canvas</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_error" href="#slack_sdk.audit_logs.v1.logs.Details.is_error">is_error</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_external_limited" href="#slack_sdk.audit_logs.v1.logs.Details.is_external_limited">is_external_limited</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_flagged" href="#slack_sdk.audit_logs.v1.logs.Details.is_flagged">is_flagged</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_internal_integration" href="#slack_sdk.audit_logs.v1.logs.Details.is_internal_integration">is_internal_integration</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_token_rotation_enabled_app" href="#slack_sdk.audit_logs.v1.logs.Details.is_token_rotation_enabled_app">is_token_rotation_enabled_app</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.is_workflow" href="#slack_sdk.audit_logs.v1.logs.Details.is_workflow">is_workflow</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.kicker" href="#slack_sdk.audit_logs.v1.logs.Details.kicker">kicker</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.label" href="#slack_sdk.audit_logs.v1.logs.Details.label">label</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.linked_channel_id" href="#slack_sdk.audit_logs.v1.logs.Details.linked_channel_id">linked_channel_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.matched_rule" href="#slack_sdk.audit_logs.v1.logs.Details.matched_rule">matched_rule</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.mobile_only" href="#slack_sdk.audit_logs.v1.logs.Details.mobile_only">mobile_only</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.name" href="#slack_sdk.audit_logs.v1.logs.Details.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.new_profile" href="#slack_sdk.audit_logs.v1.logs.Details.new_profile">new_profile</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.new_retention_policy" href="#slack_sdk.audit_logs.v1.logs.Details.new_retention_policy">new_retention_policy</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.new_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.new_scopes">new_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.new_value" href="#slack_sdk.audit_logs.v1.logs.Details.new_value">new_value</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.new_version_id" href="#slack_sdk.audit_logs.v1.logs.Details.new_version_id">new_version_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.non_sso_only" href="#slack_sdk.audit_logs.v1.logs.Details.non_sso_only">non_sso_only</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.old_retention_policy" href="#slack_sdk.audit_logs.v1.logs.Details.old_retention_policy">old_retention_policy</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.old_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.old_scopes">old_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.origin_team" href="#slack_sdk.audit_logs.v1.logs.Details.origin_team">origin_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.permissions" href="#slack_sdk.audit_logs.v1.logs.Details.permissions">permissions</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.permissions_updated" href="#slack_sdk.audit_logs.v1.logs.Details.permissions_updated">permissions_updated</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.previous_profile" href="#slack_sdk.audit_logs.v1.logs.Details.previous_profile">previous_profile</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.previous_scopes" href="#slack_sdk.audit_logs.v1.logs.Details.previous_scopes">previous_scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.previous_value" href="#slack_sdk.audit_logs.v1.logs.Details.previous_value">previous_value</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.primary_usergroup_id" href="#slack_sdk.audit_logs.v1.logs.Details.primary_usergroup_id">primary_usergroup_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.reactivated_user_count" href="#slack_sdk.audit_logs.v1.logs.Details.reactivated_user_count">reactivated_user_count</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.reason" href="#slack_sdk.audit_logs.v1.logs.Details.reason">reason</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.removed_user_count" href="#slack_sdk.audit_logs.v1.logs.Details.removed_user_count">removed_user_count</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.removed_user_error_count" href="#slack_sdk.audit_logs.v1.logs.Details.removed_user_error_count">removed_user_error_count</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.request" href="#slack_sdk.audit_logs.v1.logs.Details.request">request</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.resolution" href="#slack_sdk.audit_logs.v1.logs.Details.resolution">resolution</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.restricted_subjects" href="#slack_sdk.audit_logs.v1.logs.Details.restricted_subjects">restricted_subjects</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.row_id" href="#slack_sdk.audit_logs.v1.logs.Details.row_id">row_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.rules_checked" href="#slack_sdk.audit_logs.v1.logs.Details.rules_checked">rules_checked</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.scopes" href="#slack_sdk.audit_logs.v1.logs.Details.scopes">scopes</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.scopes_bot" href="#slack_sdk.audit_logs.v1.logs.Details.scopes_bot">scopes_bot</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.session_search_start" href="#slack_sdk.audit_logs.v1.logs.Details.session_search_start">session_search_start</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.shared_to" href="#slack_sdk.audit_logs.v1.logs.Details.shared_to">shared_to</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.shared_with" href="#slack_sdk.audit_logs.v1.logs.Details.shared_with">shared_with</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.source_team" href="#slack_sdk.audit_logs.v1.logs.Details.source_team">source_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.space_file_id" href="#slack_sdk.audit_logs.v1.logs.Details.space_file_id">space_file_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.subteam" href="#slack_sdk.audit_logs.v1.logs.Details.subteam">subteam</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.succeeded_users" href="#slack_sdk.audit_logs.v1.logs.Details.succeeded_users">succeeded_users</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_entity" href="#slack_sdk.audit_logs.v1.logs.Details.target_entity">target_entity</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_entity_id" href="#slack_sdk.audit_logs.v1.logs.Details.target_entity_id">target_entity_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_team" href="#slack_sdk.audit_logs.v1.logs.Details.target_team">target_team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_user" href="#slack_sdk.audit_logs.v1.logs.Details.target_user">target_user</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.target_user_id" href="#slack_sdk.audit_logs.v1.logs.Details.target_user_id">target_user_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.team" href="#slack_sdk.audit_logs.v1.logs.Details.team">team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.total_removal_count" href="#slack_sdk.audit_logs.v1.logs.Details.total_removal_count">total_removal_count</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.trigger" href="#slack_sdk.audit_logs.v1.logs.Details.trigger">trigger</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.type" href="#slack_sdk.audit_logs.v1.logs.Details.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Details.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.url_private" href="#slack_sdk.audit_logs.v1.logs.Details.url_private">url_private</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.user" href="#slack_sdk.audit_logs.v1.logs.Details.user">user</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.view_id" href="#slack_sdk.audit_logs.v1.logs.Details.view_id">view_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.web_only" href="#slack_sdk.audit_logs.v1.logs.Details.web_only">web_only</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.who_can_post" href="#slack_sdk.audit_logs.v1.logs.Details.who_can_post">who_can_post</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.workflows" href="#slack_sdk.audit_logs.v1.logs.Details.workflows">workflows</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Details.workspace_member_count" href="#slack_sdk.audit_logs.v1.logs.Details.workspace_member_count">workspace_member_count</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Entity" href="#slack_sdk.audit_logs.v1.logs.Entity">Entity</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.account_type_role" href="#slack_sdk.audit_logs.v1.logs.Entity.account_type_role">account_type_role</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.app" href="#slack_sdk.audit_logs.v1.logs.Entity.app">app</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.barrier" href="#slack_sdk.audit_logs.v1.logs.Entity.barrier">barrier</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.channel" href="#slack_sdk.audit_logs.v1.logs.Entity.channel">channel</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.enterprise" href="#slack_sdk.audit_logs.v1.logs.Entity.enterprise">enterprise</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.file" href="#slack_sdk.audit_logs.v1.logs.Entity.file">file</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.huddle" href="#slack_sdk.audit_logs.v1.logs.Entity.huddle">huddle</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.list" href="#slack_sdk.audit_logs.v1.logs.Entity.list">list</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.message" href="#slack_sdk.audit_logs.v1.logs.Entity.message">message</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.role" href="#slack_sdk.audit_logs.v1.logs.Entity.role">role</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.type" href="#slack_sdk.audit_logs.v1.logs.Entity.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Entity.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.user" href="#slack_sdk.audit_logs.v1.logs.Entity.user">user</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.usergroup" href="#slack_sdk.audit_logs.v1.logs.Entity.usergroup">usergroup</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.workflow" href="#slack_sdk.audit_logs.v1.logs.Entity.workflow">workflow</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.workflow_v2" href="#slack_sdk.audit_logs.v1.logs.Entity.workflow_v2">workflow_v2</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entity.workspace" href="#slack_sdk.audit_logs.v1.logs.Entity.workspace">workspace</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Entry" href="#slack_sdk.audit_logs.v1.logs.Entry">Entry</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.action" href="#slack_sdk.audit_logs.v1.logs.Entry.action">action</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.actor" href="#slack_sdk.audit_logs.v1.logs.Entry.actor">actor</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.context" href="#slack_sdk.audit_logs.v1.logs.Entry.context">context</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.date_create" href="#slack_sdk.audit_logs.v1.logs.Entry.date_create">date_create</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.details" href="#slack_sdk.audit_logs.v1.logs.Entry.details">details</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.entity" href="#slack_sdk.audit_logs.v1.logs.Entry.entity">entity</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.id" href="#slack_sdk.audit_logs.v1.logs.Entry.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Entry.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Entry.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement">FeatureEnablement</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled" href="#slack_sdk.audit_logs.v1.logs.FeatureEnablement.enabled">enabled</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.File" href="#slack_sdk.audit_logs.v1.logs.File">File</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.filetype" href="#slack_sdk.audit_logs.v1.logs.File.filetype">filetype</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.id" href="#slack_sdk.audit_logs.v1.logs.File.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.name" href="#slack_sdk.audit_logs.v1.logs.File.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.title" href="#slack_sdk.audit_logs.v1.logs.File.title">title</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.File.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.File.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Huddle" href="#slack_sdk.audit_logs.v1.logs.Huddle">Huddle</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Huddle.date_end" href="#slack_sdk.audit_logs.v1.logs.Huddle.date_end">date_end</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Huddle.date_start" href="#slack_sdk.audit_logs.v1.logs.Huddle.date_start">date_start</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Huddle.id" href="#slack_sdk.audit_logs.v1.logs.Huddle.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Huddle.participants" href="#slack_sdk.audit_logs.v1.logs.Huddle.participants">participants</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Huddle.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Huddle.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.InformationBarrier" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier">InformationBarrier</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.InformationBarrier.barriered_from_usergroups" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier.barriered_from_usergroups">barriered_from_usergroups</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.InformationBarrier.id" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.InformationBarrier.primary_usergroup" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier.primary_usergroup">primary_usergroup</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.InformationBarrier.restricted_subjects" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier.restricted_subjects">restricted_subjects</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.InformationBarrier.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.InformationBarrier.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Location" href="#slack_sdk.audit_logs.v1.logs.Location">Location</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.domain" href="#slack_sdk.audit_logs.v1.logs.Location.domain">domain</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.id" href="#slack_sdk.audit_logs.v1.logs.Location.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.name" href="#slack_sdk.audit_logs.v1.logs.Location.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.type" href="#slack_sdk.audit_logs.v1.logs.Location.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Location.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Location.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse" href="#slack_sdk.audit_logs.v1.logs.LogsResponse">LogsResponse</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.entries" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.entries">entries</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.error" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.error">error</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.needed" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.needed">needed</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.ok" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.ok">ok</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.provided" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.provided">provided</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.response_metadata">response_metadata</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.LogsResponse.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.LogsResponse.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Message" href="#slack_sdk.audit_logs.v1.logs.Message">Message</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Message.channel" href="#slack_sdk.audit_logs.v1.logs.Message.channel">channel</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Message.team" href="#slack_sdk.audit_logs.v1.logs.Message.team">team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Message.timestamp" href="#slack_sdk.audit_logs.v1.logs.Message.timestamp">timestamp</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Message.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Message.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Profile" href="#slack_sdk.audit_logs.v1.logs.Profile">Profile</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.display_name" href="#slack_sdk.audit_logs.v1.logs.Profile.display_name">display_name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.first_name" href="#slack_sdk.audit_logs.v1.logs.Profile.first_name">first_name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_1024" href="#slack_sdk.audit_logs.v1.logs.Profile.image_1024">image_1024</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_192" href="#slack_sdk.audit_logs.v1.logs.Profile.image_192">image_192</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_24" href="#slack_sdk.audit_logs.v1.logs.Profile.image_24">image_24</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_32" href="#slack_sdk.audit_logs.v1.logs.Profile.image_32">image_32</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_48" href="#slack_sdk.audit_logs.v1.logs.Profile.image_48">image_48</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_512" href="#slack_sdk.audit_logs.v1.logs.Profile.image_512">image_512</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_72" href="#slack_sdk.audit_logs.v1.logs.Profile.image_72">image_72</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.image_original" href="#slack_sdk.audit_logs.v1.logs.Profile.image_original">image_original</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.last_name" href="#slack_sdk.audit_logs.v1.logs.Profile.last_name">last_name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Profile.real_name" href="#slack_sdk.audit_logs.v1.logs.Profile.real_name">real_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata">ResponseMetadata</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata.next_cursor">next_cursor</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.ResponseMetadata.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.ResponseMetadata.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy">RetentionPolicy</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy.duration_days" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy.duration_days">duration_days</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.RetentionPolicy.type" href="#slack_sdk.audit_logs.v1.logs.RetentionPolicy.type">type</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Role" href="#slack_sdk.audit_logs.v1.logs.Role">Role</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Role.id" href="#slack_sdk.audit_logs.v1.logs.Role.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Role.name" href="#slack_sdk.audit_logs.v1.logs.Role.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Role.type" href="#slack_sdk.audit_logs.v1.logs.Role.type">type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Role.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Role.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.SharedWith" href="#slack_sdk.audit_logs.v1.logs.SharedWith">SharedWith</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.SharedWith.access_level" href="#slack_sdk.audit_logs.v1.logs.SharedWith.access_level">access_level</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.SharedWith.channel_id" href="#slack_sdk.audit_logs.v1.logs.SharedWith.channel_id">channel_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.SlackList" href="#slack_sdk.audit_logs.v1.logs.SlackList">SlackList</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.SlackList.id" href="#slack_sdk.audit_logs.v1.logs.SlackList.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.SlackList.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.SlackList.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.SpaceFileId" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId">SpaceFileId</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.SpaceFileId.payload" href="#slack_sdk.audit_logs.v1.logs.SpaceFileId.payload">payload</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.User" href="#slack_sdk.audit_logs.v1.logs.User">User</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.email" href="#slack_sdk.audit_logs.v1.logs.User.email">email</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.id" href="#slack_sdk.audit_logs.v1.logs.User.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.name" href="#slack_sdk.audit_logs.v1.logs.User.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.team" href="#slack_sdk.audit_logs.v1.logs.User.team">team</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.User.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.User.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Usergroup" href="#slack_sdk.audit_logs.v1.logs.Usergroup">Usergroup</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Usergroup.id" href="#slack_sdk.audit_logs.v1.logs.Usergroup.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Usergroup.name" href="#slack_sdk.audit_logs.v1.logs.Usergroup.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Usergroup.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Usergroup.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.Workflow" href="#slack_sdk.audit_logs.v1.logs.Workflow">Workflow</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Workflow.domain" href="#slack_sdk.audit_logs.v1.logs.Workflow.domain">domain</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Workflow.id" href="#slack_sdk.audit_logs.v1.logs.Workflow.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Workflow.name" href="#slack_sdk.audit_logs.v1.logs.Workflow.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.Workflow.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.Workflow.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2">WorkflowV2</a></code></h4>
+<ul class="two-column">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.app_id" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.app_id">app_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.callback_id" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.callback_id">callback_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.date_updated" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.date_updated">date_updated</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.id" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.id">id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.name" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.step_configuration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.step_configuration">step_configuration</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.unknown_fields">unknown_fields</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2.updated_by" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2.updated_by">updated_by</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration">WorkflowV2StepConfiguration</a></code></h4>
+<ul class="">
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.name" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.name">name</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_app_id" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_app_id">step_function_app_id</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_type" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.step_function_type">step_function_type</a></code></li>
+<li><code><a title="slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.unknown_fields" href="#slack_sdk.audit_logs.v1.logs.WorkflowV2StepConfiguration.unknown_fields">unknown_fields</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

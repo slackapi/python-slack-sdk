@@ -23,6 +23,7 @@ from slack_sdk.oauth.installation_store.models.installation import Installation
 from slack_sdk.oauth.installation_store.async_installation_store import (
     AsyncInstallationStore,
 )
+from slack_sdk.oauth.sqlalchemy_utils import normalize_datetime_for_db
 
 
 class SQLAlchemyInstallationStore(InstallationStore):
@@ -140,6 +141,9 @@ class SQLAlchemyInstallationStore(InstallationStore):
         with self.engine.begin() as conn:
             i = installation.to_dict()
             i["client_id"] = self.client_id
+            i["installed_at"] = normalize_datetime_for_db(i.get("installed_at"))
+            i["bot_token_expires_at"] = normalize_datetime_for_db(i.get("bot_token_expires_at"))
+            i["user_token_expires_at"] = normalize_datetime_for_db(i.get("user_token_expires_at"))
 
             i_column = self.installations.c
             installations_rows = conn.execute(
@@ -171,6 +175,8 @@ class SQLAlchemyInstallationStore(InstallationStore):
             # bots
             b = bot.to_dict()
             b["client_id"] = self.client_id
+            b["installed_at"] = normalize_datetime_for_db(b.get("installed_at"))
+            b["bot_token_expires_at"] = normalize_datetime_for_db(b.get("bot_token_expires_at"))
 
             b_column = self.bots.c
             bots_rows = conn.execute(
@@ -419,6 +425,9 @@ class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
         async with self.engine.begin() as conn:
             i = installation.to_dict()
             i["client_id"] = self.client_id
+            i["installed_at"] = normalize_datetime_for_db(i.get("installed_at"))
+            i["bot_token_expires_at"] = normalize_datetime_for_db(i.get("bot_token_expires_at"))
+            i["user_token_expires_at"] = normalize_datetime_for_db(i.get("user_token_expires_at"))
 
             i_column = self.installations.c
             installations_rows = await conn.execute(
@@ -450,6 +459,8 @@ class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
             # bots
             b = bot.to_dict()
             b["client_id"] = self.client_id
+            b["installed_at"] = normalize_datetime_for_db(b.get("installed_at"))
+            b["bot_token_expires_at"] = normalize_datetime_for_db(b.get("bot_token_expires_at"))
 
             b_column = self.bots.c
             bots_rows = await conn.execute(

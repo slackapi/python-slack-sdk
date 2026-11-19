@@ -1,0 +1,3 @@
+slack_sdk/web/async_chat_stream.py linguist-generated=true
+slack_sdk/web/async_client.py linguist-generated=true
+slack_sdk/web/legacy_client.py linguist-generated=true

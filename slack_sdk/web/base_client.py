@@ -92,6 +92,17 @@ class BaseClient:
             if env_variable is not None:
                 self.proxy = env_variable
 
+    # -------------------------
+    # accessors
+
+    @property
+    def logger(self) -> logging.Logger:
+        """The logger this client uses."""
+        return self._logger
+
+    # -------------------------
+    # api call
+
     def api_call(
         self,
         api_method: str,
@@ -136,7 +147,6 @@ class BaseClient:
             SlackRequestError: Json data can only be submitted as
                 POST requests.
         """
-
         api_url = _get_url(self.base_url, api_method)
         headers = headers or {}
         headers.update(self.headers)
@@ -197,7 +207,7 @@ class BaseClient:
         )
 
     def _request_for_pagination(self, api_url: str, req_args: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-        """This method is supposed to be used only for SlackResponse pagination
+        """This method is supposed to be used only for SlackResponse pagination.
 
         You can paginate using Python's for iterator as below:
 
@@ -278,7 +288,7 @@ class BaseClient:
 
             request_headers = self._build_urllib_request_headers(
                 token=token or self.token,  # type: ignore[arg-type]
-                has_json=json is not None,
+                has_json=json_body is not None,
                 has_files=files is not None,
                 additional_headers=additional_headers,
             )
@@ -577,7 +587,7 @@ class BaseClient:
         proxy: Optional[str],
         ssl: Optional[SSLContext],
     ) -> FileUploadV2Result:
-        """Upload a file using the issued upload URL"""
+        """Upload a file using the issued upload URL."""
         result = _upload_file_via_v2_url(
             url=url,
             data=data,
@@ -595,16 +605,16 @@ class BaseClient:
 
     @staticmethod
     def validate_slack_signature(*, signing_secret: str, data: str, timestamp: str, signature: str) -> bool:
-        """
-        Slack creates a unique string for your app and shares it with you. Verify
-        requests from Slack with confidence by verifying signatures using your
+        """Slack creates a unique string for your app and shares it with you.
+
+        Verify requests from Slack with confidence by verifying signatures using your
         signing secret.
 
         On each HTTP request that Slack sends, we add an X-Slack-Signature HTTP
         header. The signature is created by combining the signing secret with the
         body of the request we're sending using a standard HMAC-SHA256 keyed hash.
 
-        https://api.slack.com/docs/verifying-requests-from-slack#how_to_make_a_request_signature_in_4_easy_steps__an_overview
+        https://docs.slack.dev/authentication/verifying-requests-from-slack/#how_to_make_a_request_signature_in_4_easy_steps__an_overview
 
         Args:
             signing_secret: Your application's signing secret, available in the
