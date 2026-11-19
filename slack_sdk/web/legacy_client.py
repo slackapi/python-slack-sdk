@@ -4423,6 +4423,48 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"include_categories": include_categories})
         return self.api_call("emoji.list", http_verb="GET", params=kwargs)
 
+    def entity_presentComments(
+        self,
+        *,
+        comments: Sequence[Dict[str, Any]],
+        trigger_id: str,
+        cursor: Optional[str] = None,
+        can_post_comment: Optional[bool] = None,
+        delete_action_id: Optional[str] = None,
+        user_auth_required: Optional[bool] = None,
+        user_auth_url: Optional[str] = None,
+        error: Optional[Dict[str, Any]] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Provide comments for Work Objects.
+
+        Apps call this method to send per-user flexpane comment data to the client.
+        https://docs.slack.dev/reference/methods/entity.presentComments
+
+        Args:
+            comments: Array of comments to present to the user.
+            trigger_id: A reference to the original user action that initiated the request
+            cursor: App supplied cursor used for pagination, will be sent in the next request for comments
+            can_post_comment: Indicates whether the user has permissions to post comments
+            delete_action_id: The block action id that will be sent when a delete request is initiated for a comment.
+            user_auth_required: Set to true (or 1) to indicate that the user must authenticate to see the comments data.
+            user_auth_url: A custom URL to which users are directed for authentication if required.
+        """
+        kwargs.update({"comments": comments, "trigger_id": trigger_id})
+        if cursor is not None:
+            kwargs.update({"cursor": cursor})
+        if can_post_comment is not None:
+            kwargs.update({"can_post_comment": can_post_comment})
+        if delete_action_id is not None:
+            kwargs.update({"delete_action_id": delete_action_id})
+        if user_auth_required is not None:
+            kwargs.update({"user_auth_required": user_auth_required})
+        if user_auth_url is not None:
+            kwargs.update({"user_auth_url": user_auth_url})
+        if error is not None:
+            kwargs.update({"error": error})
+        return self.api_call("entity.presentComments", json=kwargs)
+
     def entity_presentDetails(
         self,
         trigger_id: str,
