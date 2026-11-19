@@ -415,8 +415,13 @@ class BaseClient:
                     body_string = resp["body"] if isinstance(resp["body"], str) else None
                     body_bytes = body_string.encode("utf-8") if body_string is not None else resp["body"]
                     if body_string is not None and body_string.startswith("{"):
-                        parsed_body = json.loads(body_string)
-                        resp["parsed_body"] = parsed_body
+                        try:
+                            parsed_body = json.loads(body_string)
+                            resp["parsed_body"] = parsed_body
+                        except json.decoder.JSONDecodeError:
+                            # Truncated or otherwise malformed body. Leave parsed_body unset so
+                            # the caller builds its usual non-JSON error instead of raising here.
+                            parsed_body = {}
                     else:
                         parsed_body = {}
                     retry_response = RetryHttpResponse(
