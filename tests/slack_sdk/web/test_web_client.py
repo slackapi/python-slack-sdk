@@ -129,6 +129,13 @@ class TestWebClient(unittest.TestCase):
         with self.assertRaises(err.SlackApiError):
             self.client.oauth_v2_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
 
+    def test_oauth_v2_user_access(self):
+        self.client.token = ""
+        resp = self.client.oauth_v2_user_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
+        self.assertIsNone(resp["error"])
+        with self.assertRaises(err.SlackApiError):
+            self.client.oauth_v2_user_access(client_id="999.999", client_secret="secret", code="codeeeeeeeeee")
+
     def test_issue_690_oauth_access(self):
         self.client.token = ""
         resp = self.client.oauth_access(client_id="111.222", client_secret="secret", code="codeeeeeeeeee")
