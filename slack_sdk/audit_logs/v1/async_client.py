@@ -299,7 +299,7 @@ class AsyncAuditLogsClient:
                             message = f"Failed to parse the response body: {str(e)}"
                             raise SlackApiError(message, res)
 
-                        if res.status == 429:
+                        if res.status >= 400:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
@@ -309,7 +309,7 @@ class AsyncAuditLogsClient:
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
                                             f"A retry handler found: {type(handler).__name__} "
-                                            f"for {http_verb} {url} - rate_limited"
+                                            f"for {http_verb} {url} - status: {res.status}"
                                         )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
