@@ -67,7 +67,6 @@ class TestWebClientCoverage(unittest.TestCase):
                 # TODO: admin.audit.anomaly.allow.* / The endpoints requires a "session" token
                 "admin.audit.anomaly.allow.getItem",
                 "admin.audit.anomaly.allow.updateItem",
-                "assistant.search.context",  # TODO: add this method in follow up PR
                 "conversations.requestSharedInvite.list",  # TODO: add this method in follow up PR
             ]:
                 continue
@@ -548,6 +547,15 @@ class TestWebClientCoverage(unittest.TestCase):
             elif method_name == "apps_user_connection_update":
                 self.api_methods_to_call.remove(method(user_id="U12345678", status="connected")["method"])
                 await async_method(user_id="U12345678", status="connected")
+            elif method_name == "assistant_search_context":
+                self.api_methods_to_call.remove(method(query="What is project gizmo?")["method"])
+                method(
+                    query="What is the latest on project Gizmo?",
+                    channel_types=["public_channel", "private_channel", "mpim", "im"],
+                    content_types=["messages", "files", "channels"],
+                    term_clauses=["project gizmo"],
+                )
+                await async_method(query="What is project gizmo?")
             elif method_name == "assistant_threads_setStatus":
                 self.api_methods_to_call.remove(
                     method(channel_id="D111", thread_ts="111.222", status="is typing...")["method"]
