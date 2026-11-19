@@ -78,6 +78,10 @@ class TestWebClient(unittest.TestCase):
         with self.assertRaises(err.SlackRequestError):
             self.client.api_call("fake.method", http_verb="GET", json={})
 
+    def test_apps_icon_set_requires_file_or_url(self):
+        with self.assertRaises(err.SlackRequestError):
+            self.client.apps_icon_set(app_id="A111")
+
     def test_slack_api_error_is_raised_on_unsuccessful_responses(self):
         self.client.token = "xoxb-api_test_false"
         with self.assertRaises(err.SlackApiError):

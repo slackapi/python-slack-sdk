@@ -2,6 +2,7 @@ import unittest
 
 from slack_sdk.oauth.installation_store import Installation
 from slack_sdk.oauth.installation_store.sqlite3 import SQLite3InstallationStore
+from tests.helpers import async_test
 
 
 class TestSQLite3(unittest.TestCase):
@@ -138,19 +139,58 @@ class TestSQLite3(unittest.TestCase):
         self.assertIsNone(i)
 
         # delete installations
-        store.delete_installation(enterprise_id="E111", team_id=None)
-        i = store.find_installation(enterprise_id="E111", team_id=None)
+        store.delete_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
+        i = store.find_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
+        self.assertIsNone(i)
+
+        store.save(installation)
+        store.delete_installation(enterprise_id="EO111", team_id=None)
+        i = store.find_installation(enterprise_id="EO111", team_id=None)
         self.assertIsNone(i)
 
         # delete all
         store.save(installation)
-        store.delete_all(enterprise_id="E111", team_id=None)
+        store.delete_all(enterprise_id="EO111", team_id=None)
 
-        i = store.find_installation(enterprise_id="E111", team_id=None)
+        i = store.find_installation(enterprise_id="EO111", team_id=None)
         self.assertIsNone(i)
-        i = store.find_installation(enterprise_id="E111", team_id=None, user_id="U111")
+        i = store.find_installation(enterprise_id="EO111", team_id=None, user_id="UO111")
         self.assertIsNone(i)
-        bot = store.find_bot(enterprise_id=None, team_id="T222")
+        bot = store.find_bot(enterprise_id="EO111", team_id=None)
+        self.assertIsNone(bot)
+
+    @async_test
+    async def test_async_delete(self):
+        store = SQLite3InstallationStore(database="logs/test.db", client_id="111.222")
+        installation = Installation(
+            app_id="A111",
+            enterprise_id="E111",
+            team_id="T111",
+            user_id="U111",
+            bot_id="B111",
+            bot_token="xoxb-111",
+            bot_scopes=["chat:write"],
+            bot_user_id="U222",
+        )
+        await store.async_save(installation)
+
+        # delete installations
+        await store.async_delete_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        i = await store.async_find_installation(enterprise_id="E111", team_id="T111", user_id="U111")
+        self.assertIsNone(i)
+
+        # delete bots
+        await store.async_delete_bot(enterprise_id="E111", team_id="T111")
+        bot = await store.async_find_bot(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(bot)
+
+        # delete all
+        await store.async_save(installation)
+        await store.async_delete_all(enterprise_id="E111", team_id="T111")
+
+        i = await store.async_find_installation(enterprise_id="E111", team_id="T111")
+        self.assertIsNone(i)
+        bot = await store.async_find_bot(enterprise_id="E111", team_id="T111")
         self.assertIsNone(bot)
 
     def test_save_and_find_token_rotation(self):

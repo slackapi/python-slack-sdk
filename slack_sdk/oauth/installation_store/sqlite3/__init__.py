@@ -536,6 +536,9 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 self.logger.warning(message)
             return None
 
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
+        return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+
     def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -> None:
         try:
             with self.connect() as conn:
@@ -561,6 +564,15 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
             else:
                 self.logger.warning(message)
 
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -> None:
+        return self.delete_installation(enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
+
     def delete_installation(
         self,
         *,
@@ -583,7 +595,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             and
                             team_id = ?
                         """,
-                        [self.client_id, enterprise_id or "", team_id],
+                        [self.client_id, enterprise_id or "", team_id or ""],
                     )
                 else:
                     conn.execute(
@@ -600,7 +612,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             and
                             user_id = ?
                         """,
-                        [self.client_id, enterprise_id or "", team_id, user_id],
+                        [self.client_id, enterprise_id or "", team_id or "", user_id],
                     )
                 conn.commit()
         except Exception as e:
