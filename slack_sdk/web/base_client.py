@@ -414,11 +414,15 @@ class BaseClient:
                     retry_request = RetryHttpRequest.from_urllib_http_request(req)
                     body_string = resp["body"] if isinstance(resp["body"], str) else None
                     body_bytes = body_string.encode("utf-8") if body_string is not None else resp["body"]
+                    parsed_body = {}
                     if body_string is not None and body_string.startswith("{"):
-                        parsed_body = json.loads(body_string)
-                        resp["parsed_body"] = parsed_body
-                    else:
-                        parsed_body = {}
+                        try:
+                            parsed_body = json.loads(body_string)
+                            resp["parsed_body"] = parsed_body
+                        except json.decoder.JSONDecodeError:
+                            # Leave "parsed_body" unset so that _urllib_api_call() reports the malformed body
+                            # as a SlackApiError, the same as it does when no retry handler is set
+                            pass
                     retry_response = RetryHttpResponse(
                         status_code=resp["status"],
                         headers=resp["headers"],
