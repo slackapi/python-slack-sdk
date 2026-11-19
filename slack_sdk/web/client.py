@@ -2810,6 +2810,16 @@ class WebClient(BaseClient):
             kwargs.update({"term_clauses": json.dumps(term_clauses)})
         return self.api_call("assistant.search.context", params=kwargs)
 
+    def assistant_search_info(
+        self,
+        **kwargs,
+    ) -> SlackResponse:
+        """Returns search capabilities on a given team.
+
+        https://docs.slack.dev/reference/methods/assistant.search.info
+        """
+        return self.api_call("assistant.search.info", params=kwargs)
+
     def assistant_threads_setStatus(
         self,
         *,
