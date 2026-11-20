@@ -258,7 +258,7 @@ el.replaceWith(d);
                 if actions is None:
                     continue
                 elif isinstance(actions, dict):
-                    new_actions: Dict[str, Union[ViewStateValue, dict]] = copy.copy(actions)
+                    new_actions: Dict[str, ViewStateValue] = {}
                     for action_id, v in actions.items():
                         if isinstance(v, dict):
                             d = copy.copy(v)
@@ -269,9 +269,9 @@ el.replaceWith(d);
                             self._show_warning_about_unknown(v)
                             continue
                         new_actions[action_id] = value_object
-                    value_objects[block_id] = new_actions  # type: ignore[assignment]
+                    value_objects[block_id] = new_actions
                 else:
-                    self._show_warning_about_unknown(v)
+                    self._show_warning_about_unknown(actions)
         self.values = value_objects
 
     def to_dict(self, *args) -&gt; Dict[str, Dict[str, Dict[str, dict]]]:
@@ -316,7 +316,7 @@ el.replaceWith(d);
 </dd>
 <dt id="slack_sdk.models.views.ViewStateValue"><code class="flex name class">
 <span>class <span class="ident">ViewStateValue</span></span>
-<span>(</span><span>*,<br>type: str | None = None,<br>value: str | None = None,<br>selected_date: str | None = None,<br>selected_time: str | None = None,<br>selected_conversation: str | None = None,<br>selected_channel: str | None = None,<br>selected_user: str | None = None,<br>selected_option: dict | <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a> | None = None,<br>selected_conversations: Sequence[str] | None = None,<br>selected_channels: Sequence[str] | None = None,<br>selected_users: Sequence[str] | None = None,<br>selected_options: Sequence[dict | <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None = None)</span>
+<span>(</span><span>*,<br>type: str | None = None,<br>value: str | None = None,<br>selected_date: str | None = None,<br>selected_time: str | None = None,<br>selected_conversation: str | None = None,<br>selected_channel: str | None = None,<br>selected_user: str | None = None,<br>selected_option: dict | <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a> | None = None,<br>selected_conversations: Sequence[str] | None = None,<br>selected_channels: Sequence[str] | None = None,<br>selected_users: Sequence[str] | None = None,<br>selected_options: Sequence[dict | <a title="slack_sdk.models.blocks.basic_components.Option" href="../blocks/basic_components.html#slack_sdk.models.blocks.basic_components.Option">Option</a>] | None = None,<br>selected_date_time: int | None = None,<br>timezone: str | None = None,<br>rich_text_value: <a title="slack_sdk.models.blocks.blocks.RichTextBlock" href="../blocks/blocks.html#slack_sdk.models.blocks.blocks.RichTextBlock">RichTextBlock</a> | dict | None = None,<br>files: Sequence[dict] | None = None,<br>**kwargs)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -337,6 +337,10 @@ el.replaceWith(d);
         &#34;selected_channels&#34;,
         &#34;selected_users&#34;,
         &#34;selected_options&#34;,
+        &#34;selected_date_time&#34;,
+        &#34;timezone&#34;,
+        &#34;rich_text_value&#34;,
+        &#34;files&#34;,
     }
 
     def __init__(
@@ -354,6 +358,11 @@ el.replaceWith(d);
         selected_channels: Optional[Sequence[str]] = None,
         selected_users: Optional[Sequence[str]] = None,
         selected_options: Optional[Sequence[Union[dict, Option]]] = None,
+        selected_date_time: Optional[int] = None,
+        timezone: Optional[str] = None,
+        rich_text_value: Optional[Union[dict, RichTextBlock]] = None,
+        files: Optional[Sequence[dict]] = None,
+        **kwargs,
     ):
         self.type = type
         self.value = value
@@ -366,6 +375,10 @@ el.replaceWith(d);
         self.selected_conversations = selected_conversations
         self.selected_channels = selected_channels
         self.selected_users = selected_users
+        self.selected_date_time = selected_date_time
+        self.timezone = timezone
+        self.rich_text_value = rich_text_value
+        self.files = files
 
         if isinstance(selected_options, list):
             self.selected_options = []
@@ -375,7 +388,8 @@ el.replaceWith(d);
                 elif isinstance(option, dict):
                     self.selected_options.append(Option(**option))
         else:
-            self.selected_options = selected_options  # type: ignore[assignment]</code></pre>
+            self.selected_options = selected_options  # type: ignore[assignment]
+        self.additional_attributes = kwargs</code></pre>
 </details>
 <div class="desc"><p>The base class for JSON serializable class objects.</p></div>
 <h3>Ancestors</h3>

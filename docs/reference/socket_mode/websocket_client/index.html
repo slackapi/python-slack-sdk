@@ -252,10 +252,7 @@ el.replaceWith(d);
                 if self.is_connected():
                     self.current_session.send(message)  # type: ignore[union-attr]
                 else:
-                    self.logger.warning(
-                        f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;  # type: ignore[attr-defined] # noqa: E501
-                        &#34;Failed to send a message&#34;
-                    )
+                    self.logger.warning(&#34;The current session is no longer active. Failed to send a message&#34;)
                     raise e
 
     def close(self) -&gt; None:
@@ -517,10 +514,7 @@ el.replaceWith(d);
             if self.is_connected():
                 self.current_session.send(message)  # type: ignore[union-attr]
             else:
-                self.logger.warning(
-                    f&#34;The current session (session id: {self.session_id()}) is no longer active. &#34;  # type: ignore[attr-defined] # noqa: E501
-                    &#34;Failed to send a message&#34;
-                )
+                self.logger.warning(&#34;The current session is no longer active. Failed to send a message&#34;)
                 raise e</code></pre>
 </details>
 <div class="desc"></div>

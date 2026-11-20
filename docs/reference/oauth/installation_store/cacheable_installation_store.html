@@ -79,9 +79,10 @@ el.replaceWith(d);
         key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}&#34;
         if key in self.cached_bots:
             self.cached_bots.pop(key)
-        key = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}-{installation.user_id or &#39;&#39;}&#34;
-        if key in self.cached_installations:
-            self.cached_installations.pop(key)
+        key_prefix = f&#34;{installation.enterprise_id or &#39;&#39;}-{installation.team_id or &#39;&#39;}-&#34;
+        for key in list(self.cached_installations.keys()):
+            if key.startswith(key_prefix):
+                self.cached_installations.pop(key)
 
         return self.underlying.save(installation)
 
