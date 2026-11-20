@@ -98,6 +98,55 @@ class TestSignatureVerifier(unittest.TestCase):
         self.assertFalse(verifier.is_valid(self.body, None, None))
         self.assertFalse(verifier.is_valid(None, None, None))
 
+    def test_is_valid_malformed_timestamp(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        self.assertFalse(verifier.is_valid(self.body, "abc", "v0=aa"))
+        self.assertFalse(verifier.is_valid(self.body, "1.5", "v0=aa"))
+        self.assertFalse(verifier.is_valid(self.body, "", "v0=aa"))
+
+    def test_is_valid_malformed_signature(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        self.assertFalse(verifier.is_valid(self.body, self.timestamp, "v0=é"))
+        self.assertFalse(verifier.is_valid(self.body, self.timestamp, "v0=✓"))
+
+    def test_is_valid_malformed_body(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        self.assertFalse(verifier.is_valid(b"\xff\xfe", self.timestamp, "v0=aa"))
+        self.assertFalse(verifier.is_valid(b"\x80\x81\x82", self.timestamp, "v0=aa"))
+
+    def test_is_valid_request_malformed_inputs(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        self.assertFalse(
+            verifier.is_valid_request(
+                self.body,
+                {"X-Slack-Request-Timestamp": "abc", "X-Slack-Signature": "v0=aa"},
+            )
+        )
+        self.assertFalse(
+            verifier.is_valid_request(
+                self.body,
+                {"X-Slack-Request-Timestamp": self.timestamp, "X-Slack-Signature": "v0=é"},
+            )
+        )
+        self.assertFalse(
+            verifier.is_valid_request(
+                b"\xff\xfe",
+                {"X-Slack-Request-Timestamp": self.timestamp, "X-Slack-Signature": "v0=aa"},
+            )
+        )
+
     def test_invalid_signing_secret(self):
         with self.assertRaises(ValueError):
             SignatureVerifier("")

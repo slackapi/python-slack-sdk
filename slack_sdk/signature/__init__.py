@@ -66,10 +66,25 @@ class SignatureVerifier:
         if timestamp is None or signature is None:
             return False
 
-        if abs(self.clock.now() - int(timestamp)) > 60 * 5:
+        try:
+            timestamp_value = int(timestamp)
+        except (TypeError, ValueError):
+            return False
+        if abs(self.clock.now() - timestamp_value) > 60 * 5:
             return False
 
-        calculated_signature = self.generate_signature(timestamp=timestamp, body=body)
+        # hmac.compare_digest() only accepts ASCII strings; a signature
+        # with non-ASCII characters can never match, so reject it here
+        # instead of letting compare_digest() raise TypeError.
+        if not isinstance(signature, str) or not signature.isascii():
+            return False
+
+        try:
+            calculated_signature = self.generate_signature(timestamp=timestamp, body=body)
+        except UnicodeDecodeError:
+            # A bytes body that is not valid UTF-8 can never match a
+            # signature computed over its decoded form.
+            return False
         if calculated_signature is None:
             return False
         return hmac.compare_digest(calculated_signature, signature)
