@@ -205,6 +205,8 @@ def _receive_messages(
         with sock_receive_lock:
             try:
                 received_bytes = sock.recv(size)
+                if not received_bytes:
+                    raise EOFError("Connection is closed")
                 if all_message_trace_enabled:
                     if len(received_bytes) > 0:
                         logger.debug(f"Received bytes: {received_bytes!r}")
@@ -216,18 +218,26 @@ def _receive_messages(
                     # Note that bad connections can be detected by monitoring threads
                     # the Socket Mode client automatically reconnects to a new endpoint later.
                     logger.debug("The connection seems to be already closed.")
-                    return bytes()
+                    raise EOFError("Connection is closed") from e
                 raise e
 
-    return _fetch_messages(
-        messages=[],
-        receive=receive,
-        remaining_bytes=None,
-        current_mask_key=None,
-        current_header=None,
-        current_data=bytes(),
-        logger=logger,
-    )
+    messages: List[Tuple[Optional[FrameHeader], bytes]] = []
+    try:
+        return _fetch_messages(
+            messages=messages,
+            receive=receive,
+            remaining_bytes=None,
+            current_mask_key=None,
+            current_header=None,
+            current_data=bytes(),
+            logger=logger,
+        )
+    except EOFError as e:
+        # Deliver complete frames before terminating on the next read. Never
+        # deliver the incomplete frame that was being assembled at EOF.
+        if messages:
+            return messages
+        raise ConnectionError("Connection is closed") from e
 
 
 def _fetch_messages(
@@ -251,7 +261,7 @@ def _fetch_messages(
 
     if current_header is None:
         # new message
-        if len(remaining_bytes) <= 2:
+        while len(remaining_bytes) < 2:
             remaining_bytes += receive()  # type: ignore[call-arg]
 
         if remaining_bytes[0] == 10:  # \n
@@ -276,12 +286,12 @@ def _fetch_messages(
         current_data_length: int = b2 & 0b01111111
         idx_after_length_part: int = 2
         if current_data_length == 126:
-            if len(remaining_bytes) < 4:
+            while len(remaining_bytes) < 4:
                 remaining_bytes += receive(1024)
             current_data_length = struct.unpack("!H", bytes(remaining_bytes[2:4]))[0]
             idx_after_length_part = 4
         elif current_data_length == 127:
-            if len(remaining_bytes) < 10:
+            while len(remaining_bytes) < 10:
                 remaining_bytes += receive(1024)
             current_data_length = struct.unpack("!Q", bytes(remaining_bytes[2:10]))[0]
             idx_after_length_part = 10
