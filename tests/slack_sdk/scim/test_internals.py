@@ -16,3 +16,9 @@ class TEstInternals(unittest.TestCase):
         result = _to_snake_cased(json.loads(response_body))
         self.assertEqual(result["start_index"], 1)
         self.assertIsNotNone(result["resources"][0]["id"])
+
+    def test_snake_cased_list_of_strings(self):
+        body = {"schemas": ["urn:a", "urn:b"], "emails": [{"primaryValue": "x"}]}
+        result = _to_snake_cased(body)
+        self.assertEqual(result["schemas"], ["urn:a", "urn:b"])
+        self.assertEqual(result["emails"], [{"primary_value": "x"}])
