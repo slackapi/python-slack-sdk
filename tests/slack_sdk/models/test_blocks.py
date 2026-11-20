@@ -3,6 +3,7 @@ from typing import List
 
 from slack_sdk.errors import SlackObjectFormationError
 from slack_sdk.models.blocks import (
+    ActionCellObject,
     ActionsBlock,
     AlertBlock,
     AuthProviderBlock,
@@ -14,6 +15,7 @@ from slack_sdk.models.blocks import (
     ContainerBlock,
     ContextActionsBlock,
     ContextBlock,
+    DataTableBlock,
     DividerBlock,
     FileBlock,
     HeaderBlock,
@@ -1361,6 +1363,51 @@ class RichTextBlockTests(unittest.TestCase):
 
 
 # ----------------------------------------------
+# ActionCellObject
+# ----------------------------------------------
+
+
+class ActionCellObjectTests(unittest.TestCase):
+    def test_document(self):
+        """Test action_cell from Slack documentation example"""
+        input = {
+            "type": "action_cell",
+            "element": {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Mark done",
+                },
+                "action_id": "mark_done",
+                "value": "task_123",
+            },
+            "fallback": {
+                "type": "raw_text",
+                "text": "Open",
+            },
+        }
+        self.assertDictEqual(input, ActionCellObject(**input).to_dict())
+
+    def test_with_object_helpers(self):
+        """Test action_cell built from ButtonElement and RawTextObject helpers"""
+        obj = ActionCellObject(
+            element=ButtonElement(text="Mark done", action_id="mark_done", value="task_123"),
+            fallback=RawTextObject(text="Open"),
+        )
+        expected = {
+            "type": "action_cell",
+            "element": {
+                "type": "button",
+                "text": {"type": "plain_text", "text": "Mark done", "emoji": True},
+                "action_id": "mark_done",
+                "value": "task_123",
+            },
+            "fallback": {"type": "raw_text", "text": "Open"},
+        }
+        self.assertDictEqual(expected, obj.to_dict())
+
+
+# ----------------------------------------------
 # RawNumberObject
 # ----------------------------------------------
 
@@ -2120,3 +2167,86 @@ class AuthProviderBlockTests(unittest.TestCase):
                 is_connected=True,
                 accessory={"type": "button", "action_id": "connect", "text": {"type": "plain_text", "text": "Connect"}},
             ).validate_json()
+
+
+class DataTableBlockTests(unittest.TestCase):
+    def test_document(self):
+        """Test data table block from Slack documentation example"""
+        input = {
+            "type": "data_table",
+            "caption": "Tasks",
+            "page_size": 25,
+            "row_header_column_index": 0,
+            "rows": [
+                [
+                    {"type": "raw_text", "text": "Task"},
+                    {"type": "raw_text", "text": "Points"},
+                    {"type": "raw_text", "text": "Action"},
+                ],
+                [
+                    {"type": "raw_text", "text": "Review the plan"},
+                    {"type": "raw_number", "value": 3, "text": "3"},
+                    {
+                        "type": "action_cell",
+                        "element": {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Mark done",
+                            },
+                            "action_id": "mark_done",
+                            "value": "task_123",
+                        },
+                        "fallback": {
+                            "type": "raw_text",
+                            "text": "Open",
+                        },
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(input, DataTableBlock(**input).to_dict())
+        self.assertDictEqual(input, Block.parse(input).to_dict())
+
+    def test_with_cell_object_helpers(self):
+        """Test data table block built from cell object helpers"""
+        block = DataTableBlock(
+            caption="Tasks",
+            rows=[
+                [RawTextObject(text="Task"), RawTextObject(text="Points"), RawTextObject(text="Action")],
+                [
+                    RawTextObject(text="Review the plan"),
+                    RawNumberObject(value=3, text="3"),
+                    ActionCellObject(
+                        element=ButtonElement(text="Mark done", action_id="mark_done", value="task_123"),
+                        fallback=RawTextObject(text="Open"),
+                    ),
+                ],
+            ],
+        )
+        expected = {
+            "type": "data_table",
+            "caption": "Tasks",
+            "rows": [
+                [
+                    {"type": "raw_text", "text": "Task"},
+                    {"type": "raw_text", "text": "Points"},
+                    {"type": "raw_text", "text": "Action"},
+                ],
+                [
+                    {"type": "raw_text", "text": "Review the plan"},
+                    {"type": "raw_number", "value": 3, "text": "3"},
+                    {
+                        "type": "action_cell",
+                        "element": {
+                            "type": "button",
+                            "text": {"type": "plain_text", "text": "Mark done", "emoji": True},
+                            "action_id": "mark_done",
+                            "value": "task_123",
+                        },
+                        "fallback": {"type": "raw_text", "text": "Open"},
+                    },
+                ],
+            ],
+        }
+        self.assertDictEqual(expected, block.to_dict())

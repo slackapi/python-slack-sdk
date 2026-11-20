@@ -8,6 +8,7 @@ To learn more about Block Kit, please check the following resources and tools:
 """
 
 from .basic_components import (
+    ActionCellObject,
     ButtonStyles,
     ConfirmObject,
     DynamicSelectElementTypes,
@@ -72,6 +73,7 @@ from .blocks import (
     ContainerBlock,
     ContextActionsBlock,
     ContextBlock,
+    DataTableBlock,
     DividerBlock,
     FileBlock,
     HeaderBlock,
@@ -87,6 +89,7 @@ from .blocks import (
 )
 
 __all__ = [
+    "ActionCellObject",
     "ButtonStyles",
     "ConfirmObject",
     "DynamicSelectElementTypes",
@@ -147,6 +150,7 @@ __all__ = [
     "ContainerBlock",
     "ContextActionsBlock",
     "ContextBlock",
+    "DataTableBlock",
     "DividerBlock",
     "FileBlock",
     "HeaderBlock",
