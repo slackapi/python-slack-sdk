@@ -1,5 +1,6 @@
 import os
 import unittest
+from datetime import datetime
 
 import sqlalchemy
 from sqlalchemy.engine import Engine
@@ -320,3 +321,42 @@ class TestSQLAlchemy(unittest.TestCase):
         self.store.save(installation)
         found = self.store.find_installation(enterprise_id="E111", team_id="T111")
         self.assertIsNotNone(found)
+
+    def test_find_returns_latest_save_within_the_same_second(self):
+        for suffix in ["old", "new"]:
+            self.store.save(
+                Installation(
+                    app_id="A333",
+                    enterprise_id="E333",
+                    team_id="T333",
+                    user_id="U333",
+                    bot_id="B333",
+                    bot_token=f"xoxb-{suffix}",
+                    bot_scopes=["chat:write"],
+                    bot_user_id="U444",
+                    user_token=f"xoxp-{suffix}",
+                )
+            )
+        self.store.save(
+            Installation(
+                app_id="A333",
+                enterprise_id="E333",
+                team_id="T333",
+                user_id="U555",
+                user_token="xoxp-user-only",
+            )
+        )
+        with self.engine.begin() as conn:
+            for table in [self.store.installations, self.store.bots]:
+                conn.execute(table.update().values(installed_at=datetime(2026, 11, 19, 10, 0, 0)))
+
+        bot = self.store.find_bot(enterprise_id="E333", team_id="T333")
+        self.assertEqual(bot.bot_token, "xoxb-new")
+
+        installation = self.store.find_installation(enterprise_id="E333", team_id="T333")
+        self.assertEqual(installation.user_token, "xoxp-user-only")
+        self.assertEqual(installation.bot_token, "xoxb-new")
+
+        installation = self.store.find_installation(enterprise_id="E333", team_id="T333", user_id="U333")
+        self.assertEqual(installation.user_token, "xoxp-new")
+        self.assertEqual(installation.bot_token, "xoxb-new")

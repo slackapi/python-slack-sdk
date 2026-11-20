@@ -1,5 +1,6 @@
 import os
 import unittest
+from datetime import datetime
 from tests.helpers import async_test
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
@@ -328,3 +329,43 @@ class TestAsyncSQLAlchemy(unittest.TestCase):
         await self.store.async_save(installation)
         found = await self.store.async_find_installation(enterprise_id="E111", team_id="T111")
         self.assertIsNotNone(found)
+
+    @async_test
+    async def test_find_returns_latest_save_within_the_same_second(self):
+        for suffix in ["old", "new"]:
+            await self.store.async_save(
+                Installation(
+                    app_id="A333",
+                    enterprise_id="E333",
+                    team_id="T333",
+                    user_id="U333",
+                    bot_id="B333",
+                    bot_token=f"xoxb-{suffix}",
+                    bot_scopes=["chat:write"],
+                    bot_user_id="U444",
+                    user_token=f"xoxp-{suffix}",
+                )
+            )
+        await self.store.async_save(
+            Installation(
+                app_id="A333",
+                enterprise_id="E333",
+                team_id="T333",
+                user_id="U555",
+                user_token="xoxp-user-only",
+            )
+        )
+        async with self.engine.begin() as conn:
+            for table in [self.store.installations, self.store.bots]:
+                await conn.execute(table.update().values(installed_at=datetime(2026, 11, 19, 10, 0, 0)))
+
+        bot = await self.store.async_find_bot(enterprise_id="E333", team_id="T333")
+        self.assertEqual(bot.bot_token, "xoxb-new")
+
+        installation = await self.store.async_find_installation(enterprise_id="E333", team_id="T333")
+        self.assertEqual(installation.user_token, "xoxp-user-only")
+        self.assertEqual(installation.bot_token, "xoxb-new")
+
+        installation = await self.store.async_find_installation(enterprise_id="E333", team_id="T333", user_id="U333")
+        self.assertEqual(installation.user_token, "xoxp-new")
+        self.assertEqual(installation.bot_token, "xoxb-new")

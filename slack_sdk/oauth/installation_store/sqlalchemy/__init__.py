@@ -221,7 +221,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                     c.bot_token.is_not(None),  # the latest one that has a bot token
                 )
             )
-            .order_by(desc(c.installed_at))
+            .order_by(desc(c.installed_at), desc(c.id))
             .limit(1)
         )
 
@@ -256,7 +256,7 @@ class SQLAlchemyInstallationStore(InstallationStore):
                 c.user_id == user_id,
             )
 
-        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
+        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at), desc(c.id)).limit(1)
 
         installation: Optional[Installation] = None
         with self.engine.connect() as conn:
@@ -505,7 +505,7 @@ class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
                     c.bot_token.is_not(None),  # the latest one that has a bot token
                 )
             )
-            .order_by(desc(c.installed_at))
+            .order_by(desc(c.installed_at), desc(c.id))
             .limit(1)
         )
 
@@ -540,7 +540,7 @@ class AsyncSQLAlchemyInstallationStore(AsyncInstallationStore):
                 c.user_id == user_id,
             )
 
-        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at)).limit(1)
+        query = self.installations.select().where(where_clause).order_by(desc(c.installed_at), desc(c.id)).limit(1)
 
         installation: Optional[Installation] = None
         async with self.engine.connect() as conn:
