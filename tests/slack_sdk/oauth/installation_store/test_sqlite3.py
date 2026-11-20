@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 
 from slack_sdk.oauth.installation_store import Installation
@@ -332,8 +333,9 @@ class TestSQLite3(unittest.TestCase):
         self.assertIsNone(installation)
 
     def test_find_returns_latest_save_within_the_same_second(self):
-        store = SQLite3InstallationStore(database="logs/test.db", client_id="111.222")
-        store.delete_all(enterprise_id="E333", team_id="T333")
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        store = SQLite3InstallationStore(database=f"{directory.name}/test.db", client_id="111.222")
 
         for suffix in ["old", "new"]:
             store.save(
@@ -360,7 +362,8 @@ class TestSQLite3(unittest.TestCase):
         )
         with store.connect() as conn:
             for table in ["slack_installations", "slack_bots"]:
-                conn.execute(f"update {table} set installed_at = '2026-11-19 10:00:00' where enterprise_id = 'E333'")
+                conn.execute(f"update {table} set installed_at = '2026-11-19 10:00:00'")
+                conn.execute(f"drop index {table}_idx")
 
         bot = store.find_bot(enterprise_id="E333", team_id="T333")
         self.assertEqual(bot.bot_token, "xoxb-new")
@@ -372,5 +375,3 @@ class TestSQLite3(unittest.TestCase):
         installation = store.find_installation(enterprise_id="E333", team_id="T333", user_id="U333")
         self.assertEqual(installation.user_token, "xoxp-new")
         self.assertEqual(installation.bot_token, "xoxb-new")
-
-        store.delete_all(enterprise_id="E333", team_id="T333")
