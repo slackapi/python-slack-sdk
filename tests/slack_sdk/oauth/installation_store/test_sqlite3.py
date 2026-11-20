@@ -330,3 +330,47 @@ class TestSQLite3(unittest.TestCase):
         self.assertIsNone(installation)
         installation = store.find_installation(enterprise_id=None, team_id="T111")
         self.assertIsNone(installation)
+
+    def test_find_returns_latest_save_within_the_same_second(self):
+        store = SQLite3InstallationStore(database="logs/test.db", client_id="111.222")
+        store.delete_all(enterprise_id="E333", team_id="T333")
+
+        for suffix in ["old", "new"]:
+            store.save(
+                Installation(
+                    app_id="A333",
+                    enterprise_id="E333",
+                    team_id="T333",
+                    user_id="U333",
+                    bot_id="B333",
+                    bot_token=f"xoxb-{suffix}",
+                    bot_scopes=["chat:write"],
+                    bot_user_id="U444",
+                    user_token=f"xoxp-{suffix}",
+                )
+            )
+        store.save(
+            Installation(
+                app_id="A333",
+                enterprise_id="E333",
+                team_id="T333",
+                user_id="U555",
+                user_token="xoxp-user-only",
+            )
+        )
+        with store.connect() as conn:
+            for table in ["slack_installations", "slack_bots"]:
+                conn.execute(f"update {table} set installed_at = '2026-11-19 10:00:00' where enterprise_id = 'E333'")
+
+        bot = store.find_bot(enterprise_id="E333", team_id="T333")
+        self.assertEqual(bot.bot_token, "xoxb-new")
+
+        installation = store.find_installation(enterprise_id="E333", team_id="T333")
+        self.assertEqual(installation.user_token, "xoxp-user-only")
+        self.assertEqual(installation.bot_token, "xoxb-new")
+
+        installation = store.find_installation(enterprise_id="E333", team_id="T333", user_id="U333")
+        self.assertEqual(installation.user_token, "xoxp-new")
+        self.assertEqual(installation.bot_token, "xoxb-new")
+
+        store.delete_all(enterprise_id="E333", team_id="T333")
