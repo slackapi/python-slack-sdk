@@ -579,6 +579,9 @@ el.replaceWith(d);
                 self.logger.warning(message)
             return None
 
+    async def async_delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
+        return self.delete_bot(enterprise_id=enterprise_id, team_id=team_id)
+
     def delete_bot(self, *, enterprise_id: Optional[str], team_id: Optional[str]) -&gt; None:
         try:
             with self.connect() as conn:
@@ -604,6 +607,15 @@ el.replaceWith(d);
             else:
                 self.logger.warning(message)
 
+    async def async_delete_installation(
+        self,
+        *,
+        enterprise_id: Optional[str],
+        team_id: Optional[str],
+        user_id: Optional[str] = None,
+    ) -&gt; None:
+        return self.delete_installation(enterprise_id=enterprise_id, team_id=team_id, user_id=user_id)
+
     def delete_installation(
         self,
         *,
@@ -626,7 +638,7 @@ el.replaceWith(d);
                             and
                             team_id = ?
                         &#34;&#34;&#34;,
-                        [self.client_id, enterprise_id or &#34;&#34;, team_id],
+                        [self.client_id, enterprise_id or &#34;&#34;, team_id or &#34;&#34;],
                     )
                 else:
                     conn.execute(
@@ -643,7 +655,7 @@ el.replaceWith(d);
                             and
                             user_id = ?
                         &#34;&#34;&#34;,
-                        [self.client_id, enterprise_id or &#34;&#34;, team_id, user_id],
+                        [self.client_id, enterprise_id or &#34;&#34;, team_id or &#34;&#34;, user_id],
                     )
                 conn.commit()
         except Exception as e:
@@ -828,10 +840,18 @@ def logger(self) -&gt; Logger:
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
 <ul class="hlist">
-<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
-<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.find_installation">find_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_bot">delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore">InstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_all">delete_all</a></code></li>
+<li><code><a title="slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation" href="../installation_store.html#slack_sdk.oauth.installation_store.installation_store.InstallationStore.delete_installation">delete_installation</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
@@ -852,9 +872,17 @@ def logger(self) -&gt; Logger:
 </li>
 <li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
 <ul class="hlist">
-<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all">async_delete_all</a></code></li>
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_bot">async_delete_bot</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
 <li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_installation">async_delete_installation</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore">AsyncInstallationStore</a></b></code>:
+<ul class="hlist">
+<li><code><a title="slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all" href="../async_installation_store.html#slack_sdk.oauth.installation_store.async_installation_store.AsyncInstallationStore.async_delete_all">async_delete_all</a></code></li>
 </ul>
 </li>
 </ul>
