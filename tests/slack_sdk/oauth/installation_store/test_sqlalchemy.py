@@ -349,6 +349,8 @@ class TestSQLAlchemy(unittest.TestCase):
         with self.engine.begin() as conn:
             for table in [self.store.installations, self.store.bots]:
                 conn.execute(table.update().values(installed_at=datetime(2026, 11, 19, 10, 0, 0)))
+                for index in table.indexes:
+                    index.drop(conn)
 
         bot = self.store.find_bot(enterprise_id="E333", team_id="T333")
         self.assertEqual(bot.bot_token, "xoxb-new")
