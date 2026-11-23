@@ -112,12 +112,8 @@ def async_default_handlers() -> List[AsyncRetryHandler]:
 
 
 def _status_error(res: ClientResponse) -> Optional[ClientResponseError]:
-    if res.status < 400:
-        return None
-    return ClientResponseError(
-        res.request_info,
-        res.history,
-        status=res.status,
-        message=res.reason or "",
-        headers=res.headers,
-    )
+    try:
+        res.raise_for_status()
+    except ClientResponseError as e:
+        return e
+    return None
