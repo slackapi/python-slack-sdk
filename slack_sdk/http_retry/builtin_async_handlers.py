@@ -2,7 +2,7 @@ import asyncio
 import random
 from typing import Optional, List, Type
 
-from aiohttp import ClientOSError, ClientResponse, ClientResponseError, ServerConnectionError, ServerDisconnectedError
+from aiohttp import ClientOSError, ClientResponseError, ServerConnectionError, ServerDisconnectedError
 
 from slack_sdk.http_retry.async_handler import AsyncRetryHandler
 from slack_sdk.http_retry.interval_calculator import RetryIntervalCalculator
@@ -109,11 +109,3 @@ class AsyncServerErrorRetryHandler(AsyncRetryHandler):
 
 def async_default_handlers() -> List[AsyncRetryHandler]:
     return [AsyncConnectionErrorRetryHandler()]
-
-
-def _status_error(res: ClientResponse) -> Optional[ClientResponseError]:
-    try:
-        res.raise_for_status()
-    except ClientResponseError as e:
-        return e
-    return None
