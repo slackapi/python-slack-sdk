@@ -13,6 +13,7 @@ from slack_sdk.errors import SlackApiError
 from slack_sdk.web.internal_utils import _build_unexpected_body_error_message
 
 from slack_sdk.http_retry.async_handler import AsyncRetryHandler
+from slack_sdk.http_retry.builtin_async_handlers import _status_error
 from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
 from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
 from slack_sdk.http_retry.state import RetryState
@@ -162,11 +163,13 @@ async def _request_with_session(
                             f"body: {body}"
                         )
 
+                    status_error = _status_error(res)
                     for handler in retry_handlers:
                         if await handler.can_retry_async(
                             state=retry_state,
                             request=retry_request,
                             response=retry_response,
+                            error=status_error,
                         ):
                             if logger.level <= logging.DEBUG:
                                 logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
@@ -174,6 +177,7 @@ async def _request_with_session(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,
+                                error=status_error,
                             )
                             break
 

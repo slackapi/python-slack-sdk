@@ -20,7 +20,7 @@ from .internal_utils import (
 )
 from .response import AuditLogsResponse
 from slack_sdk.http_retry.async_handler import AsyncRetryHandler
-from slack_sdk.http_retry.builtin_async_handlers import async_default_handlers
+from slack_sdk.http_retry.builtin_async_handlers import _status_error, async_default_handlers
 from slack_sdk.http_retry.request import HttpRequest as RetryHttpRequest
 from slack_sdk.http_retry.response import HttpResponse as RetryHttpResponse
 from slack_sdk.http_retry.state import RetryState
@@ -300,11 +300,13 @@ class AsyncAuditLogsClient:
                             raise SlackApiError(message, res)
 
                         if res.status >= 400:
+                            status_error = _status_error(res)
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
+                                    error=status_error,
                                 ):
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
@@ -315,6 +317,7 @@ class AsyncAuditLogsClient:
                                         state=retry_state,
                                         request=retry_request,
                                         response=retry_response,
+                                        error=status_error,
                                     )
                                     break
 

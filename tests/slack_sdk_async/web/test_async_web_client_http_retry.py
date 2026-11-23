@@ -8,6 +8,7 @@ from tests.slack_sdk.web.mock_web_api_handler import MockHandler
 from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 from ..fatal_error_retry_handler import FatalErrorRetryHandler
 from ..my_retry_handler import MyRetryHandler
+from ..error_recording_retry_handler import ErrorRecordingRetryHandler, error_statuses
 
 
 class TestAsyncWebClient_HttpRetries(unittest.TestCase):
@@ -109,3 +110,19 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
         client.retry_handlers.append(AsyncServerErrorRetryHandler())
         # The auto-retry should work here
         await client.chat_postMessage(channel="C123", text="Hi there!")
+
+    @async_test
+    async def test_server_error_passes_the_status_error_to_handlers(self):
+        MockHandler.state["server_error_count"] = 0
+        retry_handler = ErrorRecordingRetryHandler()
+        client = AsyncWebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-server_error_only_once",
+            team_id="T111",
+            retry_handlers=[retry_handler],
+        )
+
+        await client.chat_postMessage(channel="C123", text="Hi there!")
+
+        self.assertEqual([500], error_statuses(retry_handler.can_retry_errors))
+        self.assertEqual([500], error_statuses(retry_handler.prepare_errors))
