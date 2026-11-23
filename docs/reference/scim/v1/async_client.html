@@ -355,7 +355,7 @@ el.replaceWith(d);
                                 headers=res.headers,
                             )
 
-                        if res.status == 429:
+                        if res.status &gt;= 400:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
@@ -365,7 +365,7 @@ el.replaceWith(d);
                                     if self.logger.level &lt;= logging.DEBUG:
                                         self.logger.info(
                                             f&#34;A retry handler found: {type(handler).__name__} &#34;
-                                            f&#34;for {http_verb} {url} - rate_limited&#34;
+                                            f&#34;for {http_verb} {url} - status: {res.status}&#34;
                                         )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,

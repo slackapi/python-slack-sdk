@@ -2557,6 +2557,49 @@ class LegacyWebClient(LegacyBaseClient):
         kwargs.update({"event_context": event_context, "cursor": cursor, "limit": limit})
         return self.api_call("apps.event.authorizations.list", params=kwargs)
 
+    def apps_icon_set(
+        self,
+        *,
+        app_id: str,
+        file: Optional[Union[str, bytes, IOBase]] = None,
+        url: Optional[str] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Sets the app icon.
+
+        https://docs.slack.dev/reference/methods/apps.icon.set
+
+        Args:
+            app_id: The ID of the app whose icon you want to set.
+            file: File contents via `multipart/form-data`
+            url: URL of a publicly hosted image
+        """
+        if file is None and url is None:
+            raise e.SlackRequestError("Either file or url must be provided.")
+        kwargs.update({"app_id": app_id, "url": url})
+        if file is not None:
+            return self.api_call("apps.icon.set", files={"file": file}, data=kwargs)
+        return self.api_call("apps.icon.set", params=kwargs)
+
+    def apps_managed_permissions_set(
+        self,
+        *,
+        app_id: str,
+        permissions: str,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Set who can interact with a managed app.
+
+        https://docs.slack.dev/reference/methods/apps.managed.permissions.set
+
+        Args:
+            app_id: Encoded ID of the managed app to configure
+            permissions: Who can interact with the app. Use everyone to allow all members, or app_owner to restrict access
+                to the app's owner.
+        """
+        kwargs.update({"app_id": app_id, "permissions": permissions})
+        return self.api_call("apps.managed.permissions.set", params=kwargs)
+
     def apps_uninstall(
         self,
         *,
@@ -2715,6 +2758,78 @@ class LegacyWebClient(LegacyBaseClient):
         """
         kwargs.update({"refresh_token": refresh_token})
         return self.api_call("tooling.tokens.rotate", params=kwargs)
+
+    def assistant_search_context(
+        self,
+        *,
+        query: str,
+        action_token: Optional[str] = None,
+        channel_types: Optional[Union[str, Sequence[str]]] = None,
+        content_types: Optional[Union[str, Sequence[str]]] = None,
+        include_bots: Optional[bool] = None,
+        include_deleted_users: Optional[bool] = None,
+        before: Optional[int] = None,
+        after: Optional[int] = None,
+        include_context_messages: Optional[bool] = None,
+        context_channel_id: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        sort: Optional[str] = None,
+        sort_dir: Optional[str] = None,
+        include_message_blocks: Optional[bool] = None,
+        highlight: Optional[bool] = None,
+        term_clauses: Optional[Sequence[str]] = None,
+        modifiers: Optional[str] = None,
+        include_archived_channels: Optional[bool] = None,
+        disable_semantic_search: Optional[bool] = None,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Searches messages, files, channels and users across your Slack organization.
+
+        https://docs.slack.dev/reference/methods/assistant.search.context
+        """
+        kwargs.update(
+            {
+                "query": query,
+                "action_token": action_token,
+                "include_bots": include_bots,
+                "include_deleted_users": include_deleted_users,
+                "before": before,
+                "after": after,
+                "include_context_messages": include_context_messages,
+                "context_channel_id": context_channel_id,
+                "cursor": cursor,
+                "limit": limit,
+                "sort": sort,
+                "sort_dir": sort_dir,
+                "include_message_blocks": include_message_blocks,
+                "highlight": highlight,
+                "modifiers": modifiers,
+                "include_archived_channels": include_archived_channels,
+                "disable_semantic_search": disable_semantic_search,
+            }
+        )
+        if isinstance(channel_types, (list, tuple)):
+            kwargs.update({"channel_types": ",".join(channel_types)})
+        else:
+            kwargs.update({"channel_types": channel_types})
+        if isinstance(content_types, (list, tuple)):
+            kwargs.update({"content_types": ",".join(content_types)})
+        else:
+            kwargs.update({"content_types": content_types})
+        if term_clauses is not None:
+            kwargs.update({"term_clauses": json.dumps(term_clauses)})
+        return self.api_call("assistant.search.context", params=kwargs)
+
+    def assistant_search_info(
+        self,
+        **kwargs,
+    ) -> Union[Future, SlackResponse]:
+        """Returns search capabilities on a given team.
+
+        https://docs.slack.dev/reference/methods/assistant.search.info
+        """
+        return self.api_call("assistant.search.info", params=kwargs)
 
     def assistant_threads_setStatus(
         self,

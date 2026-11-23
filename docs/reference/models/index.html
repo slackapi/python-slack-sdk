@@ -221,10 +221,12 @@ method</dd>
         Raises:
             SlackObjectFormationError: if the object was not valid
         &#34;&#34;&#34;
-        for attribute in (func for func in dir(self) if not func.startswith(&#34;__&#34;)):
-            method = getattr(self, attribute, None)
-            if callable(method) and hasattr(method, &#34;validator&#34;):
-                method()
+        instance_attribute_names = (name for name in vars(self) if not name.startswith(&#34;__&#34;))
+        candidate_names = _class_validator_names(type(self)).union(instance_attribute_names)
+        for name in sorted(candidate_names):
+            attribute: Any = getattr(self, name, None)
+            if _is_validator(attribute):
+                attribute()
 
     def get_object_attribute(self, key: str):
         return getattr(self, key, None)
@@ -481,10 +483,12 @@ SlackObjectFormationError if the object was not valid</p></div>
     Raises:
         SlackObjectFormationError: if the object was not valid
     &#34;&#34;&#34;
-    for attribute in (func for func in dir(self) if not func.startswith(&#34;__&#34;)):
-        method = getattr(self, attribute, None)
-        if callable(method) and hasattr(method, &#34;validator&#34;):
-            method()</code></pre>
+    instance_attribute_names = (name for name in vars(self) if not name.startswith(&#34;__&#34;))
+    candidate_names = _class_validator_names(type(self)).union(instance_attribute_names)
+    for name in sorted(candidate_names):
+        attribute: Any = getattr(self, name, None)
+        if _is_validator(attribute):
+            attribute()</code></pre>
 </details>
 <div class="desc"><p>Validate this object against its attribute validators.</p>
 <dl>
