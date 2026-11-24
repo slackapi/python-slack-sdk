@@ -37,7 +37,10 @@ class AsyncConnectionErrorRetryHandler(AsyncRetryHandler):
         response: Optional[HttpResponse] = None,
         error: Optional[Exception] = None,
     ) -> bool:
-        if error is None or isinstance(error, ClientResponseError):
+        if error is None:
+            return False
+
+        if isinstance(error, ClientResponseError) and response is not None:
             return False
 
         for error_type in self.error_types_to_do_retries:

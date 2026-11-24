@@ -1,6 +1,6 @@
 import unittest
 
-from aiohttp import ClientError, ClientResponseError, RequestInfo
+from aiohttp import ClientError, ClientHttpProxyError, ClientResponseError, RequestInfo
 from multidict import CIMultiDict, CIMultiDictProxy
 from yarl import URL
 
@@ -38,3 +38,22 @@ class TestBuiltins(unittest.TestCase):
         )
 
         self.assertFalse(can_retry)
+
+    @async_test
+    async def test_connection_error_handler_retries_errors_without_a_response(self):
+        url = URL("https://slack.com/api/auth.test")
+        proxy_error = ClientHttpProxyError(
+            RequestInfo(url=url, method="POST", headers=CIMultiDictProxy(CIMultiDict()), real_url=url),
+            (),
+            status=407,
+        )
+        handler = AsyncConnectionErrorRetryHandler(error_types=[ClientError])
+
+        can_retry = await handler.can_retry_async(
+            state=RetryState(),
+            request=HttpRequest(method="POST", url=str(url), headers={}),
+            response=None,
+            error=proxy_error,
+        )
+
+        self.assertTrue(can_retry)
