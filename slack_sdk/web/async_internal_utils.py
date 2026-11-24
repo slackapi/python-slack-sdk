@@ -162,40 +162,28 @@ async def _request_with_session(
                             f"body: {body}"
                         )
 
+                    error: Optional[aiohttp.ClientResponseError] = None
                     try:
                         res.raise_for_status()
                     except aiohttp.ClientResponseError as e:
-                        for handler in retry_handlers:
-                            if await handler.can_retry_async(
+                        error = e
+
+                    for handler in retry_handlers:
+                        if await handler.can_retry_async(
+                            state=retry_state,
+                            request=retry_request,
+                            response=retry_response,
+                            error=error,
+                        ):
+                            if logger.level <= logging.DEBUG:
+                                logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
+                            await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,
-                                error=e,
-                            ):
-                                if logger.level <= logging.DEBUG:
-                                    logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
-                                await handler.prepare_for_next_attempt_async(
-                                    state=retry_state,
-                                    request=retry_request,
-                                    response=retry_response,
-                                    error=e,
-                                )
-                                break
-                    else:
-                        for handler in retry_handlers:
-                            if await handler.can_retry_async(
-                                state=retry_state,
-                                request=retry_request,
-                                response=retry_response,
-                            ):
-                                if logger.level <= logging.DEBUG:
-                                    logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
-                                await handler.prepare_for_next_attempt_async(
-                                    state=retry_state,
-                                    request=retry_request,
-                                    response=retry_response,
-                                )
-                                break
+                                error=error,
+                            )
+                            break
 
                     if retry_state.next_attempt_requested is False:
                         response = {
