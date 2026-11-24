@@ -322,7 +322,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                         enterprise_id = ?
                         and
                         team_id = ?
-                    order by installed_at desc
+                    order by installed_at desc, id desc
                     limit 1
                     """,
                     [self.client_id, enterprise_id or "", team_id or ""],
@@ -425,7 +425,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             enterprise_id = ?
                             and
                             team_id = ?
-                        order by installed_at desc
+                        order by installed_at desc, id desc
                         limit 1
                         """,
                         [self.client_id, enterprise_id or "", team_id],
@@ -446,7 +446,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                             team_id = ?
                             and
                             user_id = ?
-                        order by installed_at desc
+                        order by installed_at desc, id desc
                         limit 1
                         """,
                         [self.client_id, enterprise_id or "", team_id, user_id],
@@ -511,7 +511,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                                 team_id = ?
                                 and
                                 bot_token is not null
-                            order by installed_at desc
+                            order by installed_at desc, id desc
                             limit 1
                             """,
                             [self.client_id, enterprise_id or "", team_id],

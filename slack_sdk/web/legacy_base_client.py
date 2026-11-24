@@ -208,16 +208,12 @@ class LegacyBaseClient:
         Returns:
             The response parsed into a SlackResponse object.
         """
-        open_files = _files_to_data(req_args)
-        try:
+        with _files_to_data(req_args):
             if "params" in req_args:
                 # True/False -> "1"/"0"
                 req_args["params"] = convert_bool_to_0_or_1(req_args["params"])
 
             res = await self._request(http_verb=http_verb, api_url=api_url, req_args=req_args)
-        finally:
-            for f in open_files:
-                f.close()
 
         data = {
             "client": self,
