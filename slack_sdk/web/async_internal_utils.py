@@ -162,11 +162,18 @@ async def _request_with_session(
                             f"body: {body}"
                         )
 
+                    error: Optional[aiohttp.ClientResponseError] = None
+                    try:
+                        res.raise_for_status()
+                    except aiohttp.ClientResponseError as e:
+                        error = e
+
                     for handler in retry_handlers:
                         if await handler.can_retry_async(
                             state=retry_state,
                             request=retry_request,
                             response=retry_response,
+                            error=error,
                         ):
                             if logger.level <= logging.DEBUG:
                                 logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
@@ -174,6 +181,7 @@ async def _request_with_session(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,
+                                error=error,
                             )
                             break
 

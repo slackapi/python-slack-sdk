@@ -299,12 +299,15 @@ class AsyncAuditLogsClient:
                             message = f"Failed to parse the response body: {str(e)}"
                             raise SlackApiError(message, res)
 
-                        if res.status >= 400:
+                        try:
+                            res.raise_for_status()
+                        except aiohttp.ClientResponseError as e:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
+                                    error=e,
                                 ):
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
@@ -315,6 +318,7 @@ class AsyncAuditLogsClient:
                                         state=retry_state,
                                         request=retry_request,
                                         response=retry_response,
+                                        error=e,
                                     )
                                     break
 

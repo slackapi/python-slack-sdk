@@ -10,6 +10,7 @@ from tests.mock_web_api_server import (
     setup_mock_web_api_server_async,
 )
 from ..my_retry_handler import MyRetryHandler
+from ..error_recording_retry_handler import ErrorRecordingRetryHandler, error_statuses
 
 
 class TestAsyncAuditLogsClient_HttpRetries(unittest.TestCase):
@@ -58,3 +59,17 @@ class TestAsyncAuditLogsClient_HttpRetries(unittest.TestCase):
         response = await client.api_call(path="error")
         self.assertEqual(500, response.status_code)
         await assert_received_request_count_async(self, "/error", 2)
+
+    @async_test
+    async def test_server_error_passes_the_status_error_to_handlers(self):
+        retry_handler = ErrorRecordingRetryHandler()
+        client = AsyncAuditLogsClient(
+            token="xoxp-",
+            base_url="http://localhost:8888/",
+            retry_handlers=[retry_handler],
+        )
+
+        await client.api_call(path="error")
+
+        self.assertEqual([500], error_statuses(retry_handler.can_retry_errors))
+        self.assertEqual([500], error_statuses(retry_handler.prepare_errors))

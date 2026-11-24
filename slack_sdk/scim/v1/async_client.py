@@ -341,12 +341,15 @@ class AsyncSCIMClient:
                                 headers=res.headers,
                             )
 
-                        if res.status >= 400:
+                        try:
+                            res.raise_for_status()
+                        except aiohttp.ClientResponseError as e:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
+                                    error=e,
                                 ):
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
@@ -357,6 +360,7 @@ class AsyncSCIMClient:
                                         state=retry_state,
                                         request=retry_request,
                                         response=retry_response,
+                                        error=e,
                                     )
                                     break
 
