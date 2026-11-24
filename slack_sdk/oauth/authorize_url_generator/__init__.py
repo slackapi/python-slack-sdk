@@ -1,4 +1,11 @@
 from typing import Optional, Sequence
+from urllib.parse import quote
+
+
+def _encode(value: str) -> str:
+    # ":", "/" and "," are valid in a query component and are kept as they are,
+    # so URLs built from plain values stay the same as before.
+    return quote(value, safe=":/,")
 
 
 class AuthorizeUrlGenerator:
@@ -20,11 +27,17 @@ class AuthorizeUrlGenerator:
     def generate(self, state: str, team: Optional[str] = None) -> str:
         scopes = ",".join(self.scopes) if self.scopes else ""
         user_scopes = ",".join(self.user_scopes) if self.user_scopes else ""
-        url = f"{self.authorization_url}?state={state}&client_id={self.client_id}&scope={scopes}&user_scope={user_scopes}"
+        url = (
+            f"{self.authorization_url}?"
+            f"state={_encode(state)}&"
+            f"client_id={_encode(self.client_id)}&"
+            f"scope={_encode(scopes)}&"
+            f"user_scope={_encode(user_scopes)}"
+        )
         if self.redirect_uri is not None:
-            url += f"&redirect_uri={self.redirect_uri}"
+            url += f"&redirect_uri={_encode(self.redirect_uri)}"
         if team is not None:
-            url += f"&team={team}"
+            url += f"&team={_encode(team)}"
         return url
 
 
@@ -49,13 +62,13 @@ class OpenIDConnectAuthorizeUrlGenerator:
         url = (
             f"{self.authorization_url}?"
             "response_type=code&"
-            f"state={state}&"
-            f"client_id={self.client_id}&"
-            f"scope={scopes}&"
-            f"redirect_uri={self.redirect_uri}"
+            f"state={_encode(state)}&"
+            f"client_id={_encode(self.client_id)}&"
+            f"scope={_encode(scopes)}&"
+            f"redirect_uri={_encode(self.redirect_uri)}"
         )
         if team is not None:
-            url += f"&team={team}"
+            url += f"&team={_encode(team)}"
         if nonce is not None:
-            url += f"&nonce={nonce}"
+            url += f"&nonce={_encode(nonce)}"
         return url

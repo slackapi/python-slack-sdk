@@ -1,4 +1,5 @@
 import unittest
+from urllib.parse import parse_qs, urlparse
 
 from slack_sdk.oauth import AuthorizeUrlGenerator, OpenIDConnectAuthorizeUrlGenerator
 
@@ -70,3 +71,51 @@ class TestGenerator(unittest.TestCase):
             "&nonce=nnn"
         )
         self.assertEqual(expected, url)
+
+    def test_redirect_uri_with_query_string(self):
+        redirect_uri = "https://www.example.com/slack/oauth_redirect?tenant=acme&env=prod"
+        generator = AuthorizeUrlGenerator(
+            client_id="111.222",
+            scopes=["chat:write"],
+            redirect_uri=redirect_uri,
+        )
+        url = generator.generate("state-value")
+        expected = (
+            "https://slack.com/oauth/v2/authorize"
+            "?state=state-value"
+            "&client_id=111.222"
+            "&scope=chat:write"
+            "&user_scope="
+            "&redirect_uri=https://www.example.com/slack/oauth_redirect%3Ftenant%3Dacme%26env%3Dprod"
+        )
+        self.assertEqual(expected, url)
+
+        params = parse_qs(urlparse(url).query, keep_blank_values=True)
+        self.assertEqual([redirect_uri], params["redirect_uri"])
+        self.assertNotIn("env", params)
+
+    def test_state_and_team_with_reserved_characters(self):
+        generator = AuthorizeUrlGenerator(client_id="111.222", scopes=["chat:write"])
+        url = generator.generate(state="a+b/c==", team="T1&x=1")
+
+        params = parse_qs(urlparse(url).query, keep_blank_values=True)
+        self.assertEqual(["a+b/c=="], params["state"])
+        self.assertEqual(["T1&x=1"], params["team"])
+        self.assertNotIn("x", params)
+
+    def test_openid_connect_with_reserved_characters(self):
+        redirect_uri = "https://www.example.com/oidc/callback?tenant=acme&env=prod"
+        generator = OpenIDConnectAuthorizeUrlGenerator(
+            client_id="111.222",
+            redirect_uri=redirect_uri,
+            scopes=["openid"],
+        )
+        url = generator.generate(state="a+b/c==", nonce="n+1&x=1", team="T12345")
+
+        params = parse_qs(urlparse(url).query, keep_blank_values=True)
+        self.assertEqual([redirect_uri], params["redirect_uri"])
+        self.assertEqual(["a+b/c=="], params["state"])
+        self.assertEqual(["n+1&x=1"], params["nonce"])
+        self.assertEqual(["T12345"], params["team"])
+        self.assertNotIn("env", params)
+        self.assertNotIn("x", params)
