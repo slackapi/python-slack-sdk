@@ -4,9 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "slack_sdk"
-dynamic = ["version", "readme", "authors", "optional-dependencies"]
+dynamic = ["version", "readme", "optional-dependencies"]
 description = "The Slack API Platform SDK for Python"
 license = { text = "MIT" }
+authors = [{ name = "Slack Technologies, LLC" }, { email = "opensource@slack.com" }]
 requires-python = ">=3.7"
 keywords = [
 	"slack",
@@ -42,6 +43,7 @@ classifiers = [
 
 
 [project.urls]
+Homepage = "https://github.com/slackapi/python-slack-sdk"
 Documentation = "https://docs.slack.dev/tools/python-slack-sdk/"
 Source = "https://github.com/slackapi/python-slack-sdk"
 

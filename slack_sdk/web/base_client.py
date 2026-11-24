@@ -218,7 +218,7 @@ class BaseClient:
         return {
             "status_code": int(response["status"]),
             "headers": dict(response["headers"]),
-            "data": json.loads(response["body"]),
+            "data": response["parsed_body"] if "parsed_body" in response else json.loads(response["body"]),
         }
 
     def _urllib_api_call(
@@ -288,7 +288,7 @@ class BaseClient:
 
             request_headers = self._build_urllib_request_headers(
                 token=token or self.token,  # type: ignore[arg-type]
-                has_json=json is not None,
+                has_json=json_body is not None,
                 has_files=files is not None,
                 additional_headers=additional_headers,
             )
@@ -306,7 +306,9 @@ class BaseClient:
             response = self._perform_urllib_http_request(url=url, args=request_args)  # type: ignore[arg-type]
             response_body = response.get("body", None)
             response_body_data: Optional[Union[dict, bytes]] = response_body
-            if response_body is not None and not isinstance(response_body, bytes):
+            if "parsed_body" in response:
+                response_body_data = response["parsed_body"]
+            elif response_body is not None and not isinstance(response_body, bytes):
                 try:
                     response_body_data = json.loads(response["body"])
                 except json.decoder.JSONDecodeError:
@@ -413,13 +415,14 @@ class BaseClient:
                     body_string = resp["body"] if isinstance(resp["body"], str) else None
                     body_bytes = body_string.encode("utf-8") if body_string is not None else resp["body"]
                     if body_string is not None and body_string.startswith("{"):
-                        body = json.loads(body_string)
+                        parsed_body = json.loads(body_string)
+                        resp["parsed_body"] = parsed_body
                     else:
-                        body = {}  # type: ignore[assignment]
+                        parsed_body = {}
                     retry_response = RetryHttpResponse(
                         status_code=resp["status"],
                         headers=resp["headers"],
-                        body=body,  # type: ignore[arg-type]
+                        body=parsed_body,
                         data=body_bytes,
                     )
                     for handler in self.retry_handlers:

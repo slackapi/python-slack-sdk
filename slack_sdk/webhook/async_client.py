@@ -207,22 +207,26 @@ class AsyncWebhookClient:
                                 headers=res.headers,  # type: ignore[arg-type]
                             )
 
-                        if res.status == 429:
+                        try:
+                            res.raise_for_status()
+                        except aiohttp.ClientResponseError as e:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
+                                    error=e,
                                 ):
                                     if self.logger.level <= logging.DEBUG:
                                         self.logger.info(
                                             f"A retry handler found: {type(handler).__name__} "
-                                            f"for POST {self.url} - rate_limited"
+                                            f"for POST {self.url} - status: {res.status}"
                                         )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
                                         request=retry_request,
                                         response=retry_response,
+                                        error=e,
                                     )
                                     break
 

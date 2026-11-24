@@ -106,6 +106,7 @@ el.replaceWith(d);
         self.all_message_trace_enabled = all_message_trace_enabled
         self.ping_pong_trace_enabled = ping_pong_trace_enabled
         self.last_ping_pong_time = None
+        self._first_ping_time: Optional[float] = None
         self.consecutive_check_state_error_count = 0
         self.sock = None
         # To avoid ssl.SSLError: [SSL: BAD_LENGTH] bad length
@@ -208,13 +209,11 @@ el.replaceWith(d);
             self.disconnect()
 
     def disconnect(self) -&gt; None:
-        if self.sock is not None:
-            with self.sock_send_lock:
-                with self.sock_receive_lock:
-                    # Synchronize before closing this instance&#39;s socket
+        with self.sock_send_lock:
+            with self.sock_receive_lock:
+                if self.sock is not None:
                     self.sock.close()
                     self.sock = None
-                    # After this, all operations using self.sock will be skipped
 
         self.logger.info(f&#34;The connection has been closed (session id: {self.session_id})&#34;)
 
@@ -273,7 +272,10 @@ el.replaceWith(d);
         try:
             if self.sock is not None:
                 try:
-                    self.ping(f&#34;{self.session_id}:{time.time()}&#34;)
+                    ping_time = time.time()
+                    self.ping(f&#34;{self.session_id}:{ping_time}&#34;)
+                    if self._first_ping_time is None:
+                        self._first_ping_time = ping_time
                 except ssl.SSLZeroReturnError as e:
                     self.logger.info(
                         &#34;Unable to send a ping message. Closing the connection...&#34;
@@ -282,12 +284,15 @@ el.replaceWith(d);
                     self.disconnect()
                     return
 
-                if self.last_ping_pong_time is not None:
-                    disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+                stale_check_since = (
+                    self.last_ping_pong_time if self.last_ping_pong_time is not None else self._first_ping_time
+                )
+                if stale_check_since is not None:
+                    disconnected_seconds = int(time.time() - stale_check_since)
                     if self.trace_enabled and disconnected_seconds &gt; self.ping_interval:
                         message = (
                             f&#34;{disconnected_seconds} seconds have passed &#34;
-                            f&#34;since this client last received a pong response from the server &#34;
+                            f&#34;since this client last received a pong response or sent its first ping &#34;
                             f&#34;(session id: {self.session_id})&#34;
                         )
                         self.logger.debug(message)
@@ -538,7 +543,10 @@ el.replaceWith(d);
     try:
         if self.sock is not None:
             try:
-                self.ping(f&#34;{self.session_id}:{time.time()}&#34;)
+                ping_time = time.time()
+                self.ping(f&#34;{self.session_id}:{ping_time}&#34;)
+                if self._first_ping_time is None:
+                    self._first_ping_time = ping_time
             except ssl.SSLZeroReturnError as e:
                 self.logger.info(
                     &#34;Unable to send a ping message. Closing the connection...&#34;
@@ -547,12 +555,15 @@ el.replaceWith(d);
                 self.disconnect()
                 return
 
-            if self.last_ping_pong_time is not None:
-                disconnected_seconds = int(time.time() - self.last_ping_pong_time)
+            stale_check_since = (
+                self.last_ping_pong_time if self.last_ping_pong_time is not None else self._first_ping_time
+            )
+            if stale_check_since is not None:
+                disconnected_seconds = int(time.time() - stale_check_since)
                 if self.trace_enabled and disconnected_seconds &gt; self.ping_interval:
                     message = (
                         f&#34;{disconnected_seconds} seconds have passed &#34;
-                        f&#34;since this client last received a pong response from the server &#34;
+                        f&#34;since this client last received a pong response or sent its first ping &#34;
                         f&#34;(session id: {self.session_id})&#34;
                     )
                     self.logger.debug(message)
@@ -704,13 +715,11 @@ el.replaceWith(d);
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def disconnect(self) -&gt; None:
-    if self.sock is not None:
-        with self.sock_send_lock:
-            with self.sock_receive_lock:
-                # Synchronize before closing this instance&#39;s socket
+    with self.sock_send_lock:
+        with self.sock_receive_lock:
+            if self.sock is not None:
                 self.sock.close()
                 self.sock = None
-                # After this, all operations using self.sock will be skipped
 
     self.logger.info(f&#34;The connection has been closed (session id: {self.session_id})&#34;)</code></pre>
 </details>

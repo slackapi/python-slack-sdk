@@ -332,12 +332,22 @@ def _remove_none_values(d: dict) -> dict:
     return {k: v for k, v in d.items() if v is not None}
 
 
+MAX_V2_FILE_SIZE = 1 * 1024 * 1024 * 1024  # 1 GB in bytes (Slack files.upload limit)
+
+
 def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[Any]]:
     file = upload_file.get("file")
     content = upload_file.get("content")
     data: Optional[bytes] = None
     if file is not None:
         if isinstance(file, (str, os.PathLike)):  # filepath
+            file_size = os.path.getsize(os.fsencode(file))
+            if file_size > MAX_V2_FILE_SIZE:
+                filename = upload_file.get("filename") or os.path.basename(os.fspath(file))
+                raise SlackRequestError(
+                    f"Maximum upload file size is {MAX_V2_FILE_SIZE} bytes "
+                    f"(file size: {file_size} bytes for filename: {filename})"
+                )
             with open(os.fsencode(file), "rb") as readable:
                 data = readable.read()
         elif isinstance(file, bytes):
@@ -367,6 +377,11 @@ def _to_v2_file_upload_item(upload_file: Dict[str, Any]) -> Dict[str, Optional[A
     title = upload_file.get("title")
     if data is None:
         raise SlackRequestError(f"File content not found for filename: {filename}, title: {title}")
+
+    if len(data) > MAX_V2_FILE_SIZE:
+        raise SlackRequestError(
+            f"Maximum upload file size is {MAX_V2_FILE_SIZE} bytes (file size: {len(data)} bytes for filename: {filename})"
+        )
 
     if title is None:
         title = filename  # to be consistent with files.upload API

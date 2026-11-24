@@ -2,8 +2,9 @@ import asyncio
 import json
 import logging
 from asyncio import AbstractEventLoop
+from contextlib import ExitStack
 from logging import Logger
-from typing import Optional, BinaryIO, Dict, Sequence, Union, List, Any
+from typing import Optional, Dict, Union, List, Any
 
 import aiohttp
 from aiohttp import ClientSession
@@ -27,18 +28,17 @@ def _get_event_loop() -> AbstractEventLoop:
         return loop
 
 
-def _files_to_data(req_args: dict) -> Sequence[BinaryIO]:
-    open_files = []
-    files = req_args.pop("files", None)
-    if files is not None:
-        for k, v in files.items():
-            if isinstance(v, str):
-                f = open(v.encode("utf-8", "ignore"), "rb")
-                open_files.append(f)
-                req_args["data"].update({k: f})
-            else:
-                req_args["data"].update({k: v})
-    return open_files
+def _files_to_data(req_args: dict) -> ExitStack:
+    with ExitStack() as stack:
+        files = req_args.pop("files", None)
+        if files is not None:
+            for k, v in files.items():
+                if isinstance(v, str):
+                    f = stack.enter_context(open(v.encode("utf-8", "ignore"), "rb"))
+                    req_args["data"].update({k: f})
+                else:
+                    req_args["data"].update({k: v})
+        return stack.pop_all()
 
 
 async def _request_with_session(
@@ -162,11 +162,18 @@ async def _request_with_session(
                             f"body: {body}"
                         )
 
+                    error: Optional[aiohttp.ClientResponseError] = None
+                    try:
+                        res.raise_for_status()
+                    except aiohttp.ClientResponseError as e:
+                        error = e
+
                     for handler in retry_handlers:
                         if await handler.can_retry_async(
                             state=retry_state,
                             request=retry_request,
                             response=retry_response,
+                            error=error,
                         ):
                             if logger.level <= logging.DEBUG:
                                 logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
@@ -174,6 +181,7 @@ async def _request_with_session(
                                 state=retry_state,
                                 request=retry_request,
                                 response=retry_response,
+                                error=error,
                             )
                             break
 

@@ -1,11 +1,16 @@
 import unittest
 
-from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler
+from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler, AsyncServerErrorRetryHandler
 from slack_sdk.webhook.async_client import AsyncWebhookClient
 from tests.slack_sdk_async.helpers import async_test
 from tests.slack_sdk.webhook.mock_web_api_server import MockHandler
-from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
+from tests.mock_web_api_server import (
+    assert_received_request_count_async,
+    cleanup_mock_web_api_server_async,
+    setup_mock_web_api_server_async,
+)
 from ..my_retry_handler import MyRetryHandler
+from ..error_recording_retry_handler import ErrorRecordingRetryHandler, error_statuses
 
 
 class TestAsyncWebhook_HttpRetries(unittest.TestCase):
@@ -39,3 +44,27 @@ class TestAsyncWebhook_HttpRetries(unittest.TestCase):
         response = await client.send(text="hello!")
         # Just running retries; no assertions for call count so far
         self.assertEqual(429, response.status_code)
+
+    @async_test
+    async def test_server_error(self):
+        client = AsyncWebhookClient(
+            "http://localhost:8888/error",
+            retry_handlers=[AsyncServerErrorRetryHandler(max_retry_count=1)],
+        )
+
+        response = await client.send(text="hello!")
+        self.assertEqual(500, response.status_code)
+        await assert_received_request_count_async(self, "/error", 2)
+
+    @async_test
+    async def test_server_error_passes_the_status_error_to_handlers(self):
+        retry_handler = ErrorRecordingRetryHandler()
+        client = AsyncWebhookClient(
+            "http://localhost:8888/error",
+            retry_handlers=[retry_handler],
+        )
+
+        await client.send(text="hello!")
+
+        self.assertEqual([500], error_statuses(retry_handler.can_retry_errors))
+        self.assertEqual([500], error_statuses(retry_handler.prepare_errors))
