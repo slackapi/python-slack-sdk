@@ -8,6 +8,7 @@ from slack_sdk.models.basic_objects import JsonObject, JsonValidator
 
 from ...errors import SlackObjectFormationError
 from .basic_components import (
+    ActionCellObject,
     MarkdownTextObject,
     PlainTextObject,
     RawNumberObject,
@@ -121,6 +122,8 @@ class Block(JsonObject):
                     return CarouselBlock(**block)
                 elif type == AuthProviderBlock.type:
                     return AuthProviderBlock(**block)
+                elif type == DataTableBlock.type:
+                    return DataTableBlock(**block)
                 else:
                     cls.logger.warning(f"Unknown block detected and skipped ({block})")
                     return None
@@ -1300,3 +1303,64 @@ class AuthProviderBlock(Block):
     @JsonValidator("accessory attribute must be an overflow menu element")
     def _validate_accessory(self):
         return self.accessory is None or isinstance(self.accessory, OverflowMenuElement)
+
+
+class DataTableBlock(Block):
+    type = "data_table"
+    page_size_min = 1
+    page_size_max = 100
+
+    @property
+    def attributes(self) -> Set[str]:  # type: ignore[override]
+        return super().attributes.union({"rows", "caption", "page_size", "row_header_column_index"})
+
+    def __init__(
+        self,
+        *,
+        rows: Sequence[Sequence[Union[ActionCellObject, RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any]]]],
+        caption: str,
+        page_size: Optional[int] = None,
+        row_header_column_index: Optional[int] = None,
+        block_id: Optional[str] = None,
+        **others: dict,
+    ):
+        """Displays rich tables that support pagination, sorting, filtering, and interactivity.
+
+        https://docs.slack.dev/reference/block-kit/blocks/data-table-block
+
+        Args:
+            rows (required): An array consisting of table rows.
+            caption (required): A caption for the table; used as the value for the HTML caption element.
+            page_size: Number of rows per page. Min 1, Max 100. Defaults to 5 if omitted.
+            row_header_column_index: The 0-based index of the column that uniquely identifies each row
+                (the row header). This column is treated as the row's primary identifier for screen readers.
+                Defaults to 0 if omitted.
+            block_id: A unique identifier for a block. If not specified, a block_id will be generated.
+        """
+        super().__init__(type=self.type, block_id=block_id)
+        show_unknown_key_warning(self, others)
+
+        self.rows = [[self._parse_cell(cell) for cell in row] for row in rows] if rows is not None else None
+        self.caption = caption
+        self.page_size = page_size
+        self.row_header_column_index = row_header_column_index
+
+    @staticmethod
+    def _parse_cell(
+        cell: Union[ActionCellObject, RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any]],
+    ) -> Union[ActionCellObject, RawTextObject, RawNumberObject, RichTextBlock, Dict[str, Any], None]:
+        if isinstance(cell, dict) and cell.get("type") == ActionCellObject.type:
+            return ActionCellObject.parse(cell)
+        return cell
+
+    @JsonValidator("rows attribute must be specified")
+    def _validate_rows(self):
+        return self.rows is not None and len(self.rows) > 0
+
+    @JsonValidator("caption attribute must be specified")
+    def _validate_caption(self):
+        return self.caption is not None
+
+    @JsonValidator(f"page_size must be between {page_size_min} and {page_size_max}")
+    def _validate_page_size(self):
+        return self.page_size is None or self.page_size_min <= self.page_size <= self.page_size_max
