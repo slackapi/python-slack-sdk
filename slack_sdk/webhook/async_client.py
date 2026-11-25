@@ -228,6 +228,7 @@ class AsyncWebhookClient:
                                         response=retry_response,
                                         error=e,
                                     )
+                                    self.logger.info(f"Going to retry the same request: POST {self.url}")
                                     break
 
                         if retry_state.next_attempt_requested is False:
@@ -259,6 +260,7 @@ class AsyncWebhookClient:
                                 response=retry_response,
                                 error=e,
                             )
+                            self.logger.info(f"Going to retry the same request: POST {self.url}")
                             break
 
                     if retry_state.next_attempt_requested is False:

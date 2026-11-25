@@ -209,6 +209,7 @@ class WebhookClient:
                             response=retry_response,
                             error=e,
                         )
+                        self.logger.info(f"Going to retry the same request: {req.method} {req.full_url}")
                         break
 
                 if retry_state.next_attempt_requested is False:

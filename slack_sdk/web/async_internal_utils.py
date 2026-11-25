@@ -183,6 +183,7 @@ async def _request_with_session(
                                 response=retry_response,
                                 error=error,
                             )
+                            logger.info(f"Going to retry the same request: {http_verb} {api_url}")
                             break
 
                     if retry_state.next_attempt_requested is False:
@@ -210,6 +211,7 @@ async def _request_with_session(
                             response=retry_response,
                             error=e,
                         )
+                        logger.info(f"Going to retry the same request: {http_verb} {api_url}")
                         break
 
                 if retry_state.next_attempt_requested is False:

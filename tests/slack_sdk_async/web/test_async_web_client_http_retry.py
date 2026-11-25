@@ -141,3 +141,26 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
             await client.auth_test()
 
         debug.assert_not_called()
+
+    @async_test
+    async def test_ratelimited_retry_is_logged_at_info(self):
+        parent = logging.getLogger(f"{__name__}.retry_info")
+        client = AsyncWebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-ratelimited",
+            team_id="T111",
+            logger=logging.getLogger(f"{parent.name}.client"),
+            retry_handlers=[AsyncRateLimitErrorRetryHandler(max_retry_count=1)],
+        )
+
+        with self.assertLogs(parent, level=logging.INFO) as logs, self.assertRaises(err.SlackApiError):
+            parent.info("sentinel")
+            await client.auth_test()
+
+        self.assertEqual(
+            logs.output,
+            [
+                f"INFO:{parent.name}:sentinel",
+                f"INFO:{parent.name}.client:Going to retry the same request: POST http://localhost:8888/auth.test",
+            ],
+        )

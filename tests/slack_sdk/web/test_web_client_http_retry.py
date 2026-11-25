@@ -100,15 +100,21 @@ class TestWebClient_HttpRetry(unittest.TestCase):
         retry_levels = [record.levelno for record in logs.records if "A retry handler found" in record.getMessage()]
         self.assertEqual(retry_levels, [logging.DEBUG])
 
-    def test_retry_is_not_logged_at_info(self):
+    def test_retry_is_logged_at_info_without_handler_detail(self):
         parent = logging.getLogger(f"{__name__}.retry_info")
-        client = self.ratelimited_client(logging.getLogger(f"{__name__}.retry_info.client"))
+        client = self.ratelimited_client(logging.getLogger(f"{parent.name}.client"))
 
         with self.assertLogs(parent, level=logging.INFO) as logs, self.assertRaises(SlackApiError):
             parent.info("sentinel")
             client.auth_test()
 
-        self.assertEqual(logs.output, [f"INFO:{parent.name}:sentinel"])
+        self.assertEqual(
+            logs.output,
+            [
+                f"INFO:{parent.name}:sentinel",
+                f"INFO:{parent.name}.client:Going to retry the same request: POST http://localhost:8888/auth.test",
+            ],
+        )
 
     def test_response_is_not_formatted_for_debug_when_debug_is_disabled(self):
         parent = logging.getLogger(f"{__name__}.debug_guard")

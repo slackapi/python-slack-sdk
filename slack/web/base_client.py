@@ -271,7 +271,7 @@ class BaseClient:
             query_params = convert_bool_to_0_or_1(query_params)
             body_params = convert_bool_to_0_or_1(body_params)
 
-            if self._logger.isEnabledFor(logging.DEBUG):
+            if self._logger.level <= logging.DEBUG:
 
                 def convert_params(values: dict) -> dict:
                     if not values or not isinstance(values, dict):

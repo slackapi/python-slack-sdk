@@ -60,7 +60,7 @@ class WebhookClient:
         body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
-        if self.logger.isEnabledFor(logging.DEBUG):
+        if self.logger.level <= logging.DEBUG:
             self.logger.debug(f"Sending a request - url: {self.url}, body: {body}, headers: {headers}")
         try:
             url = self.url

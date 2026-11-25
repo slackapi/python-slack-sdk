@@ -434,6 +434,7 @@ class BaseClient:
                             handler.prepare_for_next_attempt(
                                 state=retry_state, request=retry_request, response=retry_response
                             )
+                            self._logger.info(f"Going to retry the same request: {req.method} {req.full_url}")
                             break
                 if retry_state.next_attempt_requested is False:
                     return resp
@@ -478,6 +479,7 @@ class BaseClient:
                             response=retry_response,
                             error=e,
                         )
+                        self._logger.info(f"Going to retry the same request: {req.method} {req.full_url}")
                         break
 
                 if retry_state.next_attempt_requested is False:

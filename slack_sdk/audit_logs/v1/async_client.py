@@ -320,6 +320,7 @@ class AsyncAuditLogsClient:
                                         response=retry_response,
                                         error=e,
                                     )
+                                    self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                                     break
 
                         if retry_state.next_attempt_requested is False:
@@ -351,6 +352,7 @@ class AsyncAuditLogsClient:
                                 response=retry_response,
                                 error=e,
                             )
+                            self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                             break
 
                     if retry_state.next_attempt_requested is False:
