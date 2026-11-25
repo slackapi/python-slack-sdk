@@ -2,10 +2,17 @@ from datetime import datetime, timezone
 from typing import Type, TypeVar, Union
 
 
+def _replace_utc_designator(iso_datetime_str: str) -> str:
+    if iso_datetime_str.endswith(("Z", "z")):
+        return iso_datetime_str[:-1] + "+00:00"
+    return iso_datetime_str
+
+
 def _from_iso_format_to_datetime(iso_datetime_str: str) -> datetime:
-    if "+" not in iso_datetime_str:
-        iso_datetime_str += "+00:00"
-    return datetime.fromisoformat(iso_datetime_str)
+    dt = datetime.fromisoformat(_replace_utc_designator(iso_datetime_str))
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
 
 
 def _from_iso_format_to_unix_timestamp(iso_datetime_str: str) -> float:
