@@ -1,4 +1,5 @@
 import unittest
+import uuid
 from urllib.parse import parse_qs, urlparse
 
 from slack_sdk.oauth import AuthorizeUrlGenerator, OpenIDConnectAuthorizeUrlGenerator
@@ -119,3 +120,25 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(["T12345"], params["team"])
         self.assertNotIn("env", params)
         self.assertNotIn("x", params)
+
+    def test_non_str_values(self):
+        state = uuid.uuid4()
+        generator = AuthorizeUrlGenerator(client_id=111222, scopes=["chat:write"])
+        url = generator.generate(state=state)
+
+        params = parse_qs(urlparse(url).query, keep_blank_values=True)
+        self.assertEqual([str(state)], params["state"])
+        self.assertEqual(["111222"], params["client_id"])
+
+    def test_openid_connect_with_non_str_values(self):
+        state = uuid.uuid4()
+        generator = OpenIDConnectAuthorizeUrlGenerator(
+            client_id="111.222",
+            redirect_uri="https://www.example.com/oidc/callback",
+            scopes=["openid"],
+        )
+        url = generator.generate(state=state, nonce=uuid.UUID(int=1))
+
+        params = parse_qs(urlparse(url).query, keep_blank_values=True)
+        self.assertEqual([str(state)], params["state"])
+        self.assertEqual(["00000000-0000-0000-0000-000000000001"], params["nonce"])
