@@ -188,7 +188,7 @@ class AsyncWebhookClient:
                 retry_response: Optional[RetryHttpResponse] = None
                 response_body = ""
 
-                if self.logger.level <= logging.DEBUG:
+                if self.logger.isEnabledFor(logging.DEBUG):
                     self.logger.debug(f"Sending a request - url: {self.url}, body: {str_body}, headers: {headers}")
 
                 try:
@@ -217,11 +217,10 @@ class AsyncWebhookClient:
                                     response=retry_response,
                                     error=e,
                                 ):
-                                    if self.logger.level <= logging.DEBUG:
-                                        self.logger.info(
-                                            f"A retry handler found: {type(handler).__name__} "
-                                            f"for POST {self.url} - status: {res.status}"
-                                        )
+                                    self.logger.info(
+                                        f"A retry handler found: {type(handler).__name__} "
+                                        f"for POST {self.url} - status: {res.status}"
+                                    )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
                                         request=retry_request,
@@ -249,10 +248,7 @@ class AsyncWebhookClient:
                             response=retry_response,
                             error=e,
                         ):
-                            if self.logger.level <= logging.DEBUG:
-                                self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} for POST {self.url} - {e}"
-                                )
+                            self.logger.info(f"A retry handler found: {type(handler).__name__} for POST {self.url} - {e}")
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,

@@ -286,13 +286,13 @@ class RTMClient:
 
     def enqueue_message(self, message: str):
         self.message_queue.put(message)
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"A new message enqueued (current queue size: {self.message_queue.qsize()})")
 
     def process_message(self):
         try:
             raw_message = self.message_queue.get(timeout=1)
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"A message dequeued (current queue size: {self.message_queue.qsize()})")
 
             if raw_message is not None:
@@ -316,7 +316,7 @@ class RTMClient:
 
     def run_message_listeners(self, message: dict) -> None:
         type = message.get("type")
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"Message processing started (type: {type})")
         try:
             for listener in self.message_listeners:
@@ -327,7 +327,7 @@ class RTMClient:
         except Exception as e:
             self.logger.exception(f"Failed to run message listeners: {e}")
         finally:
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f"Message processing completed (type: {type})")
 
     # --------------------------------------------------------------
@@ -340,7 +340,7 @@ class RTMClient:
         return None
 
     def run_all_message_listeners(self, message: str):
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"on_message invoked: (message: {message})")
         self.enqueue_message(message)
         for listener in self.on_message_listeners:
@@ -354,7 +354,7 @@ class RTMClient:
             listener(error)
 
     def run_all_close_listeners(self, code: int, reason: Optional[str] = None):
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"on_close invoked (session id: {self.session_id()})")
         if self.auto_reconnect_enabled:
             self.logger.info(f"Received CLOSE event. Going to reconnect... (session id: {self.session_id()})")

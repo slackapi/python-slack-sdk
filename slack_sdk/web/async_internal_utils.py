@@ -87,7 +87,7 @@ async def _request_with_session(
             retry_state.next_attempt_requested = False
             retry_response: Optional[RetryHttpResponse] = None
 
-            if logger.level <= logging.DEBUG:
+            if logger.isEnabledFor(logging.DEBUG):
 
                 def convert_params(values: dict) -> dict:
                     if not values or not isinstance(values, dict):
@@ -151,7 +151,7 @@ async def _request_with_session(
                                     res,
                                 )
 
-                    if logger.level <= logging.DEBUG:
+                    if logger.isEnabledFor(logging.DEBUG):
                         body = "(binary)"
                         if isinstance(data, dict) or isinstance(data, str):
                             body = data  # type: ignore[assignment]
@@ -175,8 +175,7 @@ async def _request_with_session(
                             response=retry_response,
                             error=error,
                         ):
-                            if logger.level <= logging.DEBUG:
-                                logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
+                            logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url}")
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,
@@ -202,8 +201,7 @@ async def _request_with_session(
                         response=retry_response,
                         error=e,
                     ):
-                        if logger.level <= logging.DEBUG:
-                            logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url} - {e}")
+                        logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {api_url} - {e}")
                         await handler.prepare_for_next_attempt_async(
                             state=retry_state,
                             request=retry_request,

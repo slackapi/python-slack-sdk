@@ -447,7 +447,7 @@ class RTMClient(object):
                 }
             }
         """
-        if self._logger.level <= logging.DEBUG:
+        if self._logger.isEnabledFor(logging.DEBUG):
             self._logger.debug("Received an event: '%s' - %s", event, data)
         for callback in self._callbacks[event]:
             self._logger.debug(

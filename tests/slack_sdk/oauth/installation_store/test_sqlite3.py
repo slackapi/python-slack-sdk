@@ -1,3 +1,4 @@
+import logging
 import tempfile
 import unittest
 
@@ -375,3 +376,30 @@ class TestSQLite3(unittest.TestCase):
         installation = store.find_installation(enterprise_id="E333", team_id="T333", user_id="U333")
         self.assertEqual(installation.user_token, "xoxp-new")
         self.assertEqual(installation.bot_token, "xoxb-new")
+
+    def test_lookup_failure_logs_a_warning_without_traceback_by_default(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        logger = logging.getLogger(f"{__name__}.lookup_failure.store")
+        store = SQLite3InstallationStore(database=f"{directory.name}/test.db", client_id="111.222", logger=logger)
+        with store.connect() as conn:
+            conn.execute("drop table slack_bots")
+
+        with self.assertLogs(f"{__name__}.lookup_failure", level=logging.WARNING) as logs:
+            self.assertIsNone(store.find_bot(enterprise_id="E111", team_id="T111"))
+
+        self.assertEqual([(record.levelno, record.exc_info) for record in logs.records], [(logging.WARNING, None)])
+
+    def test_lookup_failure_logs_the_traceback_when_debug_is_enabled(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        logger = logging.getLogger(f"{__name__}.lookup_failure_debug.store")
+        store = SQLite3InstallationStore(database=f"{directory.name}/test.db", client_id="111.222", logger=logger)
+        with store.connect() as conn:
+            conn.execute("drop table slack_bots")
+
+        with self.assertLogs(f"{__name__}.lookup_failure_debug", level=logging.DEBUG) as logs:
+            self.assertIsNone(store.find_bot(enterprise_id="E111", team_id="T111"))
+
+        self.assertEqual([record.levelno for record in logs.records], [logging.ERROR])
+        self.assertIsNotNone(logs.records[0].exc_info)

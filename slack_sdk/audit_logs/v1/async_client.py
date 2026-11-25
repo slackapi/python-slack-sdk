@@ -268,7 +268,7 @@ class AsyncAuditLogsClient:
                 retry_response: Optional[RetryHttpResponse] = None
                 response_body = ""
 
-                if self.logger.level <= logging.DEBUG:
+                if self.logger.isEnabledFor(logging.DEBUG):
                     headers_for_logging = {
                         k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()
                     }
@@ -309,11 +309,10 @@ class AsyncAuditLogsClient:
                                     response=retry_response,
                                     error=e,
                                 ):
-                                    if self.logger.level <= logging.DEBUG:
-                                        self.logger.info(
-                                            f"A retry handler found: {type(handler).__name__} "
-                                            f"for {http_verb} {url} - status: {res.status}"
-                                        )
+                                    self.logger.info(
+                                        f"A retry handler found: {type(handler).__name__} "
+                                        f"for {http_verb} {url} - status: {res.status}"
+                                    )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
                                         request=retry_request,
@@ -341,10 +340,7 @@ class AsyncAuditLogsClient:
                             response=retry_response,
                             error=e,
                         ):
-                            if self.logger.level <= logging.DEBUG:
-                                self.logger.info(
-                                    f"A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}"
-                                )
+                            self.logger.info(f"A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}")
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,

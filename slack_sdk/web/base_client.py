@@ -253,7 +253,7 @@ class BaseClient:
             query_params = convert_bool_to_0_or_1(query_params)  # type: ignore[assignment]
             body_params = convert_bool_to_0_or_1(body_params)  # type: ignore[assignment]
 
-            if self._logger.level <= logging.DEBUG:
+            if self._logger.isEnabledFor(logging.DEBUG):
 
                 def convert_params(values: dict) -> dict:
                     if not values or not isinstance(values, dict):
@@ -427,10 +427,9 @@ class BaseClient:
                     )
                     for handler in self.retry_handlers:
                         if handler.can_retry(state=retry_state, request=retry_request, response=retry_response):
-                            if self._logger.level <= logging.DEBUG:
-                                self._logger.info(
-                                    f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url}"
-                                )
+                            self._logger.info(
+                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url}"
+                            )
                             handler.prepare_for_next_attempt(
                                 state=retry_state, request=retry_request, response=retry_response
                             )
@@ -468,10 +467,9 @@ class BaseClient:
                         response=retry_response,
                         error=e,
                     ):
-                        if self._logger.level <= logging.DEBUG:
-                            self._logger.info(
-                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
-                            )
+                        self._logger.info(
+                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
+                        )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
@@ -496,10 +494,9 @@ class BaseClient:
                         response=None,
                         error=err,
                     ):
-                        if self._logger.level <= logging.DEBUG:
-                            self._logger.info(
-                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
-                            )
+                        self._logger.info(
+                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
+                        )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
@@ -543,7 +540,7 @@ class BaseClient:
             if resp.headers.get_content_type() == "application/gzip":
                 # admin.analytics.getFile
                 body: bytes = resp.read()
-                if self._logger.level <= logging.DEBUG:
+                if self._logger.isEnabledFor(logging.DEBUG):
                     self._logger.debug(
                         "Received the following response - "
                         f"status: {resp.code}, "
@@ -554,7 +551,7 @@ class BaseClient:
 
             charset = resp.headers.get_content_charset() or "utf-8"
             decoded_body: str = resp.read().decode(charset)  # read the response body here
-            if self._logger.level <= logging.DEBUG:
+            if self._logger.isEnabledFor(logging.DEBUG):
                 self._logger.debug(
                     "Received the following response - "
                     f"status: {resp.code}, "

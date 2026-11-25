@@ -223,7 +223,7 @@ class AuditLogsClient:
             body = json.dumps(body)  # type: ignore[assignment]
         headers["Content-Type"] = "application/json;charset=utf-8"
 
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             headers_for_logging = {k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()}
             self.logger.debug(f"Sending a request - url: {url}, body: {body}, headers: {headers_for_logging}")
 
@@ -284,10 +284,9 @@ class AuditLogsClient:
                         response=retry_response,
                         error=e,
                     ):
-                        if self.logger.level <= logging.DEBUG:
-                            self.logger.info(
-                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
-                            )
+                        self.logger.info(
+                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
+                        )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
@@ -312,10 +311,9 @@ class AuditLogsClient:
                         response=None,
                         error=err,
                     ):
-                        if self.logger.level <= logging.DEBUG:
-                            self.logger.info(
-                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
-                            )
+                        self.logger.info(
+                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
+                        )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,

@@ -351,7 +351,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
 
         except Exception as e:
             message = f"Failed to find bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.exception(message)
             else:
                 self.logger.warning(message)
@@ -530,7 +530,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
 
         except Exception as e:
             message = f"Failed to find an installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.exception(message)
             else:
                 self.logger.warning(message)
@@ -559,7 +559,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 conn.commit()
         except Exception as e:
             message = f"Failed to delete bot installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.exception(message)
             else:
                 self.logger.warning(message)
@@ -617,7 +617,7 @@ class SQLite3InstallationStore(InstallationStore, AsyncInstallationStore):
                 conn.commit()
         except Exception as e:
             message = f"Failed to delete installation data for enterprise: {enterprise_id}, team: {team_id}: {e}"
-            if self.logger.level <= logging.DEBUG:
+            if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.exception(message)
             else:
                 self.logger.warning(message)

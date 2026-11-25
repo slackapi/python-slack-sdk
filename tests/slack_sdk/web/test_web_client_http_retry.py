@@ -1,4 +1,6 @@
+import logging
 import unittest
+from unittest.mock import patch
 
 from slack_sdk.errors import SlackApiError
 from slack_sdk.http_retry import RateLimitErrorRetryHandler
@@ -78,3 +80,32 @@ class TestWebClient_HttpRetry(unittest.TestCase):
         client.retry_handlers.append(FatalErrorRetryHandler())
         # The auto-retry should work here
         client.auth_test()
+
+    def test_retry_is_logged_at_info(self):
+        logger = logging.getLogger(f"{__name__}.retry_info")
+        logger.setLevel(logging.INFO)
+        self.addCleanup(logger.setLevel, logging.NOTSET)
+        client = WebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-ratelimited",
+            team_id="T111",
+            logger=logger,
+            retry_handlers=[RateLimitErrorRetryHandler(max_retry_count=1)],
+        )
+
+        with self.assertLogs(logger, level=logging.INFO) as logs, self.assertRaises(SlackApiError):
+            client.auth_test()
+
+        self.assertTrue(any("A retry handler found" in message for message in logs.output))
+
+    def test_response_is_not_formatted_for_debug_when_debug_is_disabled(self):
+        parent = logging.getLogger(f"{__name__}.debug_guard")
+        parent.setLevel(logging.INFO)
+        self.addCleanup(parent.setLevel, logging.NOTSET)
+        logger = logging.getLogger(f"{__name__}.debug_guard.client")
+        client = WebClient(base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111", logger=logger)
+
+        with patch.object(logger, "debug") as debug:
+            client.auth_test()
+
+        debug.assert_not_called()

@@ -136,7 +136,7 @@ def _debug_log_response(
     logger,
     resp: "SCIMResponse",  # noqa: F821
 ) -> None:
-    if logger.level <= logging.DEBUG:
+    if logger.isEnabledFor(logging.DEBUG):
         logger.debug(
             "Received the following response - "
             f"status: {resp.status_code}, "

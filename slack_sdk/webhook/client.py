@@ -143,7 +143,7 @@ class WebhookClient:
         raw_body = json.dumps(body)
         headers["Content-Type"] = "application/json;charset=utf-8"
 
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             self.logger.debug(f"Sending a request - url: {self.url}, body: {raw_body}, headers: {headers}")
 
         url = self.url
@@ -199,10 +199,9 @@ class WebhookClient:
                         response=retry_response,
                         error=e,
                     ):
-                        if self.logger.level <= logging.DEBUG:
-                            self.logger.info(
-                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
-                            )
+                        self.logger.info(
+                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
+                        )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
@@ -227,10 +226,9 @@ class WebhookClient:
                         response=None,
                         error=err,
                     ):
-                        if self.logger.level <= logging.DEBUG:
-                            self.logger.info(
-                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
-                            )
+                        self.logger.info(
+                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
+                        )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
