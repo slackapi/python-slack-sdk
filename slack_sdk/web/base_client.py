@@ -427,9 +427,10 @@ class BaseClient:
                     )
                     for handler in self.retry_handlers:
                         if handler.can_retry(state=retry_state, request=retry_request, response=retry_response):
-                            self._logger.info(
-                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url}"
-                            )
+                            if self._logger.isEnabledFor(logging.DEBUG):
+                                self._logger.debug(
+                                    f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url}"
+                                )
                             handler.prepare_for_next_attempt(
                                 state=retry_state, request=retry_request, response=retry_response
                             )
@@ -467,9 +468,10 @@ class BaseClient:
                         response=retry_response,
                         error=e,
                     ):
-                        self._logger.info(
-                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
-                        )
+                        if self._logger.isEnabledFor(logging.DEBUG):
+                            self._logger.debug(
+                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
+                            )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,
@@ -494,9 +496,10 @@ class BaseClient:
                         response=None,
                         error=err,
                     ):
-                        self._logger.info(
-                            f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
-                        )
+                        if self._logger.isEnabledFor(logging.DEBUG):
+                            self._logger.debug(
+                                f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
+                            )
                         handler.prepare_for_next_attempt(
                             state=retry_state,
                             request=retry_request,

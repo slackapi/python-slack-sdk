@@ -1,4 +1,6 @@
+import logging
 import unittest
+from unittest.mock import patch
 
 import slack_sdk.errors as err
 from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler, AsyncServerErrorRetryHandler
@@ -126,3 +128,16 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
 
         self.assertEqual([500], error_statuses(retry_handler.can_retry_errors))
         self.assertEqual([500], error_statuses(retry_handler.prepare_errors))
+
+    @async_test
+    async def test_response_is_not_formatted_for_debug_when_debug_is_disabled(self):
+        parent = logging.getLogger(f"{__name__}.debug_guard")
+        parent.setLevel(logging.INFO)
+        self.addCleanup(parent.setLevel, logging.NOTSET)
+        logger = logging.getLogger(f"{__name__}.debug_guard.client")
+        client = AsyncWebClient(base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111", logger=logger)
+
+        with patch.object(logger, "debug") as debug:
+            await client.auth_test()
+
+        debug.assert_not_called()

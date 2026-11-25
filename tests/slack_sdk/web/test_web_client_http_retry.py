@@ -81,11 +81,8 @@ class TestWebClient_HttpRetry(unittest.TestCase):
         # The auto-retry should work here
         client.auth_test()
 
-    def test_retry_is_logged_at_info(self):
-        logger = logging.getLogger(f"{__name__}.retry_info")
-        logger.setLevel(logging.INFO)
-        self.addCleanup(logger.setLevel, logging.NOTSET)
-        client = WebClient(
+    def ratelimited_client(self, logger: logging.Logger) -> WebClient:
+        return WebClient(
             base_url="http://localhost:8888",
             token="xoxb-ratelimited",
             team_id="T111",
@@ -93,10 +90,25 @@ class TestWebClient_HttpRetry(unittest.TestCase):
             retry_handlers=[RateLimitErrorRetryHandler(max_retry_count=1)],
         )
 
-        with self.assertLogs(logger, level=logging.INFO) as logs, self.assertRaises(SlackApiError):
+    def test_retry_is_logged_at_debug(self):
+        logger = logging.getLogger(f"{__name__}.retry_debug")
+        client = self.ratelimited_client(logger)
+
+        with self.assertLogs(logger, level=logging.DEBUG) as logs, self.assertRaises(SlackApiError):
             client.auth_test()
 
-        self.assertTrue(any("A retry handler found" in message for message in logs.output))
+        retry_levels = [record.levelno for record in logs.records if "A retry handler found" in record.getMessage()]
+        self.assertEqual(retry_levels, [logging.DEBUG])
+
+    def test_retry_is_not_logged_at_info(self):
+        parent = logging.getLogger(f"{__name__}.retry_info")
+        client = self.ratelimited_client(logging.getLogger(f"{__name__}.retry_info.client"))
+
+        with self.assertLogs(parent, level=logging.INFO) as logs, self.assertRaises(SlackApiError):
+            parent.info("sentinel")
+            client.auth_test()
+
+        self.assertEqual(logs.output, [f"INFO:{parent.name}:sentinel"])
 
     def test_response_is_not_formatted_for_debug_when_debug_is_disabled(self):
         parent = logging.getLogger(f"{__name__}.debug_guard")

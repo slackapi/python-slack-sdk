@@ -217,10 +217,11 @@ class AsyncWebhookClient:
                                     response=retry_response,
                                     error=e,
                                 ):
-                                    self.logger.info(
-                                        f"A retry handler found: {type(handler).__name__} "
-                                        f"for POST {self.url} - status: {res.status}"
-                                    )
+                                    if self.logger.isEnabledFor(logging.DEBUG):
+                                        self.logger.debug(
+                                            f"A retry handler found: {type(handler).__name__} "
+                                            f"for POST {self.url} - status: {res.status}"
+                                        )
                                     await handler.prepare_for_next_attempt_async(
                                         state=retry_state,
                                         request=retry_request,
@@ -248,7 +249,10 @@ class AsyncWebhookClient:
                             response=retry_response,
                             error=e,
                         ):
-                            self.logger.info(f"A retry handler found: {type(handler).__name__} for POST {self.url} - {e}")
+                            if self.logger.isEnabledFor(logging.DEBUG):
+                                self.logger.debug(
+                                    f"A retry handler found: {type(handler).__name__} for POST {self.url} - {e}"
+                                )
                             await handler.prepare_for_next_attempt_async(
                                 state=retry_state,
                                 request=retry_request,
