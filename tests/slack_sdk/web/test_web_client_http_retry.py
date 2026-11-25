@@ -1,4 +1,6 @@
+import logging
 import unittest
+from unittest.mock import patch
 
 from slack_sdk.errors import SlackApiError
 from slack_sdk.http_retry import RateLimitErrorRetryHandler
@@ -78,3 +80,50 @@ class TestWebClient_HttpRetry(unittest.TestCase):
         client.retry_handlers.append(FatalErrorRetryHandler())
         # The auto-retry should work here
         client.auth_test()
+
+    def ratelimited_client(self, logger: logging.Logger) -> WebClient:
+        return WebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-ratelimited",
+            team_id="T111",
+            logger=logger,
+            retry_handlers=[RateLimitErrorRetryHandler(max_retry_count=1)],
+        )
+
+    def test_retry_is_logged_at_debug(self):
+        logger = logging.getLogger(f"{__name__}.retry_debug")
+        client = self.ratelimited_client(logger)
+
+        with self.assertLogs(logger, level=logging.DEBUG) as logs, self.assertRaises(SlackApiError):
+            client.auth_test()
+
+        retry_levels = [record.levelno for record in logs.records if "A retry handler found" in record.getMessage()]
+        self.assertEqual(retry_levels, [logging.DEBUG])
+
+    def test_retry_is_logged_at_info_without_handler_detail(self):
+        parent = logging.getLogger(f"{__name__}.retry_info")
+        client = self.ratelimited_client(logging.getLogger(f"{parent.name}.client"))
+
+        with self.assertLogs(parent, level=logging.INFO) as logs, self.assertRaises(SlackApiError):
+            parent.info("sentinel")
+            client.auth_test()
+
+        self.assertEqual(
+            logs.output,
+            [
+                f"INFO:{parent.name}:sentinel",
+                f"INFO:{parent.name}.client:Going to retry the same request: POST http://localhost:8888/auth.test",
+            ],
+        )
+
+    def test_response_is_not_formatted_for_debug_when_debug_is_disabled(self):
+        parent = logging.getLogger(f"{__name__}.debug_guard")
+        parent.setLevel(logging.INFO)
+        self.addCleanup(parent.setLevel, logging.NOTSET)
+        logger = logging.getLogger(f"{__name__}.debug_guard.client")
+        client = WebClient(base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111", logger=logger)
+
+        with patch.object(logger, "debug") as debug:
+            client.auth_test()
+
+        debug.assert_not_called()

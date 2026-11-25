@@ -1,4 +1,6 @@
+import logging
 import unittest
+from unittest.mock import patch
 
 import slack_sdk.errors as err
 from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler, AsyncServerErrorRetryHandler
@@ -126,3 +128,39 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
 
         self.assertEqual([500], error_statuses(retry_handler.can_retry_errors))
         self.assertEqual([500], error_statuses(retry_handler.prepare_errors))
+
+    @async_test
+    async def test_response_is_not_formatted_for_debug_when_debug_is_disabled(self):
+        parent = logging.getLogger(f"{__name__}.debug_guard")
+        parent.setLevel(logging.INFO)
+        self.addCleanup(parent.setLevel, logging.NOTSET)
+        logger = logging.getLogger(f"{__name__}.debug_guard.client")
+        client = AsyncWebClient(base_url="http://localhost:8888", token="xoxb-api_test", team_id="T111", logger=logger)
+
+        with patch.object(logger, "debug") as debug:
+            await client.auth_test()
+
+        debug.assert_not_called()
+
+    @async_test
+    async def test_ratelimited_retry_is_logged_at_info(self):
+        parent = logging.getLogger(f"{__name__}.retry_info")
+        client = AsyncWebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-ratelimited",
+            team_id="T111",
+            logger=logging.getLogger(f"{parent.name}.client"),
+            retry_handlers=[AsyncRateLimitErrorRetryHandler(max_retry_count=1)],
+        )
+
+        with self.assertLogs(parent, level=logging.INFO) as logs, self.assertRaises(err.SlackApiError):
+            parent.info("sentinel")
+            await client.auth_test()
+
+        self.assertEqual(
+            logs.output,
+            [
+                f"INFO:{parent.name}:sentinel",
+                f"INFO:{parent.name}.client:Going to retry the same request: POST http://localhost:8888/auth.test",
+            ],
+        )

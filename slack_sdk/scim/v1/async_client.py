@@ -317,7 +317,7 @@ class AsyncSCIMClient:
                 retry_response: Optional[RetryHttpResponse] = None
                 response_body = ""
 
-                if self.logger.level <= logging.DEBUG:
+                if self.logger.isEnabledFor(logging.DEBUG):
                     headers_for_logging = {
                         k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()
                     }
@@ -351,8 +351,8 @@ class AsyncSCIMClient:
                                     response=retry_response,
                                     error=e,
                                 ):
-                                    if self.logger.level <= logging.DEBUG:
-                                        self.logger.info(
+                                    if self.logger.isEnabledFor(logging.DEBUG):
+                                        self.logger.debug(
                                             f"A retry handler found: {type(handler).__name__} "
                                             f"for {http_verb} {url} - status: {res.status}"
                                         )
@@ -362,6 +362,7 @@ class AsyncSCIMClient:
                                         response=retry_response,
                                         error=e,
                                     )
+                                    self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                                     break
 
                         if retry_state.next_attempt_requested is False:
@@ -383,8 +384,8 @@ class AsyncSCIMClient:
                             response=retry_response,
                             error=e,
                         ):
-                            if self.logger.level <= logging.DEBUG:
-                                self.logger.info(
+                            if self.logger.isEnabledFor(logging.DEBUG):
+                                self.logger.debug(
                                     f"A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
@@ -393,6 +394,7 @@ class AsyncSCIMClient:
                                 response=retry_response,
                                 error=e,
                             )
+                            self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                             break
 
                     if retry_state.next_attempt_requested is False:

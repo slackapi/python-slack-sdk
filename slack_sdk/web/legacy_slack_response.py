@@ -193,7 +193,7 @@ class LegacySlackResponse(object):
         Raises:
             SlackApiError: The request to the Slack API failed.
         """
-        if self._logger.level <= logging.DEBUG:
+        if self._logger.isEnabledFor(logging.DEBUG):
             body = self.data if isinstance(self.data, dict) else "(binary)"
             self._logger.debug(
                 f"Received the following response - status: {self.status_code}, headers: {dict(self.headers)}, body: {body}"

@@ -31,7 +31,7 @@ def _build_request_headers(
 
 
 def _debug_log_response(logger, resp: AuditLogsResponse) -> None:
-    if logger.level <= logging.DEBUG:
+    if logger.isEnabledFor(logging.DEBUG):
         logger.debug(
             "Received the following response - "
             f"status: {resp.status_code}, "
