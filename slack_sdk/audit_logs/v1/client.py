@@ -223,7 +223,7 @@ class AuditLogsClient:
             body = json.dumps(body)  # type: ignore[assignment]
         headers["Content-Type"] = "application/json;charset=utf-8"
 
-        if self.logger.level <= logging.DEBUG:
+        if self.logger.isEnabledFor(logging.DEBUG):
             headers_for_logging = {k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()}
             self.logger.debug(f"Sending a request - url: {url}, body: {body}, headers: {headers_for_logging}")
 
@@ -284,8 +284,8 @@ class AuditLogsClient:
                         response=retry_response,
                         error=e,
                     ):
-                        if self.logger.level <= logging.DEBUG:
-                            self.logger.info(
+                        if self.logger.isEnabledFor(logging.DEBUG):
+                            self.logger.debug(
                                 f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {e}"
                             )
                         handler.prepare_for_next_attempt(
@@ -294,6 +294,7 @@ class AuditLogsClient:
                             response=retry_response,
                             error=e,
                         )
+                        self.logger.info(f"Going to retry the same request: {req.method} {req.full_url}")
                         break
 
                 if retry_state.next_attempt_requested is False:
@@ -312,8 +313,8 @@ class AuditLogsClient:
                         response=None,
                         error=err,
                     ):
-                        if self.logger.level <= logging.DEBUG:
-                            self.logger.info(
+                        if self.logger.isEnabledFor(logging.DEBUG):
+                            self.logger.debug(
                                 f"A retry handler found: {type(handler).__name__} for {req.method} {req.full_url} - {err}"
                             )
                         handler.prepare_for_next_attempt(

@@ -108,7 +108,7 @@ def _convert_dict_keys(
                             )
                         result_dict[new_key].append(new_element)
                 else:
-                    result_dict[new_key].append(_create_copy(original_value))
+                    result_dict[new_key].append(_create_copy(element))
         else:
             result_dict[new_key] = _create_copy(original_value)
     return result_dict
@@ -136,7 +136,7 @@ def _debug_log_response(
     logger,
     resp: "SCIMResponse",  # noqa: F821
 ) -> None:
-    if logger.level <= logging.DEBUG:
+    if logger.isEnabledFor(logging.DEBUG):
         logger.debug(
             "Received the following response - "
             f"status: {resp.status_code}, "

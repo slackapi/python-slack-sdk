@@ -268,7 +268,7 @@ class AsyncAuditLogsClient:
                 retry_response: Optional[RetryHttpResponse] = None
                 response_body = ""
 
-                if self.logger.level <= logging.DEBUG:
+                if self.logger.isEnabledFor(logging.DEBUG):
                     headers_for_logging = {
                         k: "(redacted)" if k.lower() == "authorization" else v for k, v in headers.items()
                     }
@@ -299,15 +299,18 @@ class AsyncAuditLogsClient:
                             message = f"Failed to parse the response body: {str(e)}"
                             raise SlackApiError(message, res)
 
-                        if res.status >= 400:
+                        try:
+                            res.raise_for_status()
+                        except aiohttp.ClientResponseError as e:
                             for handler in self.retry_handlers:
                                 if await handler.can_retry_async(
                                     state=retry_state,
                                     request=retry_request,
                                     response=retry_response,
+                                    error=e,
                                 ):
-                                    if self.logger.level <= logging.DEBUG:
-                                        self.logger.info(
+                                    if self.logger.isEnabledFor(logging.DEBUG):
+                                        self.logger.debug(
                                             f"A retry handler found: {type(handler).__name__} "
                                             f"for {http_verb} {url} - status: {res.status}"
                                         )
@@ -315,7 +318,9 @@ class AsyncAuditLogsClient:
                                         state=retry_state,
                                         request=retry_request,
                                         response=retry_response,
+                                        error=e,
                                     )
+                                    self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                                     break
 
                         if retry_state.next_attempt_requested is False:
@@ -337,8 +342,8 @@ class AsyncAuditLogsClient:
                             response=retry_response,
                             error=e,
                         ):
-                            if self.logger.level <= logging.DEBUG:
-                                self.logger.info(
+                            if self.logger.isEnabledFor(logging.DEBUG):
+                                self.logger.debug(
                                     f"A retry handler found: {type(handler).__name__} for {http_verb} {url} - {e}"
                                 )
                             await handler.prepare_for_next_attempt_async(
@@ -347,6 +352,7 @@ class AsyncAuditLogsClient:
                                 response=retry_response,
                                 error=e,
                             )
+                            self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                             break
 
                     if retry_state.next_attempt_requested is False:
