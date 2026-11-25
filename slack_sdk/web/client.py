@@ -6059,6 +6059,176 @@ class WebClient(BaseClient):
             kwargs.update({"mcp_servers": mcp_servers})
         return self.api_call("slackbot.skills.update", params=kwargs)
 
+    def slackbot_skillSets_create(
+        self,
+        *,
+        display_name: str,
+        description: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Creates an empty, private Slackbot skill set and attempts to add it to the caller's library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.create
+
+        Args:
+            display_name: Human-readable label, 1 to 255 characters. Not unique.
+            description: What the skill set is for. Max 2,000 characters.
+        """
+        kwargs.update({"display_name": display_name, "description": description})
+        return self.api_call("slackbot.skillSets.create", params=kwargs)
+
+    def slackbot_skillSets_delete(
+        self,
+        *,
+        skill_set_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Deletes a Slackbot skill set. The skills in it, and their library entries, are kept.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.delete
+
+        Args:
+            skill_set_id: Skill set to delete.
+        """
+        kwargs.update({"skill_set_id": skill_set_id})
+        return self.api_call("slackbot.skillSets.delete", params=kwargs)
+
+    def slackbot_skillSets_info(
+        self,
+        *,
+        skill_set_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Returns one Slackbot skill set and the skills in it, in display order.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.info
+
+        Args:
+            skill_set_id: Skill set to fetch.
+        """
+        kwargs.update({"skill_set_id": skill_set_id})
+        return self.api_call("slackbot.skillSets.info", params=kwargs)
+
+    def slackbot_skillSets_items_add(
+        self,
+        *,
+        skill_set_id: str,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Adds skills to a Slackbot skill set.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.items.add
+
+        Args:
+            skill_set_id: Skill set to add the skills to.
+            skill_ids: One to 20 canvas skill IDs. Each distinct ID is processed once, in the order it first appears.
+              Successful items are not rolled back if other items fail.
+        """
+        kwargs.update({"skill_set_id": skill_set_id})
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return self.api_call("slackbot.skillSets.items.add", params=kwargs)
+
+    def slackbot_skillSets_items_remove(
+        self,
+        *,
+        skill_set_id: str,
+        skill_ids: Union[str, Sequence[str]],
+        **kwargs,
+    ) -> SlackResponse:
+        """Removes skills from a Slackbot skill set.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.items.remove
+
+        Args:
+            skill_set_id: Skill set to remove the skills from.
+            skill_ids: One to 20 skill IDs. Each distinct ID is processed once. Successful items are not rolled back if
+              other items fail.
+        """
+        kwargs.update({"skill_set_id": skill_set_id})
+        if isinstance(skill_ids, (list, tuple)):
+            kwargs.update({"skill_ids": ",".join(skill_ids)})
+        else:
+            kwargs.update({"skill_ids": skill_ids})
+        return self.api_call("slackbot.skillSets.items.remove", params=kwargs)
+
+    def slackbot_skillSets_library_add(
+        self,
+        *,
+        skill_set_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Adds a Slackbot skill set to the caller's library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.library.add
+
+        Args:
+            skill_set_id: Skill set to add to the caller's library.
+        """
+        kwargs.update({"skill_set_id": skill_set_id})
+        return self.api_call("slackbot.skillSets.library.add", params=kwargs)
+
+    def slackbot_skillSets_library_remove(
+        self,
+        *,
+        skill_set_id: str,
+        **kwargs,
+    ) -> SlackResponse:
+        """Removes a Slackbot skill set from the caller's library.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.library.remove
+
+        Args:
+            skill_set_id: Skill set to remove from the caller's library.
+        """
+        kwargs.update({"skill_set_id": skill_set_id})
+        return self.api_call("slackbot.skillSets.library.remove", params=kwargs)
+
+    def slackbot_skillSets_list(
+        self,
+        *,
+        filter: Optional[str] = None,
+        cursor: Optional[str] = None,
+        limit: Optional[int] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Lists Slackbot skill sets from the caller's point of view. The skills in each set are not included.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.list
+
+        Args:
+            filter: `library`: skill sets in the caller's library. `owned`: skill sets the caller created. `editable`:
+              skill sets the caller can edit. `accessible`: skill sets the caller can view.
+            cursor: Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute
+              returned by a previous request's `response_metadata`. Must be used with the same `filter`.
+            limit: The maximum number of skill sets to return. Fewer may be returned even when more remain.
+        """
+        kwargs.update({"filter": filter, "cursor": cursor, "limit": limit})
+        return self.api_call("slackbot.skillSets.list", params=kwargs)
+
+    def slackbot_skillSets_update(
+        self,
+        *,
+        skill_set_id: str,
+        display_name: Optional[str] = None,
+        description: Optional[str] = None,
+        **kwargs,
+    ) -> SlackResponse:
+        """Changes a Slackbot skill set's display name or description.
+
+        https://docs.slack.dev/reference/methods/slackbot.skillSets.update
+
+        Args:
+            skill_set_id: Skill set to change.
+            display_name: Human-readable label, 1 to 255 characters. Not unique.
+            description: What the skill set is for. Max 2,000 characters. Send an empty string to clear.
+        """
+        kwargs.update({"skill_set_id": skill_set_id, "display_name": display_name, "description": description})
+        return self.api_call("slackbot.skillSets.update", params=kwargs)
+
     def slackLists_access_delete(
         self,
         *,
