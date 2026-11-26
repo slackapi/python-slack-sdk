@@ -26,7 +26,6 @@ class SQLAlchemyOAuthStateStore(OAuthStateStore):
         return sqlalchemy.Table(
             table_name,
             metadata,
-            metadata,
             Column("id", Integer, primary_key=True, autoincrement=True),
             Column("state", String(200), nullable=False),
             Column("expire_at", DateTime, nullable=False),
@@ -94,7 +93,6 @@ class AsyncSQLAlchemyOAuthStateStore(AsyncOAuthStateStore):
     def build_oauth_states_table(cls, metadata: MetaData, table_name: str) -> Table:
         return sqlalchemy.Table(
             table_name,
-            metadata,
             metadata,
             Column("id", Integer, primary_key=True, autoincrement=True),
             Column("state", String(200), nullable=False),
