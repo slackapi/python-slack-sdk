@@ -8,8 +8,9 @@ from unittest.mock import patch
 from slack_sdk.errors import SlackRequestError
 
 from slack_sdk.models.attachments import Attachment
-from slack_sdk.models.blocks import Block, DividerBlock
+from slack_sdk.models.blocks import Block, DividerBlock, PlainTextObject
 from slack_sdk.models.messages.chunk import MarkdownTextChunk, PlanUpdateChunk, TaskUpdateChunk
+from slack_sdk.models.metadata import EntityMetadata, EventAndEntityMetadata, Metadata
 from slack_sdk.web.internal_utils import (
     _build_unexpected_body_error_message,
     _get_url,
@@ -114,6 +115,48 @@ class TestInternalUtils(unittest.TestCase):
         }
         _parse_web_class_objects(kwargs)
         assert isinstance(kwargs["user_auth_blocks"][0], dict)
+
+    def entity_metadata(self) -> EntityMetadata:
+        return EntityMetadata(
+            entity_type="slack#/entities/task",
+            entity_payload={"attributes": {"title": {"text": "Task"}}},
+            external_ref={"id": "123"},
+            url="https://example.com/123",
+        )
+
+    def test_can_parse_metadata(self):
+        for metadata in [
+            Metadata(event_type="task_created", event_payload={"id": "123"}),
+            self.entity_metadata(),
+            EventAndEntityMetadata(entities=[self.entity_metadata()]),
+        ]:
+            kwargs = {"metadata": metadata}
+            _parse_web_class_objects(kwargs)
+            assert kwargs["metadata"] == metadata.to_dict()
+
+    def test_keeps_dict_metadata(self):
+        metadata = {"event_type": "task_created", "event_payload": {"id": "123"}}
+        kwargs = {"metadata": metadata}
+        _parse_web_class_objects(kwargs)
+        assert kwargs["metadata"] is metadata
+
+    def test_keeps_non_metadata_objects_in_metadata(self):
+        block = DividerBlock()
+        kwargs = {"metadata": block}
+        _parse_web_class_objects(kwargs)
+        assert kwargs["metadata"] is block
+
+    def test_keeps_unsupported_objects_in_blocks(self):
+        text = PlainTextObject(text="foo")
+        kwargs = {"blocks": [text]}
+        _parse_web_class_objects(kwargs)
+        assert kwargs["blocks"][0] is text
+
+    def test_can_parse_any_supported_object_in_blocks(self):
+        chunk = MarkdownTextChunk(text="fiz")
+        kwargs = {"blocks": [chunk]}
+        _parse_web_class_objects(kwargs)
+        assert kwargs["blocks"] == [chunk.to_dict()]
 
     def test_files_upload_v2_issue_1356(self):
         content_item = _to_v2_file_upload_item({"content": "test"})

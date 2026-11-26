@@ -189,17 +189,7 @@ def _build_req_args(
 
 def _parse_web_class_objects(kwargs) -> None:
     def to_dict(obj: Union[Dict, Block, Attachment, Chunk, Metadata, EventAndEntityMetadata, EntityMetadata]):
-        if isinstance(obj, Block):
-            return obj.to_dict()
-        if isinstance(obj, Attachment):
-            return obj.to_dict()
-        if isinstance(obj, Chunk):
-            return obj.to_dict()
-        if isinstance(obj, Metadata):
-            return obj.to_dict()
-        if isinstance(obj, EventAndEntityMetadata):
-            return obj.to_dict()
-        if isinstance(obj, EntityMetadata):
+        if isinstance(obj, (Block, Attachment, Chunk, Metadata, EventAndEntityMetadata, EntityMetadata)):
             return obj.to_dict()
         return obj
 
@@ -220,11 +210,7 @@ def _parse_web_class_objects(kwargs) -> None:
         kwargs.update({"chunks": dict_chunks})
 
     metadata = kwargs.get("metadata", None)
-    if metadata is not None and (
-        isinstance(metadata, Metadata)
-        or isinstance(metadata, EntityMetadata)
-        or isinstance(metadata, EventAndEntityMetadata)
-    ):
+    if isinstance(metadata, (Metadata, EntityMetadata, EventAndEntityMetadata)):
         kwargs.update({"metadata": to_dict(metadata)})
 
 
