@@ -244,7 +244,6 @@ class AsyncAuditLogsClient:
             )
 
         last_error = None
-        resp: Optional[AuditLogsResponse] = None
         build_response: Optional[Callable[[], AuditLogsResponse]] = None
         try:
             request_kwargs = {
@@ -369,5 +368,3 @@ class AsyncAuditLogsClient:
         finally:
             if not use_running_session:
                 await session.close()  # type: ignore[union-attr]
-
-        return resp

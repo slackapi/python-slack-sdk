@@ -294,7 +294,6 @@ class AsyncSCIMClient:
             )
 
         last_error: Optional[Exception] = None
-        resp: Optional[SCIMResponse] = None
         build_response: Optional[Callable[[], SCIMResponse]] = None
         try:
             request_kwargs = {
@@ -411,5 +410,3 @@ class AsyncSCIMClient:
         finally:
             if not use_running_session:
                 await session.close()
-
-        return resp
