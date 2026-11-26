@@ -218,8 +218,22 @@ class BaseClient:
         return {
             "status_code": int(response["status"]),
             "headers": dict(response["headers"]),
-            "data": response["parsed_body"] if "parsed_body" in response else json.loads(response["body"]),
+            "data": self._parse_response_body(response),
         }
+
+    def _parse_response_body(self, response: Dict[str, Any]) -> Optional[Union[dict, bytes]]:
+        """Returns the body parsed to a dict, or an error payload when it is not JSON."""
+        body = response.get("body", None)
+        if "parsed_body" in response:
+            return response["parsed_body"]
+        if body is None or isinstance(body, bytes):
+            return body
+        try:
+            return json.loads(body)
+        except json.decoder.JSONDecodeError:
+            message = _build_unexpected_body_error_message(body)
+            self._logger.error(f"Failed to decode Slack API response: {message}")
+            return {"ok": False, "error": message}
 
     def _urllib_api_call(
         self,
@@ -304,17 +318,7 @@ class BaseClient:
                 url = f"{url}&{q}" if "?" in url else f"{url}?{q}"
 
             response = self._perform_urllib_http_request(url=url, args=request_args)  # type: ignore[arg-type]
-            response_body = response.get("body", None)
-            response_body_data: Optional[Union[dict, bytes]] = response_body
-            if "parsed_body" in response:
-                response_body_data = response["parsed_body"]
-            elif response_body is not None and not isinstance(response_body, bytes):
-                try:
-                    response_body_data = json.loads(response["body"])
-                except json.decoder.JSONDecodeError:
-                    message = _build_unexpected_body_error_message(response.get("body", ""))
-                    self._logger.error(f"Failed to decode Slack API response: {message}")
-                    response_body_data = {"ok": False, "error": message}
+            response_body_data = self._parse_response_body(response)
 
             all_params: Dict[str, Any] = copy.copy(body_params) if body_params is not None else {}
             if query_params:
@@ -415,8 +419,13 @@ class BaseClient:
                     body_string = resp["body"] if isinstance(resp["body"], str) else None
                     body_bytes = body_string.encode("utf-8") if body_string is not None else resp["body"]
                     if body_string is not None and body_string.startswith("{"):
-                        parsed_body = json.loads(body_string)
-                        resp["parsed_body"] = parsed_body
+                        try:
+                            parsed_body = json.loads(body_string)
+                            resp["parsed_body"] = parsed_body
+                        except json.decoder.JSONDecodeError:
+                            # Truncated or otherwise malformed body. Leave parsed_body unset so
+                            # the caller builds its usual non-JSON error instead of raising here.
+                            parsed_body = {}
                     else:
                         parsed_body = {}
                     retry_response = RetryHttpResponse(

@@ -290,3 +290,26 @@ class TestWebClient(unittest.TestCase):
             with self.assertRaises(err.SlackApiError) as raised:
                 self.client.api_test()
         self.assertTrue(raised.exception.response["error"].startswith("Received a response in a non-JSON format"))
+
+    def test_non_json_response_body_starting_with_brace_raises_api_error(self):
+        # The retry-handler branch parses any 200 body that starts with "{", so a
+        # truncated body must not escape from it as a JSONDecodeError.
+        response = {"status": 200, "headers": {}, "body": '{"ok": tru'}
+        with patch.object(self.client, "_perform_urllib_http_request_internal", return_value=response):
+            with self.assertRaises(err.SlackApiError) as raised:
+                self.client.api_test()
+        self.assertTrue(raised.exception.response["error"].startswith("Received a response in a non-JSON format"))
+
+    def test_non_json_response_body_during_pagination_raises_api_error(self):
+        pages = [
+            {
+                "status": 200,
+                "headers": {},
+                "body": json.dumps({"ok": True, "channels": [], "response_metadata": {"next_cursor": "next"}}),
+            },
+            {"status": 200, "headers": {}, "body": '{"ok": tru'},
+        ]
+        with patch.object(self.client, "_perform_urllib_http_request_internal", side_effect=pages):
+            with self.assertRaises(err.SlackApiError) as raised:
+                list(self.client.conversations_list(limit=1))
+        self.assertTrue(raised.exception.response["error"].startswith("Received a response in a non-JSON format"))
