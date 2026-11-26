@@ -231,13 +231,13 @@ class AsyncWebhookClient:
                                     self.logger.info(f"Going to retry the same request: POST {self.url}")
                                     break
 
+                        resp = WebhookResponse(
+                            url=self.url,
+                            status_code=res.status,
+                            body=response_body,
+                            headers=res.headers,  # type: ignore[arg-type]
+                        )
                         if retry_state.next_attempt_requested is False:
-                            resp = WebhookResponse(
-                                url=self.url,
-                                status_code=res.status,
-                                body=response_body,
-                                headers=res.headers,  # type: ignore[arg-type]
-                            )
                             _debug_log_response(self.logger, resp)
                             return resp
 

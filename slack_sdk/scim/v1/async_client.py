@@ -1,7 +1,8 @@
 import json
 import logging
+from functools import partial
 from ssl import SSLContext
-from typing import Any, Union, List
+from typing import Any, Callable, Union, List
 from typing import Dict, Optional
 from urllib.parse import quote
 
@@ -294,6 +295,7 @@ class AsyncSCIMClient:
 
         last_error: Optional[Exception] = None
         resp: Optional[SCIMResponse] = None
+        build_response: Optional[Callable[[], SCIMResponse]] = None
         try:
             request_kwargs = {
                 "headers": headers,
@@ -365,13 +367,15 @@ class AsyncSCIMClient:
                                     self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                                     break
 
+                        build_response = partial(
+                            SCIMResponse,
+                            url=url,
+                            status_code=res.status,
+                            raw_body=response_body,
+                            headers=res.headers,
+                        )
                         if retry_state.next_attempt_requested is False:
-                            resp = SCIMResponse(
-                                url=url,
-                                status_code=res.status,
-                                raw_body=response_body,
-                                headers=res.headers,
-                            )
+                            resp = build_response()
                             _debug_log_response(self.logger, resp)
                             return resp
 
@@ -400,8 +404,8 @@ class AsyncSCIMClient:
                     if retry_state.next_attempt_requested is False:
                         raise last_error
 
-            if resp is not None:
-                return resp
+            if build_response is not None:
+                return build_response()
             raise last_error
 
         finally:

@@ -5,8 +5,9 @@ Refer to https://docs.slack.dev/tools/python-slack-sdk/audit-logs for details.
 
 import json
 import logging
+from functools import partial
 from ssl import SSLContext
-from typing import Any, List
+from typing import Any, Callable, List
 from typing import Dict, Optional
 
 import aiohttp
@@ -244,6 +245,7 @@ class AsyncAuditLogsClient:
 
         last_error = None
         resp: Optional[AuditLogsResponse] = None
+        build_response: Optional[Callable[[], AuditLogsResponse]] = None
         try:
             request_kwargs = {
                 "headers": headers,
@@ -323,13 +325,15 @@ class AsyncAuditLogsClient:
                                     self.logger.info(f"Going to retry the same request: {http_verb} {url}")
                                     break
 
+                        build_response = partial(
+                            AuditLogsResponse,
+                            url=url,
+                            status_code=res.status,
+                            raw_body=response_body,
+                            headers=res.headers,  # type: ignore[arg-type]
+                        )
                         if retry_state.next_attempt_requested is False:
-                            resp = AuditLogsResponse(
-                                url=url,
-                                status_code=res.status,
-                                raw_body=response_body,
-                                headers=res.headers,  # type: ignore[arg-type]
-                            )
+                            resp = build_response()
                             _debug_log_response(self.logger, resp)
                             return resp
 
@@ -358,8 +362,8 @@ class AsyncAuditLogsClient:
                     if retry_state.next_attempt_requested is False:
                         raise last_error
 
-            if resp is not None:
-                return resp
+            if build_response is not None:
+                return build_response()
             raise last_error  # type: ignore[misc]
 
         finally:

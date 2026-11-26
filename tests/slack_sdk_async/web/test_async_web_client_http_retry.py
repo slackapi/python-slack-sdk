@@ -10,6 +10,7 @@ from tests.slack_sdk.web.mock_web_api_handler import MockHandler
 from tests.mock_web_api_server import setup_mock_web_api_server_async, cleanup_mock_web_api_server_async
 from ..fatal_error_retry_handler import FatalErrorRetryHandler
 from ..my_retry_handler import MyRetryHandler
+from ..rate_limited_retry_handler import RateLimitedRetryHandler
 from ..error_recording_retry_handler import ErrorRecordingRetryHandler, error_statuses
 
 
@@ -164,3 +165,19 @@ class TestAsyncWebClient_HttpRetries(unittest.TestCase):
                 f"INFO:{parent.name}.client:Going to retry the same request: POST http://localhost:8888/auth.test",
             ],
         )
+
+    @async_test
+    async def test_ratelimited_returns_the_last_response_when_retries_run_out(self):
+        retry_handler = RateLimitedRetryHandler(max_retry_count=100)
+        client = AsyncWebClient(
+            base_url="http://localhost:8888",
+            token="xoxb-ratelimited",
+            team_id="T111",
+            retry_handlers=[retry_handler],
+        )
+
+        with self.assertRaises(err.SlackApiError) as context:
+            await client.auth_test()
+
+        self.assertEqual(429, context.exception.response.status_code)
+        self.assertEqual(100, retry_handler.retry_count)
