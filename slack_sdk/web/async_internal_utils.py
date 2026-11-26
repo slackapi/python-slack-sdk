@@ -69,7 +69,6 @@ async def _request_with_session(
         )
 
     last_error: Optional[Exception] = None
-    resp: Optional[Dict[str, Any]] = None
     try:
         retry_request = RetryHttpRequest(
             method=http_verb,
@@ -217,12 +216,8 @@ async def _request_with_session(
                 if retry_state.next_attempt_requested is False:
                     raise last_error
 
-        if resp is not None:
-            return resp
         raise last_error  # type: ignore[misc]
 
     finally:
         if not use_running_session:
             await session.close()  # type: ignore[union-attr]
-
-    return response
