@@ -43,7 +43,8 @@ class MockHandler(SimpleHTTPRequestHandler):
                 self.send_response(429)
                 self.send_header("retry-after", 1)
                 self.set_common_headers()
-                self.wfile.write("""{"ok": false, "error": "ratelimited"}""".encode("utf-8"))
+                body = "{" if "malformed" in pattern else """{"ok": false, "error": "ratelimited"}"""
+                self.wfile.write(body.encode("utf-8"))
                 return
 
         try:

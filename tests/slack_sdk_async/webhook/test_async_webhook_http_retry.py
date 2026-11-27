@@ -10,6 +10,7 @@ from tests.mock_web_api_server import (
     setup_mock_web_api_server_async,
 )
 from ..my_retry_handler import MyRetryHandler
+from ..rate_limited_retry_handler import RateLimitedRetryHandler
 from ..error_recording_retry_handler import ErrorRecordingRetryHandler, error_statuses
 
 
@@ -68,3 +69,16 @@ class TestAsyncWebhook_HttpRetries(unittest.TestCase):
 
         self.assertEqual([500], error_statuses(retry_handler.can_retry_errors))
         self.assertEqual([500], error_statuses(retry_handler.prepare_errors))
+
+    @async_test
+    async def test_ratelimited_returns_the_last_response_when_retries_run_out(self):
+        retry_handler = RateLimitedRetryHandler(max_retry_count=100)
+        client = AsyncWebhookClient(
+            "http://localhost:8888/ratelimited",
+            retry_handlers=[retry_handler],
+        )
+
+        response = await client.send(text="hello!")
+
+        self.assertEqual(429, response.status_code)
+        self.assertEqual(100, retry_handler.retry_count)

@@ -1,3 +1,4 @@
+import json
 import unittest
 
 from slack_sdk.http_retry.builtin_async_handlers import AsyncRateLimitErrorRetryHandler, AsyncServerErrorRetryHandler
@@ -10,6 +11,7 @@ from tests.mock_web_api_server import (
     setup_mock_web_api_server_async,
 )
 from ..my_retry_handler import MyRetryHandler
+from ..rate_limited_retry_handler import RateLimitedRetryHandler
 from ..error_recording_retry_handler import ErrorRecordingRetryHandler, error_statuses
 
 
@@ -74,3 +76,30 @@ class TestSCIMClient_HttpRetries(unittest.TestCase):
 
         self.assertEqual([500], error_statuses(retry_handler.can_retry_errors))
         self.assertEqual([500], error_statuses(retry_handler.prepare_errors))
+
+    @async_test
+    async def test_ratelimited_returns_the_last_response_when_retries_run_out(self):
+        retry_handler = RateLimitedRetryHandler(max_retry_count=100)
+        client = AsyncSCIMClient(
+            base_url="http://localhost:8888/",
+            token="xoxp-ratelimited",
+            retry_handlers=[retry_handler],
+        )
+
+        response = await client.search_users(start_index=0, count=1)
+
+        self.assertEqual(429, response.status_code)
+        self.assertEqual(100, retry_handler.retry_count)
+
+    @async_test
+    async def test_ratelimited_retries_a_malformed_body_without_parsing_it(self):
+        client = AsyncSCIMClient(
+            base_url="http://localhost:8888/",
+            token="xoxp-ratelimited_malformed",
+            retry_handlers=[RateLimitedRetryHandler(max_retry_count=2)],
+        )
+
+        with self.assertRaises(json.JSONDecodeError):
+            await client.api_call(http_verb="GET", path="Users")
+
+        await assert_received_request_count_async(self, "/Users", 3)

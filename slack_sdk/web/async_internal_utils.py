@@ -69,7 +69,7 @@ async def _request_with_session(
         )
 
     last_error: Optional[Exception] = None
-    resp: Optional[Dict[str, Any]] = None
+    response: Optional[Dict[str, Any]] = None
     try:
         retry_request = RetryHttpRequest(
             method=http_verb,
@@ -186,12 +186,12 @@ async def _request_with_session(
                             logger.info(f"Going to retry the same request: {http_verb} {api_url}")
                             break
 
+                    response = {
+                        "data": data,
+                        "headers": res.headers,
+                        "status_code": res.status,
+                    }
                     if retry_state.next_attempt_requested is False:
-                        response = {
-                            "data": data,
-                            "headers": res.headers,
-                            "status_code": res.status,
-                        }
                         return response
 
             except Exception as e:
@@ -217,12 +217,10 @@ async def _request_with_session(
                 if retry_state.next_attempt_requested is False:
                     raise last_error
 
-        if resp is not None:
-            return resp
+        if response is not None:
+            return response
         raise last_error  # type: ignore[misc]
 
     finally:
         if not use_running_session:
             await session.close()  # type: ignore[union-attr]
-
-    return response
