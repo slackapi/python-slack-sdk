@@ -77,7 +77,7 @@ class BaseClient:
         is not specified, if any of the following environment variables are
         present, they will be loaded into this parameter: `HTTPS_PROXY`,
         `https_proxy`, `HTTP_PROXY` or `http_proxy`."""
-        self.headers = headers or {}
+        self.headers = dict(headers) if headers else {}
         """`dict` representing additional request headers to attach to all requests."""
         self.headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.default_params = {}

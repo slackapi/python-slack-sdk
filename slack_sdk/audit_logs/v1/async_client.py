@@ -86,7 +86,7 @@ class AsyncAuditLogsClient:
         self.session = session
         self.trust_env_in_session = trust_env_in_session
         self.auth = auth
-        self.default_headers = default_headers if default_headers else {}
+        self.default_headers = dict(default_headers) if default_headers else {}
         self.default_headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.logger = logger if logger is not None else logging.getLogger(__name__)
         self.retry_handlers = retry_handlers if retry_handlers is not None else async_default_handlers()

@@ -74,7 +74,7 @@ class AsyncBaseClient:
         are allowed to read environment variables. Commonly used in conjunction
         with proxy support via the `HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY` and
         `http_proxy` environment variables."""
-        self.headers = headers or {}
+        self.headers = dict(headers) if headers else {}
         """`dict` representing additional request headers to attach to all requests."""
         self.headers["User-Agent"] = get_user_agent(user_agent_prefix, user_agent_suffix)
         self.default_params = {}
