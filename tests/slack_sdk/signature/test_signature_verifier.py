@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import Mock
 
 from slack_sdk.signature import SignatureVerifier
 
@@ -98,6 +99,26 @@ class TestSignatureVerifier(unittest.TestCase):
         self.assertFalse(verifier.is_valid(self.body, None, None))
         self.assertFalse(verifier.is_valid(None, None, None))
 
+    def test_is_valid_non_numeric_timestamp(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        self.assertFalse(verifier.is_valid(self.body, "not-a-number", self.valid_signature))
+        self.assertFalse(verifier.is_valid(self.body, "1.5", self.valid_signature))
+        self.assertFalse(verifier.is_valid(self.body, "", self.valid_signature))
+
+    def test_is_valid_request_non_numeric_timestamp_header(self):
+        verifier = SignatureVerifier(
+            signing_secret=self.signing_secret,
+            clock=MockClock(),
+        )
+        bad_headers = {
+            "X-Slack-Request-Timestamp": "not-a-number",
+            "X-Slack-Signature": self.valid_signature,
+        }
+        self.assertFalse(verifier.is_valid_request(self.body, bad_headers))
+
     def test_invalid_signing_secret(self):
         with self.assertRaises(ValueError):
             SignatureVerifier("")
@@ -117,3 +138,11 @@ class TestSignatureVerifier(unittest.TestCase):
         with self.assertRaises(ValueError):
             verifier.signing_secret = None
         self.assertEqual(verifier.signing_secret, self.signing_secret)
+
+    def test_is_valid_rejects_numeric_timestamp_outside_replay_window(self):
+        clock = Mock()
+        verifier = SignatureVerifier(signing_secret=self.signing_secret, clock=clock)
+        for elapsed, expected in ((300, True), (301, False), (-301, False)):
+            with self.subTest(elapsed=elapsed):
+                clock.now.return_value = int(self.timestamp) + elapsed
+                self.assertEqual(verifier.is_valid(self.body, self.timestamp, self.valid_signature), expected)

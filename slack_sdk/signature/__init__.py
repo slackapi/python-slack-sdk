@@ -66,7 +66,11 @@ class SignatureVerifier:
         if timestamp is None or signature is None:
             return False
 
-        if abs(self.clock.now() - int(timestamp)) > 60 * 5:
+        try:
+            ts = int(timestamp)
+        except (ValueError, TypeError):
+            return False
+        if abs(self.clock.now() - ts) > 60 * 5:
             return False
 
         calculated_signature = self.generate_signature(timestamp=timestamp, body=body)
